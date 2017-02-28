@@ -1,0 +1,282 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v1.0",
+    "signature": "5d4d185620743b39c0788fa1a011c17b93c04426"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v1.0": {
+      "CIAT.DAPA.USAID.Forecast.ForecastApp/1.0.0": {
+        "dependencies": {
+          "CIAT.DAPA.USAID.Forecast.Data": "1.0.1",
+          "Microsoft.Extensions.Configuration": "1.0.0",
+          "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0",
+          "Microsoft.Extensions.Configuration.FileExtensions": "1.0.0",
+          "Microsoft.Extensions.Configuration.Json": "1.0.0"
+        },
+        "runtime": {
+          "CIAT.DAPA.USAID.Forecast.ForecastApp.dll": {}
+        }
+      },
+      "Microsoft.Extensions.Configuration/1.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "1.0.0"
+        },
+        "runtime": {
+          "lib/netstandard1.1/Microsoft.Extensions.Configuration.dll": {}
+        }
+      },
+      "Microsoft.Extensions.Configuration.Abstractions/1.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "1.0.0"
+        },
+        "runtime": {
+          "lib/netstandard1.0/Microsoft.Extensions.Configuration.Abstractions.dll": {}
+        }
+      },
+      "Microsoft.Extensions.Configuration.EnvironmentVariables/1.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "1.0.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.Extensions.Configuration.EnvironmentVariables.dll": {}
+        }
+      },
+      "Microsoft.Extensions.Configuration.FileExtensions/1.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "1.0.0",
+          "Microsoft.Extensions.FileProviders.Physical": "1.0.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.Extensions.Configuration.FileExtensions.dll": {}
+        }
+      },
+      "Microsoft.Extensions.Configuration.Json/1.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "1.0.0",
+          "Microsoft.Extensions.Configuration.FileExtensions": "1.0.0",
+          "Newtonsoft.Json": "9.0.1",
+          "System.Runtime.Serialization.Primitives": "4.1.1"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.Extensions.Configuration.Json.dll": {}
+        }
+      },
+      "Microsoft.Extensions.FileProviders.Abstractions/1.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "1.0.0"
+        },
+        "runtime": {
+          "lib/netstandard1.0/Microsoft.Extensions.FileProviders.Abstractions.dll": {}
+        }
+      },
+      "Microsoft.Extensions.FileProviders.Physical/1.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.FileProviders.Abstractions": "1.0.0",
+          "Microsoft.Extensions.FileSystemGlobbing": "1.0.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.Extensions.FileProviders.Physical.dll": {}
+        }
+      },
+      "Microsoft.Extensions.FileSystemGlobbing/1.0.0": {
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.Extensions.FileSystemGlobbing.dll": {}
+        }
+      },
+      "Microsoft.Extensions.Primitives/1.0.0": {
+        "runtime": {
+          "lib/netstandard1.0/Microsoft.Extensions.Primitives.dll": {}
+        }
+      },
+      "MongoDB.Bson/2.3.0": {
+        "dependencies": {
+          "System.Collections.NonGeneric": "4.0.1"
+        },
+        "runtime": {
+          "lib/netstandard1.5/MongoDB.Bson.dll": {}
+        }
+      },
+      "MongoDB.Driver/2.3.0": {
+        "dependencies": {
+          "MongoDB.Bson": "2.3.0",
+          "MongoDB.Driver.Core": "2.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.5/MongoDB.Driver.dll": {}
+        }
+      },
+      "MongoDB.Driver.Core/2.3.0": {
+        "dependencies": {
+          "MongoDB.Bson": "2.3.0",
+          "System.Collections.Specialized": "4.0.1",
+          "System.Diagnostics.TraceSource": "4.0.0",
+          "System.Security.SecureString": "4.0.0"
+        },
+        "runtime": {
+          "lib/netstandard1.5/MongoDB.Driver.Core.dll": {}
+        }
+      },
+      "Newtonsoft.Json/9.0.1": {
+        "dependencies": {
+          "System.Runtime.Serialization.Primitives": "4.1.1"
+        },
+        "runtime": {
+          "lib/netstandard1.0/Newtonsoft.Json.dll": {}
+        }
+      },
+      "System.Collections.NonGeneric/4.0.1": {
+        "runtime": {
+          "lib/netstandard1.3/System.Collections.NonGeneric.dll": {}
+        }
+      },
+      "System.Collections.Specialized/4.0.1": {
+        "dependencies": {
+          "System.Collections.NonGeneric": "4.0.1"
+        },
+        "runtime": {
+          "lib/netstandard1.3/System.Collections.Specialized.dll": {}
+        }
+      },
+      "System.Diagnostics.TraceSource/4.0.0": {
+        "runtimeTargets": {
+          "runtimes/unix/lib/netstandard1.3/System.Diagnostics.TraceSource.dll": {
+            "rid": "unix",
+            "assetType": "runtime"
+          },
+          "runtimes/win/lib/netstandard1.3/System.Diagnostics.TraceSource.dll": {
+            "rid": "win",
+            "assetType": "runtime"
+          }
+        }
+      },
+      "System.Runtime.Serialization.Primitives/4.1.1": {
+        "runtime": {
+          "lib/netstandard1.3/System.Runtime.Serialization.Primitives.dll": {}
+        }
+      },
+      "System.Security.SecureString/4.0.0": {
+        "runtimeTargets": {
+          "runtimes/unix/lib/netstandard1.3/System.Security.SecureString.dll": {
+            "rid": "unix",
+            "assetType": "runtime"
+          },
+          "runtimes/win/lib/netstandard1.3/System.Security.SecureString.dll": {
+            "rid": "win",
+            "assetType": "runtime"
+          }
+        }
+      },
+      "CIAT.DAPA.USAID.Forecast.Data/1.0.1": {
+        "dependencies": {
+          "MongoDB.Driver": "2.3.0"
+        },
+        "runtime": {
+          "CIAT.DAPA.USAID.Forecast.Data.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "CIAT.DAPA.USAID.Forecast.ForecastApp/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Extensions.Configuration/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hR4yYebruRp6qyFnV3RW4qrnEb0J1LnMmQbj50AUA423V8dMs4E3YAohsyRyGBFnpbJ+KKzieSG/n2A6T0klZQ=="
+    },
+    "Microsoft.Extensions.Configuration.Abstractions/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-nJ+Et/rnDMDmGhxvFAKdN3va7y+YDPICv1nUEP8I4IKgOkWwr/dCZHMqxVhJFrkbW9ux8Kd7erC4mvxfZh0WnA=="
+    },
+    "Microsoft.Extensions.Configuration.EnvironmentVariables/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-A0yqS98VtPNlFkFI7YBlwkAekUHE/9mMeNc+K4RmgTjCrskuk6pX3LGhDU7aD5CPYc9Px7M2To/2u4xDSnRikg=="
+    },
+    "Microsoft.Extensions.Configuration.FileExtensions/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-MO7XtmLiqnpgVTX34uzFPvIS7jPmBUGLN0MP5MsYu6CqYTIs90ULjtrV5TegH5mTqKTXWjZRGXL26R6apTyc4w=="
+    },
+    "Microsoft.Extensions.Configuration.Json/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-KRyEOe5/Xi3qyDMdEVh++e2pQRsI6C3wzINVExOcu9lOsFmXK/k4qOf244fyo59rnn6s5xKnIW3WbhxWS1hu2w=="
+    },
+    "Microsoft.Extensions.FileProviders.Abstractions/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-4jsqTxG3py/hYSsOtZMkNJ2/CQqPdpwyK7bDUkrwHgqowCFSmx/C+R4IzQ+2AK2Up1fVcu+ldC0gktwidL828A=="
+    },
+    "Microsoft.Extensions.FileProviders.Physical/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Ej5hGWtK3xM9YU+B2O8EdlMcJf5utbDQs9ecnfvwhENQeeNU7iI2jjnRB2d7V6o9SQZmNHPzdPvaNb3PlSMz+Q=="
+    },
+    "Microsoft.Extensions.FileSystemGlobbing/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-scXp1Y+hmhQKLe57Z7cSjsAEFtE4zSHHydkg1SpvG56nWwWQVpVcRAbRZsv1qIBR5/vNB4LA9xiOKnvKO/Halg=="
+    },
+    "Microsoft.Extensions.Primitives/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3q2vzfKEDjL6JFkRpk5SFA3zarYsO6+ZYgoucNImrUMzDn0mFbEOL5p9oPoWiypwypbJVVjWTf557bXZ0YFLig=="
+    },
+    "MongoDB.Bson/2.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ImZ8Dstc+ZUxEqgIXJtFuL2+sesc+e0SwF68Wh8P3gSYLyWRL3hacNNgmE9iUgxUyYzVg4Sr55aRsHkHw9IaDw=="
+    },
+    "MongoDB.Driver/2.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-wq4rHgUorkGMn66TNQ4kDlh/u1DihK4bB+LdLgklP6Z7tpq3Y5It25daKrq6zcoLheCoBqhjBsKHUzrfG0KUfQ=="
+    },
+    "MongoDB.Driver.Core/2.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-CaMUxfkDkTnRR5iQ/tlVRYtJyoUAl0ToSj9/fWfQb/GYt8veQzSqu6jOLE1+KT+2HMvL6kIhX08tam+xU+iycQ=="
+    },
+    "Newtonsoft.Json/9.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-U82mHQSKaIk+lpSVCbWYKNavmNH1i5xrExDEquU1i6I5pV6UMOqRnJRSlKO3cMPfcpp0RgDY+8jUXHdQ4IfXvw=="
+    },
+    "System.Collections.NonGeneric/4.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hMxFT2RhhlffyCdKLDXjx8WEC5JfCvNozAZxCablAuFRH74SCV4AgzE8yJCh/73bFnEoZgJ9MJmkjQ0dJmnKqA=="
+    },
+    "System.Collections.Specialized/4.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/HKQyVP0yH1I0YtK7KJL/28snxHNH/bi+0lgk/+MbURF6ULhAE31MDI+NZDerNWu264YbxklXCCygISgm+HMug=="
+    },
+    "System.Diagnostics.TraceSource/4.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6WVCczFZKXwpWpzd/iJkYnsmWTSFFiU24Xx/YdHXBcu+nFI/ehTgeqdJQFbtRPzbrO3KtRNjvkhtj4t5/WwWsA=="
+    },
+    "System.Runtime.Serialization.Primitives/4.1.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-HZ6Du5QrTG8MNJbf4e4qMO3JRAkIboGT5Fk804uZtg3Gq516S7hAqTm2UZKUHa7/6HUGdVy3AqMQKbns06G/cg=="
+    },
+    "System.Security.SecureString/4.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-sqzq9GD6/b0yqPuMpgIKBuoLf4VKAj8oAfh4kXSzPaN6eoKY3hRi9C5L27uip25qlU+BGPfb0xh2Rmbwc4jFVA=="
+    },
+    "CIAT.DAPA.USAID.Forecast.Data/1.0.1": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
