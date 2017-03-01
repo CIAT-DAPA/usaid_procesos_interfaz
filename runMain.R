@@ -12,8 +12,8 @@ library(magrittr)
 library(lazyeval)
 library(foreach)
 
-dirCurrent <- paste(get_script_path(), "/", sep = "", collapse = NULL)
-#dirCurrent <- "C:/USAID/packages/"
+#dirCurrent <- paste(get_script_path(), "/", sep = "", collapse = NULL)
+dirCurrent <- "C:/USAID/procesos_interfaz/"
 
 ## Variables paquete forecast
 dirForecast <- paste(dirCurrent, "prediccionClimatica/", sep = "", collapse = NULL)
@@ -71,13 +71,13 @@ if (!file.exists(file.path(dir_outMaiz))){
 
 CMDdirForecastInputs <- paste0(gsub("/","\\\\",dirForecastInputs), "\\\"")
 try(system(paste0(forecastAppDll,"-s \"prec\" -p \"",CMDdirForecastInputs," -start 1981 -end 2013"), intern = TRUE, ignore.stderr = TRUE))
-#try(system(paste0(forecastAppDll,"-wf -p \"",CMDdirForecastInputs," -name \"daily\""), intern = TRUE, ignore.stderr = TRUE))
+try(system(paste0(forecastAppDll,"-wf -p \"",CMDdirForecastInputs," -name \"daily\""), intern = TRUE, ignore.stderr = TRUE))
 #try(system(paste0(forecastAppDll,"-fs -p \"",CMDdirForecastInputs), intern = TRUE, ignore.stderr = TRUE))
 
 
 # runPrediccion <- source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL))
 
-# runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse = NULL))
+runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse = NULL))
 
-runModeloMaiz <- source(paste(dirModeloMaiz,'call_functions.R', sep = "", collapse = NULL))
+# runModeloMaiz <- source(paste(dirModeloMaiz,'call_functions.R', sep = "", collapse = NULL))
 
