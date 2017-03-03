@@ -7,7 +7,7 @@
 
 
 #---------------------------------------------------------------------------------#
-#-------------------Función para generar barra de progreso\-----------------------#
+#-------------------Funcion para generar barra de progreso\-----------------------#
 #---------------------------------------------------------------------------------#
 sapply_pb <- function(X, FUN, ...) {
   env <- environment()
@@ -28,18 +28,18 @@ sapply_pb <- function(X, FUN, ...) {
 
 
 #---------------------------------------------------------------------------------#
-#----------------Función para generar años más frecuentes-------------------------#
+#----------------Funcion para generar annos mas frecuentes-------------------------#
 #---------------------------------------------------------------------------------#
 # INPUT
-# data: Datos acumulados mensuales para la precipitación del mes a pronosticar
+# data: Datos acumulados mensuales para la precipitacion del mes a pronosticar
 # organizados de forma ascendente
-# añoshistorico: Tabla de años ordenados de forma ascendente de acuerdo a la precipitación
-# acumulada del mes de interés
+# annoshistorico: Tabla de annos ordenados de forma ascendente de acuerdo a la precipitacion
+# acumulada del mes de interes
 
 # OUTPUT
-# Remuestreo de los años mas frecuentes del mes de interés de acuerdo a las probabilidades ingresadas
+# Remuestreo de los annos mas frecuentes del mes de interes de acuerdo a las probabilidades ingresadas
 
-resampling <- function(data,prob,añoshistorico){
+resampling <- function(data,prob,annoshistorico){
   matrizcombinaciones=0
   vectorprobabilidades=prob
   datas=0
@@ -48,18 +48,18 @@ resampling <- function(data,prob,añoshistorico){
     if(r==vectorprobabilidades[1]){
       datas=which(data<quantile(data[which(data>0)],0.3333))
       
-      matrizcombinaciones[i]=añoshistorico[sample(datas,1)]
+      matrizcombinaciones[i]=annoshistorico[sample(datas,1)]
     }
     
     if(r==vectorprobabilidades[2]){
       datas=which(data>=quantile(data,0.3333) & data<quantile(data,0.6666))
-      matrizcombinaciones[i]=añoshistorico[sample(datas,1)]
+      matrizcombinaciones[i]=annoshistorico[sample(datas,1)]
       
     }
     
     if(r==vectorprobabilidades[3]){
       datas=which(data>=quantile(data,0.6666))
-      matrizcombinaciones[i]=añoshistorico[sample(datas,1)]
+      matrizcombinaciones[i]=annoshistorico[sample(datas,1)]
       
     }
     
@@ -73,17 +73,17 @@ resampling <- function(data,prob,añoshistorico){
 
 
 #---------------------------------------------------------------------------------#
-#-----------------Función para generar escenarios diarios-------------------------#
+#-----------------Funcion para generar escenarios diarios-------------------------#
 #---------------------------------------------------------------------------------#
 # INPUT
-# prob: Tabla de probabilidades de la estación de interés para los siguientes 6 meses
-# data_d: Tabla con datos diarios de la estación de interés
-# path_output: Ruta donde se guardarán las salidas
-# station: Nombre de la estación de interés
+# prob: Tabla de probabilidades de la estacion de interes para los siguientes 6 meses
+# data_d: Tabla con datos diarios de la estacion de interes
+# path_output: Ruta donde se guardaran las salidas
+# station: Nombre de la estacion de interes
 
 #OUTPUT
-# Al correr esta función se generarán los 100 escenarios (en formato .csv) de datos diarios 
-# para la estaciónde interés
+# Al correr esta Funcion se generaran los 100 escenarios (en formato .csv) de datos diarios 
+# para la estacionde interes
 
 gen_esc_daily <- function(prob,data_d,path_output,station){
   
@@ -108,10 +108,10 @@ gen_esc_daily <- function(prob,data_d,path_output,station){
   month.prob = month.name[probabilidades$month] 
   
   #---------------------------------------------------------------------------------#
-  #-----------------Ordenar de menor a Mayr datos mensuales históricos-------------#
+  #-----------------Ordenar de menor a mayor datos mensuales historicos-------------#
   #---------------------------------------------------------------------------------#
   
-  cat("\n Calculando terciles de la precipitación... \n")
+  cat("\n Calculando terciles de la precipitacion... \n")
   
   prec_sort = matrix(NA,length(unique(data$year)),6)
   year_sort = matrix(NA,length(unique(data$year)),6)
@@ -136,7 +136,7 @@ gen_esc_daily <- function(prob,data_d,path_output,station){
   colnames(t_max_trend)=month.prob
   colnames(t_min_trend)=month.prob
   #---------------------------------------------------------------------------------#
-  #------------------------Cálculo tendencias para temp-----------------------------#
+  #------------------------Calculo tendencias para temp-----------------------------#
   #---------------------------------------------------------------------------------#
   
   cat("\n Calculando tendencias de temperaturas... \n")
@@ -198,12 +198,12 @@ for(y in min(data_temp$year):max(data_temp$year)){
 }  
   
   #---------------------------------------------------------------------------------#
-  #--------------Generación de los 10 años análogos mas probables-------------------#
+  #--------------Generacion de los 10 annos analogos mas probables-------------------#
   #---------------------------------------------------------------------------------#
   
   masprobable=matrix(0,nrow=100,ncol=dim(probabilidades)[2])
   
-  cat("\n Generando años más frecuentes... \n")
+  cat("\n Generando annos mas frecuentes... \n")
   masprobable=sapply_pb(1:100,
                         function(j){
                           esc1=sapply(1:dim(probabilidades)[2], function(i) resampling(prec_sort[,i],probabilidades[i,4:6],year_sort[,i]))
@@ -214,18 +214,18 @@ for(y in min(data_temp$year):max(data_temp$year)){
   
   
   #---------------------------------------------------------------------------------#
-  #-------------Generación de datos y resumen de los años mas probables-------------#
+  #-------------Generacion de datos y resumen de los annos mas probables-------------#
   #---------------------------------------------------------------------------------#
 
-    # valores=function(mes,var,Años){
+    # valores=function(mes,var,annos){
     #   datos=0
     #   for(i in 1:length(mes))
-    #     datos[i]=var[which(mes[i]==Años)]
+    #     datos[i]=var[which(mes[i]==annos)]
     #   return(datos)
     # }
     # 
     # todo=sapply(1:dim(probabilidades)[2], function(i) valores(masprobable2[,i],prec_sort[,i],year_sort[,i]))
-    # todo2=as.data.frame(rbind(masprobable2,c("Datos análogos",rep("",dim(probabilidades)[2]-1)),todo)) ###Años y datos analogos
+    # todo2=as.data.frame(rbind(masprobable2,c("Datos analogos",rep("",dim(probabilidades)[2]-1)),todo)) ###annos y datos analogos
     # colnames(todo2)=names(probabilidades)
     # 
     # resumen=function(x) rbind(min(x),max(x))
@@ -255,13 +255,13 @@ for(y in min(data_temp$year):max(data_temp$year)){
     # todo3=sapply(1:dim(probabilidades)[2], function(i) valores2(masprobable2[,i],todo[,i],resumen2[,i],dif[,i]))
     # 
     # resumen3=rbind(resumen2[1,],round(medias,2),resumen2[2,])
-    # row.names(resumen3)=c("Mín","Promedio","Máx")
+    # row.names(resumen3)=c("Min","Promedio","Max")
     # 
-    # resumenf=rbind(resumen3,c("Años",rep("",dim(probabilidades)[2]-1)),todo3) ###Resumen con min max y prom de los escenarios analogos
+    # resumenf=rbind(resumen3,c("annos",rep("",dim(probabilidades)[2]-1)),todo3) ###Resumen con min max y prom de los escenarios analogos
     # colnames(resumenf)=names(probabilidades)
 
   #---------------------------------------------------------------------------------#
-  #----------Generación de todos los escenarios definidos por el usuario------------#
+  #----------Generacion de todos los escenarios definidos por el usuario------------#
   #---------------------------------------------------------------------------------#
   num_esc1=100
   
@@ -327,7 +327,7 @@ for(y in min(data_temp$year):max(data_temp$year)){
   
   #---------------------------------------------------------------------------------#
   #---------------------------------------------------------------------------------#
-  #----------------------Creación de escenarios a nivel diario----------------------#
+  #----------------------Creacion de escenarios a nivel diario----------------------#
   #---------------------------------------------------------------------------------#
   #---------------------------------------------------------------------------------#
   cat("\n Generando escenarios diarios... \n")
@@ -377,11 +377,11 @@ for(y in min(data_temp$year):max(data_temp$year)){
     #-----------------Exporta los escenarios a nivel diario a .csv--------------------#
     #---------------------------------------------------------------------------------#
     
-    dir.create(paste(path_output,format.Date(Sys.Date(),"%Y%m%d"),sep="/"),showWarnings=F)
-    dir.create(paste(path_output,"/",format.Date(Sys.Date(),"%Y%m%d"),"/Escenarios_",station,sep=""),showWarnings=F)
+    dir.create(paste(path_output),showWarnings=F)
+    dir.create(paste(path_output,"/",station,sep=""),showWarnings=F)
     
     for(k in 1:nrow(escenarios_final)){
-      write.csv(esc_final_diarios[[k]],paste(path_output,"/",format.Date(Sys.Date(),"%Y%m%d"),"/Escenarios_",station,"/escenario_",nom[k],".csv",sep=""),row.names=F)
+      write.csv(esc_final_diarios[[k]],paste(path_output,"/",station,"/",nom[k],".csv",sep=""),row.names=F)
     }
     
   cat("\n Proceso finalizado exitosamente \n \n")
@@ -395,23 +395,17 @@ for(y in min(data_temp$year):max(data_temp$year)){
 #---------------------------------------------------------------------------------#
 
 # path_output = "Y:/USAID_Project/Product_1_web_interface/test/clima/resampling/" 
-# path_prob = "Y:/USAID_Project/Product_1_web_interface/test/clima/prob_forecast/20170120_prob.csv"
+# path_save = "Y:/USAID_Project/Product_1_web_interface/test/clima/prob_forecast/20170120_prob.csv"
 # path_data_d = "Y:/USAID_Project/Product_1_web_interface/test/clima/daily_data/"
 path_data_d <- dir_stations
 
 data_d_all = list.files(path_data_d,full.names = T)
 
-data_prob_all=read.csv(paste0(path_prob,"/",format(Sys.Date(),"%Y%m%d"),"_prob.csv"),header=T,dec=".")
+data_prob_all=read.csv(paste0(path_save,"/probabilities.csv"),header=T,dec=".")
 station_names = gsub('.csv','',list.files(path_data_d))
-
-start.time <- Sys.time()
 
 for(x in 1:length(data_d_all)){
     data_prob = data_prob_all[which(data_prob_all$id==station_names[x]),]
     gen_esc_daily(prob = data_prob,data_d = data_d_all[x],path_output,station = station_names[x])
-      }
-
-end.time <- Sys.time()
-time.taken <- end.time - start.time
-time.taken
+}
 

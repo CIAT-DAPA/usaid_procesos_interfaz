@@ -4,7 +4,7 @@
 #####Input download.cpt#####
 ##(dir_save) Ruta para guardar los archivos.
 ##(month) Mes antes del inicio de las predicciones.
-##(year) A�o en el cual se generan las predicciones.
+##(year) Anno en el cual se generan las predicciones.
 #####Outoput download.cpt#####
 ## Archivos de la TSM de los siguientes 6 meses
 ## guardados en la ruta suministrada en el input.
@@ -32,10 +32,10 @@ download.cpt=function(dir_save,month,year){
     
     route=paste("http://iridl.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.ENSEMBLE/.OCNF/.surface/.TMP/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.REALTIME_ENSEMBLE/.OCNF/.surface/.TMP/appendstream/S/%280000%201%20",month.abb[l],"%201982-",year,"%29VALUES/L/",i,".5/",i+2,".5/RANGE%5BL%5D//keepgrids/average/",ensemble,"%5BM%5Daverage/-999/setmissing_value/Y/(30N)/(30S)/RANGEEDGES/%5BX/Y%5D%5BS/L/add%5Dcptv10.tsv.gz",sep="")### Ruta de descarga de datos 
     
-    filePath <- paste(dir_save,"/",i,"_",paste(month.abb[w[i:(i+2)]], collapse = '_'),"-",Sys.Date(),".tsv.gz",sep="")
+    filePath <- paste(dir_save,"/",i,"_",paste(month.abb[w[i:(i+2)]], collapse = '_'),".tsv.gz",sep="")
 
     # ----------------------------------------------------------------------------------------------------------------------
-    #  > prueba que el archivo gzip no est� da�ado, sino intenta descargarlo de nuevo
+    #  > prueba que el archivo gzip no esta dannado, sino intenta descargarlo de nuevo
     # ----------------------------------------------------------------------------------------------------------------------
     gunzipTestVal = 1
     
@@ -49,9 +49,10 @@ download.cpt=function(dir_save,month,year){
       gunzipTestVal = length(grep('invalid compressed data--crc', gunzipTestStr))
 
       if (gunzipTestVal == 1){
-        cat ('... archivo gzip corrupto, se reitentara descargar\n\n\n\n')
+        cat ('... archivo gzip corrupto, se reitentara descargar\n\n\n')
       }else {
-        cat ('... archivo descargado correctamente\n\n\n\n')
+        cat(filePath)
+        cat ('\n... archivo descargado correctamente\n\n\n')
       }
     }
     # ----------------------------------------------------------------------------------------------------------------------    
@@ -65,8 +66,8 @@ download.cpt=function(dir_save,month,year){
 ##### read.table(x,sep="\t",dec=".",skip =2,fill=TRUE,na.strings =-999))
 #####Output Data_table#####
 ## (all_output) Una lista [1]los datos de la tsm donde en las filas 
-## estan los a�os y en las columnas los pixeles 
-## [2] los a�os disponibles de la informacion 
+## estan los annos y en las columnas los pixeles 
+## [2] los annos disponibles de la informacion 
 
 data_table=function(dates){
   
@@ -92,7 +93,7 @@ data_table=function(dates){
 ## (y) Mes antes del inicio de las predicciones.
 #####Output quartely_data#####
 ## (all_output) Una lista [[1]] los datos de las estaciones 
-## en forma trimestral [[2]] A�os disponibles de la informaci�n.
+## en forma trimestral [[2]] annos disponibles de la informacion.
 
 quarterly_data=function(data,sy_month){
   
@@ -161,11 +162,11 @@ nipals<-function(X,modos){
 }
 
 #####Input selection_area#####
-## (x) datos de la tsm en filas a�os y columnas pixeles.
+## (x) datos de la tsm en filas annos y columnas pixeles.
 ## (y) datos de las estaciones en el formato predefinido.
 #####Output selection_area#####
 ## (data_x_selec) datos de la tsm seleccionados para el 
-## modelo CCA, en las filas a�os y en las columnas pixeles.
+## modelo CCA, en las filas annos y en las columnas pixeles.
 
 selection_area=function(x,y){
   
@@ -278,7 +279,6 @@ cross_val=function(x,y){
       
     }
     
-    
   }  
   
   pos=which(output[,3]==max(output[,3]))
@@ -290,11 +290,11 @@ cross_val=function(x,y){
 #####Input forescast#####
 ## (x) datos de la tsm seleccionada para correr en el modelo.
 ## (Y) datos de las estaciones en el formato predefinido.
-## (x_fores) datos de las tsm para pronosticar la precipitaci�n.
+## (x_fores) datos de las tsm para pronosticar la precipitacion.
 #####Otuput forescast#####
 ## (all_out) Una lista donde el [[1]] son los pronosticos deterministico
 ## de las estaciones [[2]] el valor que toma el modo X para realizar 
-## la predicci�n.
+## la prediccion.
 
 forecast=function(x,y,x_fores,set){
   
@@ -333,7 +333,7 @@ forecast=function(x,y,x_fores,set){
 #####Input probabilities#####
 ## (fores) pronosticos deterministicos.
 ## (Y) datos de las estaciones en el formato predefinido.
-## (sd_s) desviaci�n de las estaciones para calcular las probabilidades.
+## (sd_s) desviacion de las estaciones para calcular las probabilidades.
 #####Otuput probabilities#####
 ## (prob_output) un dataframe que contiene 
 ## las probabilidades y el nombre de las estaciones. 
@@ -353,9 +353,9 @@ probabilities=function(fores,Y,sd_s){
 #####Input prob_output#####
 ## (p) numero de estaciones disponibles por dpto en la corrida.
 ## (m) mes actual.
-## (y) a�o actual.
+## (y) Anno actual.
 #####Otuput prob_output#####
-## (table_order) un dataframe que contiene el a�o y el mes del 
+## (table_order) un dataframe que contiene el Anno y el mes del 
 ## pronostico para todas las estaciones.
 
 prob_output=function(p,m,y){
@@ -380,21 +380,17 @@ prob_output=function(p,m,y){
 ########## Descarga archivos de la TSM #############
 ####################################################
 
-# start.time <- Sys.time()
 # dir_save="C:/Users/dagudelo/Desktop/Ejemplo_descarga"
 month=as.numeric(format(Sys.Date(),"%m"))
 year=format(Sys.Date(),"%Y")
 y=download.cpt(dir_save,month-1,year)
-end.time <- Sys.time()
-time.taken <- end.time - start.time
-time.taken
 
 cat("\n Archivos de la TSM descargados \n")
 
 ########## Carga y descomprime archivos de la TSM #####
 #######################################################
 
-files_gz=list.files(dir_save,pattern =as.character(Sys.Date()))
+files_gz=list.files(dir_save)
 dir_files=paste(dir_save,files_gz,sep="/")
 p=lapply(dir_files,function(x)gzfile(x,'rt'))
 y_k=lapply(dir_files,function(x)read.table(x,sep="\t",dec=".",skip =2,fill=TRUE,na.strings =-999))
@@ -412,9 +408,9 @@ names(year_predictor)=names(data_tsm)
 data_tsm_fore=lapply(data_tsm,function(x) x[dim(x)[1],,drop=F])
 names(data_tsm_fore)=names(data_tsm)
 
-cat("\n Datos de la TSM organizados en formato A�os X Pixeles \n")
+cat("\n Datos de la TSM organizados en formato annos X Pixeles \n")
 
-######### Carga las estaciones de precipitaci�n ######
+######### Carga las estaciones de precipitacion ######
 ######################################################
 
 # dir_response="C:/Users/dagudelo/Desktop/Estaciones"
@@ -422,7 +418,7 @@ dir_res=paste(dir_response,list.files(dir_response),sep="/")
 data_y=lapply(dir_res,function(x)read.table(x,dec=".",sep = ",",header = T))
 names(data_y)=basename(dir_res)
 
-cat("\n Datos de precipitaci�n cargados \n")
+cat("\n Datos de precipitacion cargados \n")
 
 ######## Carga el nombre de las estaciones de interes #######
 #############################################################
@@ -439,7 +435,7 @@ data_quar=lapply(data_y,quarterly_data,month-1)
 data_quartely=unlist(lapply(data_quar,"[", 1),recursive=FALSE)
 year_response=unlist(lapply(data_quar,"[", 2),recursive=FALSE)
 
-cat("\n Datos de precipitaci�n organizados de forma trimestral \n")
+cat("\n Datos de precipitacion organizados de forma trimestral \n")
 
 ####### Seleciona el area de la TSM ##############
 ##################################################
@@ -455,12 +451,12 @@ data_tsm_selec=Map(function(x,y) Map(selection_area,x,y),data_tsm_final,data_res
 
 cat("\n Area de la TSM selecionada \n")
 
-######## Realiza validaci�n cruzada ############
+######## Realiza validacion cruzada ############
 ################################################
 
 cross_obj=Map(function(x,y) Map(cross_val,x,y),data_tsm_selec,data_res_final)
 
-cat("\n Validaci�n cruzada realizada \n")
+cat("\n validacion cruzada realizada \n")
 
 ######### Calcula las predicciones deterministicas ########
 ###########################################################
@@ -514,5 +510,5 @@ metrics_output_all=do.call(rbind,metrics_output_list)
 
 write.csv(metrics_output_all,paste0(path_save,"/","metrics.csv"),row.names = F)
 
-cat("\n Metricas de validaci�n almacenadas \n")
+cat("\n Metricas de validacion almacenadas \n")
 
