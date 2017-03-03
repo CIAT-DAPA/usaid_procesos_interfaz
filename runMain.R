@@ -23,7 +23,7 @@ forecastAppDll <- paste("dotnet ", dirCurrent, "forecast_app/CIAT.DAPA.USAID.For
 dir_save <- paste(dirForecastInputs, "descarga", sep = "", collapse = NULL)
 dir_response <- paste(dirForecastInputs, "estacionesMensuales", sep = "", collapse = NULL)
 dir_stations <- paste(dirForecastInputs, "dailyData", sep = "", collapse = NULL)
-path_prob <- paste(dirForecastOutputs, "probForecast", sep = "", collapse = NULL)
+path_save <- paste(dirForecastOutputs, "probForecast", sep = "", collapse = NULL)
 path_output <- paste(dirForecastOutputs, "resampling", sep = "", collapse = NULL)
 
 dir_dssat <- 'C:/DSSAT46/'  ## its necessary to have the parameters .CUL, .ECO, .SPE Updated for running (calibrated the crop (Maize))
@@ -44,39 +44,37 @@ dir_outMaiz <- paste(dirModeloMaiz, "out/", sep = "", collapse = NULL)
 ## Variables paquete arroz
 dirModeloArroz <- paste(dirCurrent, "modeloMaiz/", sep = "", collapse = NULL)
 
+pathConstruct <- function(dirConstruct)
+  {
+  if (file.exists(file.path(dirConstruct))){
+    unlink(file.path(dirConstruct), recursive = TRUE, force = TRUE)
+    cat (paste0('\n... directorio "',dirConstruct,'" eliminado\n'))
+    dir.create(file.path(dirConstruct))
+    cat (paste0('... directorio "',dirConstruct,'" creado\n\n'))
+    }
+    else {
+      dir.create(file.path(dirConstruct))
+      cat (paste0('\n... directorio "',dirConstruct,'" creado\n'))
+    }
+  }
+
+pathConstruct(dirForecastInputs)
+pathConstruct(dirForecastOutputs)
+pathConstruct(dir_save)
+pathConstruct(path_save)
+pathConstruct(path_output)
+pathConstruct(dir_run)
+pathConstruct(dir_outMaiz)
+
 CMDdirForecastInputs <- paste0(gsub("/","\\\\",dirForecastInputs), "\\\"")
 try(system(paste0(forecastAppDll,"-s \"prec\" -p \"",CMDdirForecastInputs," -start 1981 -end 2013"), intern = TRUE, ignore.stderr = TRUE))
 try(system(paste0(forecastAppDll,"-wf -p \"",CMDdirForecastInputs," -name \"daily\""), intern = TRUE, ignore.stderr = TRUE))
 #try(system(paste0(forecastAppDll,"-fs -p \"",CMDdirForecastInputs), intern = TRUE, ignore.stderr = TRUE))
-
-if (!file.exists(file.path(dir_save))){
-  cat ('\n... directorio "descarga" creado\n\n\n')
-  dir.create(file.path(dir_save))
-}
-
-if (!file.exists(file.path(path_prob))){
-  cat ('... directorio "probForecast" creado\n\n\n')
-  dir.create(file.path(path_prob))
-}
-
-if (!file.exists(file.path(path_output))){
-  cat ('... directorio "path_output" creado\n\n\n')
-  dir.create(file.path(path_output))
-}
-
-if (!file.exists(file.path(dir_run))){
-  cat ('... directorio "dir_run" creado\n\n\n')
-  dir.create(file.path(dir_run))
-}
-
-if (!file.exists(file.path(dir_outMaiz))){
-  cat ('... directorio "dir_outMaiz" creado\n\n\n')
-  dir.create(file.path(dir_outMaiz))
-}
+cat("\n")
 
 runPrediccion <- source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL))
 
-# runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse = NULL))
+runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse = NULL))
 
 # runModeloMaiz <- source(paste(dirModeloMaiz,'call_functions.R', sep = "", collapse = NULL))
 
