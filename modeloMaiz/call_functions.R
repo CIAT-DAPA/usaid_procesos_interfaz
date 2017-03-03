@@ -14,7 +14,7 @@ path_functions <- dirModeloMaiz
 # dir_soil <- 'D:/CIAT/USAID/DSSAT/multiple_runs/R-DSSATv4.6/Runs/CC.SOL'  # it is not only the folder is all path when is the soil file
 # dir_climate <- 'D:/CIAT/USAID/DSSAT/multiple_runs/R-DSSATv4.6/stations/Forecasts/Escenarios/'
 # dir_climate <- 'D:/CIAT/USAID/DSSAT/multiple_runs/R-DSSATv4.6/stations/Forecasts/Escenarios_update_csv/'
-region <- "LaUnion" 
+# region <- "LaUnion" 
 name_files <-"USAID"   ## Weather station (generic), x-file name and for the indicate the run into the DSSBatch
 cultivar <- 'CI0027'   ## cultivar a correr
 ID_SOIL <- 'CCBuga0001' ## id para el suelo
@@ -24,7 +24,7 @@ select_day <- 1 ## 1 primer dia a simular 2 segundo dia etc....  select day to s
 number_days <- 45 ## Numero de dias a simular desde el primer dia del pronostico climatico (SDATE siempre seria el primer dia del pronostico)
 
 ## agregar out dir donde van a estar las salidas (el .csv que se necesita para el servidor)
-name_csv <- paste(dir_outMaiz, "prueba.csv", sep = "", collapse = NULL)
+# name_csv <- paste(dir_outMaiz, "prueba.csv", sep = "", collapse = NULL)
 # name_csv <- "prueba.csv"
 
 ## add source functions
@@ -68,13 +68,7 @@ run_mult_dssat(dir_dssat,
                5,
                name_csv)
 
-
-
-
-
-
-
-
-
-
-
+if (file.exists(file.path(dir_base))){
+    unlink(file.path(dir_base), recursive = TRUE, force = TRUE)
+    cat (paste0('\n... directorio "',dir_base,'" eliminado\n'))
+}

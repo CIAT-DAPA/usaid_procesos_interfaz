@@ -384,6 +384,10 @@ for(y in min(data_temp$year):max(data_temp$year)){
       write.csv(esc_final_diarios[[k]],paste(path_output,"/",station,"/",nom[k],".csv",sep=""),row.names=F)
     }
     
+    try(system(paste0('mv ',path_output,"/",station,"/min.csv ", path_output_sum, "/", station,"_min.csv")))
+    try(system(paste0('mv ',path_output,"/",station,"/prom.csv ", path_output_sum, "/", station,"_prom.csv")))
+    try(system(paste0('mv ',path_output,"/",station,"/max.csv ", path_output_sum, "/", station,"_max.csv")))
+    
   cat("\n Proceso finalizado exitosamente \n \n")
 
  

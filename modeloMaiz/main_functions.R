@@ -96,7 +96,7 @@ make_date <- function(data){
 load_climate <- function(dir_climate){
   require(tidyverse)
   require(lubridate)
-  climate_list <- list.files(dir_climate, pattern = 'escenario', full.names = T)
+  climate_list <- list.files(dir_climate, full.names = T)
   
   ## function to extract some files that you need
   
@@ -152,7 +152,7 @@ files_dssat <- function(dir_dssat, dir_run, dir_soil){
 execute_dssat <- function(dir_run){
   
   setwd(dir_run)
-  system(paste0("DSCSM046.EXE " , "MZCER046"," B ", "DSSBatch.v46"), ignore.stdout = T, show.output.on.console = F)
+  system(paste0("DSCSM046.EXE " , "MZCER046"," B ", "DSSBatch.v46"), ignore.stdout = T, show.output.on.console = T)
   setwd('..')
   
 }

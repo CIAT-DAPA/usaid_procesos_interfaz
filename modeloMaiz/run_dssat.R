@@ -6,7 +6,7 @@ run_dssat <- function(dir_dssat, dir_soil, dir_run, region, name_files, input_da
   options(encoding = "UTF-8")
   
   dir_base <- paste0(dir_run, 'temporal/')
-  
+
   dir_run_id <- make_id_run(dir_base, region, cultivar, select_day) ## make folder by PDATE? is it confusing them?
   
   ## in this point its necessary to add all functions that can to wirte files (x-file, weather, soil, batch)
