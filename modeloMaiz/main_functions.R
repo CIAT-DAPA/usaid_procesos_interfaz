@@ -131,11 +131,11 @@ files_dssat <- function(dir_dssat, dir_run, dir_soil){
   
   require(tidyverse)
   
-  files <- "MZCER046.CUL|MZCER046.ECO|MZCER046.SPE"  ## special files
+  files <- "cultivar.CUL|eco.ECO|spe.SPE"  ## special files
   
   exe_dssat <- paste0(dir_dssat, 'DSCSM046.EXE')    ## Executable DSSAT v 4.6
   
-  parameters <- paste0(dir_dssat, 'Genotype/') %>%
+  parameters <- dir_parameters %>%
     list.files(full.names= T) %>%
     filter_text(files, different = F)
   
@@ -367,7 +367,7 @@ tidy_descriptive <- function(data, W_station, soil, cultivar, start, end){
 
 
 
-run_mult_dssat <- function(dir_dssat, dir_soil, dir_run, region, name_files, input_dates, select_day, cultivar, climate, id_soil, number_days, out_csv){
+run_mult_dssat <- function(dir_dssat, dir_soil, dir_run, region, name_files, input_dates, select_day, cultivar, climate, id_soil, number_days, name_csv){
   
   # proof
   

@@ -15,9 +15,9 @@ path_functions <- dirModeloMaiz
 # dir_climate <- 'D:/CIAT/USAID/DSSAT/multiple_runs/R-DSSATv4.6/stations/Forecasts/Escenarios/'
 # dir_climate <- 'D:/CIAT/USAID/DSSAT/multiple_runs/R-DSSATv4.6/stations/Forecasts/Escenarios_update_csv/'
 # region <- "LaUnion" 
-name_files <-"USAID"   ## Weather station (generic), x-file name and for the indicate the run into the DSSBatch
-cultivar <- 'CI0027'   ## cultivar a correr
-ID_SOIL <- 'CCBuga0001' ## id para el suelo
+name_files <-"x"   ## Weather station (generic), x-file name and for the indicate the run into the DSSBatch
+cultivar <- hashCrop   ## cultivar a correr
+ID_SOIL <- hashSoil ## id para el suelo
 
 ## Esto deberia ser constante  
 select_day <- 1 ## 1 primer dia a simular 2 segundo dia etc....  select day to simulate from first date of climate forecast o then

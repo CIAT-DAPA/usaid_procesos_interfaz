@@ -44,7 +44,7 @@ information$WATER <- 'Y'   ## Y = Utiliza balance Hidrico, N = No utiliza balanc
 
 ## Fields
 information$NYERS <- 20 ## Years for simulation
-information$name <- 'CALB.MZX' # Only specify four characters  an then .MZX or depend to crop
+information$name <- 'x.MZX' # Only specify four characters  an then .MZX or depend to crop
 information$exp_details <- '*EXP.DETAILS: CALB1501MZ Calibracion Buga Valle 2015B'
 information$WSTA <- 'CCCR8000'  ## add with year of start simulation
 information$ID_SOIL <- 'CCBuga0001' # name of ID soil

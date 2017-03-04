@@ -31,7 +31,7 @@
 make_xfile_region <- function(region, WSTA, filename, PDATE, SDATE, cultivar, ID_SOIL){
   
   
-  if(region == "LaUnion"){
+  # if(region == "LaUnion"){
     
     
     ## Parameters necessary to write experimental file
@@ -125,7 +125,7 @@ make_xfile_region <- function(region, WSTA, filename, PDATE, SDATE, cultivar, ID
     close(proof)
     
     
-  }
+  # }
   
 }
 

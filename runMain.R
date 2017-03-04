@@ -21,7 +21,7 @@ dirInputs <- paste0(dirCurrent, "inputs/", sep = "", collapse = NULL)
 dirOutputs <- paste0(dirCurrent, "outputs/", sep = "", collapse = NULL)
 dirPrediccionInputs <- paste0(dirInputs, "prediccionClimatica/", sep = "", collapse = NULL)
 dirPrediccionOutputs <- paste0(dirOutputs, "prediccionClimatica/", sep = "", collapse = NULL)
-forecastAppDll <- paste0("dotnet ", dirCurrent, "forecast_app/CIAT.DAPA.USAID.Forecast.ForecastApp.dll -out ", sep = "", collapse = NULL)
+forecastAppDll <- paste0("dotnet ", dirCurrent, "forecast_app/CIAT.DAPA.USAID.Forecast.ForecastApp.dll ", sep = "", collapse = NULL)
 dir_save <- paste0(dirPrediccionInputs, "descarga", sep = "", collapse = NULL)
 dir_response <- paste0(dirPrediccionInputs, "estacionesMensuales", sep = "", collapse = NULL)
 dir_stations <- paste0(dirPrediccionInputs, "dailyData", sep = "", collapse = NULL)
@@ -36,8 +36,6 @@ dirCultivosOutputs <-paste0(dirOutputs, "cultivos/", sep = "", collapse = NULL)
 dirModeloMaiz <- paste0(dirCurrent, "modeloMaiz/", sep = "", collapse = NULL)
 dirModeloMaizInputs <- paste0(dirInputs, "cultivos/maiz/", sep = "", collapse = NULL)
 dirModeloMaizOutputs <-paste0(dirOutputs, "cultivos/maiz/", sep = "", collapse = NULL)
-dir_run <- paste0(dirModeloMaizOutputs, "run/", sep = "", collapse = NULL)
-dir_soil <- paste0(dirModeloMaiz, "soils/CC.SOL", sep = "", collapse = NULL)
 
 ## Variables paquete arroz
 dirModeloArroz <- paste0(dirCurrent, "modeloMaiz/", sep = "", collapse = NULL)
@@ -69,15 +67,16 @@ pathConstruct(path_output_sum)
 pathConstruct(dirCultivosOutputs)
 # pathConstruct(dirModeloMaizInputs)
 pathConstruct(dirModeloMaizOutputs)
-pathConstruct(dir_run)
 # pathConstruct(dirModeloArrozInputs)
 pathConstruct(dirModeloArrozOutputs)
 
 CMDdirInputs <- paste0(gsub("/","\\\\",dirPrediccionInputs), "\\\"")
-try(system(paste0(forecastAppDll,"-s \"prec\" -p \"",CMDdirInputs," -start 1981 -end 2013"), intern = TRUE, ignore.stderr = TRUE))
-try(system(paste0(forecastAppDll,"-wf -p \"",CMDdirInputs," -name \"daily\""), intern = TRUE, ignore.stderr = TRUE))
+try(system(paste0(forecastAppDll,"-out -s \"prec\" -p \"",CMDdirInputs," -start 1981 -end 2013"), intern = TRUE, ignore.stderr = TRUE))
+try(system(paste0(forecastAppDll,"-out -wf -p \"",CMDdirInputs," -name \"daily\""), intern = TRUE, ignore.stderr = TRUE))
 CMDdirInputs <- paste0(gsub("/","\\\\",dirInputs), "\\\"")
-try(system(paste0(forecastAppDll,"-fs -p \"",CMDdirInputs), intern = TRUE, ignore.stderr = TRUE))
+try(system(paste0(forecastAppDll,"-out -fs -p \"",CMDdirInputs), intern = TRUE, ignore.stderr = TRUE))
+#CMDdirOutputs <- paste0(gsub("/","\\\\",dirOutputs), "\\\"")
+#try(system(paste0(forecastAppDll,"-in -fs -p \"",CMDdirOutputs), intern = TRUE, ignore.stderr = TRUE))
 cat("\n")
 
 runPrediccion <- source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL))
@@ -89,7 +88,7 @@ setups = list.dirs(dirModeloMaizInputs,full.names = T)
 
 for(x in 2:length(setups)){
   setSplit <- strsplit(setups[x],"/")
-  longName <- setSplit[[1]][length(set_split[[1]])]
+  longName <- setSplit[[1]][length(setSplit[[1]])]
   longNameSplit <- strsplit(longName,"_")
 
   hashStation <- longNameSplit[[1]][1]
@@ -98,11 +97,15 @@ for(x in 2:length(setups)){
   hashDayRange <- longNameSplit[[1]][4]
 
   cat(paste("\n\n Ejecutando modelo Maiz para estacion: \"", hashStation, "\" cultivar: \"", hashCrop, "\" suelo: \"", hashSoil, "\" rango de dias: \"", hashDayRange, "\"\n", sep = ""))
+  region <- hashStation
   name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
-  cat(name_csv)
   dir_climate <- paste0(path_output, "/", hashStation, sep = "", collapse = NULL)
-  cat(dir_climate)
-  # runModeloMaiz <- source(paste(dirModeloMaiz,'call_functions.R', sep = "", collapse = NULL))
+  dir_parameters <- paste0(dirModeloMaizInputs, longName, "/", sep = "", collapse = NULL)
+  dir_soil <- paste0(dirModeloMaizInputs, longName, "/soil.SOL", sep = "", collapse = NULL)
+  dir_run <- paste0(dirModeloMaizOutputs, longName, "/run/", sep = "", collapse = NULL)
+  pathConstruct(paste0(dirModeloMaizOutputs, longName, sep = "", collapse = NULL))
+  pathConstruct(dir_run)
+  runModeloMaiz <- source(paste(dirModeloMaiz,'call_functions.R', sep = "", collapse = NULL))
   }
 
 cat("\n\n... modelo Maiz finalizado\n")
