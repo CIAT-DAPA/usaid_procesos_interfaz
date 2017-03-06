@@ -13,7 +13,7 @@ library(lazyeval)
 library(foreach)
 
 # dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
-dirCurrent <- "C:/USAID/procesos_interfaz/"
+dirCurrent <- "C:/USAID/procesos_dssat/usaid_procesos_interfaz/"
 
 ## Variables paquete forecast
 dirForecast <- paste0(dirCurrent, "prediccionClimatica/", sep = "", collapse = NULL)
@@ -103,7 +103,7 @@ for(x in 2:length(setups)){
   name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
   dir_climate <- paste0(path_output, "/", hashStation, sep = "", collapse = NULL)
   dir_parameters <- paste0(dirModeloMaizInputs, longName, "/", sep = "", collapse = NULL)
-  dir_soil <- paste0(dirModeloMaizInputs, longName, "/CC.SOL", sep = "", collapse = NULL)
+  dir_soil <- paste0(dirModeloMaizInputs, longName, "/SOIL.SOL", sep = "", collapse = NULL)
   dir_run <- paste0(dirModeloMaizOutputs, longName, "/run/", sep = "", collapse = NULL)
   pathConstruct(paste0(dirModeloMaizOutputs, longName, sep = "", collapse = NULL))
   pathConstruct(dir_run)
