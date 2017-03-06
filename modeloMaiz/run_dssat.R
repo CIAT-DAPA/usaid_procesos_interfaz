@@ -1,5 +1,5 @@
 
-run_dssat <- function(dir_dssat, dir_soil, dir_run, region, name_files, input_dates, select_day, cultivar, climate, id_soil){
+run_dssat <- function(dir_dssat, dir_soil, dir_run, region, name_files, input_dates, select_day, cultivar, climate, id_soil, name_csv, name_cultivar, name_soil){
   
   ## make dir to run based on a folder input by climate scenario (folder_001, ..... , folder_100) 
   
@@ -51,7 +51,7 @@ run_dssat <- function(dir_dssat, dir_soil, dir_run, region, name_files, input_da
   
   # add files necessay to run DSSAT
 
-  files_dssat(dir_dssat, dir_run_id, dir_soil)
+  files_dssat(dir_dssat, dir_run_id, dir_soil, dir_parameters)
   
   ### here add function to execute DSSAT
   execute_dssat(dir_run_id)
@@ -75,22 +75,22 @@ run_dssat <- function(dir_dssat, dir_soil, dir_run, region, name_files, input_da
   # soil <- ID_SOIL
   
   yield <- calc_desc(summary_out, "yield_0") %>%
-              tidy_descriptive(region, id_soil, cultivar, DATE, DATE)
+              tidy_descriptive(region, name_soil, name_cultivar, DATE, DATE)
   
   d_dry <- calc_desc(summary_out, "d_dry") %>%
-              tidy_descriptive(region, id_soil, cultivar, DATE, DATE)
+              tidy_descriptive(region, name_soil, name_cultivar, DATE, DATE)
   
   prec_acu <- calc_desc(summary_out, "prec_acu") %>%
-                tidy_descriptive(region, id_soil, cultivar, DATE, DATE)
+                tidy_descriptive(region, name_soil, name_cultivar, DATE, DATE)
   
   t_max_acu <- calc_desc(weather_out, "t_max_acu") %>%
-                tidy_descriptive(region, id_soil, cultivar, DATE, DATE)
+                tidy_descriptive(region, name_soil, name_cultivar, DATE, DATE)
   
   t_min_acu <- calc_desc(weather_out, "t_min_acu") %>%
-    tidy_descriptive(region, id_soil, cultivar, DATE, DATE)
+    tidy_descriptive(region, name_soil, name_cultivar, DATE, DATE)
   
   bio_acu <- calc_desc(summary_out, "bio_acu") %>%
-    tidy_descriptive(region, id_soil, cultivar, DATE, DATE)
+    tidy_descriptive(region, name_soil, name_cultivar, DATE, DATE)
   
   summary_stats <- dplyr::bind_rows(list(yield, 
                                          d_dry, 
@@ -103,6 +103,7 @@ run_dssat <- function(dir_dssat, dir_soil, dir_run, region, name_files, input_da
   ## Write files in a particular folder
   
   setwd(dir_run)
+  setwd('..')
   return(summary_stats)
   
   # unlink(paste0(strsplit(dir_run_id, "/")[[1]], collapse = "/"), recursive = TRUE)

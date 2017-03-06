@@ -126,21 +126,36 @@ load_climate <- function(dir_climate){
 # dir_soil <- 'D:/CIAT/USAID/DSSAT/multiple_runs/R-DSSATv4.6/Runs/CC.SOL'  # for now
 # files_dssat(dir_dssat, dir_run, dir_soil)
 
-files_dssat <- function(dir_dssat, dir_run, dir_soil){
+files_dssat <- function(dir_dssat, dir_run, dir_soil, dir_parameters){
   
   
   require(tidyverse)
   
-  files <- "cultivar.CUL|eco.ECO|spe.SPE"  ## special files
+  # files <- ".CUL|.ECO|.SPE"  ## special files
   
+  CUL <- list.files(dir_parameters, full.names = TRUE) %>%
+    grep("*.CUL", ., value = TRUE) 
+  
+  # CUL <- CUL[CUL]
+    
+  ECO <- list.files(dir_parameters, full.names = TRUE) %>%
+      grep("*.ECO", ., value = TRUE) 
+  
+  SPE <- list.files(dir_parameters, full.names = TRUE) %>%
+      grep("*.SPE", ., value = TRUE) 
+    
   exe_dssat <- paste0(dir_dssat, 'DSCSM046.EXE')    ## Executable DSSAT v 4.6
   
-  parameters <- dir_parameters %>%
-    list.files(full.names= T) %>%
-    filter_text(files, different = F)
+  # parameters <- dir_parameters %>%
+    # list.files(full.names= T) %>%
+    # filter_text(files, different = F)
+  
+  
   
   file.copy(exe_dssat, dir_run)
-  file.copy(parameters, dir_run)
+  file.copy(CUL, dir_run)
+  file.copy(ECO, dir_run)
+  file.copy(SPE, dir_run)
   file.copy(dir_soil, dir_run)
   
   
@@ -367,10 +382,14 @@ tidy_descriptive <- function(data, W_station, soil, cultivar, start, end){
 
 
 
-run_mult_dssat <- function(dir_dssat, dir_soil, dir_run, region, name_files, input_dates, select_day, cultivar, climate, id_soil, number_days, name_csv){
+run_mult_dssat <- function(dir_dssat, dir_soil, dir_run, region, name_files, input_dates, select_day, cultivar, climate, id_soil, number_days, output){
+  
   
   # proof
   
+  name_csv <- output$name_csv
+  name_cultivar <- output$cultivar
+  name_soil <- output$soil
   # number_days <- 3
   # input_dates <- climate_PS$input_dates
   # climate <- climate_PS$climate
@@ -380,13 +399,24 @@ run_mult_dssat <- function(dir_dssat, dir_soil, dir_run, region, name_files, inp
   out_summary <- foreach(i = iterators) %do% {
     
     # print(i)
-    run_dssat(dir_dssat, dir_soil, dir_run, region, name_files, input_dates, i, cultivar, climate, id_soil)
+    run_dssat(dir_dssat, dir_soil, dir_run, region, name_files, input_dates, i, cultivar, climate, id_soil, name_csv, name_cultivar, name_soil)
     
     
   } 
+  
   
   out_summary <- bind_rows(out_summary)
   write_csv(out_summary, paste0(dir_run , name_csv))
   return(out_summary)
 }
 
+
+output_names <- function(hashCrop, hashSoil, name_csv){
+  
+  output <- list()
+  output$name_csv <- name_csv
+  output$cultivar <- hashCrop 
+  output$soil <- hashSoil
+  
+  return(output)
+}
