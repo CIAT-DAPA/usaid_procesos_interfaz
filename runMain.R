@@ -79,8 +79,10 @@ try(system(paste0(forecastAppDll,"-out -fs -p \"",CMDdirInputs), intern = TRUE, 
 #try(system(paste0(forecastAppDll,"-in -fs -p \"",CMDdirOutputs), intern = TRUE, ignore.stderr = TRUE))
 cat("\n")
 
+# Prediccion
 runPrediccion <- source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL))
 
+# Remuestreo
 runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse = NULL))
 
 ## Modelo maiz
@@ -101,12 +103,13 @@ for(x in 2:length(setups)){
   name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
   dir_climate <- paste0(path_output, "/", hashStation, sep = "", collapse = NULL)
   dir_parameters <- paste0(dirModeloMaizInputs, longName, "/", sep = "", collapse = NULL)
-  dir_soil <- paste0(dirModeloMaizInputs, longName, "/soil.SOL", sep = "", collapse = NULL)
+  dir_soil <- paste0(dirModeloMaizInputs, longName, "/CC.SOL", sep = "", collapse = NULL)
   dir_run <- paste0(dirModeloMaizOutputs, longName, "/run/", sep = "", collapse = NULL)
   pathConstruct(paste0(dirModeloMaizOutputs, longName, sep = "", collapse = NULL))
   pathConstruct(dir_run)
   runModeloMaiz <- source(paste(dirModeloMaiz,'call_functions.R', sep = "", collapse = NULL))
   }
+## Termina modelo Maiz
 
 cat("\n\n... modelo Maiz finalizado\n")
 
