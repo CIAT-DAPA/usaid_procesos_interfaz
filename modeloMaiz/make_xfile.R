@@ -2,59 +2,29 @@
 ## Function to make x-file for DSSAT v4.6 from code R
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # To test
 
-information <- list()
+# information <- list()
 
 ## Parameters to organize then 
 
-information$NITRO <-  'N'  ## Y = utiliza balance nitrogeno, N =  no utiliza balance nitrogeno
-information$WATER <- 'Y'   ## Y = Utiliza balance Hidrico, N = No utiliza balance hidrico
+# information$NITRO <-  'N'  ## Y = utiliza balance nitrogeno, N =  no utiliza balance nitrogeno
+# information$WATER <- 'Y'   ## Y = Utiliza balance Hidrico, N = No utiliza balance hidrico
 
 
 ## Fields
-information$NYERS <- 20 ## Years for simulation
-information$name <- 'x.MZX' # Only specify four characters  an then .MZX or depend to crop
-information$exp_details <- '*EXP.DETAILS: CALB1501MZ Calibracion Buga Valle 2015B'
-information$WSTA <- 'CCCR8000'  ## add with year of start simulation
-information$ID_SOIL <- 'CCBuga0001' # name of ID soil
-information$smodel <- 'MZCER045' # model to use
+# information$NYERS <- 20 ## Years for simulation
+# information$name <- 'x.MZX' # Only specify four characters  an then .MZX or depend to crop
+# information$exp_details <- '*EXP.DETAILS: CALB1501MZ Calibracion Buga Valle 2015B'
+# information$WSTA <- 'CCCR8000'  ## add with year of start simulation
+# information$ID_SOIL <- 'CCBuga0001' # name of ID soil
+# information$smodel <- 'MZCER045' # model to use
 
 ## Cultivars
 
-information$INGENO <- 'CI0027'
-information$CR <- 'MZ'
-information$CNAME <- 'USAID_Union'
+# information$INGENO <- 'CI0027'
+# information$CR <- 'MZ'
+# information$CNAME <- 'USAID_Union'
 
 
 
@@ -67,59 +37,59 @@ information$CNAME <- 'USAID_Union'
 # 1    MZ 80085   -99     0     1     1   -99     0     0     0   100    15 -99
 
 
-information$ICBL <- c(25, 45, 95)
-information$SH20 <- -99
-information$SNH4 <- c(4.2, 4.4, 4.5)
-information$SNO3 <- c(11.9, 12.4, 7.6)
+# information$ICBL <- c(25, 45, 95)
+# information$SH20 <- -99
+# information$SNH4 <- c(4.2, 4.4, 4.5)
+# information$SNO3 <- c(11.9, 12.4, 7.6)
 
 # Planting Details
 
 
 ## doing a comment that explain all parameters
-information$PDATE <- 80092
-information$SDATE <- pmax(information$PDATE - 20, 0)   ## Starting simulation
-information$plant <- 'R'  # R = planting on reporting date
+# information$PDATE <- 80092
+# information$SDATE <- pmax(information$PDATE - 20, 0)   ## Starting simulation
+# information$plant <- 'R'  # R = planting on reporting date
 ## Remember Simulation date starts 20 days before planting date
-information$EDATE <- -99
-information$PPOP <- 6.25
-information$PPOE <- 6.25
-information$PLME <- 'S'
-information$PLDS <- 'R'
-information$PLRS <- 80
-information$PLRD <- 90
-information$PLDP <- 4
+# information$EDATE <- -99
+# information$PPOP <- 6.25
+# information$PPOE <- 6.25
+# information$PLME <- 'S'
+# information$PLDS <- 'R'
+# information$PLRS <- 80
+# information$PLRD <- 90
+# information$PLDP <- 4
 ## Variables como PLWT, PAGE, PENV, PLPH, SPRL con -99
 
 
 ## Date of application of irrigation
 
-information$IRRIG <- 'R'  ## R on reporting date, A automatically irragated, N Nothing
-information$IROP <- 'IR001'  ## 
-information$IDATE <- c(15289, 15293, 15296, 15304, 15345, 15362, 16020, 16036)
-information$IRVAL <- c(36, 35.59, 39.53, 21.13, 27.77, 32.65, 37.10, 41.47)
+# information$IRRIG <- 'R'  ## R on reporting date, A automatically irragated, N Nothing
+# information$IROP <- 'IR001'  ## 
+# information$IDATE <- c(15289, 15293, 15296, 15304, 15345, 15362, 16020, 16036)
+# information$IRVAL <- c(36, 35.59, 39.53, 21.13, 27.77, 32.65, 37.10, 41.47)
 
 
 
 # if is necessary to specify sowing dates 
-information$pfrst <- -99
-information$plast <- -99
-information$IC <- 1 # 1 = True or  0 = False  (when you want to use Initial Condigions)
-information$system <- 'irrigation'  ## Solo se habilita con IC = 1 (irrigation es como condiciones inicial del suelo menos drasticas)
+# information$pfrst <- -99
+# information$plast <- -99
+# information$IC <- 1 # 1 = True or  0 = False  (when you want to use Initial Condigions)
+# information$system <- 'irrigation'  ## Solo se habilita con IC = 1 (irrigation es como condiciones inicial del suelo menos drasticas)
 
 ## Fertilizers
 
-information$FDATE = c(21, 21, 35, 35, 58)  ## Dias de la aplicacion +
-information$FMCD = c('FE006', 'FE016', 'FE005', 'FE016', 'FE005') ## Investigar acerca de este parametro
-information$FACD = 'AP002' ## Investigar acerca de este parametro
-information$FDEP = 4       ## Profundidad de la aplicacion del nitrogeno
-information$FAMN = c(33.3, 0, 63.9, 0, 63.9)
-information$FAMP = c(29.1, 0, 0, 0, 0) ## Investigar mas acerca de este parametro
-information$FAMK = c(0, 36, 0, 39.2, 0)
-information$FAMC = 0
-information$FAMO = 0
-information$FOCD = 0
-information$FERNAME = -99
-information$FERTI = 'D' ## D = dias despues de la siembra
+# information$FDATE = c(21, 21, 35, 35, 58)  ## Dias de la aplicacion +
+# information$FMCD = c('FE006', 'FE016', 'FE005', 'FE016', 'FE005') ## Investigar acerca de este parametro
+# information$FACD = 'AP002' ## Investigar acerca de este parametro
+# information$FDEP = 4       ## Profundidad de la aplicacion del nitrogeno
+# information$FAMN = c(33.3, 0, 63.9, 0, 63.9)
+# information$FAMP = c(29.1, 0, 0, 0, 0) ## Investigar mas acerca de este parametro
+# information$FAMK = c(0, 36, 0, 39.2, 0)
+# information$FAMC = 0
+# information$FAMO = 0
+# information$FOCD = 0
+# information$FERNAME = -99
+# information$FERTI = 'D' ## D = dias despues de la siembra
 
 
 

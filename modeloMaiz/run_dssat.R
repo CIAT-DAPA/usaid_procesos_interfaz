@@ -1,5 +1,5 @@
 
-run_dssat <- function(dir_dssat, dir_soil, dir_run, region, name_files, input_dates, select_day, cultivar, climate, id_soil, name_csv, name_cultivar, name_soil){
+run_dssat <- function(dir_dssat, dir_soil, dir_run, dir_parameters, name_files, input_dates, select_day, cultivar, climate, id_soil, name_csv, name_cultivar, name_soil, region){
   
   ## make dir to run based on a folder input by climate scenario (folder_001, ..... , folder_100) 
   
@@ -40,7 +40,7 @@ run_dssat <- function(dir_dssat, dir_soil, dir_run, region, name_files, input_da
   # DATE <- paste(day(DATE), sprintf("%.2d", month(DATE)), year(DATE), sep = '/')
   
   ## id_soil <- ID_SOIL
-  make_xfile_region(region, paste0(name_files, sprintf("%.3d", 1:99)), paste0(dir_run_id, name_files, '.MZX'), PDATE, SDATE, cultivar, id_soil) ## Remember them can to change the filename to different regions
+  make_xfile_region(dir_parameters, paste0(name_files, sprintf("%.3d", 1:99)), paste0(dir_run_id, name_files, '.MZX'), PDATE, SDATE, cultivar, id_soil) ## Remember them can to change the filename to different regions
   
   
   invisible(make_mult_wth(climate, dir_run_id, name_files))
