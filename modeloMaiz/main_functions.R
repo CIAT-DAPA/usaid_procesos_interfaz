@@ -382,7 +382,7 @@ tidy_descriptive <- function(data, W_station, soil, cultivar, start, end){
 
 
 
-run_mult_dssat <- function(dir_dssat, dir_soil, dir_run, region, name_files, input_dates, select_day, cultivar, climate, id_soil, number_days, output){
+run_mult_dssat <- function(dir_dssat, dir_soil, dir_run, dir_parameters, name_files, input_dates, select_day, cultivar, climate, id_soil, number_days, output, region){
   
   
   # proof
@@ -399,7 +399,7 @@ run_mult_dssat <- function(dir_dssat, dir_soil, dir_run, region, name_files, inp
   out_summary <- foreach(i = iterators) %do% {
     
     # print(i)
-    run_dssat(dir_dssat, dir_soil, dir_run, region, name_files, input_dates, i, cultivar, climate, id_soil, name_csv, name_cultivar, name_soil)
+    run_dssat(dir_dssat, dir_soil, dir_run, dir_parameters, name_files, input_dates, i, cultivar, climate, id_soil, name_csv, name_cultivar, name_soil, region)
     
     
   } 
@@ -420,3 +420,24 @@ output_names <- function(hashCrop, hashSoil, name_csv){
   
   return(output)
 }
+
+
+### A`nadir` por cada inputo dentro del x-file?
+
+read_planting <- function(dir_parameters){
+  
+  require(tidyverse)
+  
+  details <- read_csv(paste0(dir_parameters, 'planting_details.csv'))
+  
+}
+
+
+### data frame to list 
+
+frame_list <- function(data){
+  
+  setNames(split(data[,2], seq(nrow(data))), data[,1])
+  
+}
+

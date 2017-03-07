@@ -62,7 +62,7 @@ climate_PS <- tidy_climate(dir_climate, number_days)
 run_mult_dssat(dir_dssat,
                dir_soil,
                dir_run,
-               region,
+               dir_parameters,
                name_files,
                climate_PS$input_dates,
                select_day, 
@@ -70,8 +70,9 @@ run_mult_dssat(dir_dssat,
                climate_PS$climate, 
                ID_SOIL,
                # number_days)
-               5,
-               output)
+               3,
+               output, 
+               region)
 
 if (file.exists(file.path(dir_base))){
     unlink(file.path(dir_base), recursive = TRUE, force = TRUE)
