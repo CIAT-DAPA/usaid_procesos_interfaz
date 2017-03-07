@@ -69,12 +69,12 @@ run_mult_dssat(dir_dssat,
                cultivar,
                climate_PS$climate, 
                ID_SOIL,
-               # number_days)
-               3,
+               number_days,
                output, 
-               region)
+               region, 
+               dirModeloMaizOutputs)
 
-if (file.exists(file.path(dir_base))){
-    unlink(file.path(dir_base), recursive = TRUE, force = TRUE)
-    cat (paste0('\n... directorio "',dir_base,'" eliminado\n'))
-}
+# if (file.exists(file.path(dir_base))){
+#     unlink(file.path(dir_base), recursive = TRUE, force = TRUE)
+#     cat (paste0('\n... directorio "',dir_base,'" eliminado\n'))
+# }
