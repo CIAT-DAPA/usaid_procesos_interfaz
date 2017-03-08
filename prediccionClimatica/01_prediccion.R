@@ -492,7 +492,11 @@ prob_output_final=do.call(rbind,prob_output_list)
 
 #path_save="Y:/USAID_Project/Product_1_web_interface/test/clima/prob_forecast"
 #path_save="C:/Users/dagudelo/Desktop"
-write_csv(prob_output_final,paste0(path_save,"/","probabilities.csv"))
+tbl_df(prob_output_final) %>%
+  mutate(year = as.integer(year),
+         month = as.integer(month)) %>%
+  write_csv(paste0(path_save,"/","probabilities.csv"))
+
 
 cat("\n Pronosticos probabilisticos almacenados \n")
 
@@ -509,7 +513,10 @@ kendall_googness_join=lapply(kendall_goodness,function(x) do.call(rbind,x))
 metrics_output_list=Map(function(x,y,z) cbind(x,y,z),table_year_month,pearson_join,kendall_googness_join)
 metrics_output_all=do.call(rbind,metrics_output_list)
 
-write_csv(metrics_output_all,paste0(path_save,"/","metrics.csv"))
+tbl_df(metrics_output_all) %>%
+  mutate(year = as.integer(year), 
+         month = as.integer(month)) %>%
+  write_csv(paste0(path_save,"/","metrics.csv"))
 
 cat("\n Metricas de validacion almacenadas \n")
 
