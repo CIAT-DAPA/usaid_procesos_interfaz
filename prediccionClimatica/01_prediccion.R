@@ -494,7 +494,10 @@ prob_output_final=do.call(rbind,prob_output_list)
 #path_save="C:/Users/dagudelo/Desktop"
 tbl_df(prob_output_final) %>%
   mutate(year = as.integer(year),
-         month = as.integer(month)) %>%
+         month = as.integer(month),
+         below = below / 100,
+         normal = normal / 100,
+         above = above /100) %>%
   write_csv(paste0(path_save,"/","probabilities.csv"))
 
 
