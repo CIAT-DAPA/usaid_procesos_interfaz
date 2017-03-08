@@ -15,6 +15,13 @@ library(foreach)
 # dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
 dirCurrent <- "C:/USAID/procesos_dssat/usaid_procesos_interfaz/"
 
+# Directorio salidas permanentes que se van a almacenar mes a mes
+dirResults <- "C:/USAID/procesos_dssat/usaid_procesos_interfaz/results"
+if (!file.exists(file.path(dirResults))){
+  dir.create(file.path(dirResults))
+  cat (paste0('\n... directorio "',dirResults,'" creado\n\n'))
+}
+
 ## Variables paquete forecast
 dirForecast <- paste0(dirCurrent, "prediccionClimatica/", sep = "", collapse = NULL)
 dirInputs <- paste0(dirCurrent, "inputs/", sep = "", collapse = NULL)
@@ -75,9 +82,6 @@ try(system(paste0(forecastAppDll,"-out -s \"prec\" -p \"",CMDdirInputs," -start 
 try(system(paste0(forecastAppDll,"-out -wf -p \"",CMDdirInputs," -name \"daily\""), intern = TRUE, ignore.stderr = TRUE))
 CMDdirInputs <- paste0(gsub("/","\\\\",dirInputs), "\\\"")
 try(system(paste0(forecastAppDll,"-out -fs -p \"",CMDdirInputs), intern = TRUE, ignore.stderr = TRUE))
-#CMDdirOutputs <- paste0(gsub("/","\\\\",dirOutputs), "\\\"")
-#try(system(paste0(forecastAppDll,"-in -fs -p \"",CMDdirOutputs), intern = TRUE, ignore.stderr = TRUE))
-cat("\n")
 
 # Prediccion
 runPrediccion <- source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL))
@@ -106,6 +110,8 @@ for(x in 2:length(setups)){
   dir_soil <- paste0(dirModeloMaizInputs, longName, "/SOIL.SOL", sep = "", collapse = NULL)
   dir_run <- paste0(dirModeloMaizOutputs, longName, "/run/", sep = "", collapse = NULL)
   pathConstruct(paste0(dirModeloMaizOutputs, longName, sep = "", collapse = NULL))
+  out_dssat <- paste0(dirModeloMaizOutputs, longName, '/out_dssat', sep = "", collapse = NULL)
+  pathConstruct(out_dssat)
   pathConstruct(dir_run)
   runModeloMaiz <- source(paste(dirModeloMaiz,'call_functions.R', sep = "", collapse = NULL))
   }
@@ -113,5 +119,7 @@ for(x in 2:length(setups)){
 
 cat("\n\n... modelo Maiz finalizado\n")
 
+CMDdirOutputs <- paste0(gsub("/","\\\\",dirOutputs), "\\\"")
+try(system(paste0(forecastAppDll,"-in -fs -cf 0.5 -p \"",CMDdirOutputs), intern = TRUE, ignore.stderr = TRUE))
 
 

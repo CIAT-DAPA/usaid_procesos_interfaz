@@ -445,6 +445,35 @@ for(y in min(data_temp$year):max(data_temp$year)){
 # path_output = "Y:/USAID_Project/Product_1_web_interface/test/clima/resampling/" 
 # path_prob = "Y:/USAID_Project/Product_1_web_interface/test/clima/prob_forecast/20170120_prob.csv"
 # path_data_d = "Y:/USAID_Project/Product_1_web_interface/test/clima/daily_data/"
+
+
+## here make a function to filter text only to summaries and change the files dir to summary dir
+
+copy_summary <- function(path, station){
+  require(magrittr)
+  
+  # path <- path_output
+  # station <- station_names[x]
+  path_files <- paste0(path, '/', station)
+  # omit_resampling <- grep('resampling', str_split(path, "/")[[1]])
+  # to <- str_split(path, "/")[[1]][-omit_resampling]
+  # to <- paste0(paste(to, collapse = '/'), '/summary/')
+  
+  pos_exlude <- list.files(path_files) %>%
+    gsub(".csv", "", .) %>%
+    grep("[a-z]", .)
+  
+  summaries <- list.files(path_files)[pos_exlude]
+  
+  from = paste0(path_files, '/', summaries)
+  to = paste0(path, '/summary/', station, '_', summaries)
+  invisible(file.rename(from, to))
+  # invisible(file.remove(from, to))
+  
+  
+}
+
+## 
 path_data_d <- dir_stations
 
 data_d_all = list.files(path_data_d,full.names = T)
@@ -453,6 +482,11 @@ data_prob_all=read.csv(paste0(path_save,"/probabilities.csv"),header=T,dec=".")
 station_names = gsub('.csv','',list.files(path_data_d))
 
 for(x in 1:length(data_d_all)){
+  
     data_prob = data_prob_all[which(data_prob_all$id==station_names[x]),]
     gen_esc_daily(prob = data_prob,data_d = data_d_all[x],path_output,station = station_names[x])
+    
+    copy_summary(path_output, station_names[x])
+
+    
 }
