@@ -9,6 +9,7 @@
 ## Archivos de la TSM de los siguientes 6 meses
 ## guardados en la ruta suministrada en el input.
 
+
 download.cpt=function(dir_save,month,year){ 
   
   w=(month)+(0:7)
@@ -491,7 +492,7 @@ prob_output_final=do.call(rbind,prob_output_list)
 
 #path_save="Y:/USAID_Project/Product_1_web_interface/test/clima/prob_forecast"
 #path_save="C:/Users/dagudelo/Desktop"
-write.csv(prob_output_final,paste0(path_save,"/","probabilities.csv"),row.names = F)
+write_csv(prob_output_final,paste0(path_save,"/","probabilities.csv"))
 
 cat("\n Pronosticos probabilisticos almacenados \n")
 
@@ -508,7 +509,7 @@ kendall_googness_join=lapply(kendall_goodness,function(x) do.call(rbind,x))
 metrics_output_list=Map(function(x,y,z) cbind(x,y,z),table_year_month,pearson_join,kendall_googness_join)
 metrics_output_all=do.call(rbind,metrics_output_list)
 
-write.csv(metrics_output_all,paste0(path_save,"/","metrics.csv"),row.names = F)
+write_csv(metrics_output_all,paste0(path_save,"/","metrics.csv"))
 
 cat("\n Metricas de validacion almacenadas \n")
 

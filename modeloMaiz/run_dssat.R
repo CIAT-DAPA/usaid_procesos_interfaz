@@ -69,6 +69,8 @@ run_dssat <- function(dir_dssat, dir_soil, dir_run, dir_parameters, name_files, 
                   group_by(scenario) %>%
                   summarise(t_max_acu = sum(TMXD), t_min_acu = sum(TMND)) 
                   
+  ### files .OUT to new dir
+  
   
   ## make a Descriptive Statistics
   
