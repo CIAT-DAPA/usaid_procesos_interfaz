@@ -41,7 +41,7 @@ dirModeloMaizInputs <- paste0(dirInputs, "cultivos/maiz/", sep = "", collapse = 
 dirModeloMaizOutputs <-paste0(dirOutputs, "cultivos/maiz/", sep = "", collapse = NULL)
 
 ## Variables globales paquete arroz
-dirModeloArroz <- paste0(dirCurrent, "modeloMaiz/", sep = "", collapse = NULL)
+dirModeloArroz <- paste0(dirCurrent, "modeloArroz/", sep = "", collapse = NULL)
 dirModeloArrozInputs <- paste0(dirInputs, "cultivos/arroz/", sep = "", collapse = NULL)
 dirModeloArrozOutputs <-paste0(dirOutputs, "cultivos/arroz/", sep = "", collapse = NULL)
 
