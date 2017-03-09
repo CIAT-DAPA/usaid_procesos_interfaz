@@ -1,6 +1,8 @@
 # Librerias y prerequisitos: 
 #   . gunzip
 #   . R librarys
+# DSSAT
+# Oriza
 library(funr)
 library(lubridate)
 library(reshape)
@@ -14,7 +16,7 @@ library(foreach)
 
 ## DIRECTORIO PRINCIPAL
 # dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
-dirCurrent <- "C:/USAID/procesos_interfaz/"
+dirCurrent <- "C:/USAID/usaid_procesos_interfaz/"
 
 ## Variables globales paquete forecast
 dirForecast <- paste0(dirCurrent, "prediccionClimatica/", sep = "", collapse = NULL)
@@ -44,11 +46,12 @@ dirModeloArrozInputs <- paste0(dirInputs, "cultivos/arroz/", sep = "", collapse 
 dirModeloArrozOutputs <-paste0(dirOutputs, "cultivos/arroz/", sep = "", collapse = NULL)
 
 # Directorio salidas permanentes que se van a almacenar mes a mes
-dirResults <- "C:/USAID/procesos_dssat/usaid_procesos_interfaz/results"
+dirResults <- paste0(dirCurrent,"results")
+
 if (!file.exists(file.path(dirResults))){
   dir.create(file.path(dirResults))
-  cat (paste0('\n... directorio "',dirResults,'" creado\n\n'))
-}
+  cat (paste0('\n... directorio "',dirResults,'" creado\n\n'))}
+
 
 # Funcion para borra y crear directorios
 pathConstruct <- function(dirConstruct)
@@ -90,8 +93,8 @@ try(system(paste0(forecastAppDll,"-out -fs -p \"",CMDdirInputs), intern = TRUE, 
 
 # Funcion corrida moledos de cultivos (maiz y arroz)
 runCrop <- function(crop, setups) {
-  for(x in 2:length(setups)){
-    setSplit <- strsplit(setups[x],"/")
+  for(i in 2:length(setups)){
+    setSplit <- strsplit(setups[i],"/")
     longName <- setSplit[[1]][length(setSplit[[1]])]
     longNameSplit <- strsplit(longName,"_")
     
@@ -130,11 +133,11 @@ runPrediccion <- source(paste(dirForecast,'01_prediccion.R', sep = "", collapse 
 runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse = NULL))
 
 ## Corrida Modelo maiz
-setups = list.dirs(dirModeloMaizInputs,full.names = T)
+setups <- list.dirs(dirModeloMaizInputs,full.names = T)
 runCrop('maiz', setups)
 
 ## Corrida Modelo arroz
-setups = list.dirs(dirModeloArrozInputs,full.names = T)
+setups <- list.dirs(dirModeloArrozInputs,full.names = T)
 runCrop('arroz', setups)
 
 # Escribiendo salidas en la base de datos
