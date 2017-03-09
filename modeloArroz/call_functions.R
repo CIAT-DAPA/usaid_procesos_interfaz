@@ -11,17 +11,19 @@ library(foreach)
 
 
 
-path_functions <- 'D:/CIAT/USAID/Oryza/usaid_forecast_rice/'
+#path_functions <- 'D:/CIAT/USAID/Oryza/usaid_forecast_rice/'
+path_functions <- dirModeloArroz
 
-dir_climate <- "D:/CIAT/USAID/Oryza/Escenarios_update_csv/"
-dir_run <- 'D:/CIAT/USAID/Oryza/usaid_forecast_rice/'
+
+#dir_climate <- "D:/CIAT/USAID/Oryza/Escenarios_update_csv/"
+#dir_run <- 'D:/CIAT/USAID/Oryza/usaid_forecast_rice/'
 filename <- 'USAID'  ## name files
 dir_oryza <- 'C:/Program Files (x86)/ORYZA(v3)/'  ## necesario crear una carpeta en esta direccion con los cultivares y archivos experimentales para cada region
-region <- "Saldaña"
+#region <- "Salda?a"
 # cultivar <- 'D:/CIAT/USAID/Oryza/usaid_forecast_rice/Experimental_Cultivar_Files/'
 
 
-cultivar <- "fedearroz2000"
+#cultivar <- "fedearroz2000"
 day <- 1 ## dia a correr a partir del pronostico climatico generado
 number_days <- 5 ## numero de dias a simular 45
 dir_exp_files <- 'D:/CIAT/USAID/Oryza/usaid_forecast_rice/Experimental_Cultivar_Files/'   ## directorio donde se encuentran los archivos experimentales y cultivares
@@ -38,7 +40,7 @@ source(paste0(path_functions, "settings_reruns.R"))
 source(paste0(path_functions, "run_oryza.R"))
 
 
-climate <- tidy_climate(dir_climate, number_days) ## carga todos los escenarios climaticos, organiza los valores para ORYZa y añade la fecha del pronostico ademas de añadir planting date and simulation date
+climate <- tidy_climate(dir_climate, number_days) ## carga todos los escenarios climaticos, organiza los valores para ORYZa y a?ade la fecha del pronostico ademas de a?adir planting date and simulation date
 
 ## function to do this, depend by region?
 
