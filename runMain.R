@@ -103,12 +103,13 @@ runCrop <- function(crop, setups) {
     hashSoil<- longNameSplit[[1]][3]
     hashDayRange <- longNameSplit[[1]][4]
 
+    dir_climate <- paste0(path_output, "/", hashStation, sep = "", collapse = NULL)
+    region <- hashStation
+    
     cat(paste("\n\n Ejecutando modelo ", crop, " para estacion: \"", hashStation, "\" cultivar: \"", hashCrop, "\" suelo: \"", hashSoil, "\" rango de dias: \"", hashDayRange, "\"\n", sep = ""))
     
     if (crop == 'maiz'){
-      region <- hashStation
       name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
-      dir_climate <- paste0(path_output, "/", hashStation, sep = "", collapse = NULL)
       dir_parameters <- paste0(dirModeloMaizInputs, longName, "/", sep = "", collapse = NULL)
       dir_soil <- paste0(dirModeloMaizInputs, longName, "/SOIL.SOL", sep = "", collapse = NULL)
       dir_run <- paste0(dirModeloMaizOutputs, longName, "/run/", sep = "", collapse = NULL)
@@ -120,7 +121,10 @@ runCrop <- function(crop, setups) {
       cat(crop)
     }
     if (crop == 'arroz'){
-      #runModeloMaiz <- source(paste(dirModeloArroz,'call_functions.R', sep = "", collapse = NULL))
+      dir_run <- paste0(dirModeloArrozOutputs, longName, "/run/", sep = "", collapse = NULL)
+      cultivar<- hashCrop
+      dir_parameters <- paste0(dirModeloArrozInputs, longName, "/", sep = "", collapse = NULL)
+      #runModeloArroz <- source(paste(dirModeloArroz,'call_functions.R', sep = "", collapse = NULL))
       cat(crop)
     }   
   }
