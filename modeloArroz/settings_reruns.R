@@ -7,7 +7,7 @@
 
 # settins_reruns(region, EMD, STTIME, IYEAR, ISTN, dir_run)
 
-settins_reruns <- function(region, EMD, STTIME, IYEAR, ISTN, dir_run){
+settins_reruns <- function(EMD, STTIME, IYEAR, ISTN, dir_run, id_s){
   
   require(rebus)
   # ISTN <- 1:length(EMD) ## para controlar el escenario climatico a simular
@@ -17,16 +17,18 @@ settins_reruns <- function(region, EMD, STTIME, IYEAR, ISTN, dir_run){
   
   # crossing()
   
-   
+  id_soil <- id_s$id_soil
+  id_exp <- id_s$id_exp
+  id_crp <- id_s$id_crp
+  
   CNTR <- 'USAID'
   
   WTRDIR = paste0("'", gsub('/', BACKSLASH, dir_run), "'")
   
-  if(region == "Saldaña"){
     
-    data <- data.frame(FILEIT = 'FEMO.exp', 
-                       FILEI2 = 'FEMO.sol',
-                       FILEI1 = 'F2000.crp',
+    data <- data.frame(FILEIT = paste0(id_exp, '.exp'), 
+                       FILEI2 = paste0(id_soil, '.sol'),
+                       FILEI1 = paste0(id_crp, '.crp'),
                        CNTR,
                        ISTN,
                        IYEAR, 
@@ -35,7 +37,7 @@ settins_reruns <- function(region, EMD, STTIME, IYEAR, ISTN, dir_run){
                        EMYR = IYEAR, 
                        WTRDIR = WTRDIR)
     
-  }
+  
   
   return(data)
 }

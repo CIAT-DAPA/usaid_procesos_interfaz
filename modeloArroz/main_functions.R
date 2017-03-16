@@ -5,8 +5,8 @@ load_climate <- function(dir_climate){
   require(tidyverse)
   require(lubridate)
   
-  climate_list <- list.files(dir_climate, pattern = 'escenario', full.names = T)
-
+  climate_list <- list.files(dir_climate, full.names = T)
+  
   climate_list_df <- lapply(climate_list, read_csv) 
   
   return(climate_list_df)
@@ -53,7 +53,7 @@ load_all_climate <- function(dir_climate){
     Map('tidy_climate_date', ., number_scenarios)
   
   return(climate)
-
+  
 }
 
 ## maybe filename USAID
@@ -63,10 +63,10 @@ load_all_climate <- function(dir_climate){
 make_mult_weather <- function(scenarios, dir_run, filename, long, lat, elev){
   
   # filename <- 'D:/CIAT/USAID/Oryza/usaid_forecast_rice/Prueba/'
- 
+  
   number_scenarios <- 1:length(scenarios)
   
-  names <- paste0(dir_run, 'USAID', number_scenarios, '.cli')
+  names <- paste0(dir_run, filename, number_scenarios, '.cli')
   
   invisible(Map('make_weather', scenarios, names, long, lat, elev, number_scenarios))
   
@@ -77,7 +77,7 @@ make_mult_weather <- function(scenarios, dir_run, filename, long, lat, elev){
 make_control <- function(out_file){
   
   # out_file <-  'D:/CIAT/USAID/Oryza/usaid_forecast_rice/Prueba/'
-
+  
   proof <- write_head(out_file, settings_head('CONTROL', 1, 1))
   
   write_ctrl_params(proof, ctrl_params('RES.DAT', 'MODEL.LOG', 'USAID.rer'))
@@ -123,27 +123,52 @@ add_exp_cul <- function(dir_files, region, dir_run){
   require(stringr)
   require(tidyverse)
   
-  if(region == "Saldaña"){
-    
-    dir_files <- list.files(paste0(dir_files, 'Saldaña'), full.names = T)
-    file.copy(dir_files, dir_run)
-    
-    pos_extract <- '.sol' %>%
-      grep(dir_files)
-    
-    split_id_soil <- dir_files %>%
-                        .[pos_extract] %>%
-                        str_split('/') %>%
-                          .[[1]] 
-    
-    id_soil <- grep('.sol', split_id_soil, value = T) %>%
-                  str_split('.sol') %>%
-                  .[[1]] %>%
-                  .[1]
-    
-  }
   
-  return(id_soil)
+  
+  dir_files <- list.files(dir_files, full.names = T)
+  file.copy(dir_files, dir_run)
+  
+  pos_extract <- '.sol' %>%
+    grep(dir_files)
+  
+  split_id_soil <- dir_files %>%
+    .[pos_extract] %>%
+    str_split('/') %>%
+    .[[1]] 
+  
+  id_soil <- grep('.sol', split_id_soil, value = T) %>%
+    str_split('.sol') %>%
+    .[[1]] %>%
+    .[1]
+  
+  
+  pos_extract <- '.crp' %>%
+    grep(dir_files)
+  
+  split_id_soil <- dir_files %>%
+    .[pos_extract] %>%
+    str_split('/') %>%
+    .[[1]] 
+  
+  id_crp <- grep('.crp', split_id_soil, value = T) %>%
+    str_split('.crp') %>%
+    .[[1]] %>%
+    .[1]
+  
+  pos_extract <- '.exp' %>%
+    grep(dir_files)
+  
+  split_id_soil <- dir_files %>%
+    .[pos_extract] %>%
+    str_split('/') %>%
+    .[[1]] 
+  
+  id_exp <- grep('.exp', split_id_soil, value = T) %>%
+    str_split('.exp') %>%
+    .[[1]] %>%
+    .[1]
+  
+  return(list(id_soil = id_soil, id_crp = id_crp, id_exp = id_exp))
   
 }
 
@@ -159,7 +184,7 @@ execute_oryza <- function(dir_run){
 
 ## make id run
 ## dir_run <- 'D:/CIAT/USAID/Oryza/usaid_forecast_rice/Prueba/'
-## region <- "Saldaña"
+## region <- "SaldaÃ±a"
 ## cultivar <- 'fedearroz2000'   ## el nombre de que depende??
 # day <- 1   ## dia para correr a partir de donde se genera el pronostico climatico
 
@@ -168,8 +193,8 @@ make_id_run <- function(dir_run, region, cultivar, day){
   
   require(stringr)
   dir <- paste0(dir_run, region, '/', cultivar, '/', day, '/')
-  dir <- stringr::str_replace(dir, "ñ", "n")
-    
+  dir <- stringr::str_replace(dir, "Ã±", "n")
+  
   if (!dir.exists(dir)) { 
     
     dir.create(dir, showWarnings = F, recursive = TRUE, mode = "777")
@@ -224,8 +249,8 @@ make_PS <- function(data, number_days){
 
 
 tidy_climate <- function(dir_climate, number_days){
-
-
+  
+  
   climate_scenarios <- load_all_climate(dir_climate)
   input_dates <- make_PS(climate_scenarios, number_days)
   return(list(input_dates = input_dates, climate_scenarios = climate_scenarios))
@@ -330,7 +355,7 @@ tidy_descriptive <- function(data, W_station, soil, cultivar, start, end){
 
 
 
-run_mult_oryza <- function(dir_run, dir_files, region, cultivar, climate_scenarios, input_dates, location, select_day, number_days, out_csv){
+run_mult_oryza <- function(dir_run, dir_files, region, cultivar, climate_scenarios, input_dates, location, select_day, number_days, output, dirModeloArrozOutputs){
   
   require(foreach)
   # proof
@@ -339,20 +364,65 @@ run_mult_oryza <- function(dir_run, dir_files, region, cultivar, climate_scenari
   # input_dates <- climate_PS$input_dates
   # climate <- climate_PS$climate
   # id_soil <- ID_SOIL
+  
+  out_csv <- output$name_csv
   iterators <- rep(1:number_days, by = select_day)  
   
   out_op <- foreach(i = iterators) %do% {
     
     # print(i)
-    run_oryza(dir_run, dir_files, region, cultivar, climate$climate_scenarios, climate$input_dates, location, i)
+    run_oryza(dir_run, dir_files, region, cultivar, climate$climate_scenarios, climate$input_dates, location, i, output)
     
     
     
   } 
   
   out_summary <- bind_rows(out_op)
-  write_csv(out_summary, paste0(dir_run , name_csv))
+  write_csv(out_summary, paste0(dirModeloArrozOutputs, out_csv))
   return(out_op)
 }
 
+frame_list <- function(data){
+  
+  setNames(split(data[,2], seq(nrow(data))), data[,1])
+  
+}
+
+
+load_coordinates <- function(dir_parameters){
+  
+  require(readr)
+  coordenadas <- read_csv(paste0(dir_parameters,'coordenadas.csv')) %>%
+    as.data.frame() %>%
+    frame_list()
+  
+}
+
+
+temp_wther <- function(temp_dir){
+  
+  # temp_dir <- id_run
+  temp_dir <- paste0(str_split(temp_dir, '/')[[1]][1], "/", 'tmp', "/")
+  
+  if(dir.exists(temp_dir)){
+    
+    dir.create(temp_dir)
+  } else{
+    
+    unlink(file.path(temp_dir), recursive = T, force = T)
+    dir.create(temp_dir)
+  }
+  return(temp_dir)
+}
+
+
+output_names <- function(hashCrop, hashSoil, name_csv){
+  
+  output <- list()
+  output$name_csv <- name_csv
+  output$cultivar <- hashCrop 
+  output$soil <- hashSoil
+  
+  return(output)
+}
 

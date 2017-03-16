@@ -1,9 +1,10 @@
 
-# function(dir_run, dir_files, region, cultivar, climate_scenarios = climate$climate_scenarios, input_dates = climate$input_dates, location, select_day = day){
+# function(dir_run, dir_files = dir_exp_files, region, cultivar, climate_scenarios = climate$climate_scenarios, input_dates = climate$input_dates, location, select_day = day, output)
 
 
-run_oryza <- function(dir_run, dir_files, region, cultivar, climate_scenarios, input_dates, location, select_day){
+run_oryza <- function(dir_run, dir_files, region, cultivar, climate_scenarios, input_dates, location, select_day, output){
   
+  require(stringr)
   lat <- location$lat
   long <- location$elev
   elev <- location$elev
@@ -12,8 +13,13 @@ run_oryza <- function(dir_run, dir_files, region, cultivar, climate_scenarios, i
   
   id_run <- make_id_run(paste0(dir_run, 'Temporal/'), region, cultivar, select_day)
   
+  temp <- temp_wther(id_run)
   
-  make_mult_weather(climate_scenarios, id_run, filename, long, lat, elev)
+  # make_mult_weather(climate_scenarios, id_run, filename, long, lat, elev)
+  make_mult_weather(climate_scenarios, temp_dir, filename, long, lat, elev)
+  
+
+  
   make_control(id_run)   ## mirar la funcion para cambiar las especificaciones
   
   
@@ -25,14 +31,21 @@ run_oryza <- function(dir_run, dir_files, region, cultivar, climate_scenarios, i
   ISTN <- 1:length(climate_scenarios)
   DATE <- input_dates$DATE[select_day]
   
-  ## esta parte se puede integrar antes de añadir los archivos que necesita oryza y que no depende de una funcion
-  parameters_reruns <- settins_reruns(region, PDATE, SDATE, IYEAR, ISTN, id_run)
+  ## esta parte se puede integrar antes de anadir los archivos que necesita oryza y que no depende de una funcion
+  id_s <- add_exp_cul(dir_files, region, id_run)  ## controla los parametros por region y retorna el id del suelo, crp and xfile
+  
+  # parameters_reruns <- settins_reruns(PDATE, SDATE, IYEAR, ISTN, id_run, id_s)
+  parameters_reruns <- settins_reruns(SDATE, PDATE, IYEAR, ISTN, temp, id_s)
   
   make_reruns(parameters_reruns, id_run)
   files_oryza(dir_oryza, id_run)
-  id_soil <- add_exp_cul(dir_files, region, id_run)  ## controla los parametros por region y retorna el id del suelo
+  
   execute_oryza(id_run)
   
+  ## copy climate oryza to current directory
+  
+  file.copy(file.path(list.files(temp, full.names = T)), id_run, recursive = TRUE)
+  unlink(file.path(temp), recursive = T, force = T)
   ## extraer summary
   
   op_dat <- read_op(id_run) %>%
@@ -45,22 +58,22 @@ run_oryza <- function(dir_run, dir_files, region, cultivar, climate_scenarios, i
   
   
   yield <- calc_desc(op_dat, 'yield_14') %>%
-    tidy_descriptive(region, id_soil, cultivar, DATE, DATE)
+    tidy_descriptive(region, output$soil, output$cultivar, DATE, DATE)
   
   prec_acu <- calc_desc(op_dat, 'prec_acu') %>%
-    tidy_descriptive(region, id_soil, cultivar, DATE, DATE)
+    tidy_descriptive(region, output$soil, output$cultivar, DATE, DATE)
   
   t_max_acu <- calc_desc(op_dat, 't_max_acu') %>%
-    tidy_descriptive(region, id_soil, cultivar, DATE, DATE)
+    tidy_descriptive(region, output$soil, output$cultivar, DATE, DATE)
   
   t_min_acu <- calc_desc(op_dat, 't_min_acu') %>%
-    tidy_descriptive(region, id_soil, cultivar, DATE, DATE)
+    tidy_descriptive(region, output$soil, output$cultivar, DATE, DATE)
   
   bio_acu <- calc_desc(op_dat, 'bio_acu') %>%
-    tidy_descriptive(region, id_soil, cultivar, DATE, DATE)
+    tidy_descriptive(region, output$soil, output$cultivar, DATE, DATE)
   
   d_har <- calc_desc(op_dat, 'd_har') %>%
-    tidy_descriptive(region, id_soil, cultivar, DATE, DATE)
+    tidy_descriptive(region, output$soil, output$cultivar, DATE, DATE)
   
   summary_stats <- dplyr::bind_rows(list(yield, 
                                          prec_acu,
@@ -70,7 +83,11 @@ run_oryza <- function(dir_run, dir_files, region, cultivar, climate_scenarios, i
                                          d_har))
   
   return(summary_stats)
-  
+  # unlink(paste0(id_run, ''))
   setwd(dir_run)
   
 }
+
+
+
+
