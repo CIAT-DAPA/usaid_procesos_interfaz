@@ -31,7 +31,7 @@ download.cpt=function(dir_save,month,year){
       ensemble="M/(1%202%203%204%205%206%207%208%209%2010%2011%2012%2013%2014%2016%2017%2018%2019%2020%2021%2022%2023%2024)/VALUES/"
     } 
     
-    route=paste("http://iridl.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.ENSEMBLE/.OCNF/.surface/.TMP/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.REALTIME_ENSEMBLE/.OCNF/.surface/.TMP/appendstream/S/%280000%201%20",month.abb[l],"%201982-",year,"%29VALUES/L/",i,".5/",i+2,".5/RANGE%5BL%5D//keepgrids/average/",ensemble,"%5BM%5Daverage/-999/setmissing_value/Y/(30N)/(30S)/RANGEEDGES/%5BX/Y%5D%5BS/L/add%5Dcptv10.tsv.gz",sep="")### Ruta de descarga de datos 
+    route=paste("http://iridl.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.ENSEMBLE/.OCNF/.surface/.TMP/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.REALTIME_ENSEMBLE/.OCNF/.surface/.TMP/appendstream/350/maskge/S/%280000%201%20",month.abb[l],"%201982-",year,"%29VALUES/L/",i,".5/",i+2,".5/RANGE%5BL%5D//keepgrids/average/",ensemble,"%5BM%5Daverage/-999/setmissing_value/Y/(30N)/(30S)/RANGEEDGES/%5BX/Y%5D%5BS/L/add%5Dcptv10.tsv.gz",sep="")### Ruta de descarga de datos 
     
     filePath <- paste(dir_save,"/",i,"_",paste(month.abb[w[i:(i+2)]], collapse = '_'),".tsv.gz",sep="")
 
@@ -373,7 +373,6 @@ prob_output=function(p,m,y){
 }
 
 
-
 #########RUN#########
 #####################
 
@@ -381,10 +380,10 @@ prob_output=function(p,m,y){
 ########## Descarga archivos de la TSM #############
 ####################################################
 
-# dir_save="C:/Users/dagudelo/Desktop/Ejemplo_descarga"
+dir_save="C:/Users/dagudelo/Desktop/Ejemplo_descarga"
 month=as.numeric(format(Sys.Date(),"%m"))
 year=format(Sys.Date(),"%Y")
-y=download.cpt(dir_save,month-1,year)
+y=download.cpt(dir_save,month,year)
 
 cat("\n Archivos de la TSM descargados \n")
 
@@ -414,7 +413,7 @@ cat("\n Datos de la TSM organizados en formato annos X Pixeles \n")
 ######### Carga las estaciones de precipitacion ######
 ######################################################
 
-# dir_response="C:/Users/dagudelo/Desktop/Estaciones"
+dir_response="C:/Users/dagudelo/Desktop/Estaciones"
 dir_res=paste(dir_response,list.files(dir_response),sep="/")
 data_y=lapply(dir_res,function(x)read.table(x,dec=".",sep = ",",header = T))
 names(data_y)=basename(dir_res)
@@ -424,7 +423,7 @@ cat("\n Datos de precipitacion cargados \n")
 ######## Carga el nombre de las estaciones de interes #######
 #############################################################
 
-# dir_stations="Y:/USAID_Project/Product_1_web_interface/test/clima/daily_data"
+dir_stations="Y:/USAID_Project/Product_1_web_interface/test/clima/daily_data"
 stations_selec=substr(list.files(dir_stations),1,nchar(list.files(dir_stations))-4)
 
 cat("\n Nombres de las estaciones de interes cargados \n")
@@ -432,7 +431,7 @@ cat("\n Nombres de las estaciones de interes cargados \n")
 ####### Convierte los datos respuesta a trimestrales ########
 #############################################################
 
-data_quar=lapply(data_y,quarterly_data,month-1)
+data_quar=lapply(data_y,quarterly_data,month)
 data_quartely=unlist(lapply(data_quar,"[", 1),recursive=FALSE)
 year_response=unlist(lapply(data_quar,"[", 2),recursive=FALSE)
 
@@ -486,12 +485,12 @@ cat("\n Predicciones probabilisticas calculadas \n")
 #############################################################
 
 p_all=lapply(data_y,function(x)dim(x)[2]-2)
-table_year_month=lapply(p_all,prob_output,month-1,year)
+table_year_month=lapply(p_all,prob_output,month,year)
 prob_output_list=Map(function(x,y)cbind(x,y),table_year_month,probabilities_join)
 prob_output_final=do.call(rbind,prob_output_list)
 
 #path_save="Y:/USAID_Project/Product_1_web_interface/test/clima/prob_forecast"
-#path_save="C:/Users/dagudelo/Desktop"
+path_save="C:/Users/dagudelo/Desktop"
 tbl_df(prob_output_final) %>%
   mutate(year = as.integer(year),
          month = as.integer(month),
