@@ -380,7 +380,7 @@ prob_output=function(p,m,y){
 ########## Descarga archivos de la TSM #############
 ####################################################
 
-dir_save="C:/Users/dagudelo/Desktop/Ejemplo_descarga"
+#dir_save="C:/Users/dagudelo/Desktop/Ejemplo_descarga"
 month=as.numeric(format(Sys.Date(),"%m"))
 year=format(Sys.Date(),"%Y")
 y=download.cpt(dir_save,month,year)
@@ -413,7 +413,7 @@ cat("\n Datos de la TSM organizados en formato annos X Pixeles \n")
 ######### Carga las estaciones de precipitacion ######
 ######################################################
 
-dir_response="C:/Users/dagudelo/Desktop/Estaciones"
+#dir_response="C:/Users/dagudelo/Desktop/Estaciones"
 dir_res=paste(dir_response,list.files(dir_response),sep="/")
 data_y=lapply(dir_res,function(x)read.table(x,dec=".",sep = ",",header = T))
 names(data_y)=basename(dir_res)
@@ -423,7 +423,7 @@ cat("\n Datos de precipitacion cargados \n")
 ######## Carga el nombre de las estaciones de interes #######
 #############################################################
 
-dir_stations="Y:/USAID_Project/Product_1_web_interface/test/clima/daily_data"
+#dir_stations="Y:/USAID_Project/Product_1_web_interface/test/clima/daily_data"
 stations_selec=substr(list.files(dir_stations),1,nchar(list.files(dir_stations))-4)
 
 cat("\n Nombres de las estaciones de interes cargados \n")
@@ -490,7 +490,7 @@ prob_output_list=Map(function(x,y)cbind(x,y),table_year_month,probabilities_join
 prob_output_final=do.call(rbind,prob_output_list)
 
 #path_save="Y:/USAID_Project/Product_1_web_interface/test/clima/prob_forecast"
-path_save="C:/Users/dagudelo/Desktop"
+#path_save="C:/Users/dagudelo/Desktop"
 tbl_df(prob_output_final) %>%
   mutate(year = as.integer(year),
          month = as.integer(month),
