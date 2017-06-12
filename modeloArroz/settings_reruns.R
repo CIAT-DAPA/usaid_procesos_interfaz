@@ -25,18 +25,18 @@ settins_reruns <- function(EMD, STTIME, IYEAR, ISTN, dir_run, id_s){
   
   WTRDIR = paste0("'", gsub('/', BACKSLASH, dir_run), "'")
   
-    
-    data <- data.frame(FILEIT = paste0(id_exp, '.exp'), 
-                       FILEI2 = paste0(id_soil, '.sol'),
-                       FILEI1 = paste0(id_crp, '.crp'),
-                       CNTR,
-                       ISTN,
-                       IYEAR, 
-                       STTIME,
-                       EMD,
-                       EMYR = IYEAR, 
-                       WTRDIR = WTRDIR)
-    
+  
+  data <- data.frame(FILEIT = paste0(id_exp, '.exp'), 
+                     FILEI2 = paste0(id_soil, '.sol'),
+                     FILEI1 = paste0(id_crp, '.crp'),
+                     CNTR,
+                     ISTN,
+                     IYEAR, 
+                     STTIME,
+                     EMD,
+                     EMYR = IYEAR, 
+                     WTRDIR = WTRDIR)
+  
   
   
   return(data)

@@ -355,7 +355,7 @@ tidy_descriptive <- function(data, W_station, soil, cultivar, start, end){
 
 
 
-run_mult_oryza <- function(dir_run, dir_files, region, cultivar, climate_scenarios, input_dates, location, select_day, number_days, output, dirModeloArrozOutputs){
+run_mult_oryza <- function(dir_run, dir_files, region, cultivar, climate_scenarios, input_dates, location, select_day, number_days, output, dirModeloArrozOutputs, filename, dir_oryza){
   
   require(foreach)
   # proof
@@ -371,7 +371,7 @@ run_mult_oryza <- function(dir_run, dir_files, region, cultivar, climate_scenari
   out_op <- foreach(i = iterators) %do% {
     
     # print(i)
-    run_oryza(dir_run, dir_files, region, cultivar, climate$climate_scenarios, climate$input_dates, location, i, output)
+    run_oryza(dir_run, dir_files, region, cultivar, climate_scenarios, input_dates, location, i, output, filename, dir_oryza)
     
     
     
