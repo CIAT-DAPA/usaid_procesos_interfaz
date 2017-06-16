@@ -1,4 +1,4 @@
-run_cpt<-function (dep, trim, x_predictors, x_modes,y_predicting,  y_modes, cca_modes, dir_output){
+run_cpt<-function (dep, trim, x_predictors, x_modes,y_predicting,  y_modes, cca_modes, dir_output, transformation){
   cmd <- "@echo off
 
   (
@@ -22,7 +22,7 @@ run_cpt<-function (dep, trim, x_predictors, x_modes,y_predicting,  y_modes, cca_
   echo 1
   echo 554
   echo 2
-  echo 541
+  echo %Transformation%
   echo 112
   echo %RESULT_GI%
   echo 311
@@ -42,7 +42,8 @@ run_cpt<-function (dep, trim, x_predictors, x_modes,y_predicting,  y_modes, cca_
   echo 501
   echo %RESULT_PROB%
   echo 0
-  ) | C:/CPT/CPT_batch.exe"
+  echo 0
+  ) | CPT_batch.exe"
   
   cmd<-gsub("%X_PREDICTORS%",x_predictors,cmd)
   cmd<-gsub("%X_Modes%",x_modes,cmd)
@@ -56,15 +57,23 @@ run_cpt<-function (dep, trim, x_predictors, x_modes,y_predicting,  y_modes, cca_
   cmd<-gsub("%RESULT_PROB%",paste0(dir_output,"/ForecastProbabilities_",dep, "_", trim,".txt"),cmd)
   
   
+  if(transformation == "no"){
+    cmd<-gsub("%Transformation%"," ",cmd)} else if(transformation != "no"){
+      cmd<-gsub("%Transformation%","541",cmd)}
+  
   #cmd <- gsub("/","\", cmd)
-  write(cmd,"C:/Users/AESQUIVEL/Google Drive/usaid_procesos_interfaz/prediccionClimatica/text1.bat")
+  write(cmd,"C:/Users/AESQUIVEL/Desktop/outputs/text.bat")
   #system(cmd, ignore.stdout = T, show.output.on.console = F)
-  system("C:/Users/AESQUIVEL/Google Drive/usaid_procesos_interfaz/prediccionClimatica/text1.bat", ignore.stdout = T, show.output.on.console = F)
+  system("C:/Users/AESQUIVEL/Desktop/outputs/text.bat", ignore.stdout = T, show.output.on.console = F)
 }
 
 
-run_cpt(dep = "cordoba", trim = "DEF", x_predictors = "C:/Users/AESQUIVEL/Desktop/s.txt",
+
+
+
+
+run_cpt(dep = "cordoba", trim = "no", x_predictors = "C:/Users/AESQUIVEL/Desktop/s.txt",
           x_modes = 5, y_predicting = "C:/Users/AESQUIVEL/Google Drive/Exp_2/dep/precip_cordoba.txt",
-          y_modes = 5, cca_modes = 3, dir_output = "C:/Users/AESQUIVEL/Desktop/outputs")
+          y_modes = 5, cca_modes = 3, dir_output = "C:/Users/AESQUIVEL/Desktop/outputs", transformation = "no")
 
 
