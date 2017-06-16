@@ -42,7 +42,7 @@ run_cpt<-function (dep, trim, x_predictors, x_modes,y_predicting,  y_modes, cca_
   echo 501
   echo %RESULT_PROB%
   echo 0
-  ) | CPT_batch.exe"
+  ) | C:/CPT/CPT_batch.exe"
   
   cmd<-gsub("%X_PREDICTORS%",x_predictors,cmd)
   cmd<-gsub("%X_Modes%",x_modes,cmd)
@@ -54,14 +54,17 @@ run_cpt<-function (dep, trim, x_predictors, x_modes,y_predicting,  y_modes, cca_
   cmd<-gsub("%2AFC%",paste0(dir_output,"/k_2AFC_Score_",dep, "_", trim,".txt"),cmd)
   cmd<-gsub("%Canonical%",paste0(dir_output,"/CanonicalCorrelations_",dep, "_", trim,".txt"),cmd)
   cmd<-gsub("%RESULT_PROB%",paste0(dir_output,"/ForecastProbabilities_",dep, "_", trim,".txt"),cmd)
-  #cmd<-gsub("/","^\.", cmd)
-  write(cmd,"C:/Users/AESQUIVEL/Google Drive/usaid_procesos_interfaz/prediccionClimatica/text.bat")
- # system(cmd, ignore.stdout = T, show.output.on.console = F)
+  
+  
+  #cmd <- gsub("/","\", cmd)
+  write(cmd,"C:/Users/AESQUIVEL/Google Drive/usaid_procesos_interfaz/prediccionClimatica/text1.bat")
+  #system(cmd, ignore.stdout = T, show.output.on.console = F)
+  system("C:/Users/AESQUIVEL/Google Drive/usaid_procesos_interfaz/prediccionClimatica/text1.bat", ignore.stdout = T, show.output.on.console = F)
 }
 
 
-  
 run_cpt(dep = "cordoba", trim = "DEF", x_predictors = "C:/Users/AESQUIVEL/Desktop/s.txt",
           x_modes = 5, y_predicting = "C:/Users/AESQUIVEL/Google Drive/Exp_2/dep/precip_cordoba.txt",
           y_modes = 5, cca_modes = 3, dir_output = "C:/Users/AESQUIVEL/Desktop/outputs")
+
 
