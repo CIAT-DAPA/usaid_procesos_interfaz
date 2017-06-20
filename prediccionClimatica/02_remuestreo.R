@@ -1,13 +1,5 @@
-
-# library(lubridate)
-# library(reshape)
-# #require(ggplot2)
-# library(stringr)
-
-
-
 #---------------------------------------------------------------------------------#
-#-------------------Funcion para generar barra de progreso\-----------------------#
+#-------------------Función para generar barra de progreso\-----------------------#
 #---------------------------------------------------------------------------------#
 sapply_pb <- function(X, FUN, ...) {
   env <- environment()
@@ -28,18 +20,18 @@ sapply_pb <- function(X, FUN, ...) {
 
 
 #---------------------------------------------------------------------------------#
-#----------------Funcion para generar annos mas frecuentes-------------------------#
+#----------------Función para generar años más frecuentes-------------------------#
 #---------------------------------------------------------------------------------#
 # INPUT
-# data: Datos acumulados mensuales para la precipitacion del mes a pronosticar
+# data: Datos acumulados mensuales para la precipitación del mes a pronosticar
 # organizados de forma ascendente
-# annoshistorico: Tabla de annos ordenados de forma ascendente de acuerdo a la precipitacion
-# acumulada del mes de interes
+# añoshistorico: Tabla de años ordenados de forma ascendente de acuerdo a la precipitación
+# acumulada del mes de interés
 
 # OUTPUT
-# Remuestreo de los annos mas frecuentes del mes de interes de acuerdo a las probabilidades ingresadas
+# Remuestreo de los años mas frecuentes del mes de interés de acuerdo a las probabilidades ingresadas
 
-resampling <- function(data,prob,annoshistorico){
+resampling <- function(data,prob,añoshistorico){
   matrizcombinaciones=0
   vectorprobabilidades=prob
   datas=0
@@ -48,18 +40,18 @@ resampling <- function(data,prob,annoshistorico){
     if(r==vectorprobabilidades[1]){
       datas=which(data<quantile(data[which(data>0)],0.3333))
       
-      matrizcombinaciones[i]=annoshistorico[sample(datas,1)]
+      matrizcombinaciones[i]=añoshistorico[sample(datas,1)]
     }
     
     if(r==vectorprobabilidades[2]){
       datas=which(data>=quantile(data,0.3333) & data<quantile(data,0.6666))
-      matrizcombinaciones[i]=annoshistorico[sample(datas,1)]
+      matrizcombinaciones[i]=añoshistorico[sample(datas,1)]
       
     }
     
     if(r==vectorprobabilidades[3]){
       datas=which(data>=quantile(data,0.6666))
-      matrizcombinaciones[i]=annoshistorico[sample(datas,1)]
+      matrizcombinaciones[i]=añoshistorico[sample(datas,1)]
       
     }
     
@@ -70,22 +62,108 @@ resampling <- function(data,prob,annoshistorico){
   
 }
 
-
-
 #---------------------------------------------------------------------------------#
-#-----------------Funcion para generar escenarios diarios-------------------------#
+#----------------Función sacar número de días del mes-----------------------------#
 #---------------------------------------------------------------------------------#
 # INPUT
-# prob: Tabla de probabilidades de la estacion de interes para los siguientes 6 meses
-# data_d: Tabla con datos diarios de la estacion de interes
-# path_output: Ruta donde se guardaran las salidas
-# station: Nombre de la estacion de interes
+# date: fecha de interés
+# OUTPUT
+# Número de días del mes de interés
 
-#OUTPUT
-# Al correr esta Funcion se generaran los 100 escenarios (en formato .csv) de datos diarios 
-# para la estacionde interes
+numberOfDays <- function(date) {
+  m <- format(date, format="%m")
+  
+  while (format(date, format="%m") == m) {
+    date <- date + 1
+  }
+  
+  return(as.integer(format(date - 1, format="%d")))
+}
 
-gen_esc_daily <- function(prob,data_d,path_output,station){
+#---------------------------------------------------------------------------------#
+#----------------Función sacar datos diarios NASA POWER---------------------------#
+#---------------------------------------------------------------------------------#
+# INPUT
+# lat: latitud de la estación/sitio de interés
+# lon: longitud de la estación/sitio de interés
+# year_to: año actual
+# month_to: mes actual
+# OUTPUT
+# Datos diarios de temperatura máxima, mínima y radiación solar de NASA POWER
+
+download_data_nasa = function(lat,lon,year_to,month_to,data_d){
+  
+  url_all = paste0("https://power.larc.nasa.gov/cgi-bin/agro.cgi?email=&area=area&latmin=",lat,"&lonmin=",lon,"&latmax=",lat,"&lonmax=",lon,"&ms=1&ds=1&ys=1983&me=12&de=31&ye=",year_to,"&p=swv_dwn&p=T2MN&p=T2MX&submit=Submit")
+  data_nasa = read.table(url_all,skip = 15,header = F, na.strings = "-")
+  names(data_nasa) = c("year","julian","sol_rad","t_min","t_max")
+  dates = seq(as.Date("1983/1/1"), as.Date(paste0(year_to,"/12/31")), "days")
+  month = as.numeric(format(dates,"%m"))
+  #data_d = read.csv("D:/_Scripts/usaid_forecast/_package/prediccionClimatica/dailyData/58504f1a006cb93ed40eebe3.csv",header=T,dec=".")
+  
+  sel_obs = data_d[data_d$year %in% unique(data_nasa$year),]
+  sel_nasa = data_nasa[data_nasa$year %in% unique(data_d$year),c(-1,-2)]
+  
+  ses_tmax = mean(sel_obs$t_max-sel_nasa$t_max,na.rm=T)
+  ses_tmin = mean(sel_obs$t_min-sel_nasa$t_min,na.rm=T)
+  ses_srad = mean(sel_obs$sol_rad-sel_nasa$sol_rad,na.rm=T)
+  
+  data_sel_m = data_nasa[data_nasa$year %in% year_to & month %in% month_to,3:5]
+  data_sel_m$sol_rad = data_sel_m$sol_rad+ses_srad
+  data_sel_m$t_min = data_sel_m$t_min+ses_tmin
+  data_sel_m$t_max = data_sel_m$t_max+ses_tmax
+  
+  data_sel_m$sol_rad[is.na(data_sel_m$sol_rad)] = mean(data_sel_m$sol_rad,na.rm=T)
+  data_sel_m$t_max[is.na(data_sel_m$t_max)] = mean(data_sel_m$t_max,na.rm=T)
+  data_sel_m$t_min[is.na(data_sel_m$t_min)] = mean(data_sel_m$t_min,na.rm=T)
+  
+  return(data_sel_m)
+}
+
+#---------------------------------------------------------------------------------#
+#----------------Función sacar datos diarios CHIRP--------------------------------#
+#---------------------------------------------------------------------------------#
+# INPUT
+# lat: latitud de la estación/sitio de interés
+# lon: longitud de la estación/sitio de interés
+# ini.date: fecha inicio de descarga
+# end.date: fecha final de descarga
+# outDir: Directorio donde se guardarán las imagenes de chirps
+# OUTPUT
+# Datos diarios de precipitación de CHIRP
+
+download_data_chirp = function(ini.date,end.date,outDir,cl){
+  
+  z=seq(as.Date(ini.date), as.Date(end.date), "days")
+  fechas=str_replace_all(z, "-", ".")  
+  
+  urls <- paste("ftp://ftp.chg.ucsb.edu/pub/org/chg/products/CHIRP/daily/2017/chirp.",fechas,".tif",sep="")
+  file <- basename(urls)
+  outDir_all = paste0(outDir,"/",file)
+  
+  
+  clusterMap(cl, download.file, url = urls, destfile = outDir_all, mode = "wb", 
+             .scheduling = 'dynamic')
+  
+  
+  
+  return("Datos de CHIRPS descargados!")
+}
+
+
+#---------------------------------------------------------------------------------#
+#-----------------Función para generar escenarios diarios-------------------------#
+#---------------------------------------------------------------------------------#
+# INPUT
+# prob: Tabla de probabilidades de la estación de interés para los siguientes 6 meses
+# data_d: Tabla con datos diarios de la estación de interés
+# path_output: Ruta donde se guardarán las salidas
+# station: Nombre de la estación de interés
+
+# OUTPUT
+# Al correr esta función se generarán los 100 escenarios (en formato .csv) de datos diarios 
+# para la estaciónde interés
+
+gen_esc_daily <- function(prob,data_d,path_output,station,lat,lon){
   
   cat("\n Inicio del remuestreo... \n")
   
@@ -94,7 +172,7 @@ gen_esc_daily <- function(prob,data_d,path_output,station){
   #---------------------------------------------------------------------------------#
   
   data_d=read.csv(data_d,header=T,dec=".")
-   
+  
   
   #attach(data_d,warn.conflicts =F)
   
@@ -108,10 +186,10 @@ gen_esc_daily <- function(prob,data_d,path_output,station){
   month.prob = month.name[probabilidades$month] 
   
   #---------------------------------------------------------------------------------#
-  #-----------------Ordenar de menor a mayor datos mensuales historicos-------------#
+  #-----------------Ordenar de menor a Mayr datos mensuales históricos-------------#
   #---------------------------------------------------------------------------------#
   
-  cat("\n Calculando terciles de la precipitacion... \n")
+  cat("\n Calculando terciles de la precipitación... \n")
   
   prec_sort = matrix(NA,length(unique(data$year)),6)
   year_sort = matrix(NA,length(unique(data$year)),6)
@@ -137,7 +215,7 @@ gen_esc_daily <- function(prob,data_d,path_output,station){
   colnames(t_max_trend)=month.prob
   colnames(t_min_trend)=month.prob
   #---------------------------------------------------------------------------------#
-  #------------------------Calculo tendencias para temp-----------------------------#
+  #------------------------Cálculo tendencias para temp-----------------------------#
   #---------------------------------------------------------------------------------#
   
   cat("\n Calculando tendencias de temperaturas... \n")
@@ -184,27 +262,27 @@ gen_esc_daily <- function(prob,data_d,path_output,station){
   
   data_d_trend = data_d[data_d$month %in% probabilidades$month,]
   
-for(y in min(data_temp$year):max(data_temp$year)){
-  for(m in probabilidades$month){
-    trend_max = trend_by_year_max[which(row.names(trend_by_year_max)==y),month.name[m]]
-    trend_min = trend_by_year_min[which(row.names(trend_by_year_min)==y),month.name[m]]
+  for(y in min(data_temp$year):max(data_temp$year)){
+    for(m in probabilidades$month){
+      trend_max = trend_by_year_max[which(row.names(trend_by_year_max)==y),month.name[m]]
+      trend_min = trend_by_year_min[which(row.names(trend_by_year_min)==y),month.name[m]]
+      
+      pos_max = which(data_d_trend$year==y & data_d_trend$month==m)
+      pos_min = which(data_d_trend$year==y & data_d_trend$month==m)
+      data_d_trend$t_max[pos_max] = data_d_trend$t_max[pos_max]+trend_max
+      data_d_trend$t_min[pos_min] = data_d_trend$t_min[pos_min]+trend_min
+      
+    }
     
-    pos_max = which(data_d_trend$year==y & data_d_trend$month==m)
-    pos_min = which(data_d_trend$year==y & data_d_trend$month==m)
-    data_d_trend$t_max[pos_max] = data_d_trend$t_max[pos_max]+trend_max
-    data_d_trend$t_min[pos_min] = data_d_trend$t_min[pos_min]+trend_min
-    
-  }
-  
-}  
+  }  
   
   #---------------------------------------------------------------------------------#
-  #--------------Generacion de los 10 annos analogos mas probables-------------------#
+  #--------------Generación de los 10 años análogos mas probables-------------------#
   #---------------------------------------------------------------------------------#
   
   masprobable=matrix(0,nrow=100,ncol=dim(probabilidades)[2])
   
-  cat("\n Generando annos mas frecuentes... \n")
+  cat("\n Generando años más frecuentes... \n")
   masprobable=sapply_pb(1:100,
                         function(j){
                           esc1=sapply(1:dim(probabilidades)[2], function(i) resampling(prec_sort[,i],probabilidades[i,4:6],year_sort[,i]))
@@ -215,54 +293,54 @@ for(y in min(data_temp$year):max(data_temp$year)){
   
   
   #---------------------------------------------------------------------------------#
-  #-------------Generacion de datos y resumen de los annos mas probables-------------#
+  #-------------Generación de datos y resumen de los años mas probables-------------#
   #---------------------------------------------------------------------------------#
-
-    valores=function(mes,var,annos){
-      datos=0
-      for(i in 1:length(mes))
-        datos[i]=var[which(mes[i]==annos)]
-      return(datos)
+  
+  valores=function(mes,var,Años){
+    datos=0
+    for(i in 1:length(mes))
+      datos[i]=var[which(mes[i]==Años)]
+    return(datos)
+  }
+  
+  todo=sapply(1:dim(probabilidades)[2], function(i) valores(masprobable2[,i],prec_sort[,i],year_sort[,i]))
+  todo2=as.data.frame(rbind(masprobable2,c("Datos análogos",rep("",dim(probabilidades)[2]-1)),todo)) ###Años y datos analogos
+  colnames(todo2)=names(probabilidades)
+  
+  resumen=function(x) rbind(min(x),max(x))
+  resumen2=apply(todo,2,resumen)
+  
+  medias=apply(todo,2,median)
+  
+  dif=t(t(todo)-medias)
+  valores2=function(masprobable2,todo,resumen2,dif){
+    
+    datos=0
+    for(i in 1:2){
+      pos<-which(todo==resumen2[i])
+      n=length(pos)
+      datos[i]=masprobable2[pos[sample(n,1)]]
     }
-
-    todo=sapply(1:dim(probabilidades)[2], function(i) valores(masprobable2[,i],prec_sort[,i],year_sort[,i]))
-    todo2=as.data.frame(rbind(masprobable2,c("Datos analogos",rep("",dim(probabilidades)[2]-1)),todo)) ###annos y datos analogos
-    colnames(todo2)=names(probabilidades)
-
-    resumen=function(x) rbind(min(x),max(x))
-    resumen2=apply(todo,2,resumen)
-
-    medias=apply(todo,2,median)
-
-    dif=t(t(todo)-medias)
-
-    valores2=function(masprobable2,todo,resumen2,dif){
-      datos=0
-      for(i in 1:2){
-        pos<-which(todo==resumen2[i])
-        n=length(pos)
-        datos[i]=masprobable2[pos[sample(n,1)]]
-      }
-
-      pos2=which(abs(dif)==min(abs(dif)))
-      n2=length(pos2)
-      datos2=masprobable2[pos2[sample(n2,1)]]
-
-      datost=c(datos[1],datos2,datos[2])
-
-      return(datost)
-    }
-
-    todo3=sapply(1:dim(probabilidades)[2], function(i) valores2(masprobable2[,i],todo[,i],resumen2[,i],dif[,i]))
-
-    resumen3=rbind(resumen2[1,],round(medias,2),resumen2[2,])
-    row.names(resumen3)=c("min","avg","max")
-
-    resumenf=rbind(resumen3,c("annos",rep("",dim(probabilidades)[2]-1)),todo3) ###Resumen con min max y prom de los escenarios analogos
-    colnames(resumenf)=names(probabilidades)
-
+    
+    pos2=which(abs(dif)==min(abs(dif)))
+    n2=length(pos2)
+    datos2=masprobable2[pos2[sample(n2,1)]]
+    
+    datost=c(datos[1],datos2,datos[2])
+    
+    return(datost)
+  }
+  
+  todo3=sapply(1:dim(probabilidades)[2], function(i) valores2(masprobable2[,i],todo[,i],resumen2[,i],dif[,i]))
+  
+  resumen3=rbind(resumen2[1,],round(medias,2),resumen2[2,])
+  row.names(resumen3)=c("min","avg","max")
+  
+  resumenf=rbind(resumen3,c("Años",rep("",dim(probabilidades)[2]-1)),todo3) ###Resumen con min max y prom de los escenarios analogos
+  colnames(resumenf)=names(probabilidades)
+  
   #---------------------------------------------------------------------------------#
-  #----------Generacion de todos los escenarios definidos por el usuario------------#
+  #----------Generación de todos los escenarios definidos por el usuario------------#
   #---------------------------------------------------------------------------------#
   num_esc1=100
   
@@ -312,9 +390,9 @@ for(y in min(data_temp$year):max(data_temp$year)){
   
   
   
-      escenarios_final=rbind(escenarios_final1[,ord_col],todo3)
-      nom=c(seq(1,num_esc1),"min","prom","max")
-
+  escenarios_final=rbind(escenarios_final1[,ord_col],todo3)
+  nom=c(seq(1,num_esc1),"min","prom","max")
+  
   # escenarios_final=escenarios_final1[,ord_col]
   # nom=seq(1,num_esc1)
   # 
@@ -328,113 +406,135 @@ for(y in min(data_temp$year):max(data_temp$year)){
   
   #---------------------------------------------------------------------------------#
   #---------------------------------------------------------------------------------#
-  #----------------------Creacion de escenarios a nivel diario----------------------#
+  #----------------------Creación de escenarios a nivel diario----------------------#
   #---------------------------------------------------------------------------------#
   #---------------------------------------------------------------------------------#
   cat("\n Generando escenarios diarios... \n")
   
-    esc_final_diarios=list()
+  esc_final_diarios=list()
+  
+  if(any(names(a)=="January")){ esc_diario_Ene=list()}
+  if(any(names(a)=="February")){ esc_diario_Feb=list()}
+  if(any(names(a)=="March")){ esc_diario_Mar=list()}
+  if(any(names(a)=="April")){ esc_diario_Abr=list()}
+  if(any(names(a)=="May")){ esc_diario_May=list()}
+  if(any(names(a)=="June")){ esc_diario_Jun=list()}
+  if(any(names(a)=="July")){ esc_diario_Jul=list()}
+  if(any(names(a)=="August")){ esc_diario_Ago=list()}
+  if(any(names(a)=="September")){ esc_diario_Sep=list()}
+  if(any(names(a)=="October")){ esc_diario_Oct=list()}
+  if(any(names(a)=="November")){ esc_diario_Nov=list()}
+  if(any(names(a)=="December")){ esc_diario_Dic=list()}
+  
+  for (n in 1:nrow(escenarios_final)){
     
-    if(any(names(a)=="January")){ esc_diario_Ene=list()}
-    if(any(names(a)=="February")){ esc_diario_Feb=list()}
-    if(any(names(a)=="March")){ esc_diario_Mar=list()}
-    if(any(names(a)=="April")){ esc_diario_Abr=list()}
-    if(any(names(a)=="May")){ esc_diario_May=list()}
-    if(any(names(a)=="June")){ esc_diario_Jun=list()}
-    if(any(names(a)=="July")){ esc_diario_Jul=list()}
-    if(any(names(a)=="August")){ esc_diario_Ago=list()}
-    if(any(names(a)=="September")){ esc_diario_Sep=list()}
-    if(any(names(a)=="October")){ esc_diario_Oct=list()}
-    if(any(names(a)=="November")){ esc_diario_Nov=list()}
-    if(any(names(a)=="December")){ esc_diario_Dic=list()}
+    esc_final_diarios[[n]]=rbind(
+      if(any(names(a)=="January")){esc_diario_Ene[[n]]=data_d_trend[data_d_trend$month=="1"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="January")],]},
+      if(any(names(a)=="February")){esc_diario_Feb[[n]]=data_d_trend[data_d_trend$month=="2"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="February")],]},
+      if(any(names(a)=="March")){esc_diario_Mar[[n]]=data_d_trend[data_d_trend$month=="3"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="March")],]},
+      if(any(names(a)=="April")){esc_diario_Abr[[n]]=data_d_trend[data_d_trend$month=="4"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="April")],]},
+      if(any(names(a)=="May")){esc_diario_May[[n]]=data_d_trend[data_d_trend$month=="5"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="May")],]},
+      if(any(names(a)=="June")){esc_diario_Jun[[n]]=data_d_trend[data_d_trend$month=="6"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="June")],]},
+      if(any(names(a)=="July")){esc_diario_Jul[[n]]=data_d_trend[data_d_trend$month=="7"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="July")],]},
+      if(any(names(a)=="August")){esc_diario_Ago[[n]]=data_d_trend[data_d_trend$month=="8"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="August")],]},
+      if(any(names(a)=="September")){esc_diario_Sep[[n]]=data_d_trend[data_d_trend$month=="9"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="September")],]},
+      if(any(names(a)=="October")){esc_diario_Oct[[n]]=data_d_trend[data_d_trend$month=="10"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="October")],]},
+      if(any(names(a)=="November")){esc_diario_Nov[[n]]=data_d_trend[data_d_trend$month=="11"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="November")],]},
+      if(any(names(a)=="December")){ esc_diario_Dic[[n]]=data_d_trend[data_d_trend$month=="12"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="December")],]})
     
-    for (n in 1:nrow(escenarios_final)){
-      
-      esc_final_diarios[[n]]=rbind(
-        if(any(names(a)=="January")){esc_diario_Ene[[n]]=data_d_trend[data_d_trend$month=="1"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="January")],]},
-        if(any(names(a)=="February")){esc_diario_Feb[[n]]=data_d_trend[data_d_trend$month=="2"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="February")],]},
-        if(any(names(a)=="March")){esc_diario_Mar[[n]]=data_d_trend[data_d_trend$month=="3"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="March")],]},
-        if(any(names(a)=="April")){esc_diario_Abr[[n]]=data_d_trend[data_d_trend$month=="4"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="April")],]},
-        if(any(names(a)=="May")){esc_diario_May[[n]]=data_d_trend[data_d_trend$month=="5"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="May")],]},
-        if(any(names(a)=="June")){esc_diario_Jun[[n]]=data_d_trend[data_d_trend$month=="6"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="June")],]},
-        if(any(names(a)=="July")){esc_diario_Jul[[n]]=data_d_trend[data_d_trend$month=="7"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="July")],]},
-        if(any(names(a)=="August")){esc_diario_Ago[[n]]=data_d_trend[data_d_trend$month=="8"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="August")],]},
-        if(any(names(a)=="September")){esc_diario_Sep[[n]]=data_d_trend[data_d_trend$month=="9"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="September")],]},
-        if(any(names(a)=="October")){esc_diario_Oct[[n]]=data_d_trend[data_d_trend$month=="10"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="October")],]},
-        if(any(names(a)=="November")){esc_diario_Nov[[n]]=data_d_trend[data_d_trend$month=="11"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="November")],]},
-        if(any(names(a)=="December")){ esc_diario_Dic[[n]]=data_d_trend[data_d_trend$month=="12"&data_d_trend$year==escenarios_final[n,which(names(escenarios_final)=="December")],]})
-      
-    }
+  }
+  
+  for (n in 1:nrow(escenarios_final)){
+    ord=order(match(as.numeric(esc_final_diarios[[n]]$month),orden))
     
-    for (n in 1:nrow(escenarios_final)){
-      ord=order(match(as.numeric(esc_final_diarios[[n]]$month),orden))
-      
-      esc_final_diarios[[n]]=esc_final_diarios[[n]][ord,]
-    }
+    esc_final_diarios[[n]]=esc_final_diarios[[n]][ord,]
+  }
+  
+  all_min = aggregate(esc_final_diarios[[101]][,4:7],list(esc_final_diarios[[101]]$year,esc_final_diarios[[101]]$month),mean)
+  all_min = all_min[orden,]
+  
+  all_avg = aggregate(esc_final_diarios[[102]][,4:7],list(esc_final_diarios[[101]]$year,esc_final_diarios[[101]]$month),mean)
+  all_avg = all_avg[orden,]
+  
+  all_max = aggregate(esc_final_diarios[[103]][,4:7],list(esc_final_diarios[[101]]$year,esc_final_diarios[[101]]$month),mean)
+  all_max = all_max[orden,]
+  
+  
+  prec_limit = cbind(data_prob[,1:2],t(resumen3))
+  tmax_limit = cbind(data_prob[,1:2],all_min$t_max,all_avg$t_max,all_max$t_max)
+  tmin_limit = cbind(data_prob[,1:2],all_min$t_min,all_avg$t_min,all_max$t_min)
+  srad_limit = cbind(data_prob[,1:2],all_min$sol_rad,all_avg$sol_rad,all_max$sol_rad)
+  
+  names(tmax_limit) = names(prec_limit)
+  names(tmin_limit) = names(prec_limit)
+  names(srad_limit) = names(prec_limit)
+  
+  tmax_limit_ord = t(apply(tmax_limit[,3:5],1,order,decreasing =F))
+  for(ord in 1:6){
+    tmax_limit[ord,3:5] = tmax_limit[ord,3:5][tmax_limit_ord[ord,]]
     
-    all_min = aggregate(esc_final_diarios[[101]][,4:7],list(esc_final_diarios[[101]]$year,esc_final_diarios[[101]]$month),mean)
-    all_min = all_min[orden,]
+  }
+  
+  rm(ord)
+  tmin_limit_ord = t(apply(tmin_limit[,3:5],1,order,decreasing =F))
+  for(ord in 1:6){
+    tmin_limit[ord,3:5] = tmin_limit[ord,3:5][tmin_limit_ord[ord,]]
+    
+  }
+  
+  rm(ord)
+  srad_limit_ord = t(apply(srad_limit[,3:5],1,order,decreasing =F))
+  for(ord in 1:6){
+    srad_limit[ord,3:5] = srad_limit[ord,3:5][srad_limit_ord[ord,]]
+    
+  }
+  dir.create(paste(path_output,"/",station,sep=""),showWarnings=F)
+  
 
-    all_avg = aggregate(esc_final_diarios[[102]][,4:7],list(esc_final_diarios[[101]]$year,esc_final_diarios[[101]]$month),mean)
-    all_avg = all_avg[orden,]
+  limit.name = c("min","avg", "max")
+  for(j in 1:3){
+    write.csv(prec_limit[,c(1,2,(j+2))],paste(path_output,"/",station,"/prec_",limit.name[j], ".csv",sep=""),row.names=F)
+    write.csv(tmax_limit[,c(1,2,(j+2))],paste(path_output,"/",station,"/t_max_",limit.name[j], ".csv",sep=""),row.names=F)
+    write.csv(tmin_limit[,c(1,2,(j+2))],paste(path_output,"/",station,"/t_min_",limit.name[j], ".csv",sep=""),row.names=F)
+    write.csv(srad_limit[,c(1,2,(j+2))],paste(path_output,"/",station,"/sol_rad_",limit.name[j], ".csv",sep=""),row.names=F)
     
-    all_max = aggregate(esc_final_diarios[[103]][,4:7],list(esc_final_diarios[[101]]$year,esc_final_diarios[[101]]$month),mean)
-    all_max = all_max[orden,]
-    
-    
-    prec_limit = cbind(data_prob[,1:2],t(resumen3))
-    tmax_limit = cbind(data_prob[,1:2],all_min$t_max,all_avg$t_max,all_max$t_max)
-    tmin_limit = cbind(data_prob[,1:2],all_min$t_min,all_avg$t_min,all_max$t_min)
-    srad_limit = cbind(data_prob[,1:2],all_min$sol_rad,all_avg$sol_rad,all_max$sol_rad)
-    
-    names(tmax_limit) = names(prec_limit)
-    names(tmin_limit) = names(prec_limit)
-    names(srad_limit) = names(prec_limit)
-    
-    tmax_limit_ord = t(apply(tmax_limit[,3:5],1,order,decreasing =F))
-    for(ord in 1:6){
-      tmax_limit[ord,3:5] = tmax_limit[ord,3:5][tmax_limit_ord[ord,]]
-      
-    }
-    
-    rm(ord)
-    tmin_limit_ord = t(apply(tmin_limit[,3:5],1,order,decreasing =F))
-    for(ord in 1:6){
-      tmin_limit[ord,3:5] = tmin_limit[ord,3:5][tmin_limit_ord[ord,]]
-      
-    }
-    
-    rm(ord)
-    srad_limit_ord = t(apply(srad_limit[,3:5],1,order,decreasing =F))
-    for(ord in 1:6){
-      srad_limit[ord,3:5] = srad_limit[ord,3:5][srad_limit_ord[ord,]]
-      
-    }
-    
-    dir.create(paste(path_output,"/",station,sep=""),showWarnings=F)
-    
-    limit.name = c("min","avg", "max")
-    for(j in 1:3){
-      write.csv(prec_limit[,c(1,2,(j+2))],paste(path_output,"/",station,"/prec_",limit.name[j], ".csv",sep=""),row.names=F)
-      write.csv(tmax_limit[,c(1,2,(j+2))],paste(path_output,"/",station,"/t_max_",limit.name[j], ".csv",sep=""),row.names=F)
-      write.csv(tmin_limit[,c(1,2,(j+2))],paste(path_output,"/",station,"/t_min_",limit.name[j], ".csv",sep=""),row.names=F)
-      write.csv(srad_limit[,c(1,2,(j+2))],paste(path_output,"/",station,"/sol_rad_",limit.name[j], ".csv",sep=""),row.names=F)
-      
-    }
-      
- 
-    #---------------------------------------------------------------------------------#
-    #-----------------Exporta los escenarios a nivel diario a .csv--------------------#
-    #---------------------------------------------------------------------------------#
-    
-   
-    for(k in 1:nrow(escenarios_final)){
-      write.csv(esc_final_diarios[[k]],paste(path_output,"/",station,"/",nom[k],".csv",sep=""),row.names=F)
-    }
-    
+  }
+  
+  
+  #---------------------------------------------------------------------------------#
+  #-----------------Exporta los escenarios a nivel diario a .csv--------------------#
+  #---------------------------------------------------------------------------------#
+  cat("\n Descargando datos observados de NASA POWER... \n")
+  
+  year_to = format(Sys.Date(),"%Y")
+  month_to = as.numeric(format(Sys.Date(),"%m"))-1
+  
+  data_nasa = download_data_nasa(lat,lon,year_to,month_to,data_d)
+  
+  cat("\n Extrayendo datos estimados de CHIRP... \n")
+  
+  
+  outDir_all = list.files(path_output,pattern = ".tif",full.names = T )
+  trs = list()
+  for(j in 1:length(outDir_all)){ trs[[j]] <- raster(outDir_all[j]) }
+  
+  trs_st = stack(trs)
+  
+  extr_vals <- raster::extract(trs_st, data.frame(x=lon,y=lat))
+  data_chirp <- as.numeric(extr_vals)
+  
+  
+  
+  z=seq(as.Date(ini.date), as.Date(end.date), "days")
+  data_obs_m =  cbind.data.frame("day" = as.numeric(format(z,"%d")),"month" = as.numeric(format(z,"%m")), "year" = as.numeric(format(z,"%Y")),"t_max"= data_nasa$t_max,"t_min"=data_nasa$t_min,"prec" = data_chirp,"sol_rad" = data_nasa$sol_rad)
+  for(k in 1:nrow(escenarios_final)){
+    to.write = rbind.data.frame( data_obs_m,esc_final_diarios[[k]])
+    write.csv(to.write,paste(path_output,"/",station,"/escenario_",nom[k],".csv",sep=""),row.names=F)
+  }
+  
   cat("\n Proceso finalizado exitosamente \n \n")
-
- 
+  
+  
 }
 
 
@@ -445,9 +545,6 @@ for(y in min(data_temp$year):max(data_temp$year)){
 # path_output = "Y:/USAID_Project/Product_1_web_interface/test/clima/resampling/" 
 # path_prob = "Y:/USAID_Project/Product_1_web_interface/test/clima/prob_forecast/20170120_prob.csv"
 # path_data_d = "Y:/USAID_Project/Product_1_web_interface/test/clima/daily_data/"
-
-
-## here make a function to filter text only to summaries and change the files dir to summary dir
 
 copy_summary <- function(path, station){
   require(magrittr)
@@ -473,20 +570,41 @@ copy_summary <- function(path, station){
   
 }
 
-## 
+lat = 5.320
+lon = -72.388
+
 path_data_d <- dir_stations
 
 data_d_all = list.files(path_data_d,full.names = T)
 
 data_prob_all=read.csv(paste0(path_save,"/probabilities.csv"),header=T,dec=".")
+# data_prob_all=read.csv(paste0(path_prob,"/",format(Sys.Date(),"%Y%m%d"),"_prob.csv"),header=T,dec=".")
+cl <- makeCluster(detectCores()) # numero de nucleos proceso en paralelo
+
+
+ini.date = paste0(substring(Sys.Date(),1,4),"-",str_pad(as.numeric(substring(Sys.Date(),7,7))-1,2,pad = "0"),"-01")
+ini.date = as.Date(ini.date)
+
+end.date = paste0(substring(Sys.Date(),1,4),"-",str_pad(as.numeric(substring(Sys.Date(),7,7))-1,2,pad = "0"),"-",numberOfDays(ini.date))
+end.date = as.Date(end.date)
+
+
+download_data_chirp(ini.date,end.date,outDir = path_output,cl)
+
+
+## 
 station_names = gsub('.csv','',list.files(path_data_d))
+
 
 for(x in 1:length(data_d_all)){
   
-    data_prob = data_prob_all[which(data_prob_all$id==station_names[x]),]
-    gen_esc_daily(prob = data_prob,data_d = data_d_all[x],path_output,station = station_names[x])
-    
-    copy_summary(path_output, station_names[x])
-
-    
+  data_prob = data_prob_all[which(data_prob_all$id==station_names[x]),]
+  
+  gen_esc_daily(prob = data_prob,data_d = data_d_all[x],path_output,station = station_names[x],lat,lon)
+  
+  copy_summary(path_output, station_names[x])
+  
+  
 }
+
+file.remove(list.files(path_output,pattern = ".tif",full.names=T))

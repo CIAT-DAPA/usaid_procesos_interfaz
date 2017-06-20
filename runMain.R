@@ -13,10 +13,16 @@ library(tidyverse)
 library(magrittr)
 library(lazyeval)
 library(foreach)
+library(rebus)
+library(raster)
+library(rgdal)
+library(R.utils)
+library(parallel)
+
 
 ## DIRECTORIO PRINCIPAL
 # dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
-dirCurrent <- "C:/USAID/usaid_procesos_interfaz/"
+dirCurrent <- "C:/usaid_procesos_interfaz/"
 
 ## Variables globales paquete forecast
 dirForecast <- paste0(dirCurrent, "prediccionClimatica/", sep = "", collapse = NULL)
@@ -68,19 +74,19 @@ pathConstruct <- function(dirConstruct)
     }
   }
 ## Construyendo directorios de entrada y salida
-pathConstruct(dirInputs)
-pathConstruct(dirOutputs)
+# pathConstruct(dirInputs)
+# pathConstruct(dirOutputs)
 # predicion climatica
-pathConstruct(dirPrediccionInputs)
-pathConstruct(dirPrediccionOutputs)
-pathConstruct(dir_save)
-pathConstruct(path_save)
-pathConstruct(path_output)
-pathConstruct(path_output_sum)
+# pathConstruct(dirPrediccionInputs)
+# pathConstruct(dirPrediccionOutputs)
+# pathConstruct(dir_save)
+# pathConstruct(path_save)
+ pathConstruct(path_output)
+ pathConstruct(path_output_sum)
 # directorio de salida para los modelos
-pathConstruct(dirCultivosOutputs)
+# pathConstruct(dirCultivosOutputs)
 # maiz
-pathConstruct(dirModeloMaizOutputs)
+# pathConstruct(dirModeloMaizOutputs)
 # arroz
 pathConstruct(dirModeloArrozOutputs)
 
@@ -93,11 +99,14 @@ try(system(paste0(forecastAppDll,"-out -fs -p \"",CMDdirInputs), intern = TRUE, 
 
 # Funcion corrida moledos de cultivos (maiz y arroz)
 runCrop <- function(crop, setups) {
+  
+  
   for(i in 2:length(setups)){
     setSplit <- strsplit(setups[i],"/")
+    
     longName <- setSplit[[1]][length(setSplit[[1]])]
     longNameSplit <- strsplit(longName,"_")
-    
+
     hashStation <- longNameSplit[[1]][1]
     hashCrop <- longNameSplit[[1]][2]
     hashSoil<- longNameSplit[[1]][3]
@@ -105,11 +114,14 @@ runCrop <- function(crop, setups) {
 
     dir_climate <- paste0(path_output, "/", hashStation, sep = "", collapse = NULL)
     region <- hashStation
-    
+
     cat(paste("\n\n Ejecutando modelo ", crop, " para estacion: \"", hashStation, "\" cultivar: \"", hashCrop, "\" suelo: \"", hashSoil, "\" rango de dias: \"", hashDayRange, "\"\n", sep = ""))
     
     if (crop == 'maiz'){
+      
+      print(longName)
       name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
+      print(name_csv)
       dir_parameters <- paste0(dirModeloMaizInputs, longName, "/", sep = "", collapse = NULL)
       dir_soil <- paste0(dirModeloMaizInputs, longName, "/SOIL.SOL", sep = "", collapse = NULL)
       dir_run <- paste0(dirModeloMaizOutputs, longName, "/run/", sep = "", collapse = NULL)
@@ -117,28 +129,31 @@ runCrop <- function(crop, setups) {
       out_dssat <- paste0(dirModeloMaizOutputs, longName, '/out_dssat', sep = "", collapse = NULL)
       pathConstruct(out_dssat)
       pathConstruct(dir_run)
-      runModeloMaiz <- source(paste(dirModeloMaiz,'call_functions.R', sep = "", collapse = NULL))
-      cat(crop)
+      runModeloMaiz <- source(paste(dirModeloMaiz,'call_functions.R', sep = "", collapse = NULL), echo = F, local = T)
+      # cat(crop)
     }
     if (crop == 'arroz'){
+      
+      
       dir_run <- paste0(dirModeloArrozOutputs, longName, "/run/", sep = "", collapse = NULL)
       cultivar<- hashCrop
+      name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
       dir_parameters <- paste0(dirModeloArrozInputs, longName, "/", sep = "", collapse = NULL)
-      #runModeloArroz <- source(paste(dirModeloArroz,'call_functions.R', sep = "", collapse = NULL))
+      runModeloArroz <- source(paste(dirModeloArroz,'call_functions.R', sep = "", collapse = NULL), local = T, echo = T)
       cat(crop)
     }   
   }
 }
 
 # Corrida Prediccion
-runPrediccion <- source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL))
+# runPrediccion <- source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL))
 
 # Corrida Remuestreo
-runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse = NULL))
+# runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse = NULL))
 
 ## Corrida Modelo maiz
-setups <- list.dirs(dirModeloMaizInputs,full.names = T)
-runCrop('maiz', setups)
+# setups <- list.dirs(dirModeloMaizInputs,full.names = T)
+# runCrop('maiz', setups)
 
 ## Corrida Modelo arroz
 setups <- list.dirs(dirModeloArrozInputs,full.names = T)

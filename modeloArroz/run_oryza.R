@@ -2,7 +2,7 @@
 # function(dir_run, dir_files = dir_exp_files, region, cultivar, climate_scenarios = climate$climate_scenarios, input_dates = climate$input_dates, location, select_day = day, output)
 
 
-run_oryza <- function(dir_run, dir_files, region, cultivar, climate_scenarios, input_dates, location, select_day, output){
+run_oryza <- function(dir_run, dir_files, region, cultivar, climate_scenarios, input_dates, location, select_day, output, filename, dir_oryza){
   
   require(stringr)
   lat <- location$lat
@@ -16,7 +16,7 @@ run_oryza <- function(dir_run, dir_files, region, cultivar, climate_scenarios, i
   temp <- temp_wther(id_run)
   
   # make_mult_weather(climate_scenarios, id_run, filename, long, lat, elev)
-  make_mult_weather(climate_scenarios, temp_dir, filename, long, lat, elev)
+  make_mult_weather(climate_scenarios, temp, filename, long, lat, elev)
   
 
   

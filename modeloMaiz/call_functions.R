@@ -8,6 +8,10 @@
 
 # path_functions <- "D:/CIAT/USAID/DSSAT/multiple_runs/R-DSSATv4.6/"  # path when is the functions necessary to run by region, scenario and multiple days to platform USAID forecast
 path_functions <- dirModeloMaiz
+# print(path_functions)
+
+# print(output)
+
 
 # dir_dssat <- 'C:/DSSAT46/'  ## its necessary to have the parameters .CUL, .ECO, .SPE Updated for running (calibrated the crop (Maize))
 # dir_run <- 'D:/CIAT/USAID/DSSAT/multiple_runs/R-DSSATv4.6/'
@@ -41,8 +45,8 @@ source(paste0(path_functions, 'functions_xfile.R'))
 source(paste0(path_functions, 'run_dssat.R'))
 
 
-
 output <- output_names(hashCrop, hashSoil, name_csv)
+
 
 # input_dates <- tidy_climate(dir_climate)
 ## Climate data wit PDATE and SDATE tidy
@@ -65,13 +69,13 @@ run_mult_dssat(dir_dssat,
                dir_parameters,
                name_files,
                climate_PS$input_dates,
-               select_day, 
+               select_day,
                cultivar,
-               climate_PS$climate, 
+               climate_PS$climate,
                ID_SOIL,
                number_days,
-               output, 
-               region, 
+               output,
+               region,
                dirModeloMaizOutputs)
 
 # if (file.exists(file.path(dir_base))){

@@ -26,6 +26,7 @@ dir_oryza <- 'C:/Program Files (x86)/ORYZA(v3)/'  ## necesario crear una carpeta
 #cultivar <- "fedearroz2000"
 day <- 1 ## dia a correr a partir del pronostico climatico generado
 number_days <- 45 ## numero de dias a simular 45
+
 # dir_exp_files <- 'D:/CIAT/USAID/Oryza/usaid_forecast_rice/Experimental_Cultivar_Files/'   ## directorio donde se encuentran los archivos experimentales y cultivares
 dir_exp_files <- dir_parameters
 
@@ -36,12 +37,12 @@ source(paste0(path_functions, "settings_control.R"))
 source(paste0(path_functions, "main_functions.R"))
 source(paste0(path_functions, "make_weather.R"))
 source(paste0(path_functions, "write_reruns.R"))
-
 source(paste0(path_functions, "settings_reruns.R"))
 source(paste0(path_functions, "run_oryza.R"))
 
 
 climate <- tidy_climate(dir_climate, number_days) ## carga todos los escenarios climaticos, organiza los valores para ORYZa y a?ade la fecha del pronostico ademas de a?adir planting date and simulation date
+
 
 ## function to do this, depend by region?
 
@@ -65,6 +66,8 @@ run_mult_oryza(dir_run,
                number_days,
                # name_csv,
                output,
-               dir_out_csv)
+               dir_out_csv, 
+               filename, 
+               dir_oryza)
 
 
