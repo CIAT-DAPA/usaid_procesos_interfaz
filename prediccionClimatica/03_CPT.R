@@ -2,7 +2,8 @@
 # x_predictors = predictores de la TSM generados con el codigo de las areas predictoras
 # y_predicting = archivos de cada departamento
 # dir_output = directorio de salida donde se guardan los resultados 
-# modes = archivo de configuraciones 
+# modes = archivo de configuraciones, en las filas se tinen: 
+# x_modes, y_modes, cca_modes, trasformation (corregir esto si esta mal)
 run_cpt<-function (x_predictors, y_predicting, modes, dir_output){
 # cmd corresponde al bash que se guarda automaticamente con los outputs  
   cmd <- "@echo off
@@ -76,54 +77,41 @@ run_cpt<-function (x_predictors, y_predicting, modes, dir_output){
   system("C:/Users/AESQUIVEL/Desktop/outputs/text.bat", ignore.stdout = T, show.output.on.console = F)
 }
 
-
-
-
-
-#### Leer el archivo de configuracines para extraer los modos de x, y, cca y si se transforma o no
-
-
-
-# directorio donde se guardan los archivos de la seleccion del area predictora
+# root - directorio donde se guardan los archivos de la seleccion del area predictora
 root <- "C:/Users/AESQUIVEL/Desktop/selection_predictor_area" 
+# nombre de los departamentos
 Locations <- list.dirs(root, full.names = FALSE,  recursive = FALSE)
 
 
-# La idea es hacer aqui un lapply por departamento 
+# directorio donde se guardan todas las salidas 
+dir.output.G <-  "C:/Users/AESQUIVEL/Desktop/outputs/"
 
-function(x){
+# Esta funcion corre cpt y guarda los archivos para todos los trimestres en un departamento
+run_all_locations<- function(x, dir.output.G){
+  # cree un directorio con el nombre del departamento en caso de ser necesario
+  if(dir.exists(paths = paste0(dir.output.G, x)) == FALSE){
+    dir.create(path = paste0(dir.output.G, x))
+  }
   
-  # Completo
+  # y: direccion del archivo de estaciones
   y_predicting <- paste0( root, "/", x ,"/precip/", list.files(path = paste0(root, "/", x ,"/precip/"), pattern = ".txt"))
-  # x hace referencia al departamento 
+  # x: direccion de los archivos de la tsm
   x_predictors <- paste0( root, "/", x ,"/tsm/", list.files(path = paste0(root, "/", x, "/", "tsm"), pattern = ".txt"))
-  
+  # Conf: direccion de los archivos de configuraciones del modelo
   Conf<- paste0("C:/Users/AESQUIVEL/Desktop/conf/", x, "/", list.files(paste0("C:/Users/AESQUIVEL/Desktop/conf/", x, "/")))
+  # directorio donde se guardara toda las corridas del departamento
+  dir_output <- paste0(dir.output.G, x)
   
-  
-  
-  run_cpt(x_predictors = "C:/Users/AESQUIVEL/Desktop/selection_predictor_area/casanare/tsm/s1.txt", 
-          y_predicting = "C:/Users/AESQUIVEL/Desktop/selection_predictor_area/cordoba/precip/precip_cordoba.txt",
-          modes = "C:/Users/AESQUIVEL/Desktop/conf/cordoba/cordoba_s1.csv",
-          dir_output = "C:/Users/AESQUIVEL/Desktop/outputs")
-
-  
-  
+  # Corre cpt y guarda los archivos para todos los trimestres de un departamento
   mapply(run_cpt, x_predictors, y_predicting, Conf, dir_output, SIMPLIFY = FALSE)
-  
 }
+# Corre cpt y guarda los archivos para todos departamentos
+mapply(run_all_locations, Locations, dir.output.G, SIMPLIFY = FALSE)
 
 
 
-
-
-
-
-
-
-
-
-run_cpt(x_predictors = "C:/Users/AESQUIVEL/Desktop/selection_predictor_area/casanare/tsm/s1.txt", 
-        y_predicting = "C:/Users/AESQUIVEL/Desktop/selection_predictor_area/cordoba/precip/precip_cordoba.txt",
-        modes = "C:/Users/AESQUIVEL/Desktop/conf/cordoba/cordoba_s1.csv",
-        dir_output = "C:/Users/AESQUIVEL/Desktop/outputs")
+# Ejemplo corrida individual
+#run_cpt(x_predictors = "C:/Users/AESQUIVEL/Desktop/selection_predictor_area/casanare/tsm/s1.txt", 
+#        y_predicting = "C:/Users/AESQUIVEL/Desktop/selection_predictor_area/cordoba/precip/precip_cordoba.txt",
+#        modes = "C:/Users/AESQUIVEL/Desktop/conf/cordoba/cordoba_s1.csv",
+#        dir_output = "C:/Users/AESQUIVEL/Desktop/outputs")
