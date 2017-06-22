@@ -17,10 +17,6 @@ run_cpt<-function (x_predictors, y_predicting, modes, dir_output){
   echo %X_Modes%
   echo 2
   echo %Y_PREDICTING%
-  echo 90
-  echo -90
-  echo 0
-  echo 359
   echo 1
   echo %Y_Modes%
   echo 1
@@ -75,6 +71,8 @@ run_cpt<-function (x_predictors, y_predicting, modes, dir_output){
   
   write(cmd,"C:/Users/AESQUIVEL/Desktop/outputs/text.bat")
   system("C:/Users/AESQUIVEL/Desktop/outputs/text.bat", ignore.stdout = T, show.output.on.console = F)
+  #if(file.exists())
+  
 }
 
 # root - directorio donde se guardan los archivos de la seleccion del area predictora
@@ -108,7 +106,7 @@ run_all_locations<- function(x, dir.output.G){
 # Corre cpt y guarda los archivos para todos departamentos
 mapply(run_all_locations, Locations, dir.output.G, SIMPLIFY = FALSE)
 
-
+gc(reset = TRUE)
 
 # Ejemplo corrida individual
 #run_cpt(x_predictors = "C:/Users/AESQUIVEL/Desktop/selection_predictor_area/casanare/tsm/s1.txt", 
