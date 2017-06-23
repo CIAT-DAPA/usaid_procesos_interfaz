@@ -69,15 +69,18 @@ run_cpt<-function (x_predictors, y_predicting, modes, dir_output){
     cmd<-gsub("%Transformation%"," ",cmd)} else if(modos["trasformation",] != "no"){
       cmd<-gsub("%Transformation%","541",cmd)}
   
-  write(cmd,"C:/Users/AESQUIVEL/Desktop/outputs/text.bat")
-  system("C:/Users/AESQUIVEL/Desktop/outputs/text.bat", ignore.stdout = T, show.output.on.console = F)
-  #if(file.exists())
+  write(cmd,paste0(dir.output.G, "text.bat"))
+  system(paste0(dir.output.G, "text.bat"), ignore.stdout = T, show.output.on.console = F)
+  
+  if(file.exists(paths = paste0(dir.output.G, "text.bat")) == TRUE){
+    file.remove(paste0(dir.output.G, "text.bat"))
+  }
   
 }
 
 # root - directorio donde se guardan los archivos de la seleccion del area predictora
-root <- "C:/Users/AESQUIVEL/Desktop/selection_predictor_area" 
-# nombre de los departamentos
+root <- "C:/Users/AESQUIVEL/Desktop/selection_predictor_area"  # areas de Diego
+# nombre de los departamentos sacados de las carpetas
 Locations <- list.dirs(root, full.names = FALSE,  recursive = FALSE)
 
 
@@ -95,8 +98,11 @@ run_all_locations<- function(x, dir.output.G){
   y_predicting <- paste0( root, "/", x ,"/precip/", list.files(path = paste0(root, "/", x ,"/precip/"), pattern = ".txt"))
   # x: direccion de los archivos de la tsm
   x_predictors <- paste0( root, "/", x ,"/tsm/", list.files(path = paste0(root, "/", x, "/", "tsm"), pattern = ".txt"))
-  # Conf: direccion de los archivos de configuraciones del modelo
+  
+  # Conf: direccion de los archivos de configuraciones del modelo 
+  # -  estas las entrega stiven
   Conf<- paste0("C:/Users/AESQUIVEL/Desktop/conf/", x, "/", list.files(paste0("C:/Users/AESQUIVEL/Desktop/conf/", x, "/")))
+  
   # directorio donde se guardara toda las corridas del departamento
   dir_output <- paste0(dir.output.G, x)
   
@@ -105,7 +111,6 @@ run_all_locations<- function(x, dir.output.G){
 }
 # Corre cpt y guarda los archivos para todos departamentos
 mapply(run_all_locations, Locations, dir.output.G, SIMPLIFY = FALSE)
-
 gc(reset = TRUE)
 
 # Ejemplo corrida individual
