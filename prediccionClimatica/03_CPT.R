@@ -1,6 +1,6 @@
 # Esta funcion crea el bash para correr en la consola de linux cada corrida de CPT
-# x_predictors = predictores de la TSM generados con el codigo de las areas predictoras
-# y_predicting = archivos de cada departamento
+# x_predictors = predictores de la TSM generados con el codigo de las areas predictoras (ruta)
+# y_predicting = archivos de cada departamento (ruta)
 # dir_output = directorio de salida donde se guardan los resultados 
 # modes = archivo de configuraciones, en las filas se tinen: 
 # x_modes, y_modes, cca_modes, trasformation (corregir esto si esta mal)
@@ -87,8 +87,12 @@ Locations <- list.dirs(root, full.names = FALSE,  recursive = FALSE)
 # directorio donde se guardan todas las salidas 
 dir.output.G <-  "C:/Users/AESQUIVEL/Desktop/outputs/"
 
+# Conf: direccion de los archivos de configuraciones del modelo  -  estas las entrega stiven
+dir.Conf <- "C:/Users/AESQUIVEL/Desktop/conf/"
+
+
 # Esta funcion corre cpt y guarda los archivos para todos los trimestres en un departamento
-run_all_locations<- function(x, dir.output.G){
+run_all_locations<- function(x, dir.output.G, dir.Conf){
   # cree un directorio con el nombre del departamento en caso de ser necesario
   if(dir.exists(paths = paste0(dir.output.G, x)) == FALSE){
     dir.create(path = paste0(dir.output.G, x))
@@ -100,8 +104,7 @@ run_all_locations<- function(x, dir.output.G){
   x_predictors <- paste0( root, "/", x ,"/tsm/", list.files(path = paste0(root, "/", x, "/", "tsm"), pattern = ".txt"))
   
   # Conf: direccion de los archivos de configuraciones del modelo 
-  # -  estas las entrega stiven
-  Conf<- paste0("C:/Users/AESQUIVEL/Desktop/conf/", x, "/", list.files(paste0("C:/Users/AESQUIVEL/Desktop/conf/", x, "/")))
+  Conf<- paste0(dir.Conf, x, "/", list.files(paste0(dir.Conf, x, "/")))
   
   # directorio donde se guardara toda las corridas del departamento
   dir_output <- paste0(dir.output.G, x)
@@ -110,7 +113,7 @@ run_all_locations<- function(x, dir.output.G){
   mapply(run_cpt, x_predictors, y_predicting, Conf, dir_output, SIMPLIFY = FALSE)
 }
 # Corre cpt y guarda los archivos para todos departamentos
-mapply(run_all_locations, Locations, dir.output.G, SIMPLIFY = FALSE)
+mapply(run_all_locations, Locations, dir.output.G, dir.Conf, SIMPLIFY = FALSE)
 gc(reset = TRUE)
 
 # Ejemplo corrida individual

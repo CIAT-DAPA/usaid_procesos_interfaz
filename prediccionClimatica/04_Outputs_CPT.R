@@ -34,7 +34,7 @@ table_Ind<-function(x, gFiles, Pfiles, Kfiles, Can.files, prob.files){
   if(month==1){ year <- year + 1}
   
   # se asigna un nombre la las filas de los objetos de probabilidades
-  rownames(w1) <- "below" ; rownames(w2) <- "normal";  rownames(w3) <- "Above" 
+  rownames(w1) <- "below" ; rownames(w2) <- "normal";  rownames(w3) <- "above" 
   
   #### creacion de la tabla de probabilidades para una sola corrida
   forecast<- data.frame(year= year  , month = month,  
