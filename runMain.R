@@ -22,7 +22,7 @@ library(parallel)
 
 ## DIRECTORIO PRINCIPAL
 # dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
-dirCurrent <- "C:/usaid_procesos_interfaz/"
+dirCurrent <- "D:/CIAT/USAID/Servidor/interfaz_web/usaid_procesos_interfaz/"
 
 ## Variables globales paquete forecast
 dirForecast <- paste0(dirCurrent, "prediccionClimatica/", sep = "", collapse = NULL)
@@ -94,6 +94,7 @@ pathConstruct(dirModeloArrozOutputs)
 CMDdirInputs <- paste0(gsub("/","\\\\",dirPrediccionInputs), "\\\"")
 try(system(paste0(forecastAppDll,"-out -s \"prec\" -p \"",CMDdirInputs," -start 1981 -end 2013"), intern = TRUE, ignore.stderr = TRUE))
 try(system(paste0(forecastAppDll,"-out -wf -p \"",CMDdirInputs," -name \"daily\""), intern = TRUE, ignore.stderr = TRUE))
+try(system(paste0(forecastAppDll,"-out -co -p \"",CMDdirInputs," -name \"daily\""), intern = TRUE, ignore.stderr = TRUE))
 CMDdirInputs <- paste0(gsub("/","\\\\",dirInputs), "\\\"")
 try(system(paste0(forecastAppDll,"-out -fs -p \"",CMDdirInputs), intern = TRUE, ignore.stderr = TRUE))
 
@@ -146,14 +147,14 @@ runCrop <- function(crop, setups) {
 }
 
 # Corrida Prediccion
-# runPrediccion <- source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL))
+runPrediccion <- source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL))
 
 # Corrida Remuestreo
-# runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse = NULL))
+runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse = NULL))
 
 ## Corrida Modelo maiz
-# setups <- list.dirs(dirModeloMaizInputs,full.names = T)
-# runCrop('maiz', setups)
+setups <- list.dirs(dirModeloMaizInputs,full.names = T)
+runCrop('maiz', setups)
 
 ## Corrida Modelo arroz
 setups <- list.dirs(dirModeloArrozInputs,full.names = T)

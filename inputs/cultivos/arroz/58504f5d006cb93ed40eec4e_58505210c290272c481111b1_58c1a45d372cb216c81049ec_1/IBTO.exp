@@ -1,0 +1,275 @@
+*--------------------------------------------------------------------*
+* EXPERIMENTAL DATA FILE                                             *
+*                                                                    *
+* File name        : IBTO.EXP                                        *
+* Crop             : Oryza sativa cv. Fed733                        *
+* Year/Season      : 2013, first growing season                      *
+* Experimental site: Fed_Saldana , 03.91N, 074.98W, 308m             *
+* Fertilizer       : 242.9 kg N                                      *
+*                                                                    *
+* People           : Barrios/Rodriguez/Rebolledo/Petro/Torres        *
+* Address          : Fedearroz, Saldana - Tolima, Colombia           *
+* Additional info  : Primer ciclo de cultivo - 4/29/2013             *
+*--------------------------------------------------------------------*
+
+*--------------------------------------------------------------------*
+* 1. Selection of modes of running                                   *
+*--------------------------------------------------------------------*
+*--  RICETYPE is to select lowland rice or aerobic/upland rice
+RICETYPE = 'LOWLAND'   ! Lowland rice
+*RICETYPE = 'AEROBIC'   ! Upland or aerobic rice
+
+*--  RUNMODE: mode of running ORYZA
+*RUNMODE = 'EXPERIMENT'       ! ORYZA simulates particular experiment
+RUNMODE ='EXPLORATION'      ! ORYZA used for exploraton 
+
+*--  PRODENV = Production situation setting
+*PRODENV = 'POTENTIAL'        ! Potential production
+PRODENV = 'WATER BALANCE'   ! Production may be water-limited
+
+*--  WATBAL is choice of water balance
+*    needs only be given when PRODENV = 'WATER BALANCE'
+WATBAL = 'PADDY'   ! PADDY water balance (for lowland soils)
+*WATBAL = 'LOWBAL'   ! LOWBAL water balance (for lowland soils)
+*WATBAL = 'SAHEL'   ! SAHEL water balance (for freely draining upland soils)
+*WATBAL = 'SAWAH'   ! SAWAH water balance (for lowland or upland soils)
+
+*--  NITROENV = Nitrogen production situation setting
+*NITROENV = 'POTENTIAL'        ! Potential production
+NITROENV = 'NITROGEN BALANCE'   ! Production may be nitrogen-limited
+
+* WARNING: NITROGEN AND WATER LIMITATIONS AT SAME TIME IS AS
+* YET UN UNVALIDATED OPTION IN ORYZA2000!!!! 
+
+*--  ETMOD is method for evapotranspiration calculation:
+*ETMOD = 'PENMAN'            ! Penman-based (Van Kraalingen & Stol,1996)
+*ETMOD = 'PRIESTLY TAYLOR'   ! Priestly-Taylor (")
+ETMOD = 'MAKKINK'           ! Makkink (Van Kraalingen & Stol, 1996)
+
+*--------------------------------------------------------------------*
+* 2. Timer data for simulation                                       *
+*--------------------------------------------------------------------*
+IYEAR  = 2016              ! Start year of simulation (year)
+STTIME = 200.                 ! Start time  (day number)
+FINTIM = 1000.               ! Finish time (days after start)
+DELT   = 1.                  ! Time step   (day)
+
+*--------------------------------------------------------------------*
+* 3. Weather station and climatic data for simulation                *
+*--------------------------------------------------------------------*
+WTRDIR = ' '   ! Directory of weather data
+CNTR   = 'IBTO'              ! Country code
+ISTN   = 1                   ! Station code
+
+ANGA = 0.29                  ! Angstrom A parameter
+ANGB = 0.45                  ! Angstrom B parameter
+
+TMCTB =  0., 0.,             ! Table for temperature increase
+       366., 0.              ! Climatic Change studies
+
+FAOF  = 1.          ! MultipL. factor for pot. evapotranspiration (FAO)
+                    ! Value Murty & Tuong
+
+TMPSB = 0.          ! Temperature increase in seed-bed due to cover:
+                    ! Zero when no cover over seed-bed; 9.5 with seed-bed		
+*--------------------------------------------------------------------*
+* 4. Establishment data
+*--------------------------------------------------------------------*
+*--  ESTAB is method of establishment: 'TRANSPLANT' or 'DIRECT-SEED'
+*ESTAB='TRANSPLANT'
+ESTAB='DIRECT-SEED'
+
+* Transplanting date January 16, 1992; sowing date Jan. 4.
+EMD    = 200       ! Day of emergence (either direct, or in seed-bed)
+EMYR   = 2016      ! Year of emergence
+SBDUR  = 0        ! Seed-bed duration (days between sowing and transplanting)
+
+*--------------------------------------------------------------------*
+* 5. Management parameters                                           *
+*--------------------------------------------------------------------*
+*NPLH   = 5.         ! Number of plants per hill
+*NH     = 25.        ! Number of hills
+*NPLSB  = 1000.      ! Number of plants in seed-bed (???)
+NPLDS  = 140.       ! Number of plants/m2 direct-seeded
+
+*-- Initial data at emergence, for either direct-seeding or seed-bed
+*   Standard data used.
+LAPE   = 0.0001     ! Initial leaf area per plant
+DVSI   = 0.0        ! Initial development stage
+WLVGI  = 0.0        ! Initial leaf weight
+WSTI   = 0.0        ! Initial stem weight
+WRTI   = 0.0        ! Initial stem weight
+WSOI   = 0.0        ! Initial weight storage organs
+ZRTI   = 0.0001     ! Initial root depth (m)
+
+*-- Re-initialization at transplanting (standard data used)
+ZRTTR  = 0.05       ! Root depth at transplanting (m)
+
+*---------------------------------------------------------------*
+* 6. Irrigation parameters
+* Need only to be filled-in when PRODENV = 'WATER BALANCE'
+*---------------------------------------------------------------*
+* No data (potential production mode)
+* No data needed for potential water condition
+* NEW, SEPT 2006:
+DVSIMAX = 1.8 ! Development stage after which no more irrigation is applied
+* NEW SETTING, BY TAOLI, 21 MAY 2010
+* The determination for switch critical
+ICOMBA = 1   !1: Use Julian day; 2: Use DVS and 3: Use mixture of DVS and Julian day,
+*	but the Julian day is not allowed to be smaller than 2
+
+*  Combining irrigation management methods table IRMTAB, it must have at least two lines,
+*      X (Julian day or DVS or DVS+Julian, present the switching day), Y (methods in real number)
+IRMTAB = 128.,2.0,      ! 0.,1.0,
+168.0,2.0,              !28.0,1.0,
+196.0,2.0,              !29.0,1.0,
+210.0,2.0,              !366.0,1.0
+231.0,2.0,
+366.0,2.0
+
+** Select from the following options:
+*SWITIR = 0 ! No irrigation; rainfed
+*SWITIR = 1 ! Irrigation supplied as input data
+SWITIR = 2 ! Irrigation at minimum standing soil water depth
+*SWITIR = 3 ! Irrigation at minimum soil water potential
+*SWITIR = 4 ! Irrigation at minimum soil water content
+*SWITIR = 5 ! Irrigation at x days after disapp. standing water
+*SWITIR = 6 ! Irrigation at minimum soil water potential in defined periods only
+
+** If SWITIR = 1, supply irrigation table, amount of irrigation 
+** (y in mm) for a given calendar * day (x), used if 
+RIRRIT =       0.,      0.0,  
+             166.,      0.0,
+             167.,      0.0,      ! 36.1,    original d
+             168.,      35.0,
+             169.,      0.0, 
+             170.,      0.0, 
+             171.,      35.0,
+             172.,      0.0, 
+             173.,      0.0, 
+             174.,      0.0, 
+             175.,      19.1,
+             176.,      0.0, 
+             184.,      0.0, 
+             185.,      60.5,
+             186.,      0.0, 
+             190.,      0.0, 
+             191.,      41.4,
+             192.,      0.0, 
+             198.,      0.0, 
+             199.,      59.2,
+             200.,      0.0, 
+             224.,      0.0, 
+             225.,      55.9,
+             226.,      0.0, 
+             234.,      0.0, 
+             235.,      49.7,
+             236.,      0.0, 
+             239.,      0.0, 
+             240.,      46.6,
+             241.,      0.0, 
+             248.,      0.0, 
+             249.,      34.2,
+             250.,      0.0, 
+             255.,      0.0, 
+             256.,      48.6,
+             257.,      0.0, 
+             258.,      0.0, 
+             259.,      0.0, 
+             260.,      0.0, 
+             261.,      0.0, 
+             262.,      0.0, 
+             263.,      0.0, 
+             264.,      58.8,
+             265.,      0.0, 
+             366.,      0.0     
+
+** If SWITIR = 2:
+***1) supply amount of irrigation IRRI2 (mm)
+***2) supply minimum standing water depth WL0MIN (mm) below which irrigation water is applied
+IRRI2   = 30. ! Irrigation gift (mm) !IT MUST BE REAL DATA
+WL0MIN = 1. ! Minimum standing water depth (mm) !IT MUST BE REAL DATA
+
+** IF SWITIR =3:
+***1) supply amount of irrigation IRRI3 (mm)
+***2) supply minimum soil water potential KPAMIN (KPa)
+***3) Supply soil layer for which KPAMIN aplied, SLMIN3
+IRRI3 = 50.            !IT MUST BE REAL DATA
+KPAMIN = 70.            !IT MUST BE REAL DATA
+SLMIN3 = 3            !IT MUST BE INTEGER DATA
+
+** IF SWITIR = 4:
+***1) supply amount of irrigation IRRI4 (mm)
+***2) supply minimum soil water conten WCAMIN (-)
+***3) Supply soil layer for which KPAMIN aplied, SLMIN4
+IRRI4 = 50.      !IT MUST BE REAL DATA
+WCMIN = 0.30      !IT MUST BE REAL DATA
+SLMIN4 = 3      !IT MUST BE INTEGER DATA
+
+** IF SWITIR = 5:
+***1) supply amount of irrigation IRRI5 (mm)
+***2) supply number of days after disappearence of standing water (WL0DAY) at which irrigation water is applied
+IRRI5 = 50.      !IT MUST BE REAL DATA
+WL0DAY = 5    ! number of days after disappearence of (-) INTEGER!!
+
+** IF SWITIR = 6:
+***1) supply amount of irrigation IRRI6 (mm)
+***2) Supply soil layer for which KPAMIN aplied, SLMIN6
+***3) period table as "start DVS' 'finish DVS' 'KPAMIN during period'
+*       Irrigation will be applied in the periods between 'start DVs' to 'end DVS'
+*       and only when the soil water tension in layer SLMIN is above KPAMIN in that period
+*       Note: at maximum 5 stages can de defined (no more than 15 data in table)!
+IRRI6 = 50.      !IT MUST BE REAL DATA
+SLMIN6 = 3      !IT MUST BE INTEGER DATA
+ISTAGET =  0.00, 0.20, 5.,
+0.65, 0.80, 50.,
+1.00, 1.20, 5.,
+1.50, 1.60, 50.,
+1.70, 1.80, 5.
+
+*--------------------------------------------------------------------*
+* 7. Nitrogen parameters                                             *
+*--------------------------------------------------------------------*
+* No data (potential production mode)
+*TWO SOIL C AND N DYNAMICS
+NUTRIENT =  'GENERAL SOM'     !USE GENERAL SOIL ORGANIC C AND N MODULE TO HANDLE THE NUTRIENT CHANGES
+*NUTRIENT =  'FIXED SUPPLY'	!Use fixed mineralization rate with fertilizer recovery rate
+*NUTRIENT =  'APSIM SOILN'     !USE APSIM SOIL C AND N MODULE TO HANDLE THE NUTRIENT CHANGES, IT CONSISTED
+!BY SOILN, POND AND SURFACEOM MODULES
+* Table of recovery fraction of Nitrogen in the soil (-) second column
+* versus development stage (DVS) (first column) STANDARD VALUE
+RECNIT = 
+0.0, 0.30,
+0.2, 0.35,
+0.4, 0.50,
+0.8, 0.75,
+1.0, 0.75,
+2.5, 0.75
+
+SOILSP = 0.8  ! Soil N mineralization rate (kg N/ha/d) (0.6)
+
+* Table of fertilizer rate (kg N/ha) (second column) versus days after sowing
+* in the seed-bed (!) (first column)
+FERTIL = 
+0.,    14.,
+1.,    0.,
+10.,   41.,
+11.,   0.,
+12.,   0.,
+13.,   0.,
+24.,   58.,
+25.,   0.,
+26.,   0.,
+37.,   0.,
+38.,   56.,
+39.,   0.,
+50.,   0.,
+51.,   0.,
+52.,   51.,
+53.,   0.,
+63.,   0.,
+64.,   21., 
+65.,   0.,
+66.,   0.,
+366.,  0.
+

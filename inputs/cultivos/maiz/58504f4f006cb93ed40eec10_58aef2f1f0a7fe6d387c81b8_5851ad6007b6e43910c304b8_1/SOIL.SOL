@@ -1,0 +1,9 @@
+*USAID00001  -99         SICL     100  Suelo Cerete MADR Fase I 2013
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ Cerete      Colombia         8.83   -75.8 Silty clay loam 
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BL   .09     6   .05    73     1     1 IB001 IB001 IB001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    30   -99  .241  .425  .695     1   .15  1.47   -99  30.1    53   -99   -99   6.6   -99  23.1   -99
+   100   -99  .222  .418  .991  .273   .15  1.49   -99  30.1    58   -99   -99   7.1   -99  21.6   -99
+
