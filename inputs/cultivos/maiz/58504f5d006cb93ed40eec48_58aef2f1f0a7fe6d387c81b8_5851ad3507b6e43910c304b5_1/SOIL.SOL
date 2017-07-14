@@ -1,8 +1,0 @@
-*USAID00001  Suelo Espinal SL    100 Suelo Espinal MADR Fase I 2013
-@SITE        COUNTRY          LAT     LONG SCS FAMILY
- Espinal     Colombia        4.188  -74.96 Sandy Loam 
-@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
-    BL   .09     6    .6    76     1     1 IB001 IB001 IB001
-@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
-    30   -99  .197  .361  .639     1  2.59  1.67   -99  15.6  22.2   -99   -99   6.7   -99   6.4   -99
-   100   -99  .178  .365  .563  .273  2.59  1.53   -99  13.1  17.1   -99   -99   6.9   -99   5.7   -99
