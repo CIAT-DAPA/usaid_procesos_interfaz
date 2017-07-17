@@ -144,6 +144,8 @@ download_data_chirp = function(ini.date,end.date,outDir,cl){
   clusterMap(cl, download.file, url = urls, destfile = outDir_all, mode = "wb", 
              .scheduling = 'dynamic')
   
+
+
   
   
   return("Datos de CHIRPS descargados!")
@@ -556,17 +558,17 @@ copy_summary <- function(path, station){
   # to <- str_split(path, "/")[[1]][-omit_resampling]
   # to <- paste0(paste(to, collapse = '/'), '/summary/')
   
-  pos_exlude <- list.files(path_files) %>%
+  pos_exclude <- list.files(path_files) %>%
     gsub(".csv", "", .) %>%
-    grep("[a-z]", .)
+    grep("[0-9]+", .)
   
-  summaries <- list.files(path_files)[pos_exlude]
+  summaries <- list.files(path_files)[-pos_exclude]
   
   from = paste0(path_files, '/', summaries)
   to = paste0(path, '/summary/', station, '_', summaries)
   invisible(file.rename(from, to))
   # invisible(file.remove(from, to))
-  
+ 
   
 }
 
@@ -579,7 +581,7 @@ data_d_all = list.files(path_data_d,full.names = T)
 
 data_prob_all=read.csv(paste0(path_save,"/probabilities.csv"),header=T,dec=".")
 # data_prob_all=read.csv(paste0(path_prob,"/",format(Sys.Date(),"%Y%m%d"),"_prob.csv"),header=T,dec=".")
-cl <- makeCluster(detectCores()) # numero de nucleos proceso en paralelo
+cl <- makeCluster(detectCores() - 1) # numero de nucleos proceso en paralelo
 
 
 ini.date = paste0(substring(Sys.Date(),1,4),"-",str_pad(as.numeric(substring(Sys.Date(),7,7))-1,2,pad = "0"),"-01")
@@ -593,14 +595,21 @@ download_data_chirp(ini.date,end.date,outDir = path_output,cl)
 
 
 ## 
-station_names = gsub('.csv','',list.files(path_data_d))
+station_names = gsub('.csv','',list.files(path_data_d)) %>%
+					.[-grep("coords", .)]
 
+daily_climate <- list.files(path_data_d,full.names = T) %>%
+					.[-grep("coords", .)]
 
-for(x in 1:length(data_d_all)){
+for(x in 1:length(station_names )){
   
+  print(station_names[x])
+  #data_prob = data_prob_all[which(data_prob_all$id==station_names[x]),]
+  ## modificado por Jeison j.mesa@cgiar.org
   data_prob = data_prob_all[which(data_prob_all$id==station_names[x]),]
   
-  gen_esc_daily(prob = data_prob,data_d = data_d_all[x],path_output,station = station_names[x],lat,lon)
+  
+  gen_esc_daily(prob = data_prob,data_d = daily_climate[x],path_output,station = station_names[x],lat,lon)
   
   copy_summary(path_output, station_names[x])
   
