@@ -26,6 +26,8 @@ run_cpt<-function (x_predictors, y_predicting, modes, dir_output){
   echo 554
   echo 2
   echo %Transformation%
+  echo 522
+  echo 2
   echo 112
   echo %RESULT_GI%
   echo 311
