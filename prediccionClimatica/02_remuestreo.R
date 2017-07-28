@@ -601,7 +601,7 @@ station_names = gsub('.csv','',list.files(path_data_d)) %>%
 daily_climate <- list.files(path_data_d,full.names = T) %>%
 					.[-grep("coords", .)]
 
-for(x in 1:length(station_names )){
+for(x in 1:length(station_names)){
   
   print(station_names[x])
   #data_prob = data_prob_all[which(data_prob_all$id==station_names[x]),]

@@ -86,7 +86,7 @@ pathConstruct <- function(dirConstruct)
 # directorio de salida para los modelos
 # pathConstruct(dirCultivosOutputs)
 # maiz
-# pathConstruct(dirModeloMaizOutputs)
+pathConstruct(dirModeloMaizOutputs)
 # arroz
 pathConstruct(dirModeloArrozOutputs)
 
@@ -98,9 +98,14 @@ try(system(paste0(forecastAppDll,"-out -co -p \"",CMDdirInputs," -name \"daily\"
 CMDdirInputs <- paste0(gsub("/","\\\\",dirInputs), "\\\"")
 try(system(paste0(forecastAppDll,"-out -fs -p \"",CMDdirInputs), intern = TRUE, ignore.stderr = TRUE))
 
+
+## cargar los archivos de Diego areas predictoras
+## ARchivo de configuracion CPT
 # Funcion corrida moledos de cultivos (maiz y arroz)
 runCrop <- function(crop, setups) {
   
+  # crop <-'maiz'
+  # i = 2 
   
   for(i in 2:length(setups)){
     setSplit <- strsplit(setups[i],"/")
@@ -110,7 +115,7 @@ runCrop <- function(crop, setups) {
 
     hashStation <- longNameSplit[[1]][1]
     hashCrop <- longNameSplit[[1]][2]
-    hashSoil<- longNameSplit[[1]][3]
+    hashSoil <- longNameSplit[[1]][3]
     hashDayRange <- longNameSplit[[1]][4]
 
     dir_climate <- paste0(path_output, "/", hashStation, sep = "", collapse = NULL)
