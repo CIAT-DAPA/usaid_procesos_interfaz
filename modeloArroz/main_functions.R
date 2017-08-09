@@ -218,30 +218,43 @@ make_PS <- function(data, number_days){
   require(lubridate)
   require(magrittr)
   
-  PDATE <- data[[1]] %>%
+  
+  after_days <- data[[1]] %>%
     filter( row_number() == 1:number_days) %>%
-    select(julian_day) %>%
+    dplyr::select(frcast_date) %>%
+    mutate(pdate = frcast_date + ddays(15)) %>%
+    dplyr::select(pdate) %>%
+    mutate(jpdate = yday(pdate)) %>%
+    filter( row_number() == 1) %>%
+    magrittr::extract2(2) 
+  
+  PDATE <- data[[1]] %>%
+    filter(julian_day >= after_days) %>%
+    filter( row_number() == 1:number_days) %>%
+    dplyr::select(julian_day) %>%
     extract2(1) %>%
     as.numeric()
   
   SDATE <- data[[1]] %>%
-    filter( row_number() == 1) %>%
-    select(julian_day) %>%
+    filter( row_number() == 1:number_days) %>%
+    dplyr::select(julian_day) %>%
     extract2(1) %>%
     as.numeric()
   
   DATE <- data[[1]] %>%
     filter( row_number() == 1:number_days) %>%
-    select(year_2) %>%
+    dplyr::select(year_2) %>%
     extract2(1)
   
   DATE_format <- data[[1]] %>%
     filter( row_number() == 1:number_days) %>%
-    select(frcast_date) %>%
+    dplyr::select(frcast_date) %>%
     extract2(1)
   
-  dates_inputs <- crossing(PDATE, SDATE) %>%
-    mutate(IYEAR = DATE, DATE = DATE_format)
+  # dates_inputs <- crossing(PDATE, SDATE) %>%
+  #   mutate(IYEAR = DATE, DATE = DATE_format)
+  
+  dates_inputs <- data_frame(PDATE, SDATE, IYEAR = DATE, DATE = DATE_format)
   
   return(dates_inputs)
   
@@ -305,7 +318,7 @@ CV <- function(var){
 
 calc_desc <- function(data, var){
   
-  data <- select_(data, var)
+  data <- dplyr::select_(data, var)
   reclas_call <- lazyeval::interp(~ mgment_no_run(var), var = as.name(var))
   
   data <- data %>%
@@ -324,7 +337,7 @@ calc_desc <- function(data, var){
                         perc_95 = quantile(., 0.95), 
                         coef_var = CV(.))) %>%
     mutate(measure = paste(var)) %>%
-    select(measure, everything())
+    dplyr::select(measure, everything())
   return(data)
 }
 
@@ -341,7 +354,7 @@ tidy_descriptive <- function(data, W_station, soil, cultivar, start, end){
            cultivar = cultivar, 
            start = start, 
            end = end) %>%
-    select(weather_station, 
+    dplyr::select(weather_station, 
            soil, 
            cultivar, 
            start, 
@@ -361,9 +374,10 @@ run_mult_oryza <- function(dir_run, dir_files, region, cultivar, climate_scenari
   # proof
   
   # number_days <- 3
-  # input_dates <- climate_PS$input_dates
-  # climate <- climate_PS$climate
+  # climate_scenarios <- climate$climate_scenarios
+  # input_dates <- climate$input_dates
   # id_soil <- ID_SOIL
+  # select_day <- day
   
   out_csv <- output$name_csv
   iterators <- rep(1:number_days, by = select_day)  

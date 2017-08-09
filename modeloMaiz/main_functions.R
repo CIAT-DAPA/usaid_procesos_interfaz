@@ -212,25 +212,43 @@ make_PS <- function(data, number_days){
   require(lubridate)
   require(magrittr)
   
-  PDATE <- data[[1]] %>%
+  # PDATE <- data[[1]] %>%
+  #   filter( row_number() == 1:number_days) %>%
+  #   dplyr::select(date_dssat) %>%
+  #   magrittr::extract2(1) %>%
+  #   as.numeric()
+  after_days <- data[[1]] %>%
     filter( row_number() == 1:number_days) %>%
-    select(date_dssat) %>%
-    extract2(1) %>%
+    dplyr::select(frcast_date) %>%
+    mutate(pdate = frcast_date + ddays(15)) %>%
+    dplyr::select(pdate) %>%
+    filter( row_number() == 1) %>%
+    magrittr::extract2(1) 
+    
+  
+  PDATE <- data[[1]] %>%
+    filter(frcast_date >= after_days) %>%
+    filter( row_number() == 1:number_days) %>%
+    dplyr::select(date_dssat) %>%
+    magrittr::extract2(1) %>%
     as.numeric()
   
   SDATE <- data[[1]] %>%
-    filter( row_number() == 1) %>%
-    select(date_dssat) %>%
+    filter( row_number() == 1:number_days) %>%
+    dplyr::select(date_dssat) %>%
     extract2(1) %>%
     as.numeric()
   
   DATE <- data[[1]] %>%
+    filter(frcast_date >= after_days) %>%
     filter( row_number() == 1:number_days) %>%
-    select(frcast_date) %>%
+    dplyr::select(frcast_date) %>%
     extract2(1)
   
-  dates_inputs <- crossing(PDATE, SDATE) %>%
-                    mutate(DATE = DATE)
+  
+  dates_inputs  <- data_frame(PDATE, SDATE, DATE)
+  # dates_inputs <- crossing(PDATE, SDATE) %>%
+  #                   mutate(DATE = DATE)
   
   return(dates_inputs)
   
@@ -334,7 +352,7 @@ CV <- function(var){
 
 calc_desc <- function(data, var){
   
-  data <- select_(data, var)
+  data <- dplyr::select_(data, var)
   reclas_call <- lazyeval::interp(~ mgment_no_run(var), var = as.name(var))
   
   data <- data %>%
@@ -353,7 +371,7 @@ calc_desc <- function(data, var){
                         perc_95 = quantile(., 0.95), 
                         coef_var = CV(.))) %>%
     mutate(measure = paste(var)) %>%
-    select(measure, everything())
+    dplyr::select(measure, everything())
   return(data)
 }
 
@@ -369,7 +387,7 @@ tidy_descriptive <- function(data, W_station, soil, cultivar, start, end){
            cultivar = cultivar, 
            start = start, 
            end = end) %>%
-    select(weather_station, 
+    dplyr::select(weather_station, 
            soil, 
            cultivar, 
            start, 
