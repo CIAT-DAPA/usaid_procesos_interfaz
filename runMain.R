@@ -105,9 +105,11 @@ try(system(paste0(forecastAppDll,"-out -fs -p \"",CMDdirInputs), intern = TRUE, 
 runCrop <- function(crop, setups) {
   
   # crop <-'maiz'
+  # crop <- 'arroz'
   # i = 2 
   
   for(i in 2:length(setups)){
+    
     setSplit <- strsplit(setups[i],"/")
     
     longName <- setSplit[[1]][length(setSplit[[1]])]
