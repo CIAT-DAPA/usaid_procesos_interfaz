@@ -53,7 +53,7 @@ output <- output_names(hashCrop, hashSoil, name_csv)
 
 climate_PS <- tidy_climate(dir_climate, number_days)
 # climate_scenarios <- load_climate(dir_climate)
-# input_dates <- climate_PS$input_dates
+# input_dates <- climate_PS$climate
 # climate <- climate_PS$climate
 
 

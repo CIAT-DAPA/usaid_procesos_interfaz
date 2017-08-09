@@ -35,7 +35,7 @@ run_oryza <- function(dir_run, dir_files, region, cultivar, climate_scenarios, i
   id_s <- add_exp_cul(dir_files, region, id_run)  ## controla los parametros por region y retorna el id del suelo, crp and xfile
   
   # parameters_reruns <- settins_reruns(PDATE, SDATE, IYEAR, ISTN, id_run, id_s)
-  parameters_reruns <- settins_reruns(SDATE, PDATE, IYEAR, ISTN, temp, id_s)
+  parameters_reruns <- settins_reruns(PDATE, SDATE, IYEAR, ISTN, temp, id_s)
   
   make_reruns(parameters_reruns, id_run)
   files_oryza(dir_oryza, id_run)
