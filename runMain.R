@@ -1,8 +1,9 @@
 # Librerias y prerequisitos: 
 #   . gunzip
 #   . R librarys
-# DSSAT
-# Oriza
+#   . CPT_batch
+#   . DSSAT
+#   . Oriza
 library(funr)
 library(lubridate)
 library(reshape)
@@ -157,7 +158,7 @@ runCrop <- function(crop, setups) {
 }
 
 # Corrida Prediccion
-runPrediccion <- source(paste(dirForecast,'01_prediccion_1.R', sep = "", collapse = NULL))
+runPrediccion <- source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL))
 
 # Corrida Remuestreo
 runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse = NULL))
