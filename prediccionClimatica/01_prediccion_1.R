@@ -1,14 +1,3 @@
-########### Packages ###########
-
-if(require(raster)==FALSE){install.packages("raster")}
-library("raster")
-if(require(corpcor)==FALSE){install.packages("corpcor")}
-library("corpcor")
-if(require(pcaPP)==FALSE){install.packages("pcaPP")}
-library("pcaPP")
-if(require(RColorBrewer)==FALSE){install.packages("RColorBrewer")}
-library("RColorBrewer")
-
 ########## Functions ##########
 
 download.cpt=function(dir_save,areas_l,n_areas_l,month,year){ 
@@ -367,12 +356,23 @@ proba=function(x,y){
   
 }
 
+best_GI=function(x){
+  
+  names=substr(basename(x),4,nchar(basename(x))-4)
+  all_GI=lapply(x,function(x)read.table(x,header=T,dec=".",skip=5))  
+  best=lapply(all_GI,function(x) x[dim(x)[1],dim(x)[2]] )
+  pos=which(unlist(best)==max(unlist(best)))[1]
+  return(names[pos])
+  
+}
+
 ########## Run ##############
 start.time <- Sys.time()
 #############################
 
-path_dpto="C:/Users/dagudelo/Desktop/Confi"
-dir_save="C:/Users/dagudelo/Desktop/Ejemplo_descarga"
+#path_dpto="C:/Users/dagudelo/Desktop/Confi"
+path_dpto=dir_response
+#dir_save="C:/Users/dagudelo/Desktop/Ejemplo_descarga"
 path_down=paste(dir_save,list.files(path_dpto),sep="/")
 O_empty_1=lapply(path_down,dir.create)
 path_areas=list.files(path_dpto,recursive = T,pattern = "areas",full.names = T)
@@ -440,7 +440,7 @@ cor_tsm=Map(function(x,y,z) Map(selection_area,x,y,z),data_tsm_final,data_res_fi
 
 cat("\n Correlación de los pixeles calculada \n")
 
-main_dir="C:/Users/dagudelo/Desktop"
+main_dir=dirPrediccionInputs
 dir.create(paste0(main_dir,"/run_CPT"))
 o_empty_3=lapply(paste0(main_dir,"/run_CPT","/",list.files(path_dpto)),dir.create)
 path_months=unlist(lapply(paste0(main_dir,"/run_CPT","/",list.files(path_dpto)),function(x)paste0(x,"/",month.abb[season])))
@@ -464,42 +464,45 @@ O_empty_8=Map(function(x,y,z)Map(run_all,x,y,z),names_all,confi_l,n_data)
 
 cat("\n Batch CPT realizado \n")
 
-path_output=lapply(paste0(main_dir,"/run_CPT","/",list.files(path_dpto)),function(x)paste0(x,"/",month.abb[season]))
-o_e=lapply(path_output,function(x)lapply(x,function(x)list.files(x,full.names = T,recursive = T,pattern = "GI")))
-best_GI=function(x){
-  
-  names=substr(basename(x),4,nchar(basename(x))-4)
-  all_GI=lapply(x,function(x)read.table(x,header=T,dec=".",skip=5))  
-  best=lapply(all_GI,function(x) x[dim(x)[1],dim(x)[2]] )
-  pos=which(unlist(best)==max(unlist(best)))[1]
-  return(names[pos])
+path_out_run=lapply(paste0(main_dir,"/run_CPT","/",list.files(path_dpto)),function(x)paste0(x,"/",month.abb[season]))
+o_e=lapply(path_out_run,function(x)lapply(x,function(x)list.files(x,full.names = T,recursive = T,pattern = "GI")))
 
-}
 best_decil_l=lapply(o_e,function(x)lapply(x,best_GI))
 best_decil=lapply(best_decil_l,unlist)
 
 cat("\n Mejor corrida seleccionada \n")
 
-path_resul="C:/Users/dagudelo/Desktop/resultados"
-o_metricas=Map(function(x,y)Map(metricas,x,y),path_output,best_decil)
+path_resul=path_save
+o_metricas=Map(function(x,y)Map(metricas,x,y),path_out_run,best_decil)
 years=format(seq(Sys.Date(), by = "month", length = 6) ,"%Y")
 metricas_l=lapply(o_metricas,function(x)Map(function(x,y)cbind(year=y,x),x,years))
 metricas_all=Map(function(x,y)lapply(x,function(x,y){x$id=paste0(y,x$id);x},y),metricas_l,part_id)
 metricas_final=do.call("rbind",lapply(metricas_all,function(x)do.call("rbind",x)))
 
-write.csv(metricas_final,paste0(path_resul,"/metrics.csv"),row.names=FALSE)
+#write.csv(metricas_final,paste0(path_resul,"/metrics.csv"),row.names=FALSE)
+tbl_df(metricas_final) %>%
+  mutate(year = year, 
+         month = as.integer(month)) %>%
+  write_csv(paste0(path_save,"/","metrics.csv"))
 
 cat("\n Metricas de validacion almacenadas \n")
 
-o_prob=Map(function(x,y)Map(proba,x,y),path_output,best_decil)
+o_prob=Map(function(x,y)Map(proba,x,y),path_out_run,best_decil)
 prob_l=lapply(o_prob,function(x)Map(function(x,y)cbind(year=y,x),x,years))
 prob_all=Map(function(x,y)lapply(x,function(x,y){x$id=paste0(y,x$id);x},y),prob_l,part_id)
 prob_final=do.call("rbind",lapply(prob_all,function(x)do.call("rbind",x)))
 
-write.csv(prob_final,paste0(path_resul,"/probabilities.csv"),row.names=FALSE)
+#write_csv(prob_final,paste0(path_resul,"/probabilities.csv"),row.names=FALSE)
+tbl_df(prob_final) %>%
+  mutate(year = year,
+         month =month,
+         below = below / 100,
+         normal = normal / 100,
+         above = above /100) %>%
+  write_csv(paste0(path_save,"/","probabilities.csv"))
+
 
 cat("\n Pronosticos probabilisticos almacenados \n")
-
 
 end.time <- Sys.time()
 time.taken <- end.time - start.time
