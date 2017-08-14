@@ -222,7 +222,7 @@ make_PS <- function(data, number_days){
   after_days <- data[[1]] %>%
     filter( row_number() == 1:number_days) %>%
     dplyr::select(frcast_date) %>%
-    mutate(pdate = frcast_date + ddays(15)) %>%
+    mutate(pdate = frcast_date + months(1)) %>%
     dplyr::select(pdate) %>%
     mutate(jpdate = yday(pdate)) %>%
     filter( row_number() == 1) %>%
@@ -236,6 +236,8 @@ make_PS <- function(data, number_days){
     as.numeric()
   
   SDATE <- data[[1]] %>%
+    dplyr::select(frcast_date, julian_day) %>%
+    filter(julian_day>= (after_days - 16)) %>%
     filter( row_number() == 1:number_days) %>%
     dplyr::select(julian_day) %>%
     extract2(1) %>%
@@ -247,6 +249,7 @@ make_PS <- function(data, number_days){
     extract2(1)
   
   DATE_format <- data[[1]] %>%
+    filter(julian_day >= after_days) %>%
     filter( row_number() == 1:number_days) %>%
     dplyr::select(frcast_date) %>%
     extract2(1)

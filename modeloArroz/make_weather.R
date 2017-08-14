@@ -36,7 +36,7 @@ make_weather <- function(climate_df, filename, long, lat, elev, scenario){
   
   climate_df <- climate_df %>%
     mutate(y = x) %>%
-    select(scenario, year_2, julian_day, sol_rad, t_min, t_max, x, y, prec)
+    dplyr::select(scenario, year_2, julian_day, sol_rad, t_min, t_max, x, y, prec)
   
   sink(file = filename, append = F)
   
