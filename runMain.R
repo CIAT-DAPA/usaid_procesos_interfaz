@@ -23,8 +23,8 @@ library(corpcor)
 library(pcaPP)
 
 ## DIRECTORIO PRINCIPAL
-# dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
-dirCurrent <- "D:/CIAT/USAID/Servidor/interfaz_web/usaid_procesos_interfaz/"
+dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
+# dirCurrent <- "C:/usaid_procesos_interfaz/"
 
 ## Variables globales paquete forecast
 dirForecast <- paste0(dirCurrent, "prediccionClimatica/", sep = "", collapse = NULL)
