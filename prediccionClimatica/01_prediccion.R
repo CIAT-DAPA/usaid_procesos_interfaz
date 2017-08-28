@@ -1,54 +1,45 @@
-####### Functions #########
-###########################
+########## Functions ##########
 
-#####Input download.cpt#####
-##(dir_save) Ruta para guardar los archivos.
-##(month) Mes antes del inicio de las predicciones.
-##(year) Anno en el cual se generan las predicciones.
-#####Outoput download.cpt#####
-## Archivos de la TSM de los siguientes 6 meses
-## guardados en la ruta suministrada en el input.
-
-
-download.cpt=function(dir_save,month,year){ 
+download.cpt=function(dir_save,areas_l,n_areas_l,month,year){ 
   
-  w=(month)+(0:7)
-  if(sum(w>12)>0)w[which(w>12)]=w[which(w>12)]-12
-  if(sum(w<1)>0)w[which(w<1)]=w[which(w<1)]+12
+  season=(month)+(-1:6)
+  if(sum(season>12)>0)season[which(season>12)]=season[which(season>12)]-12
+  if(sum(season<1)>0)season[which(season<1)]=season[which(season<1)]+12
+  
+  areas=areas_l[season[2:7]]
+  n_areas=n_areas_l[season[2:7]]
+  
+  i_con=month-2
+  if(i_con<=0)i_con=i_con+12
   
   for(i in 1:6){
     
-    l=month-1
-    if(l<=0)l=l+12
-    ensemble="M/1/24/RANGE"
-    if(l==9 & (i==1|i==2)){
-      ensemble="M/(1%202%203%204%205%206%207%208%209%2012%2013%2014%2015%2016%2017%2018%2019%2020%2021%2022%2023%2024)/VALUES/"
+    if(n_areas[[i]]==4){
+      
+      route=paste0("http://iridl.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.ENSEMBLE/.OCNF/.surface/.TMP/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.REALTIME_ENSEMBLE/.OCNF/.surface/.TMP/appendstream/350/maskge/S/%280000%201%20",month.abb[i_con],"%201982-",year,"%29/VALUES/L/",i,".5/",i+2,".5/RANGE/%5BL%5D//keepgrids/average/M/1/24/RANGE/%5BM%5Daverage/X/",areas[[i]][1],"/",areas[[i]][2],"/flagrange/Y/",areas[[i]][3],"/",areas[[i]][4],"/flagrange/add/1/flaggt/mul/0/setmissing_value/%5BX/Y%5D%5BS/L/add/%5Dcptv10.tsv.gz")
+                   
+    }else{
+      
+      route=paste0("http://iridl.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.ENSEMBLE/.OCNF/.surface/.TMP/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.REALTIME_ENSEMBLE/.OCNF/.surface/.TMP/appendstream/350/maskge/S/%280000%201%20",month.abb[i_con],"%201982-",year,"%29/VALUES/L/",i,".5/",i+2,".5/RANGE/%5BL%5D//keepgrids/average/M/1/24/RANGE/%5BM%5Daverage/X/",areas[[i]][1],"/",areas[[i]][2],"/flagrange/Y/",areas[[i]][3],"/",areas[[i]][4],"/flagrange/add/1/flaggt/X/",areas[[i]][5],"/",areas[[i]][6],"/flagrange/Y/",areas[[i]][7],"/",areas[[i]][8],"/flagrange/add/1/flaggt/add/mul/0/setmissing_value/%5BX/Y%5D%5BS/L/add/%5Dcptv10.tsv.gz")
+      
     }
-    if(l==8 & i==1){
-      ensemble="M/(1%202%203%204%205%206%207%208%209%2010%2011%2012%2014%2015%2016%2017%2018%2019%2020%2021%2022%2023%2024)/VALUES/"
-    }
-    if(l==1 & (i==4|i==5|i==6)){
-      ensemble="M/(1%202%203%204%205%206%207%208%209%2010%2011%2012%2013%2014%2016%2017%2018%2019%2020%2021%2022%2023%2024)/VALUES/"
-    } 
     
-    route=paste("http://iridl.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.ENSEMBLE/.OCNF/.surface/.TMP/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.REALTIME_ENSEMBLE/.OCNF/.surface/.TMP/appendstream/350/maskge/S/%280000%201%20",month.abb[l],"%201982-",year,"%29VALUES/L/",i,".5/",i+2,".5/RANGE%5BL%5D//keepgrids/average/",ensemble,"%5BM%5Daverage/-999/setmissing_value/Y/(30N)/(30S)/RANGEEDGES/%5BX/Y%5D%5BS/L/add%5Dcptv10.tsv.gz",sep="")### Ruta de descarga de datos 
+    filePath <- paste(dir_save,"/",i,"_",paste(month.abb[season[i:(i+2)]], collapse = '_'),".tsv.gz",sep="")
     
-    filePath <- paste(dir_save,"/",i,"_",paste(month.abb[w[i:(i+2)]], collapse = '_'),".tsv.gz",sep="")
-
     # ----------------------------------------------------------------------------------------------------------------------
     #  > prueba que el archivo gzip no esta dannado, sino intenta descargarlo de nuevo
     # ----------------------------------------------------------------------------------------------------------------------
     gunzipTestVal = 1
     
     while (gunzipTestVal == 1) {
-    
+      
       download.file(route, filePath) ### Realiza la descarga 
       
       gunzipTestStr <- try(system(paste("gunzip -t ", filePath, sep = "", collapse = NULL), intern = TRUE, ignore.stderr = FALSE))
       cat (gunzipTestStr)
-
+      
       gunzipTestVal = length(grep('invalid compressed data--crc', gunzipTestStr))
-
+      
       if (gunzipTestVal == 1){
         cat ('... archivo gzip corrupto, se reitentara descargar\n\n\n')
       }else {
@@ -62,46 +53,42 @@ download.cpt=function(dir_save,month,year){
   
 }
 
-#####Input data_table#####
-##### (dates) Datos cargados en R en formato data frame con 
-##### read.table(x,sep="\t",dec=".",skip =2,fill=TRUE,na.strings =-999))
-#####Output Data_table#####
-## (all_output) Una lista [1]los datos de la tsm donde en las filas 
-## estan los annos y en las columnas los pixeles 
-## [2] los annos disponibles de la informacion 
+transform_raster=function(x,y){
+  mapa_base=raster(,nrows=y[1], ncols=y[2])
+  extent(mapa_base)=c(-0.5,359.5,-90.5,90.5)
+  val=c(as.matrix(t(x),ncol=1,byrow = T))
+  val=as.numeric(val)
+  val[val==0]=NA
+  values(mapa_base)=val
+  return(mapa_base)
+}
 
-data_table=function(dates){
+data_raster=function(dates){
   
   year_month=dates[1,][!is.na(dates[1,])]
-  if(substr(year_month[2],6,7)=="12"){year=as.numeric(substr(year_month[-1],1,4))+1
-  }else{year=as.numeric(substr(year_month[-1],1,4))}
+  year=substr(year_month[-1],1,4)
   data_cpt1=na.omit(dates)
   pos=which(data_cpt1[,1]=="")
   pos=sort(rep(year,pos[2]-pos[1]))
   list_dates=split(data_cpt1,pos)
+  lat=as.numeric(as.character(list_dates[[1]][-1,1]))
+  cos_lat=diag(sqrt(cos((pi/180)*lat)))
   tables=lapply(list_dates,"[",-1,-1)
-  y=lapply(tables,function(x)as.numeric(as.vector(t(x))))
-  data_fin=do.call(rbind,y) 
-  colnames(data_fin)=1:dim(data_fin)[2]
-  data_fin=data_fin[,colSums(data_fin==-999)==0]
-  all_output=list(data_fin,year)
-  return(all_output)
+  tables_numeric=lapply(tables,function(x)sapply(x,function(y)as.numeric(as.character(y))))
+  #data_ponde=lapply(tables_numeric,function(x) cos_lat%*%x)
+  n_p=dim(tables_numeric[[1]])
+  all_raster=lapply(tables_numeric,transform_raster,n_p)
+  layers=stack(all_raster)
+  return(layers)
   
 }
-
-#####Input quarterly_data#####
-## (data) Datos de las estaciones en el formato definido.
-## (y) Mes antes del inicio de las predicciones.
-#####Output quartely_data#####
-## (all_output) Una lista [[1]] los datos de las estaciones 
-## en forma trimestral [[2]] annos disponibles de la informacion.
 
 quarterly_data=function(data,sy_month){
   
   names_months=0
   data_out=list()
   year_out=list()
-  l=(sy_month)+(0:7)
+  l=(sy_month)+(-1:6)
   if(sum(l>12)>0)l[which(l>12)]=l[which(l>12)]-12
   if(sum(l<1)>0)l[which(l<1)]=l[which(l<1)]+12
   for(i in 1:6){
@@ -123,70 +110,49 @@ quarterly_data=function(data,sy_month){
   return(all_output)
 } 
 
-#####Input nipals#####
-## (X) Matrix de datos para calcular el PCA.
-## (modos) Numero de componentes a calcular.
-#####Output nipals#####
-## (resul) Una lista donde el [[1]] Componentes principales, [[2]] Vectores propios 
-## [[3]] Valores propios
-
-nipals<-function(X,modos){
+pca_x_svd=function(x,modos,pon){
   
-  n<-nrow(X)
-  p<-ncol(X)
-  X0<-scale(X)*(sqrt(n)/sqrt(n-1))
-  T<-matrix(NA,n,modos)#Componentes principales
-  P<-matrix(NA,p,modos)#Vectores Propios
-  valor<-0
-  for(h in 1:modos) 
-  {
-    th<-as.matrix(X0[,1])
-    
-    for(i in 1:40)
-    {  
-      ph<-(t(X0)%*%th)/as.numeric(t(th)%*%th)
-      nph<-ph/sqrt(sum(ph^2))#Vectores Normalizados
-      ph<-nph
-      th<-X0%*%ph
-    } 
-    valor[h]<-t(th)%*%th/(dim(X0)[1])
-    T[,h]<-th
-    P[,h]<-ph
-    
-    X1<-X0-th%*%t(ph)
-    X0<-X1
-  } 
-  rownames(T)<-rownames(X) 
-  Resul<-list(T,P,valor)
-  return(Resul) 
+  n=dim(x)[1]
+  p=dim(x)[2]
+  #pon_matrix=diag(pon)
+  pon_matrix=matrix(rep(pon,n),n,p,byrow = TRUE)
+  x0=scale(x)#*(sqrt(n)/sqrt(n-1))
+  #x_pon=t(pon_matrix%*%t(x0))
+  x_pon=pon_matrix*x0
+  svd_o <- fast.svd(x_pon)
+  comp  <- svd_o$u[,1:modos,drop=F]%*%diag(svd_o$d[1:modos],length(svd_o$d[1:modos]),length(svd_o$d[1:modos])) 
+  vect  <- svd_o$v[,1:modos]
+  output <- list(comp,vect)
+  return(output)
   
 }
 
-#####Input selection_area#####
-## (x) datos de la tsm en filas annos y columnas pixeles.
-## (y) datos de las estaciones en el formato predefinido.
-#####Output selection_area#####
-## (data_x_selec) datos de la tsm seleccionados para el 
-## modelo CCA, en las filas annos y en las columnas pixeles.
+pca_y_svd=function(x,modos){
+  
+  n=dim(x)[1]
+  x0=scale(x)#*(sqrt(n)/sqrt(n-1))
+  svd_o <- fast.svd(x0)
+  comp  <- svd_o$u[,1:modos,drop=F]%*%diag(svd_o$d[1:modos],length(svd_o$d[1:modos]),length(svd_o$d[1:modos])) 
+  vect  <- svd_o$v[,1:modos]
+  output <- list(comp,vect)
+  return(output)
+  
+}
 
-selection_area=function(x,y){
+selection_area=function(x,y,ponde){
   
-  if(dim(y)[2]<10){
-    k=dim(y)[2]
-    y_pca=nipals(y,modos=k)[[1]]
-  }else{
-    k=10
-    y_pca=nipals(y,modos=10)[[1]]
-  }
+  mode_y=10 ; if(dim(y)[2]<10)mode_y=dim(y)[2]
+  mode_x=10
   
-  x_pca=nipals(x,modos=10)[[1]]
-  all_cor=matrix(NA,k*10,dim(x)[2])
+  y_pca=pca_y_svd(y,modos=mode_y)[[1]]
+  x_pca=pca_x_svd(x,modos=mode_x,ponde)[[1]]
+  all_cor=matrix(NA,mode_x*mode_y,dim(x)[2])
   count=0
   
-  for(i in 1:10){
+  for(i in 1:mode_x){
     
-    for(j in 1:k){
-      
+    for(j in 1:mode_y){
+     
       canonico=cancor(x_pca[,1:i],y_pca[,1:j,drop=F])
       x_center=scale(x_pca[,1:i],scale = F)
       y_center=scale(y_pca[,1:j],scale = F)  
@@ -196,240 +162,261 @@ selection_area=function(x,y){
       cor_tsm=cor(x,mode1[,1])
       count=count+1
       all_cor[count,]=cor_tsm[,1]
-
+      
     }
     
   }
-  
+  print("Finalizo la selección del area para un mes")
   cor_mean=apply(abs(all_cor),2,mean)
-  percen=quantile(cor_mean,0.70)
-  data_x_selec=x[,cor_mean>percen]
-  
-  return(data_x_selec)
+  return(cor_mean)
 }
 
-#####Input cross_val#####
-## (x) datos de la tsm seleccionado para correr en el modelo
-## (Y) datos de las estaciones en el formato predefinido.
-#####Otuput cross_val#####
-## (all_out) Una lista donde el [[1]] es el resultado de la validacion.
-## cruzada con el modelo que arrojo los mejores resultados [[2]] Modos de x.
-## ,modos de y, goodness index del mejor modelo.
-
-cross_val=function(x,y){
+plots=function(path,cor,q,name){
   
-  if(dim(y)[2]<15){
-    k=dim(y)[2]
-    y_pca=nipals(y,modos=k)
-  }else{
-    k=15
-    y_pca=nipals(y,modos=15)
+  Loadings_map=data_x_r[[1]][[1]]
+  pos_cor=!is.na(Loadings_map[])
+  Loadings_map[pos_cor]=cor
+  q1=quantile(cor,q[4])
+  jBrewColors <- brewer.pal(n = 100, name = "Reds")
+  tiff(paste0(path,"/",name,".tiff"),compression = 'lzw',height = 6.5,width = 5.7,units="in", res=150)
+  par(mfrow=c(2,1))
+  plot(Loadings_map,main="Correlación promedio",col=jBrewColors,colNA="gray",legend.width=1,legend.shrink=1)
+  plot(Loadings_map >= q1,main="Pixeles seleccionados",colNA="gray",legend=F,col=jBrewColors)
+  dev.off()
+  
+}
+
+files_x=function(raster,cor,na,years){
+  
+  year_p=paste0("cpt:T=",years)
+  
+  for(i in seq(0,0.9,0.1)){
+    
+    pos_data=which(!is.na(values(raster)[,1]))
+    pos_selec=cor<=quantile(cor,i)
+    pos_final=pos_data*pos_selec
+    val=values(raster)
+    val[pos_final,]=NA
+    val[which(is.na(val),arr.ind = T)]=0
+    val_l=split(val,col(val))
+    val_matrix=lapply(val_l,function(x)matrix(x,length(90:-90),length(0:359),byrow=TRUE,dimnames=list(c(90:-90),c(0:359))))
+    
+    
+    p="xmlns:cpt=http://iri.columbia.edu/CPT/v10/"
+    p1="cpt:nfields=1"
+    p2=paste0("cpt:field=ssta, ",year_p[1],", cpt:nrow=",181,", cpt:ncol=",360,", cpt:row=Y, cpt:col=X, cpt:units=Kelvin_scale, cpt:missing=0")
+    
+    name_file=paste0(main_dir,"/run_CPT/",na,"/","x_",i,".txt")
+    sink(name_file)
+    cat(p)
+    cat("\n")
+    cat(p1) 
+    cat("\n")
+    cat(p2) 
+    cat("\n")
+    u=Map(function(x,y){write.table(t(c(" ",0:359)),sep="\t",col.names=F,row.names=F,quote = F);write.table(x,sep="\t",col.names=F,row.names=T,quote = F);cat(y);cat("\n")},val_matrix,c(year_p[-1],""))
+    sink()
   }
   
-  x_pca=nipals(x,modos=15)
-  output=matrix(NA,k*15,3)
-  all_stimation=list()
-  count=0
+  return("Successful process")   
+}
+
+files_y=function(y_d,names){
   
-  for(i in 1:15){
+  y_m=paste(y_d[,1],y_d[,2],sep="-")
+  p="xmlns:cpt=http://iri.columbia.edu/CPT/v10/"
+  data=y_d[,-1:-2]
+  row.names(data)=y_m
+  p1=paste0("cpt:field=prcp, cpt:nrow=",dim(data)[1],", cpt:ncol=",dim(data)[2],", cpt:row=T, cpt:col=index, cpt:units=mm, cpt:missing=-999.000000000")
+  name_file=paste0(main_dir,"/run_CPT/",names,"/","y_",names,".txt")
+  sink(name_file)
+  cat(p)
+  cat("\n")
+  cat(p1) 
+  cat("\n")
+  write.table(t(c(" ",substr(names(data),10,25))),sep="\t",col.names=F,row.names=F,quote = F)
+  write.table(data,sep="\t",col.names=F,row.names=T,quote = F)
+  sink()
+  
+  return(substr(names(data),2,9))
+}
+
+run_cpt=function(x,y,GI,pear,afc,prob,cc,path_run,m_x,m_y,m_cca,t){
+  
+  cmd <- "@echo off
+  (
+  echo 611
+  echo 545
+  echo 1
+  echo %path_x%
+  echo 90
+  echo -90
+  echo 0
+  echo 359
+  echo 1
+  echo %mode_x%
+  echo 2
+  echo %path_y%
+  echo 1
+  echo %mode_y%
+  echo 1
+  echo %mode_cca%
+  echo 9
+  echo 1
+  echo 554
+  echo 2
+  echo %transfor%
+  echo 112
+  echo %path_GI%
+  echo 311
+  echo 451
+  echo 455
+  echo 413
+  echo 1
+  echo %path_pear%
+  echo 413
+  echo 3
+  echo %path_2afc%
+  echo 111
+  echo 501
+  echo %path_prob%
+  echo 401
+  echo %path_cc%
+  echo 0
+  echo 0
+  ) | CPT_batch.exe"
+  
+  cmd<-gsub("%path_x%",x,cmd)
+  cmd<-gsub("%path_y%",y,cmd)
+  cmd<-gsub("%path_GI%",GI,cmd)
+  cmd<-gsub("%path_pear%",pear,cmd)
+  cmd<-gsub("%path_2afc%",afc,cmd)
+  cmd<-gsub("%path_prob%",prob,cmd)
+  cmd<-gsub("%path_cc%",cc,cmd)
+  cmd<-gsub("%mode_x%",m_x,cmd)
+  cmd<-gsub("%mode_y%",m_y,cmd)
+  cmd<-gsub("%mode_cca%",m_cca,cmd)
+  cmd<-gsub("%transfor%",t,cmd)
+  write(cmd,path_run)
+  system(path_run, ignore.stdout = T, show.output.on.console = T)
+  
+}
+
+run_all=function(name,set,n){
+  
+  modes_x=set[1]
+  modes_y=set[2];if(n<as.numeric(as.character(set[2])))modes_y=n
+  modes_cca=set[3];if(min(as.numeric(as.character(set[1:2])))<as.numeric(as.character(modes_cca)))modes_cca=min(as.numeric(as.character(set[1:2])))
+  if(set[4]=="si"){tran=541}else(tran=" ")
+  
+  dpto=substr(name,1,nchar(name)-4)
+  dir=paste0(main_dir,"/","run_CPT/")
+  
+  for(i in seq(0,0.9,0.1)){
     
-    for(j in 1:k){
-      
-      X=x_pca[[1]][,1:i,drop=FALSE]
-      Y=y_pca[[1]][,1:j,drop=FALSE]
-      n=dim(Y)[1]
-      y_last=matrix(NA,n,dim(Y)[2])
-      y_est=0
-      
-      for(p in 1:n){
-        
-        Y_i<-Y[-p,]; X_i<-X[-p,]
-        canonico=cancor(X_i,Y_i)
-        x_center=scale(X_i,scale=F)
-        y_center=scale(Y_i,scale=F)  
-        com_x=x_center%*%canonico$xcoef
-        com_y=y_center%*%canonico$ycoef
-        R=canonico$cor
-        xiz=as.matrix(X[p,]-canonico$xcenter)
-        vec_x=canonico$xcoef
-        xiz_com=t(as.matrix(xiz))%*%vec_x[,1,drop=FALSE]
-        
-        
-        y_est[p]=(R[1]*xiz_com)
-        y_last[p,]=(y_est[p]*solve(canonico$ycoef)[1,,drop=FALSE]) + canonico$ycenter
-        
-        
-      }
-      
-      lod_y=y_pca[[2]][,1:j,drop=FALSE]
-      data_y_scaled=y_last%*%t(as.matrix(lod_y))
-      means=colMeans(y)
-      means_matrix=matrix(means,dim(y)[1],dim(y)[2],byrow = T)
-      sds=apply(y,2,sd)
-      data_y_stimated=(data_y_scaled%*%diag(sds))+means_matrix
-      data_y_stimated[data_y_stimated<0]=0
-      
-      count=count+1
-      
-      all_stimation[[count]]=data_y_stimated
-      colnames(all_stimation[[count]])=colnames(y)
-      output[count,1]=i
-      output[count,2]=j
-      output[count,3]=mean(diag(cor(data_y_stimated,y,method = "kendall")))
-      
-      
-    }
+    x_dir=paste0(dir,name,"/x_",i,".txt")
+    y_dir=paste0(dir,dpto,"/y_",dpto,".txt")
+    GI_dir=paste0(dir,name,"/output/","GI_",i,".txt")
+    pear_dir=paste0(dir,name,"/output/","pear_",i,".txt")
+    afc_dir=paste0(dir,name,"/output/","2afc_",i,".txt")
+    prob_dir=paste0(dir,name,"/output/","prob_",i,".txt")
+    cc_dir=paste0(dir,name,"/output/","cc_",i,".txt")
+    run_dir=paste0(dir,name,"/run_",i,".bat")
     
-  }  
+    CPT=run_cpt(x_dir,y_dir,GI_dir,pear_dir,afc_dir,prob_dir,cc_dir,run_dir,modes_x,modes_y,modes_cca,tran)
+    
+  }
   
-  pos=which(output[,3]==max(output[,3]))
-  all_out=list(all_stimation[[pos]],output[pos,])
-  return(all_out)
-  
-}
-
-#####Input forescast#####
-## (x) datos de la tsm seleccionada para correr en el modelo.
-## (Y) datos de las estaciones en el formato predefinido.
-## (x_fores) datos de las tsm para pronosticar la precipitacion.
-#####Otuput forescast#####
-## (all_out) Una lista donde el [[1]] son los pronosticos deterministico
-## de las estaciones [[2]] el valor que toma el modo X para realizar 
-## la prediccion.
-
-forecast=function(x,y,x_fores,set){
-  
-  mean_x=colMeans(x)
-  sd_x=apply(x,2,sd)
-  mean_y=colMeans(y)
-  sd_y=apply(y,2,sd)
-  x_fores_scale=(x_fores-mean_x)/sd_x
-  pca_x=nipals(x,set[1])
-  pca_y=nipals(y,set[2])
-  x_fores_comp= x_fores_scale%*%pca_x[[2]]
-  
-  
-  canonico=cancor(pca_x[[1]],pca_y[[1]])
-  x_center=scale(pca_x[[1]],scale=F)
-  y_center=scale(pca_y[[1]],scale=F)  
-  com_x=x_center%*%canonico$xcoef
-  com_y=y_center%*%canonico$ycoef
-  R=canonico$cor
-  xi=as.matrix(x_fores_comp-canonico$xcenter)
-  vec_x=canonico$xcoef
-  xi_com=as.matrix(xi)%*%vec_x[,1,drop=FALSE]
-  y_fores=(R[1]*xi_com)
-  y_fores_last=(y_fores%*%solve(canonico$ycoef)[1,])+canonico$ycenter
-  
-  
-  y_fores_comp=y_fores_last%*%t(as.matrix(pca_y[[2]]))
-  y_fores_final=(y_fores_comp*sd_y)+mean_y
-  
-  all_out=list(y_fores_final,xi_com)
-  
-  return(all_out)
+  return(print("finalizo un mes"))
   
 }
 
-#####Input probabilities#####
-## (fores) pronosticos deterministicos.
-## (Y) datos de las estaciones en el formato predefinido.
-## (sd_s) desviacion de las estaciones para calcular las probabilidades.
-#####Otuput probabilities#####
-## (prob_output) un dataframe que contiene 
-## las probabilidades y el nombre de las estaciones. 
-
-probabilities=function(fores,Y,sd_s){
+metricas=function(x,y){
   
-  terciles=apply(Y,2,function(x)quantile(x,c(1/3,2/3),type=6))
-  below=(pnorm(terciles[1,],fores,sd_s))*100
-  normal=(pnorm(terciles[2,],fores,sd_s)-pnorm(terciles[1,],fores,sd_s))*100
-  above=(1-pnorm(terciles[2,],fores,sd_s))*100
-  id=substr(names(Y),2,nchar(names(Y)))
-  prob_output=cbind.data.frame(id,below,normal,above)
+  p=read.table(paste0(x,"/output","/pear_",y,".txt"),header=T,dec=".",skip=2,col.names = c("id","pearson"))
+  k=read.table(paste0(x,"/output","/2afc_",y,".txt"),header=T,dec=".",skip=2,col.names = c("id","kendall"))
+  g=read.table(paste0(x,"/output","/GI_",y,".txt"),header=T,dec=".",skip=5)
+  goodness=g[dim(g)[1],dim(g)[2]]
+  c=read.table(paste0(x,"/output","/cc_",y,".txt"),header=T,dec=".",skip=2)
+  canonica=c[1,1]
+  p_k=merge(p,k)
+  data=cbind(month=which(month.abb==basename(x)),p_k,goodness,canonica)
   
-  return(prob_output)
+  return(data)
 }
 
-#####Input prob_output#####
-## (p) numero de estaciones disponibles por dpto en la corrida.
-## (m) mes actual.
-## (y) Anno actual.
-#####Otuput prob_output#####
-## (table_order) un dataframe que contiene el Anno y el mes del 
-## pronostico para todas las estaciones.
-
-prob_output=function(p,m,y){
+proba=function(x,y){
   
-  w=(m)+(1:6)
-  years=rep(as.numeric(y),6)
-  if(sum(w>12)>0)years[which(w>12)]=years[which(w>12)]+1
-  if(sum(w>12)>0)w[which(w>12)]=w[which(w>12)]-12
-  if(sum(w<1)>0)w[which(w<1)]=w[which(w<1)]+12
-  table=data.frame(year=rep(years,p),month=rep(w,p))
-  table_order=table[order(table$year,table$month),]
-  return(table_order)
+  below=read.table(paste0(x,"/output","/prob_",y,".txt"),header=T,nrow=1,dec=".",fill=T,skip=3,check.names = FALSE)
+  normal=read.table(paste0(x,"/output","/prob_",y,".txt"),header=T,nrow=1,dec=".",fill=T,skip=6,check.names = FALSE)
+  above=read.table(paste0(x,"/output","/prob_",y,".txt"),header=T,nrow=1,dec=".",fill=T,skip=9,check.names = FALSE)
+  
+  data=cbind.data.frame(month=which(month.abb==basename(x)),id=names(below),below=as.matrix(below)[1,],normal=as.matrix(normal)[1,],above=as.matrix(above)[1,])
+  return(data)
   
 }
 
+best_GI=function(x){
+  
+  names=substr(basename(x),4,nchar(basename(x))-4)
+  all_GI=lapply(x,function(x)read.table(x,header=T,dec=".",skip=5))  
+  best=lapply(all_GI,function(x) x[dim(x)[1],dim(x)[2]] )
+  pos=which(unlist(best)==max(unlist(best)))[1]
+  return(names[pos])
+  
+}
 
-#########RUN#########
-#####################
+########## Run ##############
+start.time <- Sys.time()
+#############################
 
-
-########## Descarga archivos de la TSM #############
-####################################################
-
+#path_dpto="C:/Users/dagudelo/Desktop/Confi"
+path_dpto=dir_response
 #dir_save="C:/Users/dagudelo/Desktop/Ejemplo_descarga"
+path_down=paste(dir_save,list.files(path_dpto),sep="/")
+O_empty_1=lapply(path_down,dir.create)
+path_areas=list.files(path_dpto,recursive = T,pattern = "areas",full.names = T)
+data_areas=lapply(path_areas,function(x)read.table(x,header=T,sep=",",dec=".",na.strings = NA))
+names(data_areas)=list.files(path_dpto)
+data_areas_l=lapply(data_areas,function(x)split(as.matrix(x[,-1:-2]),col(x[,-1:-2])))
+areas_final=lapply(data_areas_l,function(x)lapply(x,function(x1)c(na.omit(x1))))
+n_areas_l=lapply(areas_final,function(x)lapply(x,length))
 month=as.numeric(format(Sys.Date(),"%m"))
 year=format(Sys.Date(),"%Y")
-y=download.cpt(dir_save,month,year)
+O_empty_2=Map(function(x,y,z){download.cpt(x,y,z,month,year)},path_down,areas_final,n_areas_l)
 
 cat("\n Archivos de la TSM descargados \n")
 
-########## Carga y descomprime archivos de la TSM #####
-#######################################################
-
-files_gz=list.files(dir_save)
-dir_files=paste(dir_save,files_gz,sep="/")
-p=lapply(dir_files,function(x)gzfile(x,'rt'))
-y_k=lapply(dir_files,function(x)read.table(x,sep="\t",dec=".",skip =2,fill=TRUE,na.strings =-999))
+all_path_down=lapply(paste(dir_save,list.files(path_dpto),sep = "/"),function(x)list.files(x,full.names = T))
+gz_o=lapply(all_path_down,function(x)lapply(x,function(x1)gzfile(x1,'rt')))
+tsm_o=lapply(all_path_down,function(x)lapply(x,function(x1)read.table(x1,sep="\t",dec=".",skip =2,fill=TRUE,na.strings =-999,stringsAsFactors=FALSE)))
+time=lapply(tsm_o,function(x)lapply(x,function(x1) as.character(x1[1,])[-1]))
+time_sel=lapply(time,function(x)lapply(x,function(x1)x1[x1!="NA"]))
 
 cat("\n Archivos de TSM cargados y descomprimidos \n")
 
-########## Convierte los datos de la TSM en tablas #######
-##########################################################
+data_x=lapply(tsm_o,function(x)lapply(x,data_raster))
+coor_extent=lapply(areas_final,function(x1)lapply(x1,function(x) c(min(x[c(1,2,5,6)],na.rm=T)-1,max(x[c(1,2,5,6)],na.rm=T)+1,min(x[c(3,4,7,8)],na.rm=T)-1,max(x[c(3,4,7,8)],na.rm=T)+1)))
+season=month+0:5
+season[season>12]=season[season>12]-12
+extent_season=lapply(coor_extent,function(x)x[season])
+data_x_crop=Map(function(x, y) Map(function(x,y) crop(x,extent(y)),x,y),data_x,extent_season)
 
-data_x=lapply(y_k,data_table)
-data_tsm=unlist(lapply(data_x,"[", 1),recursive=FALSE)
-names(data_tsm)=substr(files_gz,3,13)
-year_predictor=unlist(lapply(data_x,"[", 2),recursive=FALSE)
-names(year_predictor)=names(data_tsm)
-data_tsm_fore=lapply(data_tsm,function(x) x[dim(x)[1],,drop=F])
-names(data_tsm_fore)=names(data_tsm)
+cat("\n Datos de la TSM organizados en formato raster")
 
-cat("\n Datos de la TSM organizados en formato annos X Pixeles \n")
+data_tsm=lapply(data_x,function(x)lapply(x,function(x) t(rasterToPoints(x))[-1:-2,]))
+names(data_tsm)=list.files(path_dpto)
+data_tsm=lapply(data_tsm,function(x){names(x)=month.abb[season];return(x)})
+year_predictor=lapply(data_tsm,function(x)lapply(x,function(x) as.numeric(substr(rownames(x), 2, 5))))
+lat=lapply(data_x_crop,function(x)lapply(x,function(x) t(rasterToPoints(x))[2,]))
 
-######### Carga las estaciones de precipitacion ######
-######################################################
+cat("\n Datos de la TSM organizados en formato Años X Pixeles \n")
 
-#dir_response="C:/Users/dagudelo/Desktop/Estaciones"
-dir_res=paste(dir_response,list.files(dir_response),sep="/")
-data_y=lapply(dir_res,function(x)read.table(x,dec=".",sep = ",",header = T))
-names(data_y)=basename(dir_res)
+path_stations=list.files(path_dpto,recursive = T,pattern = "stations",full.names = T)
+data_y=lapply(path_stations,function(x)read.table(x,dec=".",sep = ",",header = T))
+names(data_y)=list.files(path_dpto)
 
 cat("\n Datos de precipitacion cargados \n")
-
-######## Carga el nombre de las estaciones de interes #######
-#############################################################
-
-#dir_stations="Y:/USAID_Project/Product_1_web_interface/test/clima/daily_data"
-stations_selec=substr(list.files(dir_stations),1,nchar(list.files(dir_stations))-4)
-
-cat("\n Nombres de las estaciones de interes cargados \n")
-
-####### Convierte los datos respuesta a trimestrales ########
-#############################################################
 
 data_quar=lapply(data_y,quarterly_data,month)
 data_quartely=unlist(lapply(data_quar,"[", 1),recursive=FALSE)
@@ -437,63 +424,78 @@ year_response=unlist(lapply(data_quar,"[", 2),recursive=FALSE)
 
 cat("\n Datos de precipitacion organizados de forma trimestral \n")
 
-####### Seleciona el area de la TSM ##############
-##################################################
-
-year_model=lapply(year_response,function(x) Map(function(x1,y1) years_model=intersect(x1,y1),year_predictor, x))
+year_model=Map(function(x,y) Map(function(x1,y1) years_model=intersect(x1,y1),x, y),year_predictor,year_response)
 years_final_res=Map(function(x,y) Map(function(x1,y1) pos_x=x1%in%y1 ,x,y),year_response,year_model)
-years_final_prec=lapply(year_model,function(x) Map(function(x1,y1) pos_x=x1%in%y1 ,year_predictor, x))
-
-data_tsm_final=lapply(years_final_prec,function(x) Map(function(x1,y1) x1[y1,] , data_tsm , x))
+years_final_prec=Map(function(x,y) Map(function(x1,y1) pos_x=x1%in%y1 ,x,y),year_predictor,year_model)
+data_tsm_final=Map(function(x,y) Map(function(x1,y1) x1[y1,] ,x,y),data_tsm,years_final_prec)
 data_res_final=Map(function(x,y) Map(function(x1,y1) x1[y1,] ,x,y),data_quartely,years_final_res)
 
-data_tsm_selec=Map(function(x,y) Map(selection_area,x,y),data_tsm_final,data_res_final)
+cat("\n Periodo de entrenamiento generado \n")
 
-cat("\n Area de la TSM selecionada \n")
+ponde=lapply(lat,function(x)lapply(x,function(x) sqrt(cos((pi/180)*x))))
 
-######## Realiza validacion cruzada ############
-################################################
+cat("\n Ponderación PCA \n")
 
-cross_obj=Map(function(x,y) Map(cross_val,x,y),data_tsm_selec,data_res_final)
+cor_tsm=Map(function(x,y,z) Map(selection_area,x,y,z),data_tsm_final,data_res_final,ponde)
 
-cat("\n validacion cruzada realizada \n")
+cat("\n Correlación de los pixeles calculada \n")
 
-######### Calcula las predicciones deterministicas ########
-###########################################################
+main_dir=dirPrediccionInputs
+dir.create(paste0(main_dir,"/run_CPT"))
+o_empty_3=lapply(paste0(main_dir,"/run_CPT","/",list.files(path_dpto)),dir.create)
+path_months=unlist(lapply(paste0(main_dir,"/run_CPT","/",list.files(path_dpto)),function(x)paste0(x,"/",month.abb[season])))
+o_empty_4=lapply(path_months,dir.create)
+o_empty_5=lapply(paste0(path_months,"/output"),dir.create)
+names_all=lapply(list.files(path_dpto),function(x) paste0(x,"/",month.abb[season]))
+o_empty_6=Map(function(x,y,z,r)Map(files_x,x,y,z,r),data_x,cor_tsm,names_all,time_sel)
 
-fores_tsm_selec=lapply(data_tsm_selec,function(x) Map(function(x1,y1) y1[,match(colnames(x1),colnames(y1)),drop=F],x,data_tsm_fore ))
-settings=lapply(cross_obj,function(x) lapply(x,"[[",2))
-cross_all=lapply(cross_obj,function(x) lapply(x,"[[",1))
-forescast_obj=Map(function(x,y,x_fores,set)Map(forecast,x,y,x_fores,set),data_tsm_selec,data_res_final,fores_tsm_selec,settings)
-forescast_all=lapply(forescast_obj,function(x) lapply(x,"[[",1))
-Value_modo_x=lapply(forescast_obj,function(x) lapply(x,"[[",2))
+cat("\n Archivos de la TSM construidos por deciles para CPT \n")
 
-cat("\n Predicciones deterministicas calculadas \n")
+part_id=Map(files_y,data_y,list.files(path_dpto))
 
-######### Calcula las predicciones probabilisticas ########
-###########################################################
+cat("\n Archivos de las estaciones construidos para CPT \n")
 
-sd_cross=Map(function(x,y) Map(function(x1, y1) sqrt(colSums(((x1-y1)^2)/dim(x1)[1]-1-1)),x,y),cross_all,data_res_final)
-n_all=lapply(data_res_final,function(x)lapply(x,function(x)dim(x)[1]))
-sd_final=Map(function(sd,value_modo,n)Map(function(sd1,value_modo1,n1) sd1*sqrt(1+(1/n1)+(value_modo1)^2) ,sd,value_modo,n),sd_cross,Value_modo_x,n_all)
-probabilities_final=Map(function(fores,Y,sd_s) Map(probabilities,fores,Y,sd_s),forescast_all,data_res_final,sd_final)
-probabilities_join=lapply(probabilities_final,function(x) do.call(rbind,x))
+path_confi=list.files(path_dpto,recursive = T,pattern = "cpt",full.names = T)
+data_confi=lapply(path_confi,function(x)read.table(x,header=T,sep=",",dec=".",row.names = 1))
+confi_selec=lapply(data_confi,function(x)x[,season])
+confi_l=lapply(confi_selec,function(x) as.list(x))
+n_data=lapply(data_res_final,function(x)lapply(x,function(x)dim(x)[2]))
+O_empty_8=Map(function(x,y,z)Map(run_all,x,y,z),names_all,confi_l,n_data)
 
-cat("\n Predicciones probabilisticas calculadas \n")
+cat("\n Batch CPT realizado \n")
 
-#### Genera el formato de salida para las probabilidades ####
-#############################################################
+path_out_run=lapply(paste0(main_dir,"/run_CPT","/",list.files(path_dpto)),function(x)paste0(x,"/",month.abb[season]))
+o_e=lapply(path_out_run,function(x)lapply(x,function(x)list.files(x,full.names = T,recursive = T,pattern = "GI")))
 
-p_all=lapply(data_y,function(x)dim(x)[2]-2)
-table_year_month=lapply(p_all,prob_output,month,year)
-prob_output_list=Map(function(x,y)cbind(x,y),table_year_month,probabilities_join)
-prob_output_final=do.call(rbind,prob_output_list)
+best_decil_l=lapply(o_e,function(x)lapply(x,best_GI))
+best_decil=lapply(best_decil_l,unlist)
 
-#path_save="Y:/USAID_Project/Product_1_web_interface/test/clima/prob_forecast"
-#path_save="C:/Users/dagudelo/Desktop"
-tbl_df(prob_output_final) %>%
-  mutate(year = as.integer(year),
-         month = as.integer(month),
+cat("\n Mejor corrida seleccionada \n")
+
+path_resul=path_save
+o_metricas=Map(function(x,y)Map(metricas,x,y),path_out_run,best_decil)
+years=format(seq(Sys.Date(), by = "month", length = 6) ,"%Y")
+metricas_l=lapply(o_metricas,function(x)Map(function(x,y)cbind(year=y,x),x,years))
+metricas_all=Map(function(x,y)lapply(x,function(x,y){x$id=paste0(y,x$id);x},y),metricas_l,part_id)
+metricas_final=do.call("rbind",lapply(metricas_all,function(x)do.call("rbind",x)))
+
+#write.csv(metricas_final,paste0(path_resul,"/metrics.csv"),row.names=FALSE)
+tbl_df(metricas_final) %>%
+  mutate(year = year, 
+         month = as.integer(month)) %>%
+  write_csv(paste0(path_save,"/","metrics.csv"))
+
+cat("\n Metricas de validacion almacenadas \n")
+
+o_prob=Map(function(x,y)Map(proba,x,y),path_out_run,best_decil)
+prob_l=lapply(o_prob,function(x)Map(function(x,y)cbind(year=y,x),x,years))
+prob_all=Map(function(x,y)lapply(x,function(x,y){x$id=paste0(y,x$id);x},y),prob_l,part_id)
+prob_final=do.call("rbind",lapply(prob_all,function(x)do.call("rbind",x)))
+
+#write_csv(prob_final,paste0(path_resul,"/probabilities.csv"),row.names=FALSE)
+tbl_df(prob_final) %>%
+  mutate(year = year,
+         month =month,
          below = below / 100,
          normal = normal / 100,
          above = above /100) %>%
@@ -502,23 +504,7 @@ tbl_df(prob_output_final) %>%
 
 cat("\n Pronosticos probabilisticos almacenados \n")
 
-###### Genera el formato de salida para las metricas ########
-#############################################################
-
-pearson_cor=Map(function(x,y) Map(function(x1, y1){pearson=diag(cor(x1,y1));id=substr(names(x1),2,nchar(names(x1)));data.frame(id,pearson)},x,y),data_res_final,cross_all)
-kendall_cor=Map(function(x,y) Map(function(x1, y1){kendall=diag(cor(x1,y1,method = "kendall"));data.frame(kendall)},x,y),data_res_final,cross_all)
-goodness_index=lapply(settings,function(x) lapply(x,function(x1)x1[3]) )
-kendall_goodness=Map(function(x,y) Map(function(x1, y1) data.frame(x1,goodness=y1),x,y),kendall_cor,goodness_index)
-pearson_join=lapply(pearson_cor,function(x) do.call(rbind,x))
-kendall_googness_join=lapply(kendall_goodness,function(x) do.call(rbind,x))
-
-metrics_output_list=Map(function(x,y,z) cbind(x,y,z),table_year_month,pearson_join,kendall_googness_join)
-metrics_output_all=do.call(rbind,metrics_output_list)
-
-tbl_df(metrics_output_all) %>%
-  mutate(year = as.integer(year), 
-         month = as.integer(month)) %>%
-  write_csv(paste0(path_save,"/","metrics.csv"))
-
-cat("\n Metricas de validacion almacenadas \n")
+end.time <- Sys.time()
+time.taken <- end.time - start.time
+time.taken
 

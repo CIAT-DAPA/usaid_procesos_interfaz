@@ -1,4 +1,8 @@
-
+#  input_dates = climate_PS$input_dates
+# select_day = 1
+# climate = climate_PS$climate
+# id_soil = ID_SOIL
+# name_csv
 run_dssat <- function(dir_dssat, dir_soil, dir_run, dir_parameters, name_files, input_dates, select_day, cultivar, climate, id_soil, name_csv, name_cultivar, name_soil, region){
   
   ## make dir to run based on a folder input by climate scenario (folder_001, ..... , folder_100) 

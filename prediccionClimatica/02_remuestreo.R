@@ -165,6 +165,7 @@ download_data_chirp = function(ini.date,end.date,outDir,cl){
 # Al correr esta función se generarán los 100 escenarios (en formato .csv) de datos diarios 
 # para la estaciónde interés
 
+
 gen_esc_daily <- function(prob,data_d,path_output,station,lat,lon){
   
   cat("\n Inicio del remuestreo... \n")
@@ -495,10 +496,16 @@ gen_esc_daily <- function(prob,data_d,path_output,station,lat,lon){
 
   limit.name = c("min","avg", "max")
   for(j in 1:3){
-    write.csv(prec_limit[,c(1,2,(j+2))],paste(path_output,"/",station,"/prec_",limit.name[j], ".csv",sep=""),row.names=F)
-    write.csv(tmax_limit[,c(1,2,(j+2))],paste(path_output,"/",station,"/t_max_",limit.name[j], ".csv",sep=""),row.names=F)
-    write.csv(tmin_limit[,c(1,2,(j+2))],paste(path_output,"/",station,"/t_min_",limit.name[j], ".csv",sep=""),row.names=F)
-    write.csv(srad_limit[,c(1,2,(j+2))],paste(path_output,"/",station,"/sol_rad_",limit.name[j], ".csv",sep=""),row.names=F)
+    # write.csv(prec_limit[,c(1,2,(j+2))],paste(path_output,"/",station,"/prec_",limit.name[j], ".csv",sep=""),row.names=F)
+    # write.csv(tmax_limit[,c(1,2,(j+2))],paste(path_output,"/",station,"/t_max_",limit.name[j], ".csv",sep=""),row.names=F)
+    # write.csv(tmin_limit[,c(1,2,(j+2))],paste(path_output,"/",station,"/t_min_",limit.name[j], ".csv",sep=""),row.names=F)
+    # write.csv(srad_limit[,c(1,2,(j+2))],paste(path_output,"/",station,"/sol_rad_",limit.name[j], ".csv",sep=""),row.names=F)
+    #
+    
+    write.csv(prec_limit[,c(1,2,(j+2))],paste(path_output,"/",station,"/prec_",limit.name[j], ".csv",sep=""),row.names = FALSE, quote=FALSE )
+    write.csv(tmax_limit[,c(1,2,(j+2))],paste(path_output,"/",station,"/t_max_",limit.name[j], ".csv",sep=""),row.names = FALSE, quote=FALSE)
+    write.csv(tmin_limit[,c(1,2,(j+2))],paste(path_output,"/",station,"/t_min_",limit.name[j], ".csv",sep=""),row.names = FALSE, quote=FALSE)
+    write.csv(srad_limit[,c(1,2,(j+2))],paste(path_output,"/",station,"/sol_rad_",limit.name[j], ".csv",sep=""),row.names = FALSE, quote=FALSE)
     
   }
   
@@ -572,16 +579,13 @@ copy_summary <- function(path, station){
   
 }
 
-lat = 5.320
-lon = -72.388
-
 path_data_d <- dir_stations
 
 data_d_all = list.files(path_data_d,full.names = T)
 
 data_prob_all=read.csv(paste0(path_save,"/probabilities.csv"),header=T,dec=".")
 # data_prob_all=read.csv(paste0(path_prob,"/",format(Sys.Date(),"%Y%m%d"),"_prob.csv"),header=T,dec=".")
-cl <- makeCluster(detectCores() - 1) # numero de nucleos proceso en paralelo
+cl <- makeCluster(detectCores() - 2) # numero de nucleos proceso en paralelo
 
 
 ini.date = paste0(substring(Sys.Date(),1,4),"-",str_pad(as.numeric(substring(Sys.Date(),7,7))-1,2,pad = "0"),"-01")

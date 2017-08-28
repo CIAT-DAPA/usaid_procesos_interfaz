@@ -1,8 +1,9 @@
 # Librerias y prerequisitos: 
 #   . gunzip
 #   . R librarys
-# DSSAT
-# Oriza
+#   . CPT_batch
+#   . DSSAT
+#   . Oriza
 library(funr)
 library(lubridate)
 library(reshape)
@@ -18,11 +19,12 @@ library(raster)
 library(rgdal)
 library(R.utils)
 library(parallel)
-
+library(corpcor)
+library(pcaPP)
 
 ## DIRECTORIO PRINCIPAL
-# dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
-dirCurrent <- "D:/CIAT/USAID/Servidor/interfaz_web/usaid_procesos_interfaz/"
+dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
+# dirCurrent <- "C:/usaid_procesos_interfaz/"
 
 ## Variables globales paquete forecast
 dirForecast <- paste0(dirCurrent, "prediccionClimatica/", sep = "", collapse = NULL)
@@ -74,17 +76,17 @@ pathConstruct <- function(dirConstruct)
     }
   }
 ## Construyendo directorios de entrada y salida
-# pathConstruct(dirInputs)
-# pathConstruct(dirOutputs)
+pathConstruct(dirInputs)
+pathConstruct(dirOutputs)
 # predicion climatica
-# pathConstruct(dirPrediccionInputs)
-# pathConstruct(dirPrediccionOutputs)
-# pathConstruct(dir_save)
-# pathConstruct(path_save)
+pathConstruct(dirPrediccionInputs)
+pathConstruct(dirPrediccionOutputs)
+pathConstruct(dir_save)
+pathConstruct(path_save)
  pathConstruct(path_output)
  pathConstruct(path_output_sum)
 # directorio de salida para los modelos
-# pathConstruct(dirCultivosOutputs)
+pathConstruct(dirCultivosOutputs)
 # maiz
 pathConstruct(dirModeloMaizOutputs)
 # arroz
@@ -92,11 +94,13 @@ pathConstruct(dirModeloArrozOutputs)
 
 ## Descargando entradas desde la base de datos
 CMDdirInputs <- paste0(gsub("/","\\\\",dirPrediccionInputs), "\\\"")
+try(system(paste0(forecastAppDll,"-out -cpt -p \"",CMDdirInputs), intern = TRUE, ignore.stderr = TRUE))
 try(system(paste0(forecastAppDll,"-out -s \"prec\" -p \"",CMDdirInputs," -start 1981 -end 2013"), intern = TRUE, ignore.stderr = TRUE))
 try(system(paste0(forecastAppDll,"-out -wf -p \"",CMDdirInputs," -name \"daily\""), intern = TRUE, ignore.stderr = TRUE))
 try(system(paste0(forecastAppDll,"-out -co -p \"",CMDdirInputs," -name \"daily\""), intern = TRUE, ignore.stderr = TRUE))
 CMDdirInputs <- paste0(gsub("/","\\\\",dirInputs), "\\\"")
 try(system(paste0(forecastAppDll,"-out -fs -p \"",CMDdirInputs), intern = TRUE, ignore.stderr = TRUE))
+
 
 
 ## cargar los archivos de Diego areas predictoras

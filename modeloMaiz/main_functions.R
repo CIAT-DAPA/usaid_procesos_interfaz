@@ -217,10 +217,12 @@ make_PS <- function(data, number_days){
   #   dplyr::select(date_dssat) %>%
   #   magrittr::extract2(1) %>%
   #   as.numeric()
+  
+  ## desde cuando comienza el forescast day 15 dias antes o 30 dias despues
   after_days <- data[[1]] %>%
     filter( row_number() == 1:number_days) %>%
     dplyr::select(frcast_date) %>%
-    mutate(pdate = frcast_date + ddays(15)) %>%
+    mutate(pdate = frcast_date + months(1)) %>%
     dplyr::select(pdate) %>%
     filter( row_number() == 1) %>%
     magrittr::extract2(1) 
@@ -234,8 +236,10 @@ make_PS <- function(data, number_days){
     as.numeric()
   
   SDATE <- data[[1]] %>%
+    dplyr::select(date_dssat, frcast_date) %>%
+    filter(frcast_date >= after_days - ddays(16))  %>%
+    dplyr::select(date_dssat)  %>%
     filter( row_number() == 1:number_days) %>%
-    dplyr::select(date_dssat) %>%
     extract2(1) %>%
     as.numeric()
   
