@@ -166,7 +166,7 @@ download_data_chirp = function(ini.date,end.date,outDir,cl){
 # para la estaciónde interés
 
 
-gen_esc_daily <- function(prob,data_d,path_output,station,lat,lon){
+gen_esc_daily <- function(prob,data_d,path_output,station,coord){
   
   cat("\n Inicio del remuestreo... \n")
   
@@ -175,6 +175,7 @@ gen_esc_daily <- function(prob,data_d,path_output,station,lat,lon){
   #---------------------------------------------------------------------------------#
   
   data_d=read.csv(data_d,header=T,dec=".")
+  data_coord=read.csv(coord,header=T,dec=".")
   
   
   #attach(data_d,warn.conflicts =F)
@@ -518,7 +519,7 @@ gen_esc_daily <- function(prob,data_d,path_output,station,lat,lon){
   year_to = format(Sys.Date(),"%Y")
   month_to = as.numeric(format(Sys.Date(),"%m"))-1
   
-  data_nasa = download_data_nasa(lat,lon,year_to,month_to,data_d)
+  data_nasa = download_data_nasa(data_coord$lat,data_coord$lon,year_to,month_to,data_d)
   
   cat("\n Extrayendo datos estimados de CHIRP... \n")
   
@@ -529,7 +530,7 @@ gen_esc_daily <- function(prob,data_d,path_output,station,lat,lon){
   
   trs_st = stack(trs)
   
-  extr_vals <- raster::extract(trs_st, data.frame(x=lon,y=lat))
+  extr_vals <- raster::extract(trs_st, data.frame(x=data_coord$lon,y=data_coord$lat))
   data_chirp <- as.numeric(extr_vals)
   
   
@@ -605,6 +606,9 @@ station_names = gsub('.csv','',list.files(path_data_d)) %>%
 daily_climate <- list.files(path_data_d,full.names = T) %>%
 					.[-grep("coords", .)]
 
+daily_coord <- list.files(path_data_d,full.names = T) %>%
+  .[grep("coords", .)]
+
 for(x in 1:length(station_names)){
   
   print(station_names[x])
@@ -613,7 +617,7 @@ for(x in 1:length(station_names)){
   data_prob = data_prob_all[which(data_prob_all$id==station_names[x]),]
   
   
-  gen_esc_daily(prob = data_prob,data_d = daily_climate[x],path_output,station = station_names[x],lat,lon)
+  gen_esc_daily(prob = data_prob,data_d = daily_climate[x],path_output,station = station_names[x],coord = daily_coord[x])
   
   copy_summary(path_output, station_names[x])
   
