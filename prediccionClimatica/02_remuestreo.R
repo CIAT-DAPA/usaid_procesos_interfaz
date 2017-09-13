@@ -144,8 +144,8 @@ download_data_chirp = function(ini.date,end.date,outDir,cl){
   clusterMap(cl, download.file, url = urls, destfile = outDir_all, mode = "wb", 
              .scheduling = 'dynamic')
   
-
-
+  
+  
   
   
   return("Datos de CHIRPS descargados!")
@@ -371,26 +371,27 @@ gen_esc_daily <- function(prob,data_d,path_output,station,coord){
   
   for(w in 1:num_esc1){
     esc_consolidado[[w]]=cbind(
-      if(any(names(a)=="January")){ escenario_Ene[[w]]=sample(a$January,1)},
-      if(any(names(a)=="February")){ escenario_Feb[[w]]=sample(a$February,1)},
-      if(any(names(a)=="March")){ escenario_Mar[[w]]=sample(a$March,1)},
+      "January" = if(any(names(a)=="January")){ escenario_Ene[[w]]=sample(a$January,1)},
+      "February" = if(any(names(a)=="February")){ escenario_Feb[[w]]=sample(a$February,1)},
+      "March" = if(any(names(a)=="March")){ escenario_Mar[[w]]=sample(a$March,1)},
       
-      if(any(names(a)=="April")){ escenario_Abr[[w]]=sample(a$April,1)},
-      if(any(names(a)=="May")){escenario_May[[w]]=sample(a$May,1)},
-      if(any(names(a)=="June")){escenario_Jun[[w]]=sample(a$June,1)},
-      if(any(names(a)=="July")){escenario_Jul[[w]]=sample(a$July,1)},
-      if(any(names(a)=="August")){ escenario_Ago[[w]]=sample(a$August,1)},
-      if(any(names(a)=="September")){escenario_Sep[[w]]=sample(a$September,1)},
-      if(any(names(a)=="October")){escenario_Oct[[w]]=sample(a$October,1)},
-      if(any(names(a)=="November")){escenario_Nov[[w]]=sample(a$November,1)},
-      if(any(names(a)=="December")){escenario_Dic[[w]]=sample(a$December,1)})
+      "April" = if(any(names(a)=="April")){ escenario_Abr[[w]]=sample(a$April,1)},
+      "May" = if(any(names(a)=="May")){escenario_May[[w]]=sample(a$May,1)},
+      "June" = if(any(names(a)=="June")){escenario_Jun[[w]]=sample(a$June,1)},
+      "July" = if(any(names(a)=="July")){escenario_Jul[[w]]=sample(a$July,1)},
+      "August" = if(any(names(a)=="August")){ escenario_Ago[[w]]=sample(a$August,1)},
+      "September" = if(any(names(a)=="September")){escenario_Sep[[w]]=sample(a$September,1)},
+      "October" = if(any(names(a)=="October")){escenario_Oct[[w]]=sample(a$October,1)},
+      "November" = if(any(names(a)=="November")){escenario_Nov[[w]]=sample(a$November,1)},
+      "December" = if(any(names(a)=="December")){escenario_Dic[[w]]=sample(a$December,1)})
     
   }
   
   escenarios_final1=do.call("rbind",esc_consolidado)
   
-  orden=match(month.prob,colnames(year_sort))
+  orden=match(month.prob,colnames(escenarios_final1))
   ord_col=order(match(sort(orden),orden))
+  
   
   
   
@@ -449,7 +450,7 @@ gen_esc_daily <- function(prob,data_d,path_output,station,coord){
   }
   
   for (n in 1:nrow(escenarios_final)){
-    ord=order(match(as.numeric(esc_final_diarios[[n]]$month),orden))
+    ord=order(match(as.numeric(esc_final_diarios[[n]]$month),prob$month))
     
     esc_final_diarios[[n]]=esc_final_diarios[[n]][ord,]
   }
@@ -457,10 +458,10 @@ gen_esc_daily <- function(prob,data_d,path_output,station,coord){
   all_min = aggregate(esc_final_diarios[[101]][,4:7],list(esc_final_diarios[[101]]$year,esc_final_diarios[[101]]$month),mean)
   all_min = all_min[orden,]
   
-  all_avg = aggregate(esc_final_diarios[[102]][,4:7],list(esc_final_diarios[[101]]$year,esc_final_diarios[[101]]$month),mean)
+  all_avg = aggregate(esc_final_diarios[[102]][,4:7],list(esc_final_diarios[[102]]$year,esc_final_diarios[[102]]$month),mean)
   all_avg = all_avg[orden,]
   
-  all_max = aggregate(esc_final_diarios[[103]][,4:7],list(esc_final_diarios[[101]]$year,esc_final_diarios[[101]]$month),mean)
+  all_max = aggregate(esc_final_diarios[[103]][,4:7],list(esc_final_diarios[[103]]$year,esc_final_diarios[[103]]$month),mean)
   all_max = all_max[orden,]
   
   
@@ -494,7 +495,7 @@ gen_esc_daily <- function(prob,data_d,path_output,station,coord){
   }
   dir.create(paste(path_output,"/",station,sep=""),showWarnings=F)
   
-
+  
   limit.name = c("min","avg", "max")
   for(j in 1:3){
     # write.csv(prec_limit[,c(1,2,(j+2))],paste(path_output,"/",station,"/prec_",limit.name[j], ".csv",sep=""),row.names=F)
@@ -576,7 +577,7 @@ copy_summary <- function(path, station){
   to = paste0(path, '/summary/', station, '_', summaries)
   invisible(file.rename(from, to))
   # invisible(file.remove(from, to))
- 
+  
   
 }
 
@@ -601,10 +602,10 @@ download_data_chirp(ini.date,end.date,outDir = path_output,cl)
 
 ## 
 station_names = gsub('.csv','',list.files(path_data_d)) %>%
-					.[-grep("coords", .)]
+  .[-grep("coords", .)]
 
 daily_climate <- list.files(path_data_d,full.names = T) %>%
-					.[-grep("coords", .)]
+  .[-grep("coords", .)]
 
 daily_coord <- list.files(path_data_d,full.names = T) %>%
   .[grep("coords", .)]
