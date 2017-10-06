@@ -110,7 +110,7 @@ load_climate <- function(dir_climate){
     # filter_text(omit_files, different = T) %>%
     # .[1:99]             ## luego quitar el cargar solo las 99 veces
   
-  climate_list_df <- lapply(climate_list, read_csv) %>%
+  climate_list_df <- lapply(climate_list, read_csv, col_types = cols()) %>%
     lapply(make_date)
   
   return(climate_list_df)
@@ -167,7 +167,7 @@ files_dssat <- function(dir_dssat, dir_run, dir_soil, dir_parameters){
 execute_dssat <- function(dir_run){
   
   setwd(dir_run)
-  system(paste0("DSCSM046.EXE " , "MZCER046"," B ", "DSSBatch.v46"), ignore.stdout = T, show.output.on.console = T)
+  system(paste0("DSCSM046.EXE " , "MZCER046"," B ", "DSSBatch.v46"), ignore.stdout = T, show.output.on.console = F)
   setwd('..')
   
 }
@@ -285,9 +285,9 @@ tidy_climate <- function(dir_climate, number_days){
 
 read_summary <- function(dir_run){
   
-  summary_out <- read_table(paste0(dir_run, 'summary.OUT'), skip = 3 , na = "*******")
+  summary_out <- read_table(paste0(dir_run, 'summary.OUT'), skip = 3 , na = "*******", col_types = cols())
   
-  
+
   return(summary_out)
 }
 
@@ -303,8 +303,8 @@ read_weather <- function(data, skip_lines, i){
   require(lubridate)
   options(warn = -1)
   
-  fread(data, skip = skip_lines, stringsAsFactors = F, na.strings = "NaN", header = T, colClasses = list(
-    integer = 1:3, numeric = 4:18)) %>%
+  suppressWarnings(suppressMessages(fread(data, skip = skip_lines, stringsAsFactors = F, na.strings = "NaN", header = T, colClasses = list(
+    integer = 1:3, numeric = 4:18)))) %>%
     tbl_df() %>%
     mutate_all(funs(as.numeric)) %>%
     mutate(scenario = rep(i, length(DOY)))
@@ -450,7 +450,7 @@ read_planting <- function(dir_parameters){
   
   require(tidyverse)
   
-  details <- read_csv(paste0(dir_parameters, 'planting_details.csv'))
+  details <- read_csv(paste0(dir_parameters, 'planting_details.csv'), col_types = cols())
   
 }
 

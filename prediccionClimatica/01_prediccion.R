@@ -366,6 +366,19 @@ best_GI=function(x){
   
 }
 
+
+save_areas=function(ras,cor,dec,name,ext){
+  
+  cor_raster=ras[[1]]
+  pos=!is.na(values(cor_raster))
+  values(cor_raster)[pos]=cor
+  selec_raster=cor_raster>=quantile(cor,as.numeric(dec))
+  raster_final=crop(selec_raster,extent(ext))
+  writeRaster(raster_final,name,format="ascii")
+  return(print("Área seleccionada guardada en formato Raster"))
+  
+}
+
 ########## Run ##############
 start.time <- Sys.time()
 #############################
@@ -441,9 +454,9 @@ cor_tsm=Map(function(x,y,z) Map(selection_area,x,y,z),data_tsm_final,data_res_fi
 cat("\n Correlación de los pixeles calculada \n")
 
 main_dir=dirPrediccionInputs
-dir.create(paste0(main_dir,"/run_CPT"))
-o_empty_3=lapply(paste0(main_dir,"/run_CPT","/",list.files(path_dpto)),dir.create)
-path_months=unlist(lapply(paste0(main_dir,"/run_CPT","/",list.files(path_dpto)),function(x)paste0(x,"/",month.abb[season])))
+# dir.create(paste0(main_dir,"/run_CPT"))
+o_empty_3=lapply(paste0(dir_runCPT,"/",list.files(path_dpto)),dir.create)
+path_months=unlist(lapply(paste0(dir_runCPT,"/",list.files(path_dpto)),function(x)paste0(x,"/",month.abb[season])))
 o_empty_4=lapply(path_months,dir.create)
 o_empty_5=lapply(paste0(path_months,"/output"),dir.create)
 names_all=lapply(list.files(path_dpto),function(x) paste0(x,"/",month.abb[season]))
@@ -464,7 +477,7 @@ O_empty_8=Map(function(x,y,z)Map(run_all,x,y,z),names_all,confi_l,n_data)
 
 cat("\n Batch CPT realizado \n")
 
-path_out_run=lapply(paste0(main_dir,"/run_CPT","/",list.files(path_dpto)),function(x)paste0(x,"/",month.abb[season]))
+path_out_run=lapply(paste0(dir_runCPT,"/",list.files(path_dpto)),function(x)paste0(x,"/",month.abb[season]))
 o_e=lapply(path_out_run,function(x)lapply(x,function(x)list.files(x,full.names = T,recursive = T,pattern = "GI")))
 
 best_decil_l=lapply(o_e,function(x)lapply(x,best_GI))
@@ -503,6 +516,13 @@ tbl_df(prob_final) %>%
 
 
 cat("\n Pronosticos probabilisticos almacenados \n")
+
+# dir.create(paste0(path_save,"/raster"))
+o_empty_3=lapply(paste0(path_rasters,"/",list.files(path_dpto)),dir.create)
+path_raster=lapply(paste0(path_rasters,"/",list.files(path_dpto)),function(x)paste0(x,"/",year,"_",month.abb[season],".asc"))
+O_empty_8=Map(function(x,y,z,k,l)Map(save_areas,x,y,z,k,l),data_x,cor_tsm,best_decil,path_raster,extent_season)
+
+cat("\n Áreas almacenadas en formato Raster \n")
 
 end.time <- Sys.time()
 time.taken <- end.time - start.time

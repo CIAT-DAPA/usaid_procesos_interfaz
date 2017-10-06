@@ -9,6 +9,7 @@ library(data.table)
 library(foreach)
 library(funr)
 library(lazyeval)
+library(lubridate)
 library(parallel)
 library(pcaPP)
 library(R.utils)
@@ -16,6 +17,7 @@ library(raster)
 library(rebus)
 library(reshape)
 library(rgdal)
+library(sendmailR)
 library(stringr)
 library(tidyverse)
 library(trend)
@@ -43,46 +45,53 @@ runCrop <- function(crop, setups) {
   # i = 2 
   
   for(i in 2:length(setups)){
+    tryCatch(
+      {
     
-    setSplit <- strsplit(setups[i],"/")
+        setSplit <- strsplit(setups[i],"/")
+        
+        longName <- setSplit[[1]][length(setSplit[[1]])]
+        longNameSplit <- strsplit(longName,"_")
     
-    longName <- setSplit[[1]][length(setSplit[[1]])]
-    longNameSplit <- strsplit(longName,"_")
+        hashStation <- longNameSplit[[1]][1]
+        hashCrop <- longNameSplit[[1]][2]
+        hashSoil <- longNameSplit[[1]][3]
+        hashDayRange <- longNameSplit[[1]][4]
+    
+        dir_climate <- paste0(path_output, "/", hashStation, sep = "", collapse = NULL)
+        region <- hashStation
+    
+        cat(paste("\n\n Crop:", crop, ", station: \"", hashStation, "\", species: \"", hashCrop, "\", soil: \"", hashSoil, "\", rango of days: \"", hashDayRange, "\"\n", sep = ""))
+        
+        if (crop == 'maiz'){
+          print(longName)
+          name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
+          print(name_csv)
+          dir_parameters <- paste0(dirModeloMaizInputs, longName, "/", sep = "", collapse = NULL)
+          dir_soil <- paste0(dirModeloMaizInputs, longName, "/SOIL.SOL", sep = "", collapse = NULL)
+          dir_run <- paste0(dirModeloMaizOutputs, longName, "/run/", sep = "", collapse = NULL)
+          pathConstruct(paste0(dirModeloMaizOutputs, longName, sep = "", collapse = NULL))
+          out_dssat <- paste0(dirModeloMaizOutputs, longName, '/out_dssat', sep = "", collapse = NULL)
+          pathConstruct(out_dssat)
+          pathConstruct(dir_run)
+          runModeloMaiz <- source(paste(dirModeloMaiz,'call_functions.R', sep = "", collapse = NULL), echo = F, local = T)
+        }
+    
+        if (crop == 'arroz'){
+          dir_run <- paste0(dirModeloArrozOutputs, longName, "/run/", sep = "", collapse = NULL)
+          cultivar<- hashCrop
+          name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
+          dir_parameters <- paste0(dirModeloArrozInputs, longName, "/", sep = "", collapse = NULL)
+          runModeloArroz <- source(paste(dirModeloArroz,'call_functions.R', sep = "", collapse = NULL), local = T, echo = F)
+          
+        }   
+      
+      }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
+    
+        }
 
-    hashStation <- longNameSplit[[1]][1]
-    hashCrop <- longNameSplit[[1]][2]
-    hashSoil <- longNameSplit[[1]][3]
-    hashDayRange <- longNameSplit[[1]][4]
-
-    dir_climate <- paste0(path_output, "/", hashStation, sep = "", collapse = NULL)
-    region <- hashStation
-
-    cat(paste("\n\n Crop:", crop, ", station: \"", hashStation, "\", species: \"", hashCrop, "\", soil: \"", hashSoil, "\", rango of days: \"", hashDayRange, "\"\n", sep = ""))
-    
-    if (crop == 'maiz'){
-      print(longName)
-      name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
-      print(name_csv)
-      dir_parameters <- paste0(dirModeloMaizInputs, longName, "/", sep = "", collapse = NULL)
-      dir_soil <- paste0(dirModeloMaizInputs, longName, "/SOIL.SOL", sep = "", collapse = NULL)
-      dir_run <- paste0(dirModeloMaizOutputs, longName, "/run/", sep = "", collapse = NULL)
-      pathConstruct(paste0(dirModeloMaizOutputs, longName, sep = "", collapse = NULL))
-      out_dssat <- paste0(dirModeloMaizOutputs, longName, '/out_dssat', sep = "", collapse = NULL)
-      pathConstruct(out_dssat)
-      pathConstruct(dir_run)
-      runModeloMaiz <- source(paste(dirModeloMaiz,'call_functions.R', sep = "", collapse = NULL), echo = F, local = T)
-    }
-    
-    if (crop == 'arroz'){
-      dir_run <- paste0(dirModeloArrozOutputs, longName, "/run/", sep = "", collapse = NULL)
-      cultivar<- hashCrop
-      name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
-      dir_parameters <- paste0(dirModeloArrozInputs, longName, "/", sep = "", collapse = NULL)
-      runModeloArroz <- source(paste(dirModeloArroz,'call_functions.R', sep = "", collapse = NULL), local = T, echo = T)
-      cat(crop)
-    }   
   }
-}
+  
 
 ## MAIN PATH
 # dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
@@ -95,7 +104,7 @@ dirCurrent <- "C:/usaid_procesos_interfaz/"
   dirForecast <- paste0(dirCurrent, "prediccionClimatica/", sep = "", collapse = NULL)
 
   ## Global variables maize model module
-  # dir_dssat <- 'C:/DSSAT46/'  ## its necessary to have the parameters .CUL, .ECO, .SPE Updated for running (calibrated the crop (Maize))
+  dir_dssat <- 'C:/DSSAT46/'  ## its necessary to have the parameters .CUL, .ECO, .SPE Updated for running (calibrated the crop (Maize))
   dirModeloMaiz <- paste0(dirCurrent, "modeloMaiz/", sep = "", collapse = NULL)
 
   ## Global variables rice model module
@@ -106,6 +115,7 @@ dirCurrent <- "C:/usaid_procesos_interfaz/"
     # Input variables Forecast module
     dirPrediccionInputs <- paste0(dirInputs, "prediccionClimatica/", sep = "", collapse = NULL)
       dir_save <- paste0(dirPrediccionInputs, "descarga", sep = "", collapse = NULL)
+      dir_runCPT <- paste0(dirPrediccionInputs, "run_CPT", sep = "", collapse = NULL)
       dir_response <- paste0(dirPrediccionInputs, "estacionesMensuales", sep = "", collapse = NULL)
       dir_stations <- paste0(dirPrediccionInputs, "dailyData", sep = "", collapse = NULL)
     dirCultivosInputs <-paste0(dirInputs, "cultivos/", sep = "", collapse = NULL)
@@ -119,6 +129,7 @@ dirCurrent <- "C:/usaid_procesos_interfaz/"
     # Output variables Forecast module
     dirPrediccionOutputs <- paste0(dirOutputs, "prediccionClimatica/", sep = "", collapse = NULL)
       path_save <- paste0(dirPrediccionOutputs, "probForecast", sep = "", collapse = NULL)
+      path_rasters <- paste0(dirPrediccionOutputs, "raster", sep = "", collapse = NULL)
       path_output <- paste0(dirPrediccionOutputs, "resampling", sep = "", collapse = NULL)
         path_output_sum <- paste0(path_output, "/summary", sep = "", collapse = NULL)
     dirCultivosOutputs <-paste0(dirOutputs, "cultivos/", sep = "", collapse = NULL)
@@ -139,10 +150,12 @@ dirCurrent <- "C:/usaid_procesos_interfaz/"
 pathConstruct(dirInputs)                        # ./inputs/
   pathConstruct(dirPrediccionInputs)            # ./inputs/prediccionClimatica/
     pathConstruct(dir_save)                     # ./inputs/prediccionClimatica/descarga
+    pathConstruct(dir_runCPT)                   # ./inputs/prediccionClimatica/run_CPT
 # OUTPUTS
 pathConstruct(dirOutputs)                       # ./outputs/
   pathConstruct(dirPrediccionOutputs)           # ./outputs/prediccionClimatica/
     pathConstruct(path_save)                    # ./outputs/prediccionClimatica/probForecas
+    pathConstruct(path_rasters)                 # ./outputs/prediccionClimatica/raster
     pathConstruct(path_output)                  # ./outputs/prediccionClimatica/resampling
       pathConstruct(path_output_sum)            # ./outputs/prediccionClimatica/resampling/summary
   # Outoputs crop model
@@ -177,8 +190,17 @@ setups <- list.dirs(dirModeloArrozInputs,full.names = T)
 runCrop('arroz', setups)
 
 # Upload proccess results to interface database
-# CMDdirOutputs <- paste0(gsub("/","\\\\",dirOutputs), "\\\"")
-# try(system(paste0(forecastAppDll,"-in -fs -cf 0.5 -p \"",CMDdirOutputs), intern = TRUE, ignore.stderr = TRUE))
+CMDdirOutputs <- paste0(gsub("/","\\\\",dirOutputs), "\\\"")
+try(system(paste0(forecastAppDll,"-in -fs -cf 0.5 -p \"",CMDdirOutputs), intern = TRUE, ignore.stderr = TRUE))
 
 
 # try(system(paste0(forecastAppDll,"-out -usr -p \"",CMDdirOutputs), intern = TRUE, ignore.stderr = TRUE))
+
+
+from <- "pronosticosaclimate@gmail.com"
+to <- "edarague@gmail.com"
+subject <- "Run Result"
+body <- "This is the result of the test:"                     
+mailControl=list(smtpServer="smtp.gmail.com")
+
+sendmail(from=from,to=to,subject=subject,msg=body,control=mailControl)

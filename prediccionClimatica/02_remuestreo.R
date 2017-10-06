@@ -1,5 +1,5 @@
 #---------------------------------------------------------------------------------#
-#-------------------Funci髇 para generar barra de progreso\-----------------------#
+#-------------------Funci贸n para generar barra de progreso\-----------------------#
 #---------------------------------------------------------------------------------#
 sapply_pb <- function(X, FUN, ...) {
   env <- environment()
@@ -20,18 +20,18 @@ sapply_pb <- function(X, FUN, ...) {
 
 
 #---------------------------------------------------------------------------------#
-#----------------Funci髇 para generar a駉s m醩 frecuentes-------------------------#
+#----------------Funci贸n para generar anos m谩s frecuentes-------------------------#
 #---------------------------------------------------------------------------------#
 # INPUT
-# data: Datos acumulados mensuales para la precipitaci髇 del mes a pronosticar
+# data: Datos acumulados mensuales para la precipitaci贸n del mes a pronosticar
 # organizados de forma ascendente
-# a駉shistorico: Tabla de a駉s ordenados de forma ascendente de acuerdo a la precipitaci髇
-# acumulada del mes de inter閟
+# anoshistorico: Tabla de anos ordenados de forma ascendente de acuerdo a la precipitaci贸n
+# acumulada del mes de inter茅s
 
 # OUTPUT
-# Remuestreo de los a駉s mas frecuentes del mes de inter閟 de acuerdo a las probabilidades ingresadas
+# Remuestreo de los anos mas frecuentes del mes de inter茅s de acuerdo a las probabilidades ingresadas
 
-resampling <- function(data,prob,a駉shistorico){
+resampling <- function(data,prob,anoshistorico){
   matrizcombinaciones=0
   vectorprobabilidades=prob
   datas=0
@@ -40,18 +40,18 @@ resampling <- function(data,prob,a駉shistorico){
     if(r==vectorprobabilidades[1]){
       datas=which(data<quantile(data[which(data>0)],0.3333))
       
-      matrizcombinaciones[i]=a駉shistorico[sample(datas,1)]
+      matrizcombinaciones[i]=anoshistorico[sample(datas,1)]
     }
     
     if(r==vectorprobabilidades[2]){
       datas=which(data>=quantile(data,0.3333) & data<quantile(data,0.6666))
-      matrizcombinaciones[i]=a駉shistorico[sample(datas,1)]
+      matrizcombinaciones[i]=anoshistorico[sample(datas,1)]
       
     }
     
     if(r==vectorprobabilidades[3]){
       datas=which(data>=quantile(data,0.6666))
-      matrizcombinaciones[i]=a駉shistorico[sample(datas,1)]
+      matrizcombinaciones[i]=anoshistorico[sample(datas,1)]
       
     }
     
@@ -63,12 +63,12 @@ resampling <- function(data,prob,a駉shistorico){
 }
 
 #---------------------------------------------------------------------------------#
-#----------------Funci髇 sacar n鷐ero de d韆s del mes-----------------------------#
+#----------------Funci贸n sacar n煤mero de d铆as del mes-----------------------------#
 #---------------------------------------------------------------------------------#
 # INPUT
-# date: fecha de inter閟
+# date: fecha de inter茅s
 # OUTPUT
-# N鷐ero de d韆s del mes de inter閟
+# N煤mero de d铆as del mes de inter茅s
 
 numberOfDays <- function(date) {
   m <- format(date, format="%m")
@@ -81,15 +81,15 @@ numberOfDays <- function(date) {
 }
 
 #---------------------------------------------------------------------------------#
-#----------------Funci髇 sacar datos diarios NASA POWER---------------------------#
+#----------------Funci贸n sacar datos diarios NASA POWER---------------------------#
 #---------------------------------------------------------------------------------#
 # INPUT
-# lat: latitud de la estaci髇/sitio de inter閟
-# lon: longitud de la estaci髇/sitio de inter閟
-# year_to: a駉 actual
+# lat: latitud de la estaci贸n/sitio de inter茅s
+# lon: longitud de la estaci贸n/sitio de inter茅s
+# year_to: a帽o actual
 # month_to: mes actual
 # OUTPUT
-# Datos diarios de temperatura m醲ima, m韓ima y radiaci髇 solar de NASA POWER
+# Datos diarios de temperatura m谩xima, m铆nima y radiaci贸n solar de NASA POWER
 
 download_data_nasa = function(lat,lon,year_to,month_to,data_d){
   
@@ -120,16 +120,16 @@ download_data_nasa = function(lat,lon,year_to,month_to,data_d){
 }
 
 #---------------------------------------------------------------------------------#
-#----------------Funci髇 sacar datos diarios CHIRP--------------------------------#
+#----------------Funci贸n sacar datos diarios CHIRP--------------------------------#
 #---------------------------------------------------------------------------------#
 # INPUT
-# lat: latitud de la estaci髇/sitio de inter閟
-# lon: longitud de la estaci髇/sitio de inter閟
+# lat: latitud de la estaci贸n/sitio de inter茅s
+# lon: longitud de la estaci贸n/sitio de inter茅s
 # ini.date: fecha inicio de descarga
 # end.date: fecha final de descarga
-# outDir: Directorio donde se guardar醤 las imagenes de chirps
+# outDir: Directorio donde se guardar谩n las imagenes de chirps
 # OUTPUT
-# Datos diarios de precipitaci髇 de CHIRP
+# Datos diarios de precipitaci贸n de CHIRP
 
 download_data_chirp = function(ini.date,end.date,outDir,cl){
   
@@ -153,17 +153,17 @@ download_data_chirp = function(ini.date,end.date,outDir,cl){
 
 
 #---------------------------------------------------------------------------------#
-#-----------------Funci髇 para generar escenarios diarios-------------------------#
+#-----------------Funci贸n para generar escenarios diarios-------------------------#
 #---------------------------------------------------------------------------------#
 # INPUT
-# prob: Tabla de probabilidades de la estaci髇 de inter閟 para los siguientes 6 meses
-# data_d: Tabla con datos diarios de la estaci髇 de inter閟
-# path_output: Ruta donde se guardar醤 las salidas
-# station: Nombre de la estaci髇 de inter閟
+# prob: Tabla de probabilidades de la estaci贸n de inter茅s para los siguientes 6 meses
+# data_d: Tabla con datos diarios de la estaci贸n de inter茅s
+# path_output: Ruta donde se guardar谩n las salidas
+# station: Nombre de la estaci贸n de inter茅s
 
 # OUTPUT
-# Al correr esta funci髇 se generar醤 los 100 escenarios (en formato .csv) de datos diarios 
-# para la estaci髇de inter閟
+# Al correr esta funci贸n se generar谩n los 100 escenarios (en formato .csv) de datos diarios 
+# para la estaci贸nde inter茅s
 
 
 gen_esc_daily <- function(prob,data_d,path_output,station,coord){
@@ -190,10 +190,10 @@ gen_esc_daily <- function(prob,data_d,path_output,station,coord){
   month.prob = month.name[probabilidades$month] 
   
   #---------------------------------------------------------------------------------#
-  #-----------------Ordenar de menor a Mayr datos mensuales hist髍icos-------------#
+  #-----------------Ordenar de menor a Mayr datos mensuales hist贸ricos-------------#
   #---------------------------------------------------------------------------------#
   
-  cat("\n Calculando terciles de la precipitaci髇... \n")
+  cat("\n Calculando terciles de la precipitaci贸n... \n")
   
   prec_sort = matrix(NA,length(unique(data$year)),6)
   year_sort = matrix(NA,length(unique(data$year)),6)
@@ -219,7 +219,7 @@ gen_esc_daily <- function(prob,data_d,path_output,station,coord){
   colnames(t_max_trend)=month.prob
   colnames(t_min_trend)=month.prob
   #---------------------------------------------------------------------------------#
-  #------------------------C醠culo tendencias para temp-----------------------------#
+  #------------------------C谩lculo tendencias para temp-----------------------------#
   #---------------------------------------------------------------------------------#
   
   cat("\n Calculando tendencias de temperaturas... \n")
@@ -281,12 +281,12 @@ gen_esc_daily <- function(prob,data_d,path_output,station,coord){
   }  
   
   #---------------------------------------------------------------------------------#
-  #--------------Generaci髇 de los 10 a駉s an醠ogos mas probables-------------------#
+  #--------------Generaci贸n de los 10 anos an谩logos mas probables-------------------#
   #---------------------------------------------------------------------------------#
   
   masprobable=matrix(0,nrow=100,ncol=dim(probabilidades)[2])
   
-  cat("\n Generando a駉s m醩 frecuentes... \n")
+  cat("\n Generando anos m谩s frecuentes... \n")
   masprobable=sapply_pb(1:100,
                         function(j){
                           esc1=sapply(1:dim(probabilidades)[2], function(i) resampling(prec_sort[,i],probabilidades[i,4:6],year_sort[,i]))
@@ -297,18 +297,18 @@ gen_esc_daily <- function(prob,data_d,path_output,station,coord){
   
   
   #---------------------------------------------------------------------------------#
-  #-------------Generaci髇 de datos y resumen de los a駉s mas probables-------------#
+  #-------------Generaci贸n de datos y resumen de los anos mas probables-------------#
   #---------------------------------------------------------------------------------#
   
-  valores=function(mes,var,A駉s){
+  valores=function(mes,var,Anos){
     datos=0
     for(i in 1:length(mes))
-      datos[i]=var[which(mes[i]==A駉s)]
+      datos[i]=var[which(mes[i]==Anos)]
     return(datos)
   }
   
   todo=sapply(1:dim(probabilidades)[2], function(i) valores(masprobable2[,i],prec_sort[,i],year_sort[,i]))
-  todo2=as.data.frame(rbind(masprobable2,c("Datos an醠ogos",rep("",dim(probabilidades)[2]-1)),todo)) ###A駉s y datos analogos
+  todo2=as.data.frame(rbind(masprobable2,c("Datos an谩logos",rep("",dim(probabilidades)[2]-1)),todo)) ###Anos y datos analogos
   colnames(todo2)=names(probabilidades)
   
   resumen=function(x) rbind(min(x),max(x))
@@ -340,11 +340,11 @@ gen_esc_daily <- function(prob,data_d,path_output,station,coord){
   resumen3=rbind(resumen2[1,],round(medias,2),resumen2[2,])
   row.names(resumen3)=c("min","avg","max")
   
-  resumenf=rbind(resumen3,c("A駉s",rep("",dim(probabilidades)[2]-1)),todo3) ###Resumen con min max y prom de los escenarios analogos
+  resumenf=rbind(resumen3,c("Anos",rep("",dim(probabilidades)[2]-1)),todo3) ###Resumen con min max y prom de los escenarios analogos
   colnames(resumenf)=names(probabilidades)
   
   #---------------------------------------------------------------------------------#
-  #----------Generaci髇 de todos los escenarios definidos por el usuario------------#
+  #----------Generaci贸n de todos los escenarios definidos por el usuario------------#
   #---------------------------------------------------------------------------------#
   num_esc1=100
   
@@ -411,7 +411,7 @@ gen_esc_daily <- function(prob,data_d,path_output,station,coord){
   
   #---------------------------------------------------------------------------------#
   #---------------------------------------------------------------------------------#
-  #----------------------Creaci髇 de escenarios a nivel diario----------------------#
+  #----------------------Creaci贸n de escenarios a nivel diario----------------------#
   #---------------------------------------------------------------------------------#
   #---------------------------------------------------------------------------------#
   cat("\n Generando escenarios diarios... \n")
@@ -590,10 +590,10 @@ data_prob_all=read.csv(paste0(path_save,"/probabilities.csv"),header=T,dec=".")
 cl <- makeCluster(detectCores() - 2) # numero de nucleos proceso en paralelo
 
 
-ini.date = paste0(substring(Sys.Date(),1,4),"-",str_pad(as.numeric(substring(Sys.Date(),7,7))-1,2,pad = "0"),"-01")
+ini.date = paste0(substring(Sys.Date(),1,4),"-",str_pad(as.numeric(substring(Sys.Date(),6,7))-1,2,pad = "0"),"-01")
 ini.date = as.Date(ini.date)
 
-end.date = paste0(substring(Sys.Date(),1,4),"-",str_pad(as.numeric(substring(Sys.Date(),7,7))-1,2,pad = "0"),"-",numberOfDays(ini.date))
+end.date = paste0(substring(Sys.Date(),1,4),"-",str_pad(as.numeric(substring(Sys.Date(),6,7))-1,2,pad = "0"),"-",numberOfDays(ini.date))
 end.date = as.Date(end.date)
 
 
