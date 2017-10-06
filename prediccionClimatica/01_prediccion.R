@@ -522,8 +522,12 @@ path_raster=lapply(paste0(main_dir,"/raster","/",list.files(path_dpto)),function
 O_empty_8=Map(function(x,y,z,k,l)Map(save_areas,x,y,z,k,l),data_x,cor_tsm,best_decil,path_raster,extent_season)
 
 cat("\n Áreas almacenadas en formato Raster \n")
+cat("\n Áreas almacenadas en formato Raster \n")
 
 end.time <- Sys.time()
 time.taken <- end.time - start.time
 time.taken
+
+
+
 
