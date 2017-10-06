@@ -366,6 +366,18 @@ best_GI=function(x){
   
 }
 
+save_areas=function(ras,cor,dec,name,ext){
+  
+  cor_raster=ras[[1]]
+  pos=!is.na(values(cor_raster))
+  values(cor_raster)[pos]=cor
+  selec_raster=cor_raster>=quantile(cor,as.numeric(dec))
+  raster_final=crop(selec_raster,extent(ext))
+  writeRaster(raster_final,name,format="ascii")
+  return(print("Área seleccionada guardada en formato Raster"))
+  
+}
+
 ########## Run ##############
 start.time <- Sys.time()
 #############################
@@ -503,6 +515,13 @@ tbl_df(prob_final) %>%
 
 
 cat("\n Pronosticos probabilisticos almacenados \n")
+
+dir.create(paste0(main_dir,"/raster"))
+o_empty_3=lapply(paste0(main_dir,"/raster","/",list.files(path_dpto)),dir.create)
+path_raster=lapply(paste0(main_dir,"/raster","/",list.files(path_dpto)),function(x)paste0(x,"/",year,"_",month.abb[season],".asc"))
+O_empty_8=Map(function(x,y,z,k,l)Map(save_areas,x,y,z,k,l),data_x,cor_tsm,best_decil,path_raster,extent_season)
+
+cat("\n Áreas almacenadas en formato Raster \n")
 
 end.time <- Sys.time()
 time.taken <- end.time - start.time
