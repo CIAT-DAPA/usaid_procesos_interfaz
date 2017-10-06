@@ -66,7 +66,7 @@ transform_raster=function(x,y){
 data_raster=function(dates){
   
   year_month=dates[1,][!is.na(dates[1,])]
-  year=substr(year_month[-1],1,4)
+  year=ifelse(substr(year_month[-1],6,7)=="12",substr(year_month[-1],9,12),substr(year_month[-1],1,4))
   data_cpt1=na.omit(dates)
   pos=which(data_cpt1[,1]=="")
   pos=sort(rep(year,pos[2]-pos[1]))
@@ -139,10 +139,10 @@ pca_y_svd=function(x,modos){
   
 }
 
-selection_area=function(x,y,ponde){
+selection_area=function(x,y,ponde,confi){
   
-  mode_y=10 ; if(dim(y)[2]<10)mode_y=dim(y)[2]
-  mode_x=10
+  mode_x=as.numeric(confi[1])
+  mode_y=as.numeric(confi[2]) ; if(dim(y)[2] < mode_y)mode_y=dim(y)[2]
   
   y_pca=pca_y_svd(y,modos=mode_y)[[1]]
   x_pca=pca_x_svd(x,modos=mode_x,ponde)[[1]]
@@ -152,7 +152,7 @@ selection_area=function(x,y,ponde){
   for(i in 1:mode_x){
     
     for(j in 1:mode_y){
-     
+      
       canonico=cancor(x_pca[,1:i],y_pca[,1:j,drop=F])
       x_center=scale(x_pca[,1:i],scale = F)
       y_center=scale(y_pca[,1:j],scale = F)  
@@ -241,7 +241,7 @@ files_y=function(y_d,names){
   return(substr(names(data),2,9))
 }
 
-run_cpt=function(x,y,GI,pear,afc,prob,cc,path_run,m_x,m_y,m_cca,t){
+run_cpt=function(x,y,GI,pear,afc,prob,cc,path_run,m_x,m_y,m_cca,t,first,last){
   
   cmd <- "@echo off
   (
@@ -261,6 +261,11 @@ run_cpt=function(x,y,GI,pear,afc,prob,cc,path_run,m_x,m_y,m_cca,t){
   echo %mode_y%
   echo 1
   echo %mode_cca%
+  echo 532
+  echo %first_y%
+  echo %last_y%
+  echo N
+  echo 2
   echo 9
   echo 1
   echo 554
@@ -297,21 +302,29 @@ run_cpt=function(x,y,GI,pear,afc,prob,cc,path_run,m_x,m_y,m_cca,t){
   cmd<-gsub("%mode_y%",m_y,cmd)
   cmd<-gsub("%mode_cca%",m_cca,cmd)
   cmd<-gsub("%transfor%",t,cmd)
+  cmd<-gsub("%first_y%",first,cmd)
+  cmd<-gsub("%last_y%",last,cmd)
   write(cmd,path_run)
   system(path_run, ignore.stdout = T, show.output.on.console = T)
   
 }
 
-run_all=function(name,set,n){
+run_all=function(name,set,n,year_r){
   
-  modes_x=set[1]
-  modes_y=set[2];if(n<as.numeric(as.character(set[2])))modes_y=n
-  modes_cca=set[3];if(min(as.numeric(as.character(set[1:2])))<as.numeric(as.character(modes_cca)))modes_cca=min(as.numeric(as.character(set[1:2])))
-  if(set[4]=="si"){tran=541}else(tran=" ")
+  modes_x=as.numeric(set[1])
+  modes_y=as.numeric(set[2]);if(n < modes_y)modes_y=n
+  modes_cca=as.numeric(set[3]);if(min(c(modes_x,modes_y)) < modes_cca ) modes_cca=min(c(modes_x,modes_y))
+  t_gamma=gsub(" ","",set[4])
+  if(t_gamma=="si"){tran=541}else(tran=" ")
   
   dpto=substr(name,1,nchar(name)-4)
+  month=substr(name,nchar(name)-2,nchar(name))
   dir=paste0(main_dir,"/","run_CPT/")
   
+  f=year_r[1]
+  l=year_r[length(year_r)]
+  if(month=="Jan")l=l-1
+    
   for(i in seq(0,0.9,0.1)){
     
     x_dir=paste0(dir,name,"/x_",i,".txt")
@@ -323,7 +336,7 @@ run_all=function(name,set,n){
     cc_dir=paste0(dir,name,"/output/","cc_",i,".txt")
     run_dir=paste0(dir,name,"/run_",i,".bat")
     
-    CPT=run_cpt(x_dir,y_dir,GI_dir,pear_dir,afc_dir,prob_dir,cc_dir,run_dir,modes_x,modes_y,modes_cca,tran)
+    CPT=run_cpt(x_dir,y_dir,GI_dir,pear_dir,afc_dir,prob_dir,cc_dir,run_dir,modes_x,modes_y,modes_cca,tran,f,l)
     
   }
   
@@ -448,7 +461,15 @@ ponde=lapply(lat,function(x)lapply(x,function(x) sqrt(cos((pi/180)*x))))
 
 cat("\n Ponderación PCA \n")
 
-cor_tsm=Map(function(x,y,z) Map(selection_area,x,y,z),data_tsm_final,data_res_final,ponde)
+path_confi=list.files(path_dpto,recursive = T,pattern = "cpt",full.names = T)
+data_confi=lapply(path_confi,function(x)read.table(x,header=T,sep=",",dec=".",row.names = 1,stringsAsFactors = FALSE))
+confi_selec=lapply(data_confi,function(x)x[,season])
+confi_l=lapply(confi_selec,function(x) as.list(x))
+n_data=lapply(data_res_final,function(x)lapply(x,function(x)dim(x)[2]))
+
+cat("\n Configuración CPT cargada \n")
+
+cor_tsm=Map(function(x,y,z,k) Map(selection_area,x,y,z,k),data_tsm_final,data_res_final,ponde,confi_l)
 
 cat("\n Correlación de los pixeles calculada \n")
 
@@ -467,18 +488,12 @@ part_id=Map(files_y,data_y,list.files(path_dpto))
 
 cat("\n Archivos de las estaciones construidos para CPT \n")
 
-path_confi=list.files(path_dpto,recursive = T,pattern = "cpt",full.names = T)
-data_confi=lapply(path_confi,function(x)read.table(x,header=T,sep=",",dec=".",row.names = 1))
-confi_selec=lapply(data_confi,function(x)x[,season])
-confi_l=lapply(confi_selec,function(x) as.list(x))
-n_data=lapply(data_res_final,function(x)lapply(x,function(x)dim(x)[2]))
-O_empty_8=Map(function(x,y,z)Map(run_all,x,y,z),names_all,confi_l,n_data)
+O_empty_8=Map(function(x,y,z,k)Map(run_all,x,y,z,k),names_all,confi_l,n_data,year_response)
 
 cat("\n Batch CPT realizado \n")
 
 path_out_run=lapply(paste0(main_dir,"/run_CPT","/",list.files(path_dpto)),function(x)paste0(x,"/",month.abb[season]))
 o_e=lapply(path_out_run,function(x)lapply(x,function(x)list.files(x,full.names = T,recursive = T,pattern = "GI")))
-
 best_decil_l=lapply(o_e,function(x)lapply(x,best_GI))
 best_decil=lapply(best_decil_l,unlist)
 
