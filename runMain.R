@@ -192,6 +192,7 @@ runCrop('arroz', setups)
 # Upload proccess results to interface database
 CMDdirOutputs <- paste0(gsub("/","\\\\",dirOutputs), "\\\"")
 try(system(paste0(forecastAppDll,"-in -fs -cf 0.5 -p \"",CMDdirOutputs), intern = TRUE, ignore.stderr = TRUE))
+try(system(paste0(forecastAppDll,"-share"), intern = TRUE, ignore.stderr = TRUE))
 
 
 # try(system(paste0(forecastAppDll,"-out -usr -p \"",CMDdirOutputs), intern = TRUE, ignore.stderr = TRUE))
