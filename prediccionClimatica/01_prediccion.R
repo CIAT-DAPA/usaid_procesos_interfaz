@@ -533,9 +533,9 @@ tbl_df(prob_final) %>%
 cat("\n Pronosticos probabilisticos almacenados \n")
 
 
-dir.create(paste0(main_dir,"/raster"))
-o_empty_3=lapply(paste0(main_dir,"/raster","/",list.files(path_dpto)),dir.create)
-path_raster=lapply(paste0(main_dir,"/raster","/",list.files(path_dpto)),function(x)paste0(x,"/",year,"_",month.abb[season],".asc"))
+dir.create(path_rasters)
+o_empty_3=lapply(paste0(path_rasters,"/",list.files(path_dpto)),dir.create)
+path_raster=lapply(paste0(path_rasters,"/",list.files(path_dpto)),function(x)paste0(x,"/",year,"_",month.abb[season],".asc"))
 O_empty_8=Map(function(x,y,z,k,l)Map(save_areas,x,y,z,k,l),data_x,cor_tsm,best_decil,path_raster,extent_season)
 
 cat("\n ?reas almacenadas en formato Raster \n")
@@ -543,7 +543,3 @@ cat("\n ?reas almacenadas en formato Raster \n")
 end.time <- Sys.time()
 time.taken <- end.time - start.time
 time.taken
-
-
-
-
