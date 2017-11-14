@@ -103,13 +103,13 @@ make_reruns <- function(data, dir_run){
 
 # files_oryza(dir_oryza, dir_run)
 
-files_oryza <- function(dir_oryza, dir_run){
+# files_oryza <- function(dir_oryza, dir_run){
   
-  exe_oryza <- paste0(dir_oryza, 'ORYZA3.EXE')
+#   exe_oryza <- paste0(dir_oryza, 'ORYZA3.EXE')
   
-  file.copy(exe_oryza, dir_run)
+#   file.copy(exe_oryza, dir_run)
   
-}
+# }
 
 
 

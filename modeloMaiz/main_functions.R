@@ -144,7 +144,7 @@ files_dssat <- function(dir_dssat, dir_run, dir_soil, dir_parameters){
   SPE <- list.files(dir_parameters, full.names = TRUE) %>%
       grep("*.SPE", ., value = TRUE) 
     
-  exe_dssat <- paste0(dir_dssat, 'DSCSM046.EXE')    ## Executable DSSAT v 4.6
+  # exe_dssat <- paste0(dir_dssat, 'DSCSM046.EXE')    ## Executable DSSAT v 4.6
   
   # parameters <- dir_parameters %>%
     # list.files(full.names= T) %>%
@@ -152,7 +152,7 @@ files_dssat <- function(dir_dssat, dir_run, dir_soil, dir_parameters){
   
   
   
-  file.copy(exe_dssat, dir_run)
+  #file.copy(exe_dssat, dir_run)
   file.copy(CUL, dir_run)
   file.copy(ECO, dir_run)
   file.copy(SPE, dir_run)

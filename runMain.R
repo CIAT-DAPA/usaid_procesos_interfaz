@@ -1,3 +1,22 @@
+# =====================================================================
+# For compatibility with Rscript.exe: 
+# =====================================================================
+if(length(.libPaths()) == 1){
+  # We're in Rscript.exe
+  possible_lib_paths <- file.path(Sys.getenv(c('USERPROFILE','R_USER')),
+                                  "R","win-library",
+                                  paste(R.version$major,
+                                        substr(R.version$minor,1,1),
+                                        sep='.'))
+  indx <- which(file.exists(possible_lib_paths))
+  if(length(indx)){
+    .libPaths(possible_lib_paths[indx[1]])
+  }
+  # CLEAN UP
+  rm(indx,possible_lib_paths)
+}
+# =====================================================================
+
 # Librerias y prerequisitos: 
 #   . gunzip
 #   . R librarys
@@ -75,6 +94,7 @@ runCrop <- function(crop, setups) {
           pathConstruct(out_dssat)
           pathConstruct(dir_run)
           runModeloMaiz <- source(paste(dirModeloMaiz,'call_functions.R', sep = "", collapse = NULL), echo = F, local = T)
+          unlink(file.path(paste0(dirModeloMaizOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
         }
     
         if (crop == 'arroz'){
@@ -83,7 +103,7 @@ runCrop <- function(crop, setups) {
           name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
           dir_parameters <- paste0(dirModeloArrozInputs, longName, "/", sep = "", collapse = NULL)
           runModeloArroz <- source(paste(dirModeloArroz,'call_functions.R', sep = "", collapse = NULL), local = T, echo = F)
-          
+          unlink(file.path(paste0(dirModeloArrozOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
         }   
       
       }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
@@ -193,6 +213,9 @@ runCrop('arroz', setups)
 CMDdirOutputs <- paste0(gsub("/","\\\\",dirOutputs), "\\\"")
 try(system(paste0(forecastAppDll,"-in -fs -cf 0.5 -p \"",CMDdirOutputs), intern = TRUE, ignore.stderr = TRUE))
 try(system(paste0(forecastAppDll,"-share"), intern = TRUE, ignore.stderr = TRUE))
+
+# Delete cropmodels cache
+pathConstruct(dirCultivosOutputs)             # ./outputs/cultivos/
 
 
 # try(system(paste0(forecastAppDll,"-out -usr -p \"",CMDdirOutputs), intern = TRUE, ignore.stderr = TRUE))
