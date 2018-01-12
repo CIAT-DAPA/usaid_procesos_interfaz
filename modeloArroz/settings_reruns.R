@@ -6,8 +6,13 @@
 
 
 # settins_reruns(region, EMD, STTIME, IYEAR, ISTN, dir_run)
-
-settins_reruns <- function(EMD, STTIME, IYEAR, ISTN, dir_run, id_s){
+# EMD = PDATE
+# STTIME = SDATE
+# IYEAR
+# ISTN
+# dir_run = temp
+# id_s
+settins_reruns <- function(EMD, STTIME, IYEAR, EMYR, ISTN, dir_run, id_s){
   
   require(rebus)
   # ISTN <- 1:length(EMD) ## para controlar el escenario climatico a simular
@@ -24,8 +29,17 @@ settins_reruns <- function(EMD, STTIME, IYEAR, ISTN, dir_run, id_s){
   CNTR <- 'USAID'
   
   WTRDIR = paste0("'", gsub('/', BACKSLASH, dir_run), "'")
-  
-  
+  # 
+  # if(STTIME > EMD){
+  #   
+  #   EMYR = IYEAR + 1
+  #   
+  # }else{
+  #   
+  #   EMYR = IYEAR
+  #   
+  # }
+  # 
   data <- data.frame(FILEIT = paste0(id_exp, '.exp'), 
                      FILEI2 = paste0(id_soil, '.sol'),
                      FILEI1 = paste0(id_crp, '.crp'),
@@ -34,7 +48,7 @@ settins_reruns <- function(EMD, STTIME, IYEAR, ISTN, dir_run, id_s){
                      IYEAR, 
                      STTIME,
                      EMD,
-                     EMYR = IYEAR, 
+                     EMYR, 
                      WTRDIR = WTRDIR)
   
   

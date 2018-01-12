@@ -13,7 +13,10 @@ load_climate <- function(dir_climate){
   
 }
 
-
+# data <- load_climate(dir_climate)[[1]]
+# scenario <- number_scenarios[1]
+# map(data, .f = function(x){x$year})
+# 
 
 tidy_climate_date <- function(data, scenario){
   
@@ -22,7 +25,7 @@ tidy_climate_date <- function(data, scenario){
   require(tidyverse)
   require(lubridate)
   
-  current_year <- Sys.Date() %>%
+  current_year <- (Sys.Date() - 16) %>%
     year()  
   
   init_frcast <- ydm(paste(current_year, data$day[1], data$month[1], sep = "-"))
@@ -89,7 +92,7 @@ make_control <- function(out_file){
 
 make_reruns <- function(data, dir_run){
   
-  # data <- settins_reruns(region, CNTR, ISTN, IYEAR, STTIME, EMD, dir_run)
+  # data <- settins_reruns(region, CNTR, ISTN, IYEAR, EMYR, STTIME, EMD, dir_run)
   
   write_reruns(data, dir_run)
   
@@ -209,7 +212,7 @@ make_id_run <- function(dir_run, region, cultivar, day){
 
 
 
-# data <- climate
+# data <- climate_scenarios
 # number_days <- 45
 
 make_PS <- function(data, number_days){
@@ -222,14 +225,17 @@ make_PS <- function(data, number_days){
   after_days <- data[[1]] %>%
     filter( row_number() == 1:number_days) %>%
     dplyr::select(frcast_date) %>%
-    mutate(pdate = frcast_date + months(1)) %>%
+    mutate(pdate = frcast_date + months(1) - 16) %>%
     dplyr::select(pdate) %>%
     mutate(jpdate = yday(pdate)) %>%
     filter( row_number() == 1) %>%
-    magrittr::extract2(2) 
+    magrittr::extract2(1) 
+  
+
   
   PDATE <- data[[1]] %>%
-    filter(julian_day >= after_days) %>%
+    # filter(frcast_date >= '2017-12-01')
+    filter(frcast_date >= after_days + 16) %>%
     filter( row_number() == 1:number_days) %>%
     dplyr::select(julian_day) %>%
     extract2(1) %>%
@@ -237,7 +243,7 @@ make_PS <- function(data, number_days){
   
   SDATE <- data[[1]] %>%
     dplyr::select(frcast_date, julian_day) %>%
-    filter(julian_day>= (after_days - 16)) %>%
+    filter(frcast_date>= (after_days)) %>%
     filter( row_number() == 1:number_days) %>%
     dplyr::select(julian_day) %>%
     extract2(1) %>%
@@ -248,8 +254,14 @@ make_PS <- function(data, number_days){
     dplyr::select(year_2) %>%
     extract2(1)
   
+  IYEAR <- data[[1]] %>%
+    filter(frcast_date >= after_days) %>%
+    filter( row_number() == 1:number_days) %>%
+    dplyr::select(year_2) %>%
+    extract2(1)
+  
   DATE_format <- data[[1]] %>%
-    filter(julian_day >= after_days) %>%
+    filter(frcast_date >= after_days + 16) %>%
     filter( row_number() == 1:number_days) %>%
     dplyr::select(frcast_date) %>%
     extract2(1)
@@ -257,7 +269,7 @@ make_PS <- function(data, number_days){
   # dates_inputs <- crossing(PDATE, SDATE) %>%
   #   mutate(IYEAR = DATE, DATE = DATE_format)
   
-  dates_inputs <- data_frame(PDATE, SDATE, IYEAR = DATE, DATE = DATE_format)
+  dates_inputs <- data_frame(PDATE, SDATE, IYEAR, DATE = DATE_format)
   
   return(dates_inputs)
   
@@ -270,6 +282,7 @@ tidy_climate <- function(dir_climate, number_days){
   climate_scenarios <- load_all_climate(dir_climate)
   input_dates <- make_PS(climate_scenarios, number_days)
   return(list(input_dates = input_dates, climate_scenarios = climate_scenarios))
+  
 }
 
 
