@@ -517,8 +517,13 @@ gen_esc_daily <- function(prob,data_d,path_output,station,coord){
   #---------------------------------------------------------------------------------#
   cat("\n Descargando datos observados de NASA POWER... \n")
   
+  if (substring(Sys.Date(),6,7) == "01"){
+    year_to = as.numeric(format(Sys.Date(),"%Y"))-1
+    month_to = 12
+  } else {
   year_to = format(Sys.Date(),"%Y")
   month_to = as.numeric(format(Sys.Date(),"%m"))-1
+  }
   
   data_nasa = download_data_nasa(data_coord$lat,data_coord$lon,year_to,month_to,data_d)
   
@@ -589,11 +594,20 @@ data_prob_all=read.csv(paste0(path_save,"/probabilities.csv"),header=T,dec=".")
 # data_prob_all=read.csv(paste0(path_prob,"/",format(Sys.Date(),"%Y%m%d"),"_prob.csv"),header=T,dec=".")
 cl <- makeCluster(detectCores() - 2) # numero de nucleos proceso en paralelo
 
+substr_year <- substring(Sys.Date(),1,4)
 
-ini.date = paste0(substring(Sys.Date(),1,4),"-",str_pad(as.numeric(substring(Sys.Date(),6,7))-1,2,pad = "0"),"-01")
+if (substring(Sys.Date(),6,7) == "01"){
+    substr_month <- "12"
+    substr_year <- as.numeric(substring(Sys.Date(),1,4))-1
+  } else {
+    substr_month <- str_pad(as.numeric(substring(Sys.Date(),6,7))-1,2,pad = "0")
+    substr_year <- substring(Sys.Date(),1,4)
+  }
+
+ini.date = paste0(substr_year,"-",substr_month,"-01")
 ini.date = as.Date(ini.date)
 
-end.date = paste0(substring(Sys.Date(),1,4),"-",str_pad(as.numeric(substring(Sys.Date(),6,7))-1,2,pad = "0"),"-",numberOfDays(ini.date))
+end.date = paste0(substr_year,"-",substr_month,"-",numberOfDays(ini.date))
 end.date = as.Date(end.date)
 
 
@@ -611,18 +625,23 @@ daily_coord <- list.files(path_data_d,full.names = T) %>%
   .[grep("coords", .)]
 
 for(x in 1:length(station_names)){
-  
+# x<-1  
   print(station_names[x])
   #data_prob = data_prob_all[which(data_prob_all$id==station_names[x]),]
   ## modificado por Jeison j.mesa@cgiar.org
   data_prob = data_prob_all[which(data_prob_all$id==station_names[x]),]
   
+  # prob = data_prob
+  # data_d = daily_climate[x]
+  # path_output
+  # station = station_names[x]
+  # coord = daily_coord[x]
   
   gen_esc_daily(prob = data_prob,data_d = daily_climate[x],path_output,station = station_names[x],coord = daily_coord[x])
-  
   copy_summary(path_output, station_names[x])
   
   
 }
 
 file.remove(list.files(path_output,pattern = ".tif",full.names=T))
+
