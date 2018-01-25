@@ -64,7 +64,7 @@ make_date <- function(data){
   require(lubridate)
   
   # data <- read_csv(climate_list[[1]])
-  current_year <- Sys.Date() %>%
+  current_year <- (Sys.Date() - 16) %>%
     year()
   
   init_frcast <- ydm(paste(current_year, data$day[1], data$month[1], sep = "-"))
@@ -226,6 +226,7 @@ make_PS <- function(data, number_days){
     dplyr::select(pdate) %>%
     filter( row_number() == 1) %>%
     magrittr::extract2(1) 
+
     
   
   PDATE <- data[[1]] %>%
