@@ -131,12 +131,12 @@ download_data_nasa = function(lat,lon,year_to,month_to,data_d){
 # OUTPUT
 # Datos diarios de precipitaciÃ³n de CHIRP
 
-download_data_chirp = function(ini.date,end.date,outDir,cl){
+download_data_chirp = function(ini.date,end.date,year_to,outDir,cl){
   
   z=seq(as.Date(ini.date), as.Date(end.date), "days")
   fechas=str_replace_all(z, "-", ".")  
   
-  urls <- paste("ftp://ftp.chg.ucsb.edu/pub/org/chg/products/CHIRP/daily/2017/chirp.",fechas,".tif",sep="")
+  urls <- paste("ftp://ftp.chg.ucsb.edu/pub/org/chg/products/CHIRP/daily/",year_to,"/chirp.",fechas,".tif",sep="")
   file <- basename(urls)
   outDir_all = paste0(outDir,"/",file)
   
@@ -611,7 +611,7 @@ end.date = paste0(substr_year,"-",substr_month,"-",numberOfDays(ini.date))
 end.date = as.Date(end.date)
 
 
-download_data_chirp(ini.date,end.date,outDir = path_output,cl)
+download_data_chirp(ini.date,end.date,year_to = substr_year,outDir = path_output,cl)
 
 
 ## 
