@@ -29,6 +29,7 @@ library(foreach)
 library(funr)
 library(lazyeval)
 library(lubridate)
+library(mailR)
 library(parallel)
 library(pcaPP)
 library(R.utils)
@@ -36,7 +37,6 @@ library(raster)
 library(rebus)
 library(reshape)
 library(rgdal)
-library(sendmailR)
 library(stringr)
 library(tidyverse)
 library(trend)
@@ -44,8 +44,9 @@ library(trend)
 # Function erase and make folder
 pathConstruct <- function(dirConstruct)
   {
+  setwd(dirCurrent)
   if (file.exists(file.path(dirConstruct))){
-    unlink(file.path(dirConstruct), recursive = TRUE, force = TRUE)
+    unlink(file.path(dirConstruct), recursive = FALSE, force = TRUE)
     cat (paste0('\n... folder "',dirConstruct,'" deleted\n'))
     dir.create(file.path(dirConstruct))
     cat (paste0('... folder "',dirConstruct,'" created\n\n'))
@@ -114,6 +115,8 @@ runCrop <- function(crop, setups) {
   
 
 ## MAIN PATH
+start.time <- Sys.time()
+
 dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
 #dirCurrent <- "C:/usaid_procesos_interfaz/"
 
@@ -161,9 +164,9 @@ dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
   # Output permanent folder
   dirResults <- paste0(dirCurrent,"results")
 
-  if (!file.exists(file.path(dirResults))){
-    dir.create(file.path(dirResults))
-    cat (paste0('\n... folder "',dirResults,'" created\n\n'))}
+  # if (!file.exists(file.path(dirResults))){
+  #   dir.create(file.path(dirResults))
+  #   cat (paste0('\n... folder "',dirResults,'" created\n\n'))}
 
 ## ********************** Making inputs and outputs folders  **************************************
 # INPUTS
@@ -217,14 +220,21 @@ try(system(paste0(forecastAppDll,"-share"), intern = TRUE, ignore.stderr = TRUE)
 # Delete cropmodels cache
 pathConstruct(dirCultivosOutputs)             # ./outputs/cultivos/
 
+# send mail
+try(system(paste0(forecastAppDll,"-out -usr -p \"",CMDdirOutputs), intern = TRUE, ignore.stderr = TRUE))
 
-# try(system(paste0(forecastAppDll,"-out -usr -p \"",CMDdirOutputs), intern = TRUE, ignore.stderr = TRUE))
+sender <- "pronosticosaclimate@gmail.com"
+#recipients <- readLines(paste0(dirOutputs, "notify/notify.csv"))
+recipients <- c("edarague@gmail.com")
+email <- send.mail(from = sender,
+                   to = recipients,
+                   subject="Resultados pronosticos",
+                   body = "El proceso ha finalizado con 'exito",
+                   smtp = list(host.name = "aspmx.l.google.com", port = 25),
+                   authenticate = FALSE,
+                   send = FALSE)
+email$send() # execute to send email
 
-
-from <- "pronosticosaclimate@gmail.com"
-to <- "edarague@gmail.com"
-subject <- "Run Result"
-body <- "This is the result of the test:"                     
-mailControl=list(smtpServer="smtp.gmail.com")
-
-sendmail(from=from,to=to,subject=subject,msg=body,control=mailControl)
+end.time <- Sys.time()
+time.taken <- end.time - start.time
+time.taken
