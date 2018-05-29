@@ -222,7 +222,7 @@ write_pDetails <- function(name_exp, information){
   cat("@P PDATE EDATE  PPOP  PPOE  PLME  PLDS  PLRS  PLRD  PLDP  PLWT  PAGE  PENV  PLPH  SPRL                        PLNAME\n",file=name_exp)
   cat(paste(sprintf("%2d",as.integer(information$P))," ",sprintf("%5s",information$PDATE),
             " ",sprintf("%5s",information$EDATE)," ",sprintf("%5d",as.integer(information$PPOP)),
-            " ",sprintf("%5d",as.integer(information$PPOE))," ",sprintf("%5s",information$PLME),
+            " ",sprintf("%5s",as.numeric(as.character(information$PPOE)))," ",sprintf("%5s",information$PLME),
             " ",sprintf("%5s",information$PLDS)," ",sprintf("%5d",as.integer(information$PLRS)),
             " ",sprintf("%5d",as.integer(information$PLRD))," ",sprintf("%5d",as.integer(information$PLDP)),
             " ",sprintf("%5d",as.integer(information$PLWT))," ",sprintf("%5d",as.integer(information$PAGE)),

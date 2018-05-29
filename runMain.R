@@ -223,14 +223,14 @@ pathConstruct(dirCultivosOutputs)             # ./outputs/cultivos/
 # send mail
 try(system(paste0(forecastAppDll,"-out -usr -p \"",CMDdirOutputs), intern = TRUE, ignore.stderr = TRUE))
 
-sender <- ""
+sender <- "pronosticosaclimate@gmail.com"
 #recipients <- readLines(paste0(dirOutputs, "notify/notify.csv"))
-recipients <- c("")
+recipients <- c("edarague@gmail.com")
 email <- send.mail(from = sender,
                    to = recipients,
                    subject="Resultados pronosticos",
                    body = "El proceso ha finalizado con 'exito",
-                   smtp = list(host.name = "", port = 25),
+                   smtp = list(host.name = "aspmx.l.google.com", port = 25),
                    authenticate = FALSE,
                    send = FALSE)
 email$send() # execute to send email
