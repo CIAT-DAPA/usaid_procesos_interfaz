@@ -40,6 +40,7 @@ library(rgdal)
 library(stringr)
 library(tidyverse)
 library(trend)
+library(rjson)
 
 # Function erase and make folder
 pathConstruct <- function(dirConstruct)
