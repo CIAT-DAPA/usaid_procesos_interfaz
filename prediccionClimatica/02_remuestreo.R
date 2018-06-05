@@ -92,22 +92,33 @@ numberOfDays <- function(date) {
 # Datos diarios de temperatura mÃ¡xima, mÃ�nima y radiaciÃ³n solar de NASA POWER
 
 download_data_nasa = function(lat,lon,year_to,month_to,data_d){
+  # url_all = paste0("https://power.larc.nasa.gov/cgi-bin/agro.cgi?email=&area=area&latmin=",lat,"&lonmin=",lon,"&latmax=",lat,"&lonmax=",lon,"&ms=1&ds=1&ys=1983&me=12&de=31&ye=",year_to,"&p=swv_dwn&p=T2MN&p=T2MX&submit=Submit")
+  # url_all = paste0("https://power.larc.nasa.gov/cgi-bin/v1/DataAccess.py?&request=execute&identifier=SinglePoint&parameters=ALLSKY_SFC_SW_DWN,T2M_MAX,T2M_MIN&startDate=19830101&endDate=",format(Sys.Date(),"%Y%m%d"),"&userCommunity=AG&tempAverage=DAILY&outputList=ASCII&lat=",lat,"&lon=",lon)
+  # 
+  # data_nasa = read.table(url_all,skip = 15,header = F, na.strings = "-")
+  json_file <- paste0("https://power.larc.nasa.gov/cgi-bin/v1/DataAccess.py?&request=execute&identifier=SinglePoint&parameters=ALLSKY_SFC_SW_DWN,T2M_MAX,T2M_MIN&startDate=19830101&endDate=",format(Sys.Date(),"%Y%m%d"),"&userCommunity=AG&tempAverage=DAILY&outputList=ASCII&lat=",lat,"&lon=",lon)
+  json_data <- fromJSON(file=json_file)
+  srad = unlist(json_data$features[[1]]$properties$parameter$ALLSKY_SFC_SW_DWN)
+  tmax = unlist(json_data$features[[1]]$properties$parameter$T2M_MAX)
+  tmin = unlist(json_data$features[[1]]$properties$parameter$T2M_MIN)
   
-  url_all = paste0("https://power.larc.nasa.gov/cgi-bin/agro.cgi?email=&area=area&latmin=",lat,"&lonmin=",lon,"&latmax=",lat,"&lonmax=",lon,"&ms=1&ds=1&ys=1983&me=12&de=31&ye=",year_to,"&p=swv_dwn&p=T2MN&p=T2MX&submit=Submit")
-  data_nasa = read.table(url_all,skip = 15,header = F, na.strings = "-")
-  names(data_nasa) = c("year","julian","sol_rad","t_min","t_max")
-  dates = seq(as.Date("1983/1/1"), as.Date(paste0(year_to,"/12/31")), "days")
+  data_nasa <-data.frame(srad,tmin,tmax)
+  data_nasa[ data_nasa == -99 ] = NA
+  
+  names(data_nasa) = c("sol_rad","t_min","t_max")
+  dates = seq(as.Date("1983/1/1"), as.Date(format(Sys.Date(),"%Y/%m/%d")), "days")
   month = as.numeric(format(dates,"%m"))
+  year_n = as.numeric(format(dates,"%Y"))
   #data_d = read.csv("D:/_Scripts/usaid_forecast/_package/prediccionClimatica/dailyData/58504f1a006cb93ed40eebe3.csv",header=T,dec=".")
   
-  sel_obs = data_d[data_d$year %in% unique(data_nasa$year),]
-  sel_nasa = data_nasa[data_nasa$year %in% unique(data_d$year),c(-1,-2)]
+  sel_obs = data_d[data_d$year %in% unique(year_n),]
+  sel_nasa = data_nasa[year_n %in% unique(data_d$year),]
   
   ses_tmax = mean(sel_obs$t_max-sel_nasa$t_max,na.rm=T)
   ses_tmin = mean(sel_obs$t_min-sel_nasa$t_min,na.rm=T)
   ses_srad = mean(sel_obs$sol_rad-sel_nasa$sol_rad,na.rm=T)
   
-  data_sel_m = data_nasa[data_nasa$year %in% year_to & month %in% month_to,3:5]
+  data_sel_m = data_nasa[year_n %in% year_to & month %in% month_to,]
   data_sel_m$sol_rad = data_sel_m$sol_rad+ses_srad
   data_sel_m$t_min = data_sel_m$t_min+ses_tmin
   data_sel_m$t_max = data_sel_m$t_max+ses_tmax
