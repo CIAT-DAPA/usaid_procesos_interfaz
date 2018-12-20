@@ -1,6 +1,7 @@
 # Configuration files
+configs/
 
-forecast_app/appsettings.json
+log.txt
 
 inputs/
 outputs/

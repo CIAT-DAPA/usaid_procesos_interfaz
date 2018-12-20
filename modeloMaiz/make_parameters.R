@@ -126,8 +126,8 @@ make_xfile_region <- function(dir_parameters, WSTA, filename, PDATE, SDATE, cult
     input_sControls <- list()
     input_sControls$NYERS <- 1 ## Years for simulation
     input_sControls$SMODEL <- 'MZCER046' # model to use
-    input_sControls$WATER <- 'N'   ## Y = Utiliza balance Hidrico, N = No utiliza balance hidrico
-    input_sControls$NITRO <-  'N'  ## Y = utiliza balance nitrogeno, N =  no utiliza balance nitrogeno
+    input_sControls$WATER <- 'Y'   ## Y = Utiliza balance Hidrico, N = No utiliza balance hidrico
+    input_sControls$NITRO <-  'Y'  ## Y = utiliza balance nitrogeno, N =  no utiliza balance nitrogeno
     input_sControls$PLANT <- 'R'  # R = planting on reporting date ## Add the other options
     input_sControls$IRRIG <- IRR  ##  R =  on reporting date, A automatically irragated, N Nothing, add the other options
     input_sControls$FERTI = 'N' ## add more options

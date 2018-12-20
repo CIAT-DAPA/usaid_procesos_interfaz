@@ -63,13 +63,14 @@ run_dssat <- function(dir_dssat, dir_soil, dir_run, dir_parameters, name_files, 
   
   ## here add function to load de output necessary
   
-  summary_out <- read_summary(dir_run_id) %>%
-                  mutate(yield_0 = HWAH,
-                         d_dry = MDAT-PDAT,
-                         prec_acu = PRCP,
-                         bio_acu = CWAM)   ## rename some variables for the server
+  summary_out <- suppressWarnings(read_summary(dir_run_id)) %>%
+    mutate(yield_0 = HWAH,
+           d_dry = as.numeric(as.Date(as.character(MDAT), format("%Y%j")) - as.Date(as.character(PDAT), format("%Y%j"))),
+           prec_acu = PRCP,
+           bio_acu = CWAM)
   
-  weather_out <- read_mult_weather(dir_run_id) %>%
+  
+  weather_out <- suppressWarnings(read_mult_weather(dir_run_id)) %>%
                   group_by(scenario) %>%
                   summarise(t_max_acu = sum(TMXD), t_min_acu = sum(TMND)) 
                   

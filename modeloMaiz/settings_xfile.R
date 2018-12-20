@@ -293,9 +293,9 @@ make_sControls <- function(input_sControls, PDATE){
                                  NSWIT = 1, MESOM = "G", MESEV = "S", MESOL =2, MANAGEMENT = "MA",
                                  PLANT, IRRIG,
                                  FERTI, RESID = "R", HARVS = "M", OUTPUTS = "OU", FNAME = "N",
-                                 OVVEW = "Y", SUMRY = "Y", FROPT = 1, GROUT = "Y", CAOUT = "Y",
-                                 WAOUT = "Y", NIOUT = "Y", MIOUT = "Y",
-                                 DIOUT = "Y", VBOSE = "Y", CHOUT = "Y", OPOUT = "Y")
+                                 OVVEW = "N", SUMRY = "Y", FROPT = 1, GROUT = "Y", CAOUT = "N",
+                                 WAOUT = "N", NIOUT = "N", MIOUT = "N",
+                                 DIOUT = "N", VBOSE = "N", CHOUT = "N", OPOUT = "N")
 
  
   return(sim_ctrl)

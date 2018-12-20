@@ -12,7 +12,7 @@ run_oryza <- function(dir_run, dir_files, region, cultivar, climate_scenarios, i
   ## make id run 
   
   id_run <- make_id_run(paste0(dir_run, 'Temporal/'), region, cultivar, select_day)
-  
+  print(id_run)
   temp <- temp_wther(id_run)
   
   # make_mult_weather(climate_scenarios, id_run, filename, long, lat, elev)
@@ -28,17 +28,19 @@ run_oryza <- function(dir_run, dir_files, region, cultivar, climate_scenarios, i
   PDATE <- input_dates$PDATE[select_day]
   SDATE <- input_dates$SDATE[select_day]
   IYEAR <- input_dates$IYEAR[select_day]
+  EMYR <- year(input_dates$DATE[select_day])
   ISTN <- 1:length(climate_scenarios)
   DATE <- input_dates$DATE[select_day]
+  
   
   ## esta parte se puede integrar antes de anadir los archivos que necesita oryza y que no depende de una funcion
   id_s <- add_exp_cul(dir_files, region, id_run)  ## controla los parametros por region y retorna el id del suelo, crp and xfile
   
   # parameters_reruns <- settins_reruns(PDATE, SDATE, IYEAR, ISTN, id_run, id_s)
-  parameters_reruns <- settins_reruns(PDATE, SDATE, IYEAR, ISTN, temp, id_s)
+  parameters_reruns <- settins_reruns(PDATE, SDATE, IYEAR, EMYR, ISTN, temp, id_s)
   
   make_reruns(parameters_reruns, id_run)
-  files_oryza(dir_oryza, id_run)
+  # files_oryza(dir_oryza, id_run)
   
   execute_oryza(id_run)
   

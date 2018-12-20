@@ -64,7 +64,7 @@ make_date <- function(data){
   require(lubridate)
   
   # data <- read_csv(climate_list[[1]])
-  current_year <- Sys.Date() %>%
+  current_year <- (Sys.Date() - 16) %>%
     year()
   
   init_frcast <- ydm(paste(current_year, data$day[1], data$month[1], sep = "-"))
@@ -110,7 +110,7 @@ load_climate <- function(dir_climate){
     # filter_text(omit_files, different = T) %>%
     # .[1:99]             ## luego quitar el cargar solo las 99 veces
   
-  climate_list_df <- lapply(climate_list, read_csv) %>%
+  climate_list_df <- lapply(climate_list, read_csv, col_types = cols()) %>%
     lapply(make_date)
   
   return(climate_list_df)
@@ -144,7 +144,7 @@ files_dssat <- function(dir_dssat, dir_run, dir_soil, dir_parameters){
   SPE <- list.files(dir_parameters, full.names = TRUE) %>%
       grep("*.SPE", ., value = TRUE) 
     
-  exe_dssat <- paste0(dir_dssat, 'DSCSM046.EXE')    ## Executable DSSAT v 4.6
+  # exe_dssat <- paste0(dir_dssat, 'DSCSM046.EXE')    ## Executable DSSAT v 4.6
   
   # parameters <- dir_parameters %>%
     # list.files(full.names= T) %>%
@@ -152,7 +152,7 @@ files_dssat <- function(dir_dssat, dir_run, dir_soil, dir_parameters){
   
   
   
-  file.copy(exe_dssat, dir_run)
+  #file.copy(exe_dssat, dir_run)
   file.copy(CUL, dir_run)
   file.copy(ECO, dir_run)
   file.copy(SPE, dir_run)
@@ -167,7 +167,7 @@ files_dssat <- function(dir_dssat, dir_run, dir_soil, dir_parameters){
 execute_dssat <- function(dir_run){
   
   setwd(dir_run)
-  system(paste0("DSCSM046.EXE " , "MZCER046"," B ", "DSSBatch.v46"), ignore.stdout = T, show.output.on.console = T)
+  system(paste0("DSCSM046.EXE " , "MZCER046"," B ", "DSSBatch.v46"), ignore.stdout = T, show.output.on.console = F)
   setwd('..')
   
 }
@@ -226,6 +226,7 @@ make_PS <- function(data, number_days){
     dplyr::select(pdate) %>%
     filter( row_number() == 1) %>%
     magrittr::extract2(1) 
+
     
   
   PDATE <- data[[1]] %>%
@@ -285,9 +286,9 @@ tidy_climate <- function(dir_climate, number_days){
 
 read_summary <- function(dir_run){
   
-  summary_out <- read_table(paste0(dir_run, 'summary.OUT'), skip = 3 , na = "*******")
+  summary_out <- read_table(paste0(dir_run, 'summary.OUT'), skip = 3 , na = "*******", col_types = cols())
   
-  
+
   return(summary_out)
 }
 
@@ -303,8 +304,8 @@ read_weather <- function(data, skip_lines, i){
   require(lubridate)
   options(warn = -1)
   
-  fread(data, skip = skip_lines, stringsAsFactors = F, na.strings = "NaN", header = T, colClasses = list(
-    integer = 1:3, numeric = 4:18)) %>%
+  suppressWarnings(suppressMessages(fread(data, skip = skip_lines, stringsAsFactors = F, na.strings = "NaN", header = T, colClasses = list(
+    integer = 1:3, numeric = 4:18)))) %>%
     tbl_df() %>%
     mutate_all(funs(as.numeric)) %>%
     mutate(scenario = rep(i, length(DOY)))
@@ -450,7 +451,7 @@ read_planting <- function(dir_parameters){
   
   require(tidyverse)
   
-  details <- read_csv(paste0(dir_parameters, 'planting_details.csv'))
+  details <- read_csv(paste0(dir_parameters, 'planting_details.csv'), col_types = cols())
   
 }
 

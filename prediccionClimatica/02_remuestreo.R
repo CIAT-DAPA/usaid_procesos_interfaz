@@ -1,5 +1,5 @@
 #---------------------------------------------------------------------------------#
-#-------------------Función para generar barra de progreso\-----------------------#
+#-------------------FunciÃƒÂ³n para generar barra de progreso\-----------------------#
 #---------------------------------------------------------------------------------#
 sapply_pb <- function(X, FUN, ...) {
   env <- environment()
@@ -20,18 +20,18 @@ sapply_pb <- function(X, FUN, ...) {
 
 
 #---------------------------------------------------------------------------------#
-#----------------Función para generar años más frecuentes-------------------------#
+#----------------FunciÃƒÂ³n para generar anos mÃƒÂ¡s frecuentes-------------------------#
 #---------------------------------------------------------------------------------#
 # INPUT
-# data: Datos acumulados mensuales para la precipitación del mes a pronosticar
+# data: Datos acumulados mensuales para la precipitaciÃƒÂ³n del mes a pronosticar
 # organizados de forma ascendente
-# añoshistorico: Tabla de años ordenados de forma ascendente de acuerdo a la precipitación
-# acumulada del mes de interés
+# anoshistorico: Tabla de anos ordenados de forma ascendente de acuerdo a la precipitaciÃƒÂ³n
+# acumulada del mes de interÃƒÂ©s
 
 # OUTPUT
-# Remuestreo de los años mas frecuentes del mes de interés de acuerdo a las probabilidades ingresadas
+# Remuestreo de los anos mas frecuentes del mes de interÃƒÂ©s de acuerdo a las probabilidades ingresadas
 
-resampling <- function(data,prob,añoshistorico){
+resampling <- function(data,prob,anoshistorico){
   matrizcombinaciones=0
   vectorprobabilidades=prob
   datas=0
@@ -40,18 +40,18 @@ resampling <- function(data,prob,añoshistorico){
     if(r==vectorprobabilidades[1]){
       datas=which(data<quantile(data[which(data>0)],0.3333))
       
-      matrizcombinaciones[i]=añoshistorico[sample(datas,1)]
+      matrizcombinaciones[i]=anoshistorico[sample(datas,1)]
     }
     
     if(r==vectorprobabilidades[2]){
       datas=which(data>=quantile(data,0.3333) & data<quantile(data,0.6666))
-      matrizcombinaciones[i]=añoshistorico[sample(datas,1)]
+      matrizcombinaciones[i]=anoshistorico[sample(datas,1)]
       
     }
     
     if(r==vectorprobabilidades[3]){
       datas=which(data>=quantile(data,0.6666))
-      matrizcombinaciones[i]=añoshistorico[sample(datas,1)]
+      matrizcombinaciones[i]=anoshistorico[sample(datas,1)]
       
     }
     
@@ -63,12 +63,12 @@ resampling <- function(data,prob,añoshistorico){
 }
 
 #---------------------------------------------------------------------------------#
-#----------------Función sacar número de días del mes-----------------------------#
+#----------------FunciÃƒÂ³n sacar nÃƒÂºmero de dÃƒ­as del mes-----------------------------#
 #---------------------------------------------------------------------------------#
 # INPUT
-# date: fecha de interés
+# date: fecha de interÃƒÂ©s
 # OUTPUT
-# Número de días del mes de interés
+# NÃƒÂºmero de dÃƒ­as del mes de interÃƒÂ©s
 
 numberOfDays <- function(date) {
   m <- format(date, format="%m")
@@ -81,33 +81,44 @@ numberOfDays <- function(date) {
 }
 
 #---------------------------------------------------------------------------------#
-#----------------Función sacar datos diarios NASA POWER---------------------------#
+#----------------FunciÃƒÂ³n sacar datos diarios NASA POWER---------------------------#
 #---------------------------------------------------------------------------------#
 # INPUT
-# lat: latitud de la estación/sitio de interés
-# lon: longitud de la estación/sitio de interés
-# year_to: año actual
+# lat: latitud de la estaciÃƒÂ³n/sitio de interÃƒÂ©s
+# lon: longitud de la estaciÃƒÂ³n/sitio de interÃƒÂ©s
+# year_to: aÃƒÂ±o actual
 # month_to: mes actual
 # OUTPUT
-# Datos diarios de temperatura máxima, mínima y radiación solar de NASA POWER
+# Datos diarios de temperatura mÃƒÂ¡xima, mÃƒ­nima y radiaciÃƒÂ³n solar de NASA POWER
 
 download_data_nasa = function(lat,lon,year_to,month_to,data_d){
+  # url_all = paste0("https://power.larc.nasa.gov/cgi-bin/agro.cgi?email=&area=area&latmin=",lat,"&lonmin=",lon,"&latmax=",lat,"&lonmax=",lon,"&ms=1&ds=1&ys=1983&me=12&de=31&ye=",year_to,"&p=swv_dwn&p=T2MN&p=T2MX&submit=Submit")
+  # url_all = paste0("https://power.larc.nasa.gov/cgi-bin/v1/DataAccess.py?&request=execute&identifier=SinglePoint&parameters=ALLSKY_SFC_SW_DWN,T2M_MAX,T2M_MIN&startDate=19830101&endDate=",format(Sys.Date(),"%Y%m%d"),"&userCommunity=AG&tempAverage=DAILY&outputList=ASCII&lat=",lat,"&lon=",lon)
+  # 
+  # data_nasa = read.table(url_all,skip = 15,header = F, na.strings = "-")
+  json_file <- paste0("https://power.larc.nasa.gov/cgi-bin/v1/DataAccess.py?&request=execute&identifier=SinglePoint&parameters=ALLSKY_SFC_SW_DWN,T2M_MAX,T2M_MIN&startDate=19830101&endDate=",format(Sys.Date(),"%Y%m%d"),"&userCommunity=AG&tempAverage=DAILY&outputList=ASCII&lat=",lat,"&lon=",lon)
+  json_data <- fromJSON(file=json_file)
+  srad = unlist(json_data$features[[1]]$properties$parameter$ALLSKY_SFC_SW_DWN)
+  tmax = unlist(json_data$features[[1]]$properties$parameter$T2M_MAX)
+  tmin = unlist(json_data$features[[1]]$properties$parameter$T2M_MIN)
   
-  url_all = paste0("https://power.larc.nasa.gov/cgi-bin/agro.cgi?email=&area=area&latmin=",lat,"&lonmin=",lon,"&latmax=",lat,"&lonmax=",lon,"&ms=1&ds=1&ys=1983&me=12&de=31&ye=",year_to,"&p=swv_dwn&p=T2MN&p=T2MX&submit=Submit")
-  data_nasa = read.table(url_all,skip = 15,header = F, na.strings = "-")
-  names(data_nasa) = c("year","julian","sol_rad","t_min","t_max")
-  dates = seq(as.Date("1983/1/1"), as.Date(paste0(year_to,"/12/31")), "days")
+  data_nasa <-data.frame(srad,tmin,tmax)
+  data_nasa[ data_nasa == -99 ] = NA
+  
+  names(data_nasa) = c("sol_rad","t_min","t_max")
+  dates = seq(as.Date("1983/1/1"), as.Date(format(Sys.Date(),"%Y/%m/%d")), "days")
   month = as.numeric(format(dates,"%m"))
+  year_n = as.numeric(format(dates,"%Y"))
   #data_d = read.csv("D:/_Scripts/usaid_forecast/_package/prediccionClimatica/dailyData/58504f1a006cb93ed40eebe3.csv",header=T,dec=".")
   
-  sel_obs = data_d[data_d$year %in% unique(data_nasa$year),]
-  sel_nasa = data_nasa[data_nasa$year %in% unique(data_d$year),c(-1,-2)]
+  sel_obs = data_d[data_d$year %in% unique(year_n),]
+  sel_nasa = data_nasa[year_n %in% unique(data_d$year),]
   
   ses_tmax = mean(sel_obs$t_max-sel_nasa$t_max,na.rm=T)
   ses_tmin = mean(sel_obs$t_min-sel_nasa$t_min,na.rm=T)
   ses_srad = mean(sel_obs$sol_rad-sel_nasa$sol_rad,na.rm=T)
   
-  data_sel_m = data_nasa[data_nasa$year %in% year_to & month %in% month_to,3:5]
+  data_sel_m = data_nasa[year_n %in% year_to & month %in% month_to,]
   data_sel_m$sol_rad = data_sel_m$sol_rad+ses_srad
   data_sel_m$t_min = data_sel_m$t_min+ses_tmin
   data_sel_m$t_max = data_sel_m$t_max+ses_tmax
@@ -120,23 +131,23 @@ download_data_nasa = function(lat,lon,year_to,month_to,data_d){
 }
 
 #---------------------------------------------------------------------------------#
-#----------------Función sacar datos diarios CHIRP--------------------------------#
+#----------------FunciÃƒÂ³n sacar datos diarios CHIRP--------------------------------#
 #---------------------------------------------------------------------------------#
 # INPUT
-# lat: latitud de la estación/sitio de interés
-# lon: longitud de la estación/sitio de interés
+# lat: latitud de la estaciÃƒÂ³n/sitio de interÃƒÂ©s
+# lon: longitud de la estaciÃƒÂ³n/sitio de interÃƒÂ©s
 # ini.date: fecha inicio de descarga
 # end.date: fecha final de descarga
-# outDir: Directorio donde se guardarán las imagenes de chirps
+# outDir: Directorio donde se guardarÃƒÂ¡n las imagenes de chirps
 # OUTPUT
-# Datos diarios de precipitación de CHIRP
+# Datos diarios de precipitaciÃƒÂ³n de CHIRP
 
-download_data_chirp = function(ini.date,end.date,outDir,cl){
+download_data_chirp = function(ini.date,end.date,year_to,outDir,cl){
   
   z=seq(as.Date(ini.date), as.Date(end.date), "days")
   fechas=str_replace_all(z, "-", ".")  
   
-  urls <- paste("ftp://ftp.chg.ucsb.edu/pub/org/chg/products/CHIRP/daily/2017/chirp.",fechas,".tif",sep="")
+  urls <- paste("ftp://ftp.chg.ucsb.edu/pub/org/chg/products/CHIRP/daily/",year_to,"/chirp.",fechas,".tif",sep="")
   file <- basename(urls)
   outDir_all = paste0(outDir,"/",file)
   
@@ -144,8 +155,8 @@ download_data_chirp = function(ini.date,end.date,outDir,cl){
   clusterMap(cl, download.file, url = urls, destfile = outDir_all, mode = "wb", 
              .scheduling = 'dynamic')
   
-
-
+  
+  
   
   
   return("Datos de CHIRPS descargados!")
@@ -153,20 +164,20 @@ download_data_chirp = function(ini.date,end.date,outDir,cl){
 
 
 #---------------------------------------------------------------------------------#
-#-----------------Función para generar escenarios diarios-------------------------#
+#-----------------FunciÃƒÂ³n para generar escenarios diarios-------------------------#
 #---------------------------------------------------------------------------------#
 # INPUT
-# prob: Tabla de probabilidades de la estación de interés para los siguientes 6 meses
-# data_d: Tabla con datos diarios de la estación de interés
-# path_output: Ruta donde se guardarán las salidas
-# station: Nombre de la estación de interés
+# prob: Tabla de probabilidades de la estaciÃƒÂ³n de interÃƒÂ©s para los siguientes 6 meses
+# data_d: Tabla con datos diarios de la estaciÃƒÂ³n de interÃƒÂ©s
+# path_output: Ruta donde se guardarÃƒÂ¡n las salidas
+# station: Nombre de la estaciÃƒÂ³n de interÃƒÂ©s
 
 # OUTPUT
-# Al correr esta función se generarán los 100 escenarios (en formato .csv) de datos diarios 
-# para la estaciónde interés
+# Al correr esta funciÃƒÂ³n se generarÃƒÂ¡n los 100 escenarios (en formato .csv) de datos diarios 
+# para la estaciÃƒÂ³nde interÃƒÂ©s
 
 
-gen_esc_daily <- function(prob,data_d,path_output,station,lat,lon){
+gen_esc_daily <- function(prob,data_d,path_output,station,coord){
   
   cat("\n Inicio del remuestreo... \n")
   
@@ -175,6 +186,7 @@ gen_esc_daily <- function(prob,data_d,path_output,station,lat,lon){
   #---------------------------------------------------------------------------------#
   
   data_d=read.csv(data_d,header=T,dec=".")
+  data_coord=read.csv(coord,header=T,dec=".")
   
   
   #attach(data_d,warn.conflicts =F)
@@ -189,10 +201,10 @@ gen_esc_daily <- function(prob,data_d,path_output,station,lat,lon){
   month.prob = month.name[probabilidades$month] 
   
   #---------------------------------------------------------------------------------#
-  #-----------------Ordenar de menor a Mayr datos mensuales históricos-------------#
+  #-----------------Ordenar de menor a Mayr datos mensuales histÃƒÂ³ricos-------------#
   #---------------------------------------------------------------------------------#
   
-  cat("\n Calculando terciles de la precipitación... \n")
+  cat("\n Calculando terciles de la precipitaciÃƒÂ³n... \n")
   
   prec_sort = matrix(NA,length(unique(data$year)),6)
   year_sort = matrix(NA,length(unique(data$year)),6)
@@ -218,7 +230,7 @@ gen_esc_daily <- function(prob,data_d,path_output,station,lat,lon){
   colnames(t_max_trend)=month.prob
   colnames(t_min_trend)=month.prob
   #---------------------------------------------------------------------------------#
-  #------------------------Cálculo tendencias para temp-----------------------------#
+  #------------------------CÃƒÂ¡lculo tendencias para temp-----------------------------#
   #---------------------------------------------------------------------------------#
   
   cat("\n Calculando tendencias de temperaturas... \n")
@@ -233,12 +245,12 @@ gen_esc_daily <- function(prob,data_d,path_output,station,lat,lon){
     sen.res_tmin = sens.slope(by_month_tmin)
     
     # t <- (1:length(by_month))
-    # s.pred <- sen.res$intercept + sen.res$b.sen * t
-    if(data.table::between(0, sen.res_tmax$b.sen.lo, sen.res_tmax$b.sen.up)==F){
-      s.pred_new[v,1] <- sen.res_tmax$b.sen
+    # s.pred <- sen.res$intercept + sen.res$estimates * t
+    if(data.table::between(0, sen.res_tmax$conf.int[1], sen.res_tmax$conf.int[2])==F){
+      s.pred_new[v,1] <- sen.res_tmax$estimates
     } 
-    if(data.table::between(0, sen.res_tmin$b.sen.lo, sen.res_tmin$b.sen.up)==F){
-      s.pred_new[v,2] <- sen.res_tmin$b.sen
+    if(data.table::between(0, sen.res_tmin$conf.int[1], sen.res_tmin$conf.int[2])==F){
+      s.pred_new[v,2] <- sen.res_tmin$estimates
     }  
     
   }
@@ -280,12 +292,12 @@ gen_esc_daily <- function(prob,data_d,path_output,station,lat,lon){
   }  
   
   #---------------------------------------------------------------------------------#
-  #--------------Generación de los 10 años análogos mas probables-------------------#
+  #--------------GeneraciÃƒÂ³n de los 10 anos anÃƒÂ¡logos mas probables-------------------#
   #---------------------------------------------------------------------------------#
   
   masprobable=matrix(0,nrow=100,ncol=dim(probabilidades)[2])
   
-  cat("\n Generando años más frecuentes... \n")
+  cat("\n Generando anos mÃƒÂ¡s frecuentes... \n")
   masprobable=sapply_pb(1:100,
                         function(j){
                           esc1=sapply(1:dim(probabilidades)[2], function(i) resampling(prec_sort[,i],probabilidades[i,4:6],year_sort[,i]))
@@ -296,18 +308,18 @@ gen_esc_daily <- function(prob,data_d,path_output,station,lat,lon){
   
   
   #---------------------------------------------------------------------------------#
-  #-------------Generación de datos y resumen de los años mas probables-------------#
+  #-------------GeneraciÃƒÂ³n de datos y resumen de los anos mas probables-------------#
   #---------------------------------------------------------------------------------#
   
-  valores=function(mes,var,Años){
+  valores=function(mes,var,Anos){
     datos=0
     for(i in 1:length(mes))
-      datos[i]=var[which(mes[i]==Años)]
+      datos[i]=var[which(mes[i]==Anos)]
     return(datos)
   }
   
   todo=sapply(1:dim(probabilidades)[2], function(i) valores(masprobable2[,i],prec_sort[,i],year_sort[,i]))
-  todo2=as.data.frame(rbind(masprobable2,c("Datos análogos",rep("",dim(probabilidades)[2]-1)),todo)) ###Años y datos analogos
+  todo2=as.data.frame(rbind(masprobable2,c("Datos anÃƒÂ¡logos",rep("",dim(probabilidades)[2]-1)),todo)) ###Anos y datos analogos
   colnames(todo2)=names(probabilidades)
   
   resumen=function(x) rbind(min(x),max(x))
@@ -339,11 +351,11 @@ gen_esc_daily <- function(prob,data_d,path_output,station,lat,lon){
   resumen3=rbind(resumen2[1,],round(medias,2),resumen2[2,])
   row.names(resumen3)=c("min","avg","max")
   
-  resumenf=rbind(resumen3,c("Años",rep("",dim(probabilidades)[2]-1)),todo3) ###Resumen con min max y prom de los escenarios analogos
+  resumenf=rbind(resumen3,c("Anos",rep("",dim(probabilidades)[2]-1)),todo3) ###Resumen con min max y prom de los escenarios analogos
   colnames(resumenf)=names(probabilidades)
   
   #---------------------------------------------------------------------------------#
-  #----------Generación de todos los escenarios definidos por el usuario------------#
+  #----------GeneraciÃƒÂ³n de todos los escenarios definidos por el usuario------------#
   #---------------------------------------------------------------------------------#
   num_esc1=100
   
@@ -370,26 +382,27 @@ gen_esc_daily <- function(prob,data_d,path_output,station,lat,lon){
   
   for(w in 1:num_esc1){
     esc_consolidado[[w]]=cbind(
-      if(any(names(a)=="January")){ escenario_Ene[[w]]=sample(a$January,1)},
-      if(any(names(a)=="February")){ escenario_Feb[[w]]=sample(a$February,1)},
-      if(any(names(a)=="March")){ escenario_Mar[[w]]=sample(a$March,1)},
+      "January" = if(any(names(a)=="January")){ escenario_Ene[[w]]=sample(a$January,1)},
+      "February" = if(any(names(a)=="February")){ escenario_Feb[[w]]=sample(a$February,1)},
+      "March" = if(any(names(a)=="March")){ escenario_Mar[[w]]=sample(a$March,1)},
       
-      if(any(names(a)=="April")){ escenario_Abr[[w]]=sample(a$April,1)},
-      if(any(names(a)=="May")){escenario_May[[w]]=sample(a$May,1)},
-      if(any(names(a)=="June")){escenario_Jun[[w]]=sample(a$June,1)},
-      if(any(names(a)=="July")){escenario_Jul[[w]]=sample(a$July,1)},
-      if(any(names(a)=="August")){ escenario_Ago[[w]]=sample(a$August,1)},
-      if(any(names(a)=="September")){escenario_Sep[[w]]=sample(a$September,1)},
-      if(any(names(a)=="October")){escenario_Oct[[w]]=sample(a$October,1)},
-      if(any(names(a)=="November")){escenario_Nov[[w]]=sample(a$November,1)},
-      if(any(names(a)=="December")){escenario_Dic[[w]]=sample(a$December,1)})
+      "April" = if(any(names(a)=="April")){ escenario_Abr[[w]]=sample(a$April,1)},
+      "May" = if(any(names(a)=="May")){escenario_May[[w]]=sample(a$May,1)},
+      "June" = if(any(names(a)=="June")){escenario_Jun[[w]]=sample(a$June,1)},
+      "July" = if(any(names(a)=="July")){escenario_Jul[[w]]=sample(a$July,1)},
+      "August" = if(any(names(a)=="August")){ escenario_Ago[[w]]=sample(a$August,1)},
+      "September" = if(any(names(a)=="September")){escenario_Sep[[w]]=sample(a$September,1)},
+      "October" = if(any(names(a)=="October")){escenario_Oct[[w]]=sample(a$October,1)},
+      "November" = if(any(names(a)=="November")){escenario_Nov[[w]]=sample(a$November,1)},
+      "December" = if(any(names(a)=="December")){escenario_Dic[[w]]=sample(a$December,1)})
     
   }
   
   escenarios_final1=do.call("rbind",esc_consolidado)
   
-  orden=match(month.prob,colnames(year_sort))
+  orden=match(month.prob,colnames(escenarios_final1))
   ord_col=order(match(sort(orden),orden))
+  
   
   
   
@@ -409,7 +422,7 @@ gen_esc_daily <- function(prob,data_d,path_output,station,lat,lon){
   
   #---------------------------------------------------------------------------------#
   #---------------------------------------------------------------------------------#
-  #----------------------Creación de escenarios a nivel diario----------------------#
+  #----------------------CreaciÃƒÂ³n de escenarios a nivel diario----------------------#
   #---------------------------------------------------------------------------------#
   #---------------------------------------------------------------------------------#
   cat("\n Generando escenarios diarios... \n")
@@ -448,7 +461,7 @@ gen_esc_daily <- function(prob,data_d,path_output,station,lat,lon){
   }
   
   for (n in 1:nrow(escenarios_final)){
-    ord=order(match(as.numeric(esc_final_diarios[[n]]$month),orden))
+    ord=order(match(as.numeric(esc_final_diarios[[n]]$month),prob$month))
     
     esc_final_diarios[[n]]=esc_final_diarios[[n]][ord,]
   }
@@ -456,10 +469,10 @@ gen_esc_daily <- function(prob,data_d,path_output,station,lat,lon){
   all_min = aggregate(esc_final_diarios[[101]][,4:7],list(esc_final_diarios[[101]]$year,esc_final_diarios[[101]]$month),mean)
   all_min = all_min[orden,]
   
-  all_avg = aggregate(esc_final_diarios[[102]][,4:7],list(esc_final_diarios[[101]]$year,esc_final_diarios[[101]]$month),mean)
+  all_avg = aggregate(esc_final_diarios[[102]][,4:7],list(esc_final_diarios[[102]]$year,esc_final_diarios[[102]]$month),mean)
   all_avg = all_avg[orden,]
   
-  all_max = aggregate(esc_final_diarios[[103]][,4:7],list(esc_final_diarios[[101]]$year,esc_final_diarios[[101]]$month),mean)
+  all_max = aggregate(esc_final_diarios[[103]][,4:7],list(esc_final_diarios[[103]]$year,esc_final_diarios[[103]]$month),mean)
   all_max = all_max[orden,]
   
   
@@ -493,7 +506,7 @@ gen_esc_daily <- function(prob,data_d,path_output,station,lat,lon){
   }
   dir.create(paste(path_output,"/",station,sep=""),showWarnings=F)
   
-
+  
   limit.name = c("min","avg", "max")
   for(j in 1:3){
     # write.csv(prec_limit[,c(1,2,(j+2))],paste(path_output,"/",station,"/prec_",limit.name[j], ".csv",sep=""),row.names=F)
@@ -515,10 +528,15 @@ gen_esc_daily <- function(prob,data_d,path_output,station,lat,lon){
   #---------------------------------------------------------------------------------#
   cat("\n Descargando datos observados de NASA POWER... \n")
   
+  if (substring(Sys.Date(),6,7) == "01"){
+    year_to = as.numeric(format(Sys.Date(),"%Y"))-1
+    month_to = 12
+  } else {
   year_to = format(Sys.Date(),"%Y")
   month_to = as.numeric(format(Sys.Date(),"%m"))-1
+  }
   
-  data_nasa = download_data_nasa(lat,lon,year_to,month_to,data_d)
+  data_nasa = download_data_nasa(data_coord$lat,data_coord$lon,year_to,month_to,data_d)
   
   cat("\n Extrayendo datos estimados de CHIRP... \n")
   
@@ -529,7 +547,7 @@ gen_esc_daily <- function(prob,data_d,path_output,station,lat,lon){
   
   trs_st = stack(trs)
   
-  extr_vals <- raster::extract(trs_st, data.frame(x=lon,y=lat))
+  extr_vals <- raster::extract(trs_st, data.frame(x=data_coord$lon,y=data_coord$lat))
   data_chirp <- as.numeric(extr_vals)
   
   
@@ -575,7 +593,7 @@ copy_summary <- function(path, station){
   to = paste0(path, '/summary/', station, '_', summaries)
   invisible(file.rename(from, to))
   # invisible(file.remove(from, to))
- 
+  
   
 }
 
@@ -587,37 +605,54 @@ data_prob_all=read.csv(paste0(path_save,"/probabilities.csv"),header=T,dec=".")
 # data_prob_all=read.csv(paste0(path_prob,"/",format(Sys.Date(),"%Y%m%d"),"_prob.csv"),header=T,dec=".")
 cl <- makeCluster(detectCores() - 2) # numero de nucleos proceso en paralelo
 
+substr_year <- substring(Sys.Date(),1,4)
 
-ini.date = paste0(substring(Sys.Date(),1,4),"-",str_pad(as.numeric(substring(Sys.Date(),7,7))-1,2,pad = "0"),"-01")
+if (substring(Sys.Date(),6,7) == "01"){
+    substr_month <- "12"
+    substr_year <- as.numeric(substring(Sys.Date(),1,4))-1
+  } else {
+    substr_month <- str_pad(as.numeric(substring(Sys.Date(),6,7))-1,2,pad = "0")
+    substr_year <- substring(Sys.Date(),1,4)
+  }
+
+ini.date = paste0(substr_year,"-",substr_month,"-01")
 ini.date = as.Date(ini.date)
 
-end.date = paste0(substring(Sys.Date(),1,4),"-",str_pad(as.numeric(substring(Sys.Date(),7,7))-1,2,pad = "0"),"-",numberOfDays(ini.date))
+end.date = paste0(substr_year,"-",substr_month,"-",numberOfDays(ini.date))
 end.date = as.Date(end.date)
 
 
-download_data_chirp(ini.date,end.date,outDir = path_output,cl)
+download_data_chirp(ini.date,end.date,year_to = substr_year,outDir = path_output,cl)
 
 
 ## 
 station_names = gsub('.csv','',list.files(path_data_d)) %>%
-					.[-grep("coords", .)]
+  .[-grep("coords", .)]
 
 daily_climate <- list.files(path_data_d,full.names = T) %>%
-					.[-grep("coords", .)]
+  .[-grep("coords", .)]
+
+daily_coord <- list.files(path_data_d,full.names = T) %>%
+  .[grep("coords", .)]
 
 for(x in 1:length(station_names)){
-  
+# x<-1  
   print(station_names[x])
   #data_prob = data_prob_all[which(data_prob_all$id==station_names[x]),]
   ## modificado por Jeison j.mesa@cgiar.org
   data_prob = data_prob_all[which(data_prob_all$id==station_names[x]),]
   
+  # prob = data_prob
+  # data_d = daily_climate[x]
+  # path_output
+  # station = station_names[x]
+  # coord = daily_coord[x]
   
-  gen_esc_daily(prob = data_prob,data_d = daily_climate[x],path_output,station = station_names[x],lat,lon)
-  
+  gen_esc_daily(prob = data_prob,data_d = daily_climate[x],path_output,station = station_names[x],coord = daily_coord[x])
   copy_summary(path_output, station_names[x])
   
   
 }
 
 file.remove(list.files(path_output,pattern = ".tif",full.names=T))
+
