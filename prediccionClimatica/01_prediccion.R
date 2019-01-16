@@ -1,7 +1,6 @@
 ########## Functions ##########
 
 download.cpt=function(dir_save,areas_l,n_areas_l,month,year){ 
-download.cpt=function(dir_save,areas_l,n_areas_l,month,year){ 
   
   season=(month)+(-1:6)
   if(sum(season>12)>0)season[which(season>12)]=season[which(season>12)]-12
@@ -167,7 +166,7 @@ selection_area=function(x,y,ponde,confi){
     }
     
   }
-  print("Finalizo la selecci�n del area para un mes")
+  print("Finalizo la selección del area para un mes")
   cor_mean=apply(abs(all_cor),2,mean)
   return(cor_mean)
 }
@@ -181,7 +180,7 @@ plots=function(path,cor,q,name){
   jBrewColors <- brewer.pal(n = 100, name = "Reds")
   tiff(paste0(path,"/",name,".tiff"),compression = 'lzw',height = 6.5,width = 5.7,units="in", res=150)
   par(mfrow=c(2,1))
-  plot(Loadings_map,main="Correlaci�n promedio",col=jBrewColors,colNA="gray",legend.width=1,legend.shrink=1)
+  plot(Loadings_map,main="Correlación promedio",col=jBrewColors,colNA="gray",legend.width=1,legend.shrink=1)
   plot(Loadings_map >= q1,main="Pixeles seleccionados",colNA="gray",legend=F,col=jBrewColors)
   dev.off()
   
@@ -512,7 +511,7 @@ save_areas=function(ras,cor,dec,name,ext){
   selec_raster=cor_raster>=quantile(cor,as.numeric(dec),na.rm=T)
   raster_final=crop(selec_raster,extent(ext))
   writeRaster(raster_final,name,format="ascii")
-  return(print("�rea seleccionada guardada en formato Raster"))
+  return(print("área seleccionada guardada en formato Raster"))
   
 }
 
@@ -581,7 +580,7 @@ confi_selec=lapply(data_confi,function(x)x[,season])
 confi_l=lapply(confi_selec,function(x) as.list(x))
 p_data=lapply(data_y,function(x)dim(x)[2]-2)
 
-cat("\n Configuraci�n CPT cargada \n")
+cat("\n Configuración CPT cargada \n")
 
 path_x <- lapply(list.files(dir_save,full.names = T),function(x)list.files(x,recursive = T,full.names = T))
 path_zone<- list.files(paste0(main_dir,"run_CPT"),full.names = T) %>% paste0(.,"/y_",list.files(path_dpto),".txt")
@@ -597,7 +596,7 @@ cc <-  lapply(path_cc,function(x)lapply(x,function(x1)read.table(x1,sep="\t",dec
 load <- lapply(path_load,function(x)lapply(x,function(x1)read.table(x1,sep="\t",dec=".",skip =2,fill=TRUE,na.strings =-999,stringsAsFactors=FALSE)))
 cor_tsm <- Map(function(x,y)Map(correl,x,y),cc,load)
 
-cat("\n Correlaci�n calculada")
+cat("\n Correlación calculada")
 
 names_selec <-lapply(path_x,function(x)substr(x,1,nchar(x)-4))
 o_empty_1=Map(function(x,y,z,r)Map(files_x,x,y,z,r),data_x,cor_tsm,names_selec,time_sel)
@@ -656,7 +655,7 @@ o_empty_3=lapply(paste0(main_dir,"raster","/",list.files(path_dpto)),dir.create)
 path_raster=lapply(paste0(main_dir,"raster","/",list.files(path_dpto)),function(x)paste0(x,"/",years,"_",month.abb[season],".asc"))
 O_empty_8=Map(function(x,y,z,k,l)Map(save_areas,x,y,z,k,l),data_x,cor_tsm,best_decil,path_raster,extent_season)
 
-cat("\n �reas almacenadas en formato Raster \n")
+cat("\n áreas almacenadas en formato Raster \n")
 
 
 end.time <- Sys.time()
