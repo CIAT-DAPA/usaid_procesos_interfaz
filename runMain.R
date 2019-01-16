@@ -119,7 +119,7 @@ runCrop <- function(crop, setups) {
 start.time <- Sys.time()
 
 dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
-#dirCurrent <- "C:/usaid_procesos_interfaz/"
+# dirCurrent <- "C:/usaid_procesos_interfaz/"
 
   # forecastAppDll app
   forecastAppDll <- paste0("dotnet ", dirCurrent, "forecast_app/CIAT.DAPA.USAID.Forecast.ForecastApp.dll ", sep = "", collapse = NULL)
