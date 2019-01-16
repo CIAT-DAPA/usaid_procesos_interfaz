@@ -8,4 +8,4 @@ outputs/
 results/
 
 .Rhistory
-appsettings.json
+forecast_app/appsettings.json
