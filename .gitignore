@@ -6,3 +6,5 @@ configs/
 inputs/
 outputs/
 results/
+
+.Rhistory
