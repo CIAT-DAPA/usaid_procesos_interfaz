@@ -584,14 +584,14 @@ cat("\n Configuración CPT cargada \n")
 
 path_x <- lapply(list.files(dir_save,full.names = T),function(x)list.files(x,recursive = T,full.names = T))
 path_zone<- list.files(paste0(main_dir,"run_CPT"),full.names = T) %>% paste0(.,"/y_",list.files(path_dpto),".txt")
-path_output <- lapply(path_months_l,function(x)paste0(x,"/output/0_"))
+path_output_pred <- lapply(path_months_l,function(x)paste0(x,"/output/0_"))
 path_run <- lapply(path_months_l,function(x)paste0(x,"/run_0.bat"))
-first_run <- Map(function(x,y,z,k,p1,p2)Map(run_cpt,x,y,z,k,p1,p2),path_x,path_zone,path_run,path_output,confi_l,p_data)
+first_run <- Map(function(x,y,z,k,p1,p2)Map(run_cpt,x,y,z,k,p1,p2),path_x,path_zone,path_run,path_output_pred,confi_l,p_data)
 
 cat("\n Primera corrida realizada")
 
-path_cc <- lapply(path_output,function(x)paste0(x,"cca_cc.txt"))
-path_load <- lapply(path_output,function(x)paste0(x,"cca_load_x.txt"))
+path_cc <- lapply(path_output_pred,function(x)paste0(x,"cca_cc.txt"))
+path_load <- lapply(path_output_pred,function(x)paste0(x,"cca_load_x.txt"))
 cc <-  lapply(path_cc,function(x)lapply(x,function(x1)read.table(x1,sep="\t",dec=".",header = T,row.names = 1,skip =2,fill=TRUE,na.strings =-999,stringsAsFactors=FALSE)))
 load <- lapply(path_load,function(x)lapply(x,function(x1)read.table(x1,sep="\t",dec=".",skip =2,fill=TRUE,na.strings =-999,stringsAsFactors=FALSE)))
 cor_tsm <- Map(function(x,y)Map(correl,x,y),cc,load)
@@ -604,9 +604,9 @@ o_empty_1=Map(function(x,y,z,r)Map(files_x,x,y,z,r),data_x,cor_tsm,names_selec,t
 cat("\n Archivos de la TSM construidos por deciles para CPT \n")
 
 path_x_2 <- lapply(list.files(dir_save,full.names = T),function(x)list.files(x,recursive = T,full.names = T,pattern = "0."))
-path_output_2 <- lapply(path_months_l,function(x) lapply(x, function(x)paste0(x,"/output/",seq(0.1,0.9,0.1),"_"))) %>% lapply(.,unlist)
+path_output_pred_2 <- lapply(path_months_l,function(x) lapply(x, function(x)paste0(x,"/output/",seq(0.1,0.9,0.1),"_"))) %>% lapply(.,unlist)
 path_run_2 <-lapply(path_months_l,function(x) lapply(x, function(x)paste0(x,"/run_",seq(0.1,0.9,0.1),".bat"))) %>% lapply(.,unlist)
-second_run <- Map(function(x,y,z,k,p1,p2)Map(run_cpt,x,y,z,k,p1,p2),path_x_2,path_zone,path_run_2,path_output_2,confi_l,p_data)
+second_run <- Map(function(x,y,z,k,p1,p2)Map(run_cpt,x,y,z,k,p1,p2),path_x_2,path_zone,path_run_2,path_output_pred_2,confi_l,p_data)
 
 cat("\n Segunda corrida realizada\n")
 
