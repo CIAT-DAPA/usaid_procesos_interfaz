@@ -3,29 +3,31 @@
 
 download.cpt=function(dir_save,areas_l,n_areas_l,month,year){ 
   
-  season=(month)+(-1:6)
+  season=(month)+0:5
   if(sum(season>12)>0)season[which(season>12)]=season[which(season>12)]-12
   if(sum(season<1)>0)season[which(season<1)]=season[which(season<1)]+12
   
-  areas=areas_l[season[2:7]]
-  n_areas=n_areas_l[season[2:7]]
+  season_for=season[c(1,4)]
+  areas=areas_l[season_for]
+  n_areas=n_areas_l[season_for]
   
-  i_con=month-2
+  i_con=month-1
   if(i_con<=0)i_con=i_con+12
   
-  for(i in 1:6){
+  for(i in 1:2){
     
+    t=c(1,4)
     if(n_areas[[i]]==4){
       
-      route=paste0("http://iridl.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.ENSEMBLE/.OCNF/.surface/.TMP/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.REALTIME_ENSEMBLE/.OCNF/.surface/.TMP/appendstream/350/maskge/S/%280000%201%20",month.abb[i_con],"%201982-",year,"%29/VALUES/L/",i,".5/",i+2,".5/RANGE/%5BL%5D//keepgrids/average/M/1/24/RANGE/%5BM%5Daverage/X/",areas[[i]][1],"/",areas[[i]][2],"/flagrange/Y/",areas[[i]][3],"/",areas[[i]][4],"/flagrange/add/1/flaggt/mul/0/setmissing_value/%5BX/Y%5D%5BS/L/add/%5Dcptv10.tsv.gz")
+      route=paste0("http://iridl.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.ENSEMBLE/.OCNF/.surface/.TMP/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.REALTIME_ENSEMBLE/.OCNF/.surface/.TMP/appendstream/350/maskge/S/%280000%201%20",month.abb[i_con],"%201982-",year,"%29/VALUES/L/",t[i],".5/",t[i]+2,".5/RANGE/%5BL%5D//keepgrids/average/M/1/24/RANGE/%5BM%5Daverage/X/",areas[[i]][1],"/",areas[[i]][2],"/flagrange/Y/",areas[[i]][3],"/",areas[[i]][4],"/flagrange/add/1/flaggt/mul/0/setmissing_value/%5BX/Y%5D%5BS/L/add/%5Dcptv10.tsv.gz")
       
     }else{
       
-      route=paste0("http://iridl.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.ENSEMBLE/.OCNF/.surface/.TMP/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.REALTIME_ENSEMBLE/.OCNF/.surface/.TMP/appendstream/350/maskge/S/%280000%201%20",month.abb[i_con],"%201982-",year,"%29/VALUES/L/",i,".5/",i+2,".5/RANGE/%5BL%5D//keepgrids/average/M/1/24/RANGE/%5BM%5Daverage/X/",areas[[i]][1],"/",areas[[i]][2],"/flagrange/Y/",areas[[i]][3],"/",areas[[i]][4],"/flagrange/add/1/flaggt/X/",areas[[i]][5],"/",areas[[i]][6],"/flagrange/Y/",areas[[i]][7],"/",areas[[i]][8],"/flagrange/add/1/flaggt/add/mul/0/setmissing_value/%5BX/Y%5D%5BS/L/add/%5Dcptv10.tsv.gz")
+      route=paste0("http://iridl.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.ENSEMBLE/.OCNF/.surface/.TMP/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.REALTIME_ENSEMBLE/.OCNF/.surface/.TMP/appendstream/350/maskge/S/%280000%201%20",month.abb[i_con],"%201982-",year,"%29/VALUES/L/",t[i],".5/",t[i]+2,".5/RANGE/%5BL%5D//keepgrids/average/M/1/24/RANGE/%5BM%5Daverage/X/",areas[[i]][1],"/",areas[[i]][2],"/flagrange/Y/",areas[[i]][3],"/",areas[[i]][4],"/flagrange/add/1/flaggt/X/",areas[[i]][5],"/",areas[[i]][6],"/flagrange/Y/",areas[[i]][7],"/",areas[[i]][8],"/flagrange/add/1/flaggt/add/mul/0/setmissing_value/%5BX/Y%5D%5BS/L/add/%5Dcptv10.tsv.gz")
       
     }
     
-    filePath <- paste(dir_save,"/",i,"_",paste(month.abb[season[i:(i+2)]], collapse = '_'),".tsv.gz",sep="")
+    filePath <- paste(dir_save,"/",i,"_",paste(month.abb[season[t[i]:(t[i]+2)]], collapse = '_'),".tsv.gz",sep="")
     
     # ----------------------------------------------------------------------------------------------------------------------
     #  > prueba que el archivo gzip no esta dannado, sino intenta descargarlo de nuevo
@@ -520,17 +522,17 @@ save_areas=function(ras,cor,dec,name,ext){
 start.time <- Sys.time()
 options(timeout=180)
 #############################
-#path_dpto <- "D:/OneDrive - CGIAR/CIAT/plataforma/Confi"
+#path_dpto <- "D:/steven/plataforma//Confi"
 
 path_dpto=dir_response
 
-#dir_save <- "D:/OneDrive - CGIAR/CIAT/plataforma/Ejemplo_descarga"
+#dir_save <- "D:/steven/plataforma/Ejemplo_descarga"
 
-#main_dir <- "D:/OneDrive - CGIAR/CIAT/plataforma/"
+#main_dir <- "D:/steven/plataforma/"
 main_dir=dirPrediccionInputs
 month=as.numeric(format(Sys.Date(),"%m"))
 year=format(Sys.Date(),"%Y")
-season=month+0:5
+season=month+c(0,3)
 season[season>12]=season[season>12]-12
 path_months_l=lapply(paste0(main_dir,"run_CPT","/",list.files(path_dpto)),function(x)paste0(x,"/",month.abb[season]))
 path_months=unlist(path_months_l)
@@ -618,10 +620,9 @@ best_decil=lapply(best_decil_l,unlist)
 
 cat("\n Mejor corrida seleccionada \n")
 
-
 path_resul=path_save
 o_metricas=Map(function(x,y)Map(metricas,x,y),path_months_l,best_decil)
-years=format(seq(Sys.Date(), by = "month", length = 6) ,"%Y")
+years=format(seq(Sys.Date(), by = "month", length = 2) ,"%Y")
 metricas_l=lapply(o_metricas,function(x)Map(function(x,y)cbind(year=y,x),x,years))
 metricas_all=Map(function(x,y)lapply(x,function(x,y){x$id=paste0(y,x$id);x},y),metricas_l,part_id)
 metricas_final=do.call("rbind",lapply(metricas_all,function(x)do.call("rbind",x)))
