@@ -107,7 +107,21 @@ runCrop <- function(crop, setups) {
           runModeloArroz <- source(paste(dirModeloArroz,'call_functions.R', sep = "", collapse = NULL), local = T, echo = F)
           unlink(file.path(paste0(dirModeloArrozOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
         }   
-      
+
+        if (crop == 'frijol'){
+          print(longName)
+          name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
+          print(name_csv)
+          dir_parameters <- paste0(dirModeloFrijolInputs, longName, "/", sep = "", collapse = NULL)
+          dir_soil <- paste0(dirModeloFrijolInputs, longName, "/SOIL.SOL", sep = "", collapse = NULL)
+          dir_run <- paste0(dirModeloFrijolOutputs, longName, "/run/", sep = "", collapse = NULL)
+          pathConstruct(paste0(dirModeloFrijolOutputs, longName, sep = "", collapse = NULL))
+          out_dssat <- paste0(dirModeloFrijolOutputs, longName, '/out_dssat', sep = "", collapse = NULL)
+          pathConstruct(out_dssat)
+          pathConstruct(dir_run)
+          runModeloFrijol <- source(paste(dirModeloFrijol,'call_functions.R', sep = "", collapse = NULL), echo = F, local = T)
+          unlink(file.path(paste0(dirModeloFrijolOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
+        }
       }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
     
         }
@@ -133,6 +147,10 @@ dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
 
   ## Global variables rice model module
   dirModeloArroz <- paste0(dirCurrent, "modeloArroz/", sep = "", collapse = NULL)
+  
+  ## Global variables Frijol model module
+  dir_dssat <- 'C:/DSSAT46/'  ## its necessary to have the parameters .CUL, .ECO, .SPE Updated for running (calibrated the crop (Frijol))
+  dirModeloFrijol <- paste0(dirCurrent, "modeloFrijol/", sep = "", collapse = NULL)
 
   # INPUTS variables
   dirInputs <- paste0(dirCurrent, "inputs/", sep = "", collapse = NULL)
@@ -143,10 +161,12 @@ dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
       dir_response <- paste0(dirPrediccionInputs, "estacionesMensuales", sep = "", collapse = NULL)
       dir_stations <- paste0(dirPrediccionInputs, "dailyData", sep = "", collapse = NULL)
     dirCultivosInputs <-paste0(dirInputs, "cultivos/", sep = "", collapse = NULL)
-    # Input variables maize model module
+    # Input variables Maize model module
     dirModeloMaizInputs <- paste0(dirInputs, "cultivos/maiz/", sep = "", collapse = NULL)
     # Input variables rice model module
     dirModeloArrozInputs <- paste0(dirInputs, "cultivos/arroz/", sep = "", collapse = NULL)
+    # Input variables frijol model module
+    dirModeloFrijolInputs <- paste0(dirInputs, "cultivos/frijol/", sep = "", collapse = NULL)
 
   # OUTPUTS variables
   dirOutputs <- paste0(dirCurrent, "outputs/", sep = "", collapse = NULL)
@@ -161,7 +181,9 @@ dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
     dirModeloMaizOutputs <-paste0(dirOutputs, "cultivos/maiz/", sep = "", collapse = NULL)
     # Output variables rice model module
     dirModeloArrozOutputs <-paste0(dirOutputs, "cultivos/arroz/", sep = "", collapse = NULL)
-
+    # Output variables frijol model module
+    dirModeloFrijolOutputs <-paste0(dirOutputs, "cultivos/frijol/", sep = "", collapse = NULL)
+    
   # Output permanent folder
   dirResults <- paste0(dirCurrent,"results")
 
@@ -188,6 +210,9 @@ pathConstruct(dirOutputs)                       # ./outputs/
     pathConstruct(dirModeloMaizOutputs)         # ./outputs/cultivos/maiz/
     # Rice
     pathConstruct(dirModeloArrozOutputs)        # ./outputs/cultivos/arroz/
+    # Frijol
+    pathConstruct(dirModeloFrijolOutputs)        # ./outputs/cultivos/frijol/
+    
 ## ************************************************************************************************
 
 ## Download initial parameters from interface database
@@ -212,6 +237,10 @@ runCrop('maiz', setups)
 ## Rice crop model process
 setups <- list.dirs(dirModeloArrozInputs,full.names = T)
 runCrop('arroz', setups)
+
+## Frijol crop model process
+setups <- list.dirs(dirModeloFrijolInputs,full.names = T)
+runCrop('frijol', setups)
 
 # Upload proccess results to interface database
 CMDdirOutputs <- paste0(gsub("/","\\\\",dirOutputs), "\\\"")
