@@ -28,10 +28,13 @@ central_month <- function(month_cent){
   season <- paste0(ini_m, lead(ini_m),lead(ini_m, n = 2) )
   # season <- glue::glue('{ini_m}{lead(ini_m)}{lead(ini_m, n = 2)}')
   season <- case_when(season == 'NDNA' ~ 'NDJ', season == 'DNANA' ~ 'DJF', TRUE ~ as.character(season)) 
+  season <- tibble(cent = c(2:12, 1), season)
   
-  season_cent <- season[month_cent]
+  # season_cent <- season[month_cent]
+  season_cent <- season %>% filter(cent == month_cent) %>% .$season
   
-  return(season_cent)}
+  return(season_cent)
+}
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -409,7 +412,7 @@ function_to_save <- function(station, Esc_all, path_out){
     unnest
   
   Esc_C <- Escenaries %>% 
-    # mutate(file_name = glue::glue('{path_out}{station}/{station}_escenario_{id}.csv')) 
+    mutate(data = purrr::map(.x = data, .f = function(x){mutate(x, day = as.integer(day), month = as.integer(month), year = as.integer(year))}))%>% 
     mutate(file_name = paste0(path_out, '/',station, '/', station, '_escenario_', id, '.csv')) 
   
   # Creation of the data folder (where the results will be saved). 
@@ -437,7 +440,7 @@ function_to_save <- function(station, Esc_all, path_out){
   Type_Esc <- Esc_all %>% 
     dplyr::select(Esc_Type) %>% 
     unnest %>% 
-    # mutate(file_name = glue::glue('{path_out}summary/{station}_escenario_{Type}.csv'))
+    mutate(data = purrr::map(.x = data, .f = function(x){mutate(x, day = as.integer(day), month = as.integer(month), year = as.integer(year))}))%>%
     mutate(file_name = paste0(path_out, '/summary/', station, '_escenario_', Type, '.csv'))
   
   walk2(.x = Type_Esc$data, .y = Type_Esc$file_name, 
@@ -447,7 +450,7 @@ function_to_save <- function(station, Esc_all, path_out){
   Esc_all %>% 
     dplyr::select(Base_years) %>% 
     unnest %>% 
-    # write_csv(., path = glue::glue('{path_out}validation/{station}_Escenario_A.csv'))
+    mutate_all(.funs = as.integer) %>%
     write_csv(., path = paste0(path_out, '/validation/', station, '_Escenario_A.csv'))
   
   # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
