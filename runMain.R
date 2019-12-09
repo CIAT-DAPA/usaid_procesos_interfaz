@@ -132,8 +132,8 @@ runCrop <- function(crop, setups) {
 ## MAIN PATH
 start.time <- Sys.time()
 
-dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
-# dirCurrent <- "C:/usaid_procesos_interfaz/"
+#dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
+dirCurrent <- "C:/usaid_procesos_interfaz/"
 
   # forecastAppDll app
   forecastAppDll <- paste0("dotnet ", dirCurrent, "forecast_app/CIAT.DAPA.USAID.Forecast.ForecastApp.dll ", sep = "", collapse = NULL)
@@ -216,9 +216,10 @@ pathConstruct(dirOutputs)                       # ./outputs/
 ## ************************************************************************************************
 
 ## Download initial parameters from interface database
+setwd(paste0(dirCurrent,"/forecast_app"))
 CMDdirInputs <- paste0(gsub("/","\\\\",dirPrediccionInputs), "\\\"")
 try(system(paste0(forecastAppDll,"-out -cpt -p \"",CMDdirInputs), intern = TRUE, ignore.stderr = TRUE))
-try(system(paste0(forecastAppDll,"-out -s \"prec\" -p \"",CMDdirInputs," -start 1981 -end 2013"), intern = TRUE, ignore.stderr = TRUE))
+try(system(paste0(forecastAppDll,"-out -s \"prec\" -p \"",CMDdirInputs," -start 1982 -end 2013"), intern = TRUE, ignore.stderr = TRUE))
 try(system(paste0(forecastAppDll,"-out -wf -p \"",CMDdirInputs," -name \"daily\""), intern = TRUE, ignore.stderr = TRUE))
 try(system(paste0(forecastAppDll,"-out -co -p \"",CMDdirInputs," -name \"daily\""), intern = TRUE, ignore.stderr = TRUE))
 CMDdirInputs <- paste0(gsub("/","\\\\",dirInputs), "\\\"")
@@ -243,6 +244,7 @@ setups <- list.dirs(dirModeloFrijolInputs,full.names = T)
 runCrop('frijol', setups)
 
 # Upload proccess results to interface database
+setwd(paste0(dirCurrent,"/forecast_app"))
 CMDdirOutputs <- paste0(gsub("/","\\\\",dirOutputs), "\\\"")
 try(system(paste0(forecastAppDll,"-in -fs -cf 0.5 -p \"",CMDdirOutputs), intern = TRUE, ignore.stderr = TRUE))
 try(system(paste0(forecastAppDll,"-share"), intern = TRUE, ignore.stderr = TRUE))
