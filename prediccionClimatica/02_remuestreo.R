@@ -603,7 +603,7 @@ purrr::map2(.x = Resam$id, .y = Resam$Escenaries, .f = function_to_save, path_ou
 # OUTPUT: save chirp raster layers. 
 download_data_chirp <- function(ini.date, end.date, year_to, path_Chirp, no_cores){
   
-  fechas <- seq(as.Date(ini.date), as.Date(end.date), "days") %>% str_replace_all("-", ".")  
+  fechas <- seq(as.Date(ini.date), as.Date(end.date), "days") %>% str_replace_all("-", ".")
   
   urls <- paste("ftp://ftp.chg.ucsb.edu/pub/org/chg/products/CHIRP/daily/",year_to,"/chirp.",fechas,".tif",sep="")
   file <- basename(urls)

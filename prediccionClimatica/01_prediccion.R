@@ -1,3 +1,13 @@
+########## Set .sh/.bat extension #########
+#Defines the extension of the executable depending on OS
+
+ext_exe <- ""
+
+if (Sys.info()['sysname'] == "Windows") {
+  ext_exe <- ".bat"
+} else {
+  ext_exe <- ".sh"
+}
 
 ########## Functions ##########
 
@@ -325,7 +335,7 @@ run_cpt=function(x,y,run,output,confi,p){
   echo %path_prob%
   echo 0
   echo 0
-  ) | CPT_batch.exe"
+  ) | CPT.x"
   
   cmd<-gsub("%path_x%",x,cmd)
   cmd<-gsub("%path_y%",y,cmd)
@@ -357,8 +367,17 @@ run_cpt=function(x,y,run,output,confi,p){
   
   
   write(cmd,run)
-  #shell.exec(run)
-  system2(run)
+  #Check the operating system. If it's Linux, grant execute permissions, since it may not have them 
+  if (Sys.info()['sysname'] == 'Windows'){ 
+    system2(run)
+  }
+  else{
+    system(paste("chmod +x", run))
+    system(run)
+    
+  }
+  
+  
   
 }
 
@@ -465,7 +484,7 @@ run_all=function(name,set,n,year_r){
     afc_dir=paste0(dir,name,"/output/","2afc_",i,".txt")
     prob_dir=paste0(dir,name,"/output/","prob_",i,".txt")
     cc_dir=paste0(dir,name,"/output/","cc_",i,".txt")
-    run_dir=paste0(dir,name,"/run_",i,".bat")
+    run_dir=paste0(dir,name,"/run_",i, ext_exe)
     
     CPT=run_cpt(x_dir,y_dir,GI_dir,pear_dir,afc_dir,prob_dir,cc_dir,run_dir,modes_x,modes_y,modes_cca,tran,f,l)
     
@@ -593,7 +612,7 @@ cat("\n Configuración CPT cargada \n")
 path_x <- lapply(list.files(dir_save,full.names = T),function(x)list.files(x,recursive = T,full.names = T))
 path_zone<- list.files(paste0(main_dir,"run_CPT"),full.names = T) %>% paste0(.,"/y_",list.files(path_dpto),".txt")
 path_output_pred <- lapply(path_months_l,function(x)paste0(x,"/output/0_"))
-path_run <- lapply(path_months_l,function(x)paste0(x,"/run_0.bat"))
+path_run <- lapply(path_months_l,function(x)paste0(x,"/run_0", ext_exe))
 first_run <- Map(function(x,y,z,k,p1,p2)Map(run_cpt,x,y,z,k,p1,p2),path_x,path_zone,path_run,path_output_pred,confi_l,p_data)
 
 cat("\n Primera corrida realizada")
@@ -613,7 +632,7 @@ cat("\n Archivos de la TSM construidos por deciles para CPT \n")
 
 path_x_2 <- lapply(list.files(dir_save,full.names = T),function(x)list.files(x,recursive = T,full.names = T,pattern = "0."))
 path_output_pred_2 <- lapply(path_months_l,function(x) lapply(x, function(x)paste0(x,"/output/",seq(0.1,0.9,0.1),"_"))) %>% lapply(.,unlist)
-path_run_2 <-lapply(path_months_l,function(x) lapply(x, function(x)paste0(x,"/run_",seq(0.1,0.9,0.1),".bat"))) %>% lapply(.,unlist)
+path_run_2 <-lapply(path_months_l,function(x) lapply(x, function(x)paste0(x,"/run_",seq(0.1,0.9,0.1),ext_exe))) %>% lapply(.,unlist)
 second_run <- Map(function(x,y,z,k,p1,p2)Map(run_cpt,x,y,z,k,p1,p2),path_x_2,path_zone,path_run_2,path_output_pred_2,confi_l,p_data)
 
 cat("\n Segunda corrida realizada\n")
