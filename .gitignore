@@ -9,3 +9,4 @@ results/
 
 .Rhistory
 forecast_app/appsettings.json
+.RData
