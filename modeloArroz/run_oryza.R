@@ -84,7 +84,7 @@ run_oryza <- function(dir_run, dir_files, region, cultivar, climate_scenarios, i
                                          bio_acu,
                                          d_har))
 
-  #Borrar .bin/s
+  #Borrar .bins
   return(summary_stats)
   # unlink(paste0(id_run, ''))
   setwd(dir_run)

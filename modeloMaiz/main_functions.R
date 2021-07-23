@@ -167,7 +167,14 @@ files_dssat <- function(dir_dssat, dir_run, dir_soil, dir_parameters){
 execute_dssat <- function(dir_run){
   
   setwd(dir_run)
-  system(paste0("DSCSM046.EXE " , "MZCER046"," B ", "DSSBatch.v46"), ignore.stdout = T, show.output.on.console = F)
+  if (Sys.info()['sysname'] == 'Windows'){ 
+    system(paste0("DSCSM046.EXE " , "MZCER046"," B ", "DSSBatch.v46"), ignore.stdout = T, show.output.on.console = F)
+  }
+  else{
+    system('dssat . B DSSBatch.v47')
+
+  }
+  
   setwd('..')
   
 }

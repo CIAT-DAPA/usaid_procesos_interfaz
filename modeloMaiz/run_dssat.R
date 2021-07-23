@@ -44,14 +44,14 @@ run_dssat <- function(dir_dssat, dir_soil, dir_run, dir_parameters, name_files, 
   # DATE <- paste(day(DATE), sprintf("%.2d", month(DATE)), year(DATE), sep = '/')
   
   ## id_soil <- ID_SOIL
-  make_xfile_region(dir_parameters, paste0(name_files, sprintf("%.3d", 1:99)), paste0(dir_run_id, name_files, '.MZX'), PDATE, SDATE, cultivar, id_soil) ## Remember them can to change the filename to different regions
+  make_xfile_region(dir_parameters, paste0(name_files, sprintf("%.3d", 1:99)), paste0(dir_run_id, name_files, '001.MZX'), PDATE, SDATE, cultivar, id_soil) ## Remember them can to change the filename to different regions
   
   
   invisible(make_mult_wth(climate, dir_run_id, name_files))
   
   # Make Batch
   
-  CSMbatch("MAIZE", paste0(name_files, '.MZX'), paste0(dir_run_id, "DSSBatch.v46"))
+  CSMbatch("MAIZE", paste0(name_files, '001.MZX'), paste0(dir_run_id, "DSSBatch.v47"))
   
   # add files necessay to run DSSAT
 
