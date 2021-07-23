@@ -105,7 +105,7 @@ runCrop <- function(crop, setups) {
           name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
           dir_parameters <- paste0(dirModeloArrozInputs, longName, "/", sep = "", collapse = NULL)
           runModeloArroz <- source(paste(dirModeloArroz,'call_functions.R', sep = "", collapse = NULL), local = T, echo = F)
-          unlink(file.path(paste0(dirModeloArrozOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
+          #unlink(file.path(paste0(dirModeloArrozOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
         }   
 
         if (crop == 'frijol'){

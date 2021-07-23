@@ -175,13 +175,20 @@ add_exp_cul <- function(dir_files, region, dir_run){
   
 }
 
+#Executes the model depending on OS
 execute_oryza <- function(dir_run){
-  
+
   setwd(dir_run)
-  system(paste0(' ORYZA3.exe'), ignore.stdout = T, show.output.on.console = F)
+  if (Sys.info()['sysname'] == 'Windows'){ 
+    system2(paste0(' ORYZA3.exe'), ignore.stdout = T, show.output.on.console = F)
+  }
+  else{
+    system('oryza .')
+
+  }
   setwd('..')
-  
-  
+
+
 }
 
 
@@ -430,15 +437,15 @@ load_coordinates <- function(dir_parameters){
 
 
 temp_wther <- function(temp_dir){
-  
+
   # temp_dir <- id_run
-  temp_dir <- paste0(str_split(temp_dir, '/')[[1]][1], "/", 'tmp', "/")
-  
+  temp_dir <- paste0(temp_dir, 'tmp', "/")
+
   if(dir.exists(temp_dir)){
-    
+
     dir.create(temp_dir)
   } else{
-    
+
     unlink(file.path(temp_dir), recursive = T, force = T)
     dir.create(temp_dir)
   }
@@ -455,4 +462,3 @@ output_names <- function(hashCrop, hashSoil, name_csv){
   
   return(output)
 }
-
