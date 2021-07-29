@@ -165,13 +165,14 @@ files_dssat <- function(dir_dssat, dir_run, dir_soil, dir_parameters){
 # dir_run <- 'D:/CIAT/USAID/DSSAT/multiple_runs/R-DSSATv4.6/Proof_run/'
 # execute_dssat(dir_run)
 execute_dssat <- function(dir_run){
-  
+  print(paste('ruta: ', dir_run))
   setwd(dir_run)
   if (Sys.info()['sysname'] == 'Windows'){ 
     system(paste0("DSCSM046.EXE " , "MZCER046"," B ", "DSSBatch.v46"), ignore.stdout = T, show.output.on.console = F)
   }
   else{
-    system('dssat . B DSSBatch.v47')
+    system(paste0('dssat ',  dir_run,' B DSSBatch.v47'))
+    
 
   }
   
@@ -200,12 +201,12 @@ make_id_run <- function(dir_run, region, cultivar, day){
 }
 
 
-make_mult_wth <- function(scenarios, dir_run, filename){
+make_mult_wth <- function(scenarios, dir_run, filename, lat, long){
   
   # scenarios <- climate_scenarios
   num_scenarios <- 1:length(scenarios)
   filename <- paste0(filename, sprintf("%.3d", num_scenarios))
-  mapply(make_wth, scenarios, dir_run, -99, -99, filename) 
+  mapply(make_wth, scenarios, dir_run, lat, long, filename) 
 
 }
 
@@ -462,6 +463,16 @@ read_planting <- function(dir_parameters){
   
 }
 
+#Load coordinates from csv 
+load_coordinates <- function(dir_parameters){
+  
+  require(readr)
+  coordenadas <- read_csv(paste0(dir_parameters,'coordenadas.csv')) %>%
+    as.data.frame() %>%
+    frame_list()
+  
+}
+
 
 ### data frame to list 
 
@@ -470,4 +481,6 @@ frame_list <- function(data){
   setNames(split(data[,2], seq(nrow(data))), data[,1])
   
 }
+
+
 

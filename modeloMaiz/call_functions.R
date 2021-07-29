@@ -27,7 +27,7 @@ ID_SOIL <- 'USAID00001' ## id para el suelo
 
 ## Esto deberia ser constante  
 select_day <- 1 ## 1 primer dia a simular 2 segundo dia etc....  select day to simulate from first date of climate forecast o then
-number_days <- 45 ## Numero de dias a simular desde el primer dia del pronostico climatico (SDATE siempre seria el primer dia del pronostico)
+number_days <- 2 ## Numero de dias a simular desde el primer dia del pronostico climatico (SDATE siempre seria el primer dia del pronostico)
 
 ## agregar out dir donde van a estar las salidas (el .csv que se necesita para el servidor)
 # name_csv <- paste(dir_outMaiz, "prueba.csv", sep = "", collapse = NULL)
@@ -55,6 +55,7 @@ climate_PS <- tidy_climate(dir_climate, number_days)
 # climate_scenarios <- load_climate(dir_climate)
 # input_dates <- climate_PS$climate
 # climate <- climate_PS$climate
+
 
 
 ## simulating by input_dates from rows
