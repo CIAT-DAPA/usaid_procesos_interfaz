@@ -220,6 +220,7 @@ pathConstruct(dirOutputs)                       # ./outputs/
 setwd(paste0(dirCurrent,"/forecast_app"))
 CMDdirInputs <- paste0(gsub("/","\\\\",dirPrediccionInputs), "\\\"")
 try(system(paste0(forecastAppDll,"-out -cpt -p \"",CMDdirInputs), intern = TRUE, ignore.stderr = TRUE))
+print(paste0(forecastAppDll,"-out -cpt -p \"",CMDdirInputs))
 try(system(paste0(forecastAppDll,"-out -s \"prec\" -p \"",CMDdirInputs," -start 1982 -end 2013"), intern = TRUE, ignore.stderr = TRUE))
 try(system(paste0(forecastAppDll,"-out -wf -p \"",CMDdirInputs," -name \"daily\""), intern = TRUE, ignore.stderr = TRUE))
 try(system(paste0(forecastAppDll,"-out -co -p \"",CMDdirInputs," -name \"daily\""), intern = TRUE, ignore.stderr = TRUE))
