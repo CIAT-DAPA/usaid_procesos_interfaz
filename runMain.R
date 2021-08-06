@@ -134,7 +134,11 @@ start.time <- Sys.time()
 
 #dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
 #dirCurrent <- "C:/usaid_procesos_interfaz/"
+<<<<<<< HEAD
 dirCurrent <- "/forecast/usaid_procesos_interfaz/"
+=======
+dirCurrent <- "/forecast/workdir/usaid_procesos_interfaz/"
+>>>>>>> fbbb39777e5442cd0011d7e65b84877683a258aa
 
   # forecastAppDll app - App de consola que se conecta a la base de datos
   forecastAppDll <- paste0("dotnet ", dirCurrent, "forecast_app/CIAT.DAPA.USAID.Forecast.ForecastApp.dll ", sep = "", collapse = NULL)
@@ -218,6 +222,7 @@ pathConstruct(dirOutputs)                       # ./outputs/
 
 ## Download initial parameters from interface database
 setwd(paste0(dirCurrent,"/forecast_app"))
+<<<<<<< HEAD
 #CMDdirInputs <- paste0(gsub("/","\\\\",dirPrediccionInputs), "\\\"")
 CMDdirInputs = dirPrediccionInputs
 dotnet_cmd = c(paste0(forecastAppDll,"-out -cpt -p \"",CMDdirInputs,"\""),
@@ -233,6 +238,16 @@ try(system(dotnet_cmd[3], intern = TRUE, ignore.stderr = TRUE))
 try(system(dotnet_cmd[4], intern = TRUE, ignore.stderr = TRUE))
 #CMDdirInputs <- paste0(gsub("/","\\\\",dirInputs), "\\\"")
 try(system(dotnet_cmd[5], intern = TRUE, ignore.stderr = TRUE))
+=======
+CMDdirInputs <- paste0(gsub("/","\\\\",dirPrediccionInputs), "\\\"")
+try(system(paste0(forecastAppDll,"-out -cpt -p \"",CMDdirInputs), intern = TRUE, ignore.stderr = TRUE))
+print(paste0(forecastAppDll,"-out -cpt -p \"",CMDdirInputs))
+try(system(paste0(forecastAppDll,"-out -s \"prec\" -p \"",CMDdirInputs," -start 1982 -end 2013"), intern = TRUE, ignore.stderr = TRUE))
+try(system(paste0(forecastAppDll,"-out -wf -p \"",CMDdirInputs," -name \"daily\""), intern = TRUE, ignore.stderr = TRUE))
+try(system(paste0(forecastAppDll,"-out -co -p \"",CMDdirInputs," -name \"daily\""), intern = TRUE, ignore.stderr = TRUE))
+CMDdirInputs <- paste0(gsub("/","\\\\",dirInputs), "\\\"")
+try(system(paste0(forecastAppDll,"-out -fs -p \"",CMDdirInputs), intern = TRUE, ignore.stderr = TRUE))
+>>>>>>> fbbb39777e5442cd0011d7e65b84877683a258aa
 
 # Prediction process
 runPrediccion <- source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL))

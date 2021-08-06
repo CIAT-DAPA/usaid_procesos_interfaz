@@ -1,13 +1,26 @@
+########## Set .sh/.bat extension #########
+#Defines the extension of the executable depending on OS
+
+ext_exe <- ""
+
+if (Sys.info()['sysname'] == "Windows") {
+  ext_exe <- ".bat"
+} else {
+  ext_exe <- ".sh"
+}
 
 ########## Functions ##########
 
 download.cpt=function(dir_save,areas_l,n_areas_l,month,year){ 
   
   season=(month)+0:5
+  y=rep(year,length(season))
+  y_season=ifelse(season>12,as.numeric(y)+1,y) ####
   if(sum(season>12)>0)season[which(season>12)]=season[which(season>12)]-12
   if(sum(season<1)>0)season[which(season<1)]=season[which(season<1)]+12
   
-  season_for=season[c(1,4)]
+  
+  season_for=season[c(2,5)]
   areas=areas_l[season_for]
   n_areas=n_areas_l[season_for]
   
@@ -19,11 +32,11 @@ download.cpt=function(dir_save,areas_l,n_areas_l,month,year){
     t=c(1,4)
     if(n_areas[[i]]==4){
       
-      route=paste0("http://iridl.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.ENSEMBLE/.OCNF/.surface/.TMP/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.REALTIME_ENSEMBLE/.OCNF/.surface/.TMP/appendstream/350/maskge/S/%280000%201%20",month.abb[i_con],"%201982-",year,"%29/VALUES/L/",t[i],".5/",t[i]+2,".5/RANGE/%5BL%5D//keepgrids/average/M/1/24/RANGE/%5BM%5Daverage/X/",areas[[i]][1],"/",areas[[i]][2],"/flagrange/Y/",areas[[i]][3],"/",areas[[i]][4],"/flagrange/add/1/flaggt/mul/0/setmissing_value/%5BX/Y%5D%5BS/L/add/%5Dcptv10.tsv.gz")
+      route=paste0("http://iridl.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.ENSEMBLE/.OCNF/.surface/.TMP/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.REALTIME_ENSEMBLE/.OCNF/.surface/.TMP/appendstream/350/maskge/S/%280000%201%20",month.abb[i_con],"%201982-",y_season[t[i]],"%29/VALUES/L/",t[i],".5/",t[i]+2,".5/RANGE/%5BL%5D//keepgrids/average/M/1/24/RANGE/%5BM%5Daverage/X/",areas[[i]][1],"/",areas[[i]][2],"/flagrange/Y/",areas[[i]][3],"/",areas[[i]][4],"/flagrange/add/1/flaggt/mul/0/setmissing_value/%5BX/Y%5D%5BS/L/add/%5Dcptv10.tsv.gz")
       
     }else{
       
-      route=paste0("http://iridl.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.ENSEMBLE/.OCNF/.surface/.TMP/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.REALTIME_ENSEMBLE/.OCNF/.surface/.TMP/appendstream/350/maskge/S/%280000%201%20",month.abb[i_con],"%201982-",year,"%29/VALUES/L/",t[i],".5/",t[i]+2,".5/RANGE/%5BL%5D//keepgrids/average/M/1/24/RANGE/%5BM%5Daverage/X/",areas[[i]][1],"/",areas[[i]][2],"/flagrange/Y/",areas[[i]][3],"/",areas[[i]][4],"/flagrange/add/1/flaggt/X/",areas[[i]][5],"/",areas[[i]][6],"/flagrange/Y/",areas[[i]][7],"/",areas[[i]][8],"/flagrange/add/1/flaggt/add/mul/0/setmissing_value/%5BX/Y%5D%5BS/L/add/%5Dcptv10.tsv.gz")
+      route=paste0("http://iridl.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.ENSEMBLE/.OCNF/.surface/.TMP/SOURCES/.NOAA/.NCEP/.EMC/.CFSv2/.REALTIME_ENSEMBLE/.OCNF/.surface/.TMP/appendstream/350/maskge/S/%280000%201%20",month.abb[i_con],"%201982-",y_season[t[i]],"%29/VALUES/L/",t[i],".5/",t[i]+2,".5/RANGE/%5BL%5D//keepgrids/average/M/1/24/RANGE/%5BM%5Daverage/X/",areas[[i]][1],"/",areas[[i]][2],"/flagrange/Y/",areas[[i]][3],"/",areas[[i]][4],"/flagrange/add/1/flaggt/X/",areas[[i]][5],"/",areas[[i]][6],"/flagrange/Y/",areas[[i]][7],"/",areas[[i]][8],"/flagrange/add/1/flaggt/add/mul/0/setmissing_value/%5BX/Y%5D%5BS/L/add/%5Dcptv10.tsv.gz")
       
     }
     
@@ -322,7 +335,7 @@ run_cpt=function(x,y,run,output,confi,p){
   echo %path_prob%
   echo 0
   echo 0
-  ) | CPT_batch.exe"
+  ) | CPT.x"
   
   cmd<-gsub("%path_x%",x,cmd)
   cmd<-gsub("%path_y%",y,cmd)
@@ -354,8 +367,17 @@ run_cpt=function(x,y,run,output,confi,p){
   
   
   write(cmd,run)
-  #shell.exec(run)
-  system2(run)
+  #Check the operating system. If it's Linux, grant execute permissions, since it may not have them 
+  if (Sys.info()['sysname'] == 'Windows'){ 
+    system2(run)
+  }
+  else{
+    system(paste("chmod +x", run))
+    system(run)
+    
+  }
+  
+  
   
 }
 
@@ -462,7 +484,7 @@ run_all=function(name,set,n,year_r){
     afc_dir=paste0(dir,name,"/output/","2afc_",i,".txt")
     prob_dir=paste0(dir,name,"/output/","prob_",i,".txt")
     cc_dir=paste0(dir,name,"/output/","cc_",i,".txt")
-    run_dir=paste0(dir,name,"/run_",i,".bat")
+    run_dir=paste0(dir,name,"/run_",i, ext_exe)
     
     CPT=run_cpt(x_dir,y_dir,GI_dir,pear_dir,afc_dir,prob_dir,cc_dir,run_dir,modes_x,modes_y,modes_cca,tran,f,l)
     
@@ -532,7 +554,9 @@ path_dpto=dir_response
 main_dir=dirPrediccionInputs
 month=as.numeric(format(Sys.Date(),"%m"))
 year=format(Sys.Date(),"%Y")
-season=month+c(0,3)
+season=month+c(1,4)
+y_1=format(seq(Sys.Date(), by = "month", length = 2) ,"%Y")
+years=ifelse(season>12,as.numeric(y_1)+1,y_1)
 season[season>12]=season[season>12]-12
 path_months_l=lapply(paste0(main_dir,"run_CPT","/",list.files(path_dpto)),function(x)paste0(x,"/",month.abb[season]))
 path_months=unlist(path_months_l)
@@ -588,7 +612,7 @@ cat("\n Configuración CPT cargada \n")
 path_x <- lapply(list.files(dir_save,full.names = T),function(x)list.files(x,recursive = T,full.names = T))
 path_zone<- list.files(paste0(main_dir,"run_CPT"),full.names = T) %>% paste0(.,"/y_",list.files(path_dpto),".txt")
 path_output_pred <- lapply(path_months_l,function(x)paste0(x,"/output/0_"))
-path_run <- lapply(path_months_l,function(x)paste0(x,"/run_0.bat"))
+path_run <- lapply(path_months_l,function(x)paste0(x,"/run_0", ext_exe))
 first_run <- Map(function(x,y,z,k,p1,p2)Map(run_cpt,x,y,z,k,p1,p2),path_x,path_zone,path_run,path_output_pred,confi_l,p_data)
 
 cat("\n Primera corrida realizada")
@@ -608,7 +632,7 @@ cat("\n Archivos de la TSM construidos por deciles para CPT \n")
 
 path_x_2 <- lapply(list.files(dir_save,full.names = T),function(x)list.files(x,recursive = T,full.names = T,pattern = "0."))
 path_output_pred_2 <- lapply(path_months_l,function(x) lapply(x, function(x)paste0(x,"/output/",seq(0.1,0.9,0.1),"_"))) %>% lapply(.,unlist)
-path_run_2 <-lapply(path_months_l,function(x) lapply(x, function(x)paste0(x,"/run_",seq(0.1,0.9,0.1),".bat"))) %>% lapply(.,unlist)
+path_run_2 <-lapply(path_months_l,function(x) lapply(x, function(x)paste0(x,"/run_",seq(0.1,0.9,0.1),ext_exe))) %>% lapply(.,unlist)
 second_run <- Map(function(x,y,z,k,p1,p2)Map(run_cpt,x,y,z,k,p1,p2),path_x_2,path_zone,path_run_2,path_output_pred_2,confi_l,p_data)
 
 cat("\n Segunda corrida realizada\n")
@@ -622,7 +646,6 @@ cat("\n Mejor corrida seleccionada \n")
 
 path_resul=path_save
 o_metricas=Map(function(x,y)Map(metricas,x,y),path_months_l,best_decil)
-years=format(seq(Sys.Date(), by = "month", length = 2) ,"%Y")
 metricas_l=lapply(o_metricas,function(x)Map(function(x,y)cbind(year=y,x),x,years))
 metricas_all=Map(function(x,y)lapply(x,function(x,y){x$id=paste0(y,x$id);x},y),metricas_l,part_id)
 metricas_final=do.call("rbind",lapply(metricas_all,function(x)do.call("rbind",x)))

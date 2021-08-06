@@ -27,8 +27,14 @@ settins_reruns <- function(EMD, STTIME, IYEAR, EMYR, ISTN, dir_run, id_s){
   id_crp <- id_s$id_crp
   
   CNTR <- 'USAID'
+  if (Sys.info()['sysname'] == 'Windows'){ 
+    WTRDIR = paste0("'", gsub('/', BACKSLASH, dir_run), "'")
+  }
+  else{
+    WTRDIR = paste0("'", gsub('/', '/', dir_run), "'")
+    
+  }
   
-  WTRDIR = paste0("'", gsub('/', BACKSLASH, dir_run), "'")
   # 
   # if(STTIME > EMD){
   #   
