@@ -29,7 +29,7 @@ library(foreach)
 library(funr)
 library(lazyeval)
 library(lubridate)
-library(mailR)
+#library(mailR)
 library(parallel)
 library(pcaPP)
 library(R.utils)
@@ -92,8 +92,8 @@ runCrop <- function(crop, setups) {
           dir_soil <- paste0(dirModeloMaizInputs, longName, "/SOIL.SOL", sep = "", collapse = NULL)
           dir_run <- paste0(dirModeloMaizOutputs, longName, "/run/", sep = "", collapse = NULL)
           pathConstruct(paste0(dirModeloMaizOutputs, longName, sep = "", collapse = NULL))
-          out_dssat <- paste0(dirModeloMaizOutputs, longName, '/out_dssat', sep = "", collapse = NULL)
-          pathConstruct(out_dssat)
+          #out_dssat <- paste0(dirModeloMaizOutputs, longName, '/out_dssat', sep = "", collapse = NULL)
+          #pathConstruct(out_dssat)
           pathConstruct(dir_run)
           runModeloMaiz <- source(paste(dirModeloMaiz,'call_functions.R', sep = "", collapse = NULL), echo = F, local = T)
           unlink(file.path(paste0(dirModeloMaizOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
@@ -105,7 +105,7 @@ runCrop <- function(crop, setups) {
           name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
           dir_parameters <- paste0(dirModeloArrozInputs, longName, "/", sep = "", collapse = NULL)
           runModeloArroz <- source(paste(dirModeloArroz,'call_functions.R', sep = "", collapse = NULL), local = T, echo = F)
-          unlink(file.path(paste0(dirModeloArrozOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
+          #unlink(file.path(paste0(dirModeloArrozOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
         }   
 
         if (crop == 'frijol'){
@@ -132,10 +132,11 @@ runCrop <- function(crop, setups) {
 ## MAIN PATH
 start.time <- Sys.time()
 
-dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
-# dirCurrent <- "C:/usaid_procesos_interfaz/"
+#dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
+#dirCurrent <- "C:/usaid_procesos_interfaz/"
+dirCurrent <- "/forecast/usaid_procesos_interfaz/"
 
-  # forecastAppDll app
+  # forecastAppDll app - App de consola que se conecta a la base de datos
   forecastAppDll <- paste0("dotnet ", dirCurrent, "forecast_app/CIAT.DAPA.USAID.Forecast.ForecastApp.dll ", sep = "", collapse = NULL)
 
   ## Global variables Forecast module
@@ -216,13 +217,22 @@ pathConstruct(dirOutputs)                       # ./outputs/
 ## ************************************************************************************************
 
 ## Download initial parameters from interface database
-CMDdirInputs <- paste0(gsub("/","\\\\",dirPrediccionInputs), "\\\"")
-try(system(paste0(forecastAppDll,"-out -cpt -p \"",CMDdirInputs), intern = TRUE, ignore.stderr = TRUE))
-try(system(paste0(forecastAppDll,"-out -s \"prec\" -p \"",CMDdirInputs," -start 1981 -end 2013"), intern = TRUE, ignore.stderr = TRUE))
-try(system(paste0(forecastAppDll,"-out -wf -p \"",CMDdirInputs," -name \"daily\""), intern = TRUE, ignore.stderr = TRUE))
-try(system(paste0(forecastAppDll,"-out -co -p \"",CMDdirInputs," -name \"daily\""), intern = TRUE, ignore.stderr = TRUE))
-CMDdirInputs <- paste0(gsub("/","\\\\",dirInputs), "\\\"")
-try(system(paste0(forecastAppDll,"-out -fs -p \"",CMDdirInputs), intern = TRUE, ignore.stderr = TRUE))
+setwd(paste0(dirCurrent,"/forecast_app"))
+#CMDdirInputs <- paste0(gsub("/","\\\\",dirPrediccionInputs), "\\\"")
+CMDdirInputs = dirPrediccionInputs
+dotnet_cmd = c(paste0(forecastAppDll,"-out -cpt -p \"",CMDdirInputs,"\""),
+            paste0(forecastAppDll,"-out -s \"prec\" -p \"",CMDdirInputs,"\" -start 1982 -end 2013"),
+            paste0(forecastAppDll,"-out -wf -p \"",CMDdirInputs,"\" -name \"daily\""),
+            paste0(forecastAppDll,"-out -co -p \"",CMDdirInputs,"\" -name \"daily\""),
+            paste0(forecastAppDll,"-out -fs -p \"",CMDdirInputs,"\""))
+print(dotnet_cmd)
+try(system(dotnet_cmd[1], intern = TRUE, ignore.stderr = TRUE))
+
+try(system(dotnet_cmd[2], intern = TRUE, ignore.stderr = TRUE))
+try(system(dotnet_cmd[3], intern = TRUE, ignore.stderr = TRUE))
+try(system(dotnet_cmd[4], intern = TRUE, ignore.stderr = TRUE))
+#CMDdirInputs <- paste0(gsub("/","\\\\",dirInputs), "\\\"")
+try(system(dotnet_cmd[5], intern = TRUE, ignore.stderr = TRUE))
 
 # Prediction process
 runPrediccion <- source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL))
@@ -243,6 +253,7 @@ setups <- list.dirs(dirModeloFrijolInputs,full.names = T)
 runCrop('frijol', setups)
 
 # Upload proccess results to interface database
+setwd(paste0(dirCurrent,"/forecast_app"))
 CMDdirOutputs <- paste0(gsub("/","\\\\",dirOutputs), "\\\"")
 try(system(paste0(forecastAppDll,"-in -fs -cf 0.5 -p \"",CMDdirOutputs), intern = TRUE, ignore.stderr = TRUE))
 try(system(paste0(forecastAppDll,"-share"), intern = TRUE, ignore.stderr = TRUE))
@@ -250,20 +261,6 @@ try(system(paste0(forecastAppDll,"-share"), intern = TRUE, ignore.stderr = TRUE)
 # Delete cropmodels cache
 pathConstruct(dirCultivosOutputs)             # ./outputs/cultivos/
 
-# send mail
-try(system(paste0(forecastAppDll,"-out -usr -p \"",CMDdirOutputs), intern = TRUE, ignore.stderr = TRUE))
-
-sender <- "pronosticosaclimate@gmail.com"
-#recipients <- readLines(paste0(dirOutputs, "notify/notify.csv"))
-recipients <- c("edarague@gmail.com")
-email <- send.mail(from = sender,
-                   to = recipients,
-                   subject="Resultados pronosticos",
-                   body = "El proceso ha finalizado con 'exito",
-                   smtp = list(host.name = "aspmx.l.google.com", port = 25),
-                   authenticate = FALSE,
-                   send = FALSE)
-email$send() # execute to send email
 
 end.time <- Sys.time()
 time.taken <- end.time - start.time

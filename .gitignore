@@ -3,9 +3,10 @@ configs/
 
 *log.txt
 
-inputs/
-outputs/
-results/
+/inputs/
+/outputs/
 
 .Rhistory
 forecast_app/appsettings.json
+
+
