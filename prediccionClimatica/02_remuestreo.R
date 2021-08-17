@@ -639,16 +639,18 @@ download_data_nasa <- function(data, special_data){
   month_to <- special_data$month_to
   
   
-  json_file <- paste0("https://power.larc.nasa.gov/cgi-bin/v1/DataAccess.py?&request=execute&identifier=SinglePoint&parameters=ALLSKY_SFC_SW_DWN,T2M_MAX,T2M_MIN&startDate=19830101&endDate=",format(Sys.Date(),"%Y%m%d"),"&userCommunity=AG&tempAverage=DAILY&outputList=ASCII&lat=",lat,"&lon=",lon)
+  #json_file <- paste0("https://power.larc.nasa.gov/cgi-bin/v1/DataAccess.py?&request=execute&identifier=SinglePoint&parameters=ALLSKY_SFC_SW_DWN,T2M_MAX,T2M_MIN&startDate=19830101&endDate=",format(Sys.Date(),"%Y%m%d"),"&userCommunity=AG&tempAverage=DAILY&outputList=ASCII&lat=",lat,"&lon=",lon)
+  json_file <- paste0("https://power.larc.nasa.gov/api/temporal/daily/point?start=19830101&end=",format(Sys.Date(),"%Y%m%d"),"&latitude=",lat,"&longitude=",lon, "&community=ag&parameters=ALLSKY_SFC_SW_DWN,T2M_MAX,T2M_MIN&header=true&time-standard=lst")
+  print(json_file)
   # Esta mostrando un error que no conozco.
   json_data <- jsonlite::fromJSON(json_file)
   
   
   data_nasa <-  tibble(dates = seq(as.Date("1983/1/1"), as.Date(format(Sys.Date(),"%Y/%m/%d")), "days")) %>%  
     mutate(year_n = year(dates), month = month(dates), day = day(dates),
-           t_min = json_data$features$properties$parameter$T2M_MIN %>% unlist, 
-           t_max = json_data$features$properties$parameter$T2M_MAX %>% unlist, 
-           sol_rad = json_data$features$properties$parameter$ALLSKY_SFC_SW_DWN %>% unlist) %>% 
+           t_min = json_data$properties$parameter$T2M_MIN %>% unlist, 
+           t_max = json_data$properties$parameter$T2M_MAX %>% unlist, 
+           sol_rad = json_data$properties$parameter$ALLSKY_SFC_SW_DWN %>% unlist) %>% 
     na_if(-99)
   
   
