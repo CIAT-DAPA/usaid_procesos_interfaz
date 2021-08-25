@@ -646,12 +646,12 @@ download_data_nasa <- function(data, special_data){
   json_data <- jsonlite::fromJSON(json_file)
   
   
-  data_nasa <-  tibble(dates = seq(as.Date("1983/1/1"), as.Date(format(Sys.Date(),"%Y/%m/%d")), "days")) %>%  
-    mutate(year_n = year(dates), month = month(dates), day = day(dates),
-           t_min = json_data$properties$parameter$T2M_MIN %>% unlist, 
-           t_max = json_data$properties$parameter$T2M_MAX %>% unlist, 
-           sol_rad = json_data$properties$parameter$ALLSKY_SFC_SW_DWN %>% unlist) %>% 
-    na_if(-99)
+  data_nasa <- json_data$properties$parameter %>% 
+        map(bind_cols) %>%
+        map2(.y = names(.),
+             ~pivot_longer(.x, cols = everything(), values_to = .y, names_to = "date") %>%
+                 mutate(date = lubridate::ymd(date))) %>%
+        reduce(left_join, by = "date")
   
   
   
