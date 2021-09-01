@@ -1,6 +1,6 @@
 # =====================================================================
 # Cores to use when the crop models run in parallel. Change this parameter to use more cores.
-no_cores <- 2 #detectCores()-2
+no_cores <- Sys.getenv("N_CORES")
 # =====================================================================
 
 # =====================================================================

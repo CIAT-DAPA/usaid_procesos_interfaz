@@ -818,7 +818,7 @@ if (substring(Sys.Date(),6,7) == "01"){
 
 # =-=-=-= --------------------------------------------
 # =-=-=-=-= Change this parameter for run in parallel. 
-no_cores <- 2
+no_cores <- Sys.getenv("N_CORES")
 
 # =-=-= Here we download Chirps data (This download is only done once). 
 download_data_chirp(ini.date, end.date, year_to, path_Chirp, no_cores)
