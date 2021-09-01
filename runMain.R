@@ -251,12 +251,16 @@ runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse 
 
 ## Maize crop model process
 setups <- list.dirs(dirModeloMaizInputs,full.names = T)
+# Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
+setups <- if(no_cores > 1) setups[-1] else setups
 cl <- makeCluster(no_cores, type = "FORK")
 clusterMap(cl, runCrop, crop = 'maiz', setups = setups)
 stopCluster(cl)
 
 ## Rice crop model process
 setups <- list.dirs(dirModeloArrozInputs,full.names = T)
+# Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
+setups <- if(no_cores > 1) setups[-1] else setups
 cl <- makeCluster(no_cores, type = "FORK")
 clusterMap(cl, runCrop, crop = 'arroz', setups = setups)
 stopCluster(cl)
