@@ -651,7 +651,8 @@ download_data_nasa <- function(data, special_data){
         map2(.y = names(.),
              ~pivot_longer(.x, cols = everything(), values_to = .y, names_to = "date") %>%
                  mutate(date = lubridate::ymd(date))) %>%
-        reduce(left_join, by = "date")
+        reduce(left_join, by = "date") %>% setNames(c("date", "sol_rad", "t_max", "t_min")) %>%
+        mutate(year_n = year(date), month = month(date), day = day(date)) %>% dplyr::select(date, year_n, month, day, t_min, t_max, sol_rad)%>%na_if(-999)
   
   
   
@@ -817,7 +818,7 @@ if (substring(Sys.Date(),6,7) == "01"){
 
 # =-=-=-= --------------------------------------------
 # =-=-=-=-= Change this parameter for run in parallel. 
-no_cores <- 1
+no_cores <- 2
 
 # =-=-= Here we download Chirps data (This download is only done once). 
 download_data_chirp(ini.date, end.date, year_to, path_Chirp, no_cores)

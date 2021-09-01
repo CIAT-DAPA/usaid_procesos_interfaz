@@ -1,4 +1,9 @@
 # =====================================================================
+# Cores to use when the crop models run in parallel. Change this parameter to use more cores.
+no_cores <- 2 #detectCores()-2
+# =====================================================================
+
+# =====================================================================
 # For compatibility with Rscript.exe: 
 # =====================================================================
 if(length(.libPaths()) == 1){
@@ -26,6 +31,7 @@ if(length(.libPaths()) == 1){
 library(corpcor)
 library(data.table)
 library(foreach)
+library(doParallel)
 library(funr)
 library(lazyeval)
 library(lubridate)
@@ -105,7 +111,7 @@ runCrop <- function(crop, setups) {
           name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
           dir_parameters <- paste0(dirModeloArrozInputs, longName, "/", sep = "", collapse = NULL)
           runModeloArroz <- source(paste(dirModeloArroz,'call_functions.R', sep = "", collapse = NULL), local = T, echo = F)
-          #unlink(file.path(paste0(dirModeloArrozOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
+          unlink(file.path(paste0(dirModeloArrozOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
         }   
 
         if (crop == 'frijol'){
@@ -136,6 +142,7 @@ start.time <- Sys.time()
 #dirCurrent <- "C:/usaid_procesos_interfaz/"
 
 dirCurrent <- "/forecast/workdir/usaid_procesos_interfaz/"
+
 
   # forecastAppDll app - App de consola que se conecta a la base de datos
   forecastAppDll <- paste0("dotnet ", dirCurrent, "forecast_app/CIAT.DAPA.USAID.Forecast.ForecastApp.dll ", sep = "", collapse = NULL)
@@ -181,8 +188,10 @@ dirCurrent <- "/forecast/workdir/usaid_procesos_interfaz/"
     dirCultivosOutputs <-paste0(dirOutputs, "cultivos/", sep = "", collapse = NULL)
     # Output variables maize model module
     dirModeloMaizOutputs <-paste0(dirOutputs, "cultivos/maiz/", sep = "", collapse = NULL)
+    #dirModeloMaizOutputs <-paste0(dirOutputs, "cultivos/prueba/maiz/", sep = "", collapse = NULL)
     # Output variables rice model module
     dirModeloArrozOutputs <-paste0(dirOutputs, "cultivos/arroz/", sep = "", collapse = NULL)
+    #dirModeloArrozOutputs <-paste0(dirOutputs, "cultivos/prueba/arroz/", sep = "", collapse = NULL)
     # Output variables frijol model module
     dirModeloFrijolOutputs <-paste0(dirOutputs, "cultivos/frijol/", sep = "", collapse = NULL)
     
@@ -242,15 +251,19 @@ runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse 
 
 ## Maize crop model process
 setups <- list.dirs(dirModeloMaizInputs,full.names = T)
-runCrop('maiz', setups)
+cl <- makeCluster(no_cores, type = "FORK")
+clusterMap(cl, runCrop, crop = 'maiz', setups = setups)
+stopCluster(cl)
 
 ## Rice crop model process
 setups <- list.dirs(dirModeloArrozInputs,full.names = T)
-runCrop('arroz', setups)
+cl <- makeCluster(no_cores, type = "FORK")
+clusterMap(cl, runCrop, crop = 'arroz', setups = setups)
+stopCluster(cl)
 
 ## Frijol crop model process
-setups <- list.dirs(dirModeloFrijolInputs,full.names = T)
-runCrop('frijol', setups)
+#setups <- list.dirs(dirModeloFrijolInputs,full.names = T)
+#runCrop('frijol', setups)
 
 # Upload proccess results to interface database
 setwd(paste0(dirCurrent,"/forecast_app"))
