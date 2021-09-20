@@ -31,7 +31,6 @@ if(length(.libPaths()) == 1){
 library(corpcor)
 library(data.table)
 library(foreach)
-library(doParallel)
 library(funr)
 library(lazyeval)
 library(lubridate)
@@ -141,7 +140,8 @@ start.time <- Sys.time()
 #dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
 #dirCurrent <- "C:/usaid_procesos_interfaz/"
 
-dirCurrent <- "/forecast/workdir/usaid_procesos_interfaz/"
+dirCurrent <- "/forecast/usaid_procesos_interfaz/"
+#dirCurrent <- "/forecast/workdir/usaid_procesos_interfaz/"
 
 
   # forecastAppDll app - App de consola que se conecta a la base de datos
@@ -161,6 +161,7 @@ dirCurrent <- "/forecast/workdir/usaid_procesos_interfaz/"
   dir_dssat <- 'C:/DSSAT46/'  ## its necessary to have the parameters .CUL, .ECO, .SPE Updated for running (calibrated the crop (Frijol))
   dirModeloFrijol <- paste0(dirCurrent, "modeloFrijol/", sep = "", collapse = NULL)
 
+dirCurrent <- "/forecast/workdir/"
   # INPUTS variables
   dirInputs <- paste0(dirCurrent, "inputs/", sep = "", collapse = NULL)
     # Input variables Forecast module
@@ -262,7 +263,7 @@ setups <- list.dirs(dirModeloArrozInputs,full.names = T)
 # Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
 setups <- if(no_cores > 1) setups[-1] else setups
 cl <- makeCluster(no_cores, type = "FORK")
-clusterMap(cl, runCrop, crop = 'arroz', setups = setups)
+clusterMap(cl, runCrop, crop = "arroz", setups = setups)
 stopCluster(cl)
 
 ## Frijol crop model process
