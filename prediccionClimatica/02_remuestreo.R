@@ -815,7 +815,7 @@ if (substring(Sys.Date(),6,7) == "01"){
 
 # =-=-=-= --------------------------------------------
 # =-=-=-=-= Change this parameter for run in parallel. 
-no_cores <- 1
+no_cores <- as.numeric(Sys.getenv("N_CORES"))
 
 # =-=-= Here we download Chirps data (This download is only done once). 
 download_data_chirp(ini.date, end.date, year_to, path_Chirp, no_cores)
@@ -830,11 +830,7 @@ data_to_replace <- Initial_data %>%
   mutate(path = paste0(path_output, '/',id), year_to, month_to) %>%
   nest(-id, -path) %>% 
   right_join(., Initial_data) %>% 
-  dplyr::select(-CPT_prob) 
-
-
-data_to_replace <-data_to_replace %>% # filter(row_number() >30 )%>% # =-=-=-= revisar desde aqui. 
-  mutate(satellite_data = purrr::map2(.x = stations, .y = data, .f = Join_extract, path_output)) 
+  dplyr::select(-CPT_prob) %>% mutate(satellite_data = purrr::map2(.x = stations, .y = data, .f = Join_extract, path_output)) 
 
 # data_to_replace %>% dplyr::select(id, satellite_data) %>% filter(id == '5a200e4575c44204941f06db') %>% dplyr::select(-id)%>% unnest()
 
@@ -844,7 +840,7 @@ data_to_replace <- data_to_replace %>%
          complete_data = purrr::map2(.x = path, .y = satellite_data, .f = complete_data))
 
 
-walk2(.x = data_to_replace$complete_data, .y = data_to_replace$path, .f = function_replace)
+map2(.x = data_to_replace$complete_data, .y = data_to_replace$path, .f = function_replace)
 
 
 # This remove chirp files.

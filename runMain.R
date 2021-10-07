@@ -1,4 +1,9 @@
 # =====================================================================
+# Cores to use when the crop models run in parallel. Change this parameter to use more cores.
+no_cores <- as.numeric(Sys.getenv("N_CORES"))
+# =====================================================================
+
+# =====================================================================
 # For compatibility with Rscript.exe: 
 # =====================================================================
 if(length(.libPaths()) == 1){
@@ -29,7 +34,6 @@ library(foreach)
 library(funr)
 library(lazyeval)
 library(lubridate)
-library(mailR)
 library(parallel)
 library(pcaPP)
 library(R.utils)
@@ -41,6 +45,15 @@ library(stringr)
 library(tidyverse)
 library(trend)
 library(rjson)
+
+library(curl)
+library(askpass)
+library(jsonlite)
+library(mime)
+library(openssl)
+library(R6)
+library(sys)
+library(httr)
 
 # Function erase and make folder
 pathConstruct <- function(dirConstruct)
@@ -63,9 +76,9 @@ runCrop <- function(crop, setups) {
   
   # crop <-'maiz'
   # crop <- 'arroz'
-  # i = 2 
+  # i = 2
   
-  for(i in 2:length(setups)){
+  mclapply(2:length(setups), function(i) {
     tryCatch(
       {
     
@@ -124,7 +137,7 @@ runCrop <- function(crop, setups) {
         }
       }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
     
-        }
+        }, mc.cores = no_cores, mc.preschedule = F)
 
   }
   
@@ -229,16 +242,23 @@ try(system(paste0(forecastAppDll,"-out -fs -p \"",CMDdirInputs), intern = TRUE, 
 # Prediction process
 runPrediccion <- source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL))
 
+# Import raster to Geoserver process
+runRasterImport <- source(paste(dirForecast,'raster_files_upload.R', sep = "", collapse = NULL))
+
 # Resampling process
 runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse = NULL))
 
 ## Maize crop model process
 setups <- list.dirs(dirModeloMaizInputs,full.names = T)
-runCrop('maiz', setups)
+# Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
+setups <- if(no_cores > 1) setups[-1] else setups
+runCrop("maiz", setups)
 
 ## Rice crop model process
 setups <- list.dirs(dirModeloArrozInputs,full.names = T)
-runCrop('arroz', setups)
+# Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
+setups <- if(no_cores > 1) setups[-1] else setups
+runCrop("arroz", setups)
 
 ## Frijol crop model process
 setups <- list.dirs(dirModeloFrijolInputs,full.names = T)
