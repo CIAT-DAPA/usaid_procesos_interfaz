@@ -183,6 +183,7 @@ execute_oryza <- function(dir_run){
     system2(paste0(' ORYZA3.exe'), ignore.stdout = T, show.output.on.console = F)
   }
   else{
+    print(paste(dir_run, "oryza ."))
     system('oryza .')
 
   }

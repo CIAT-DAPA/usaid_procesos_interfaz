@@ -1,6 +1,6 @@
 # =====================================================================
 # Cores to use when the crop models run in parallel. Change this parameter to use more cores.
-no_cores <- Sys.getenv("N_CORES")
+no_cores <- as.numeric(Sys.getenv("N_CORES"))
 # =====================================================================
 
 # =====================================================================
@@ -34,7 +34,6 @@ library(foreach)
 library(funr)
 library(lazyeval)
 library(lubridate)
-#library(mailR)
 library(parallel)
 library(pcaPP)
 library(R.utils)
@@ -46,6 +45,15 @@ library(stringr)
 library(tidyverse)
 library(trend)
 library(rjson)
+
+library(curl)
+library(askpass)
+library(jsonlite)
+library(mime)
+library(openssl)
+library(R6)
+library(sys)
+library(httr)
 
 # Function erase and make folder
 pathConstruct <- function(dirConstruct)
@@ -68,9 +76,9 @@ runCrop <- function(crop, setups) {
   
   # crop <-'maiz'
   # crop <- 'arroz'
-  # i = 2 
+  # i = 2
   
-  for(i in 2:length(setups)){
+  mclapply(2:length(setups), function(i) {
     tryCatch(
       {
     
@@ -110,7 +118,7 @@ runCrop <- function(crop, setups) {
           name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
           dir_parameters <- paste0(dirModeloArrozInputs, longName, "/", sep = "", collapse = NULL)
           runModeloArroz <- source(paste(dirModeloArroz,'call_functions.R', sep = "", collapse = NULL), local = T, echo = F)
-          unlink(file.path(paste0(dirModeloArrozOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
+          #unlink(file.path(paste0(dirModeloArrozOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
         }   
 
         if (crop == 'frijol'){
@@ -129,7 +137,7 @@ runCrop <- function(crop, setups) {
         }
       }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
     
-        }
+        }, mc.cores = no_cores, mc.preschedule = F)
 
   }
   
@@ -139,10 +147,7 @@ start.time <- Sys.time()
 
 #dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
 #dirCurrent <- "C:/usaid_procesos_interfaz/"
-
-dirCurrent <- "/forecast/usaid_procesos_interfaz/"
-#dirCurrent <- "/forecast/workdir/usaid_procesos_interfaz/"
-
+dirCurrent <- "/forecast/workdir/usaid_procesos_interfaz/"
 
   # forecastAppDll app - App de consola que se conecta a la base de datos
   forecastAppDll <- paste0("dotnet ", dirCurrent, "forecast_app/CIAT.DAPA.USAID.Forecast.ForecastApp.dll ", sep = "", collapse = NULL)
@@ -161,7 +166,6 @@ dirCurrent <- "/forecast/usaid_procesos_interfaz/"
   dir_dssat <- 'C:/DSSAT46/'  ## its necessary to have the parameters .CUL, .ECO, .SPE Updated for running (calibrated the crop (Frijol))
   dirModeloFrijol <- paste0(dirCurrent, "modeloFrijol/", sep = "", collapse = NULL)
 
-dirCurrent <- "/forecast/workdir/"
   # INPUTS variables
   dirInputs <- paste0(dirCurrent, "inputs/", sep = "", collapse = NULL)
     # Input variables Forecast module
@@ -189,10 +193,8 @@ dirCurrent <- "/forecast/workdir/"
     dirCultivosOutputs <-paste0(dirOutputs, "cultivos/", sep = "", collapse = NULL)
     # Output variables maize model module
     dirModeloMaizOutputs <-paste0(dirOutputs, "cultivos/maiz/", sep = "", collapse = NULL)
-    #dirModeloMaizOutputs <-paste0(dirOutputs, "cultivos/prueba/maiz/", sep = "", collapse = NULL)
     # Output variables rice model module
     dirModeloArrozOutputs <-paste0(dirOutputs, "cultivos/arroz/", sep = "", collapse = NULL)
-    #dirModeloArrozOutputs <-paste0(dirOutputs, "cultivos/prueba/arroz/", sep = "", collapse = NULL)
     # Output variables frijol model module
     dirModeloFrijolOutputs <-paste0(dirOutputs, "cultivos/frijol/", sep = "", collapse = NULL)
     
@@ -229,23 +231,19 @@ pathConstruct(dirOutputs)                       # ./outputs/
 
 ## Download initial parameters from interface database
 setwd(paste0(dirCurrent,"/forecast_app"))
-#CMDdirInputs <- paste0(gsub("/","\\\\",dirPrediccionInputs), "\\\"")
-CMDdirInputs = dirPrediccionInputs
-dotnet_cmd = c(paste0(forecastAppDll,"-out -cpt -p \"",CMDdirInputs,"\""),
-            paste0(forecastAppDll,"-out -s \"prec\" -p \"",CMDdirInputs,"\" -start 1982 -end 2013"),
-            paste0(forecastAppDll,"-out -wf -p \"",CMDdirInputs,"\" -name \"daily\""),
-            paste0(forecastAppDll,"-out -co -p \"",CMDdirInputs,"\" -name \"daily\""),
-            paste0(forecastAppDll,"-out -fs -p \"",CMDdirInputs,"\""))
-print(dotnet_cmd)
-try(system(dotnet_cmd[1], intern = TRUE, ignore.stderr = TRUE))
-try(system(dotnet_cmd[2], intern = TRUE, ignore.stderr = TRUE))
-try(system(dotnet_cmd[3], intern = TRUE, ignore.stderr = TRUE))
-try(system(dotnet_cmd[4], intern = TRUE, ignore.stderr = TRUE))
-#CMDdirInputs <- paste0(gsub("/","\\\\",dirInputs), "\\\"")
-try(system(dotnet_cmd[5], intern = TRUE, ignore.stderr = TRUE))
+CMDdirInputs <- paste0(gsub("/","\\\\",dirPrediccionInputs), "\\\"")
+try(system(paste0(forecastAppDll,"-out -cpt -p \"",CMDdirInputs), intern = TRUE, ignore.stderr = TRUE))
+try(system(paste0(forecastAppDll,"-out -s \"prec\" -p \"",CMDdirInputs," -start 1982 -end 2013"), intern = TRUE, ignore.stderr = TRUE))
+try(system(paste0(forecastAppDll,"-out -wf -p \"",CMDdirInputs," -name \"daily\""), intern = TRUE, ignore.stderr = TRUE))
+try(system(paste0(forecastAppDll,"-out -co -p \"",CMDdirInputs," -name \"daily\""), intern = TRUE, ignore.stderr = TRUE))
+CMDdirInputs <- paste0(gsub("/","\\\\",dirInputs), "\\\"")
+try(system(paste0(forecastAppDll,"-out -fs -p \"",CMDdirInputs), intern = TRUE, ignore.stderr = TRUE))
 
 # Prediction process
 runPrediccion <- source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL))
+
+# Import raster to Geoserver process
+runRasterImport <- source(paste(dirForecast,'raster_files_upload.R', sep = "", collapse = NULL))
 
 # Resampling process
 runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse = NULL))
@@ -254,21 +252,17 @@ runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse 
 setups <- list.dirs(dirModeloMaizInputs,full.names = T)
 # Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
 setups <- if(no_cores > 1) setups[-1] else setups
-cl <- makeCluster(no_cores, type = "FORK")
-clusterMap(cl, runCrop, crop = 'maiz', setups = setups)
-stopCluster(cl)
+runCrop("maiz", setups)
 
 ## Rice crop model process
 setups <- list.dirs(dirModeloArrozInputs,full.names = T)
 # Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
 setups <- if(no_cores > 1) setups[-1] else setups
-cl <- makeCluster(no_cores, type = "FORK")
-clusterMap(cl, runCrop, crop = "arroz", setups = setups)
-stopCluster(cl)
+runCrop("arroz", setups)
 
 ## Frijol crop model process
-#setups <- list.dirs(dirModeloFrijolInputs,full.names = T)
-#runCrop('frijol', setups)
+setups <- list.dirs(dirModeloFrijolInputs,full.names = T)
+runCrop('frijol', setups)
 
 # Upload proccess results to interface database
 setwd(paste0(dirCurrent,"/forecast_app"))
@@ -279,6 +273,20 @@ try(system(paste0(forecastAppDll,"-share"), intern = TRUE, ignore.stderr = TRUE)
 # Delete cropmodels cache
 pathConstruct(dirCultivosOutputs)             # ./outputs/cultivos/
 
+# send mail
+try(system(paste0(forecastAppDll,"-out -usr -p \"",CMDdirOutputs), intern = TRUE, ignore.stderr = TRUE))
+
+sender <- "pronosticosaclimate@gmail.com"
+#recipients <- readLines(paste0(dirOutputs, "notify/notify.csv"))
+recipients <- c("edarague@gmail.com")
+email <- send.mail(from = sender,
+                   to = recipients,
+                   subject="Resultados pronosticos",
+                   body = "El proceso ha finalizado con 'exito",
+                   smtp = list(host.name = "aspmx.l.google.com", port = 25),
+                   authenticate = FALSE,
+                   send = FALSE)
+email$send() # execute to send email
 
 end.time <- Sys.time()
 time.taken <- end.time - start.time

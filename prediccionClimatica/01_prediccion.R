@@ -535,7 +535,7 @@ save_areas=function(ras,cor,dec,name,ext){
   values(cor_raster)=cor
   selec_raster=cor_raster>=quantile(cor,as.numeric(dec),na.rm=T)
   raster_final=crop(selec_raster,extent(ext))
-  writeRaster(raster_final,name,format="ascii")
+  writeRaster(raster_final,name,format="GTiff")
   return(print("área seleccionada guardada en formato Raster"))
   
 }
@@ -677,11 +677,10 @@ cat("\n Pronosticos probabilisticos almacenados \n")
 
 dir.create(paste0(main_dir,"/raster"))
 o_empty_3=lapply(paste0(main_dir,"raster","/",list.files(path_dpto)),dir.create)
-path_raster=lapply(paste0(main_dir,"raster","/",list.files(path_dpto)),function(x)paste0(x,"/",years,"_",month.abb[season],".asc"))
+path_raster=lapply(paste0(main_dir,"raster","/",list.files(path_dpto)),function(x)paste0(x,"/", sample(1:999, 1),years,"_",month.abb[season],".tif"))
 O_empty_8=Map(function(x,y,z,k,l)Map(save_areas,x,y,z,k,l),data_x,cor_tsm,best_decil,path_raster,extent_season)
 
 cat("\n áreas almacenadas en formato Raster \n")
-
 
 end.time <- Sys.time()
 time.taken <- end.time - start.time
