@@ -405,9 +405,9 @@ resampling <-  function(data, CPT_prob, year_forecast){
 #  5. Function to save all files from resampling.  
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # ***** INPUT 
-# * station: name of the station.
-# * Esc_all: resampling function output.
-# * path_out: path for save files.
+# * station: name of the station. -- >ID
+# * Esc_all: resampling function output. 100 escenaries
+# * path_out: path for save files. 
 
 # *****  OUTPUT
 # This function save resampling files, summary files and escenario_a (years resampled). 
@@ -416,11 +416,10 @@ resampling <-  function(data, CPT_prob, year_forecast){
 function_to_save <- function(station, Esc_all, path_out){
   
   # Daily sceneries (generated with resampling).
-  Escenaries <- Esc_all %>%
-    dplyr::select(data) %>% 
-    unnest
   
-  Esc_C <- Escenaries %>% 
+  Esc_C <- Esc_all %>%
+    dplyr::select(data) %>% 
+    unnest(cols = data) %>% 
     mutate(data = purrr::map(.x = data, .f = function(x){mutate(x, day = as.integer(day), month = as.integer(month), year = as.integer(year))}))%>% 
     mutate(file_name = paste0(path_out, '/',station, '/', station, '_escenario_', id, '.csv')) 
   
@@ -445,7 +444,7 @@ function_to_save <- function(station, Esc_all, path_out){
   walk2(.x = Esc_C$data, .y = Esc_C$file_name, 
         .f = function(.x, .y){ readr::write_csv(x = .x, path = .y)})
   
-  # Save scenarios type. 
+  # Save scenarios type. MIn and maximun
   Type_Esc <- Esc_all %>% 
     dplyr::select(Esc_Type) %>% 
     unnest %>% 
@@ -560,14 +559,18 @@ Initial_data <- tibble(id = list.files(Path_stations) %>% str_replace('.csv', ''
 # year of resampling (in this case the current year).
 year_forecast <- Sys.Date() %>% year()
 
+
+
 # =-=-=-=-=-=-=-= we are doing resampling for all data sets 
 Resam <- Initial_data %>% 
   mutate(Escenaries = purrr::map2(.x = stations, .y = CPT_prob, 
                                   .f = resampling, year_forecast = year_forecast))
 
+
+
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-= 
 # # Save all files from resampling. 
-purrr::map2(.x = Resam$id, .y = Resam$Escenaries, .f = function_to_save, path_out = path_output)
+#purrr::map2(.x = Resam$id, .y = Resam$Escenaries, .f = function_to_save, path_out = path_output)
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -600,8 +603,12 @@ purrr::map2(.x = Resam$id, .y = Resam$Escenaries, .f = function_to_save, path_ou
 # path_Chirp: path to save raster files. 
 # no_cores = # cores to use in parallel. 
 
-# OUTPUT: save chirp raster layers. 
-download_data_chirp <- function(ini.date, end.date, year_to, path_Chirp, no_cores){
+
+#######Disable from here . up2021
+
+
+## OUTPUT: save chirp raster layers. 
+#download_data_chirp <- function(ini.date, end.date, year_to, path_Chirp, no_cores){
   
   fechas <- seq(as.Date(ini.date), as.Date(end.date), "days") %>% str_replace_all("-", ".")
   #urls <- paste("ftp://ftp.chg.ucsb.edu/pub/org/chg/products/CHIRP/daily/",year_to,"/chirp.",fechas,".tif",sep="")
@@ -616,126 +623,126 @@ download_data_chirp <- function(ini.date, end.date, year_to, path_Chirp, no_core
   
   stopCluster(cl)
   return("CHIRPS data downloaded!") }
-
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# 1. Function to extract NASA POWER daily data 
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# This function 
-# INPUT
-# * data : station data. 
-# * special_data: this contains (lat: latitude of the station / site of interest, 
-# lon: longitud of the station / site of interest, year_to: actual year, month_to: actual month).
-
-# OUTPUT: NASA series. 
-# It could be possible NASA API in some case sometimes don't work. 
-download_data_nasa <- function(data, special_data){
-  # data <- Cerete
-  # special_data <- tibble(lat, lon, year_to, month_to)
-  options(timeout = 120)
-  lat <- special_data$lat
-  lon <- special_data$lon
-  year_to <- special_data$year_to
-  month_to <- special_data$month_to
-  
-  
-  #json_file <- paste0("https://power.larc.nasa.gov/cgi-bin/v1/DataAccess.py?&request=execute&identifier=SinglePoint&parameters=ALLSKY_SFC_SW_DWN,T2M_MAX,T2M_MIN&startDate=19830101&endDate=",format(Sys.Date(),"%Y%m%d"),"&userCommunity=AG&tempAverage=DAILY&outputList=ASCII&lat=",lat,"&lon=",lon)
-  json_file <- paste0("https://power.larc.nasa.gov/api/temporal/daily/point?start=19830101&end=",format(Sys.Date(),"%Y%m%d"),"&latitude=",lat,"&longitude=",lon, "&community=ag&parameters=ALLSKY_SFC_SW_DWN,T2M_MAX,T2M_MIN&header=true&time-standard=lst")
-  print(json_file)
-  # Esta mostrando un error que no conozco.
-  json_data <- jsonlite::fromJSON(json_file)
-  
-  
-  data_nasa <- json_data$properties$parameter %>% 
-        map(bind_cols) %>%
-        map2(.y = names(.),
-             ~pivot_longer(.x, cols = everything(), values_to = .y, names_to = "date") %>%
-                 mutate(date = lubridate::ymd(date))) %>%
-        reduce(left_join, by = "date") %>% setNames(c("date", "sol_rad", "t_max", "t_min")) %>%
-        mutate(year_n = year(date), month = month(date), day = day(date)) %>% dplyr::select(date, year_n, month, day, t_min, t_max, sol_rad)%>%na_if(-999)
-  
-  
-  
-  # Join observed and NASA data. 
-  all_data <- right_join( data %>% 
-                            filter(year %in% unique(data_nasa$year_n) ) %>% dplyr::select(-prec),
-                          data_nasa %>% 
-                            filter(year_n %in% unique(data$year)) %>% 
-                            purrr::set_names(c('dates', 'year', 'month', 'day', 't_min_N', 't_max_N', 'sol_rad_N')))
-  
-  
-  # Bias between observed data and NASA data. 
-  mean_less <- all_data %>% 
-    summarise(mean_max = mean(t_max-t_max_N, na.rm = TRUE), 
-              mean_min = mean(t_min - t_min_N, na.rm = TRUE),
-              mean_sol_rad = mean(sol_rad - sol_rad_N, na.rm = TRUE))
-  
-  # data full with mean NASA. 
-  nasa_data_dw <- data_nasa %>% 
-    filter(year_n == year_to, month == month_to) %>% 
-    mutate(t_max = t_max + mean_less$mean_max, 
-           t_min = t_min + mean_less$mean_min,
-           sol_rad = sol_rad + mean_less$mean_sol_rad) %>% 
-    mutate(t_max = ifelse(is.na(t_max), mean(t_max, na.rm = TRUE), t_max),
-           t_min = ifelse(is.na(t_min), mean(t_min, na.rm = TRUE), t_min),
-           sol_rad = ifelse(is.na(sol_rad), mean(sol_rad, na.rm = TRUE), sol_rad))
-  
-  return(nasa_data_dw)}
-
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# 2. Function to extract Chirp data and Join with NASA POWER DATA. 
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# ***** INPUT 
-# * data:  path for save files.
-# * special_data: data from Chirp and nasa for each station.
-# *****  OUTPUT
-#  This return resampling scenaries join with satellite data. 
 #
-# ***** Note: This function save files.
-Join_extract <- function(data, special_data, path_Chirp){
-  # Download Nasa data. 
-  # data<-data_to_replace$stations[[33]]
-  # special_data<-data_to_replace$data[[33]]
-  
-  nasa_data <- download_data_nasa(data, special_data)
-  
-  # Extract Chirp data 
-  # monthly <- ifelse(month_to < 10, glue::glue('0{month_to}'), month_to)
-  monthly <- ifelse(month_to < 10, paste0('0', month_to), month_to)
-  
-  chirp_data <- list.files(path_Chirp, full.names = TRUE, pattern = '.tif') %>%
-    stack %>% 
-    raster::extract(., data.frame(x= special_data$lon,y= special_data$lat)) %>% # arreglar aqui 
-    t() %>% 
-    as_tibble() %>% 
-    set_names('prec') %>% 
-    mutate(names = list.files(path_Chirp,  pattern = '.tif') %>% str_replace('.tif', ''), # arreglar aqui 
-           day = names %>% str_sub(. , nchar(names) - 1, nchar(names)) %>% as.numeric()) %>% 
-    dplyr::select(-names)
-  
-  # Join Chirp and NASA data. 
-  final_month <- right_join(chirp_data, nasa_data) %>% 
-    dplyr::select(day, month, year_n, prec, t_max, t_min, sol_rad) %>% 
-    rename(year = year_n)
-  
-  return(final_month)}
-
-# data<-data_to_replace$stations[[1]]
-# special_data<-data_to_replace$data[[1]]
-
-# Join_extract(data = data_to_replace$stations[[33]], special_data = data_to_replace$data[[33]], path_Chirp = path_Chirp)
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# 3. Function to add 
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# ***** INPUT 
-# * path:  path for save files.
-# * Satellite: data from Chirp and nasa for each station.
-# *****  OUTPUT
-#  This return resampling scenaries join with satellite data. 
 #
-# ***** Note: This function save files.
-complete_data <-  function(path, Satellite){
+## =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+## 1. Function to extract NASA POWER daily data 
+## =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+## This function 
+## INPUT
+## * data : daily - station data. 
+## * special_data: this contains (lat: latitude of the station / site of interest, 
+## lon: longitud of the station / site of interest, year_to: actual year, month_to: actual month).
+#
+## OUTPUT: NASA series. 
+## It could be possible NASA API in some case sometimes don't work. 
+#download_data_nasa <- function(data, special_data){
+#  # data <- Cerete
+#  # special_data <- tibble(lat, lon, year_to, month_to)
+#  options(timeout = 120)
+#  lat <- special_data$lat
+#  lon <- special_data$lon
+#  year_to <- special_data$year_to
+#  month_to <- special_data$month_to
+#  
+#  
+#  #json_file <- paste0("https://power.larc.nasa.gov/cgi-bin/v1/DataAccess.py?&request=execute&identifier=SinglePoint&parameters=ALLSKY_SFC_SW_DWN,T2M_MAX,T2M_MIN&startDate=19830101&endDate=",format(Sys.Date(),"%Y%m%d"),"&userCommunity=AG&tempAverage=DAILY&outputList=ASCII&lat=",lat,"&lon=",lon)
+#  json_file <- paste0("https://power.larc.nasa.gov/api/temporal/daily/point?start=20200101&end=",format(Sys.Date(),"%Y%m%d"),"&latitude=",lat,"&longitude=",lon, "&community=ag&parameters=ALLSKY_SFC_SW_DWN,T2M_MAX,T2M_MIN&header=true&time-standard=lst")
+#  print(json_file)
+#  # Esta mostrando un error que no conozco.
+#  json_data <- jsonlite::fromJSON(json_file)
+#  
+#  
+#  data_nasa <- json_data$properties$parameter %>% 
+#        map(bind_cols) %>%
+#        map2(.y = names(.),
+#             ~pivot_longer(.x, cols = everything(), values_to = .y, names_to = "date") %>%
+#                 mutate(date = lubridate::ymd(date))) %>%
+#        reduce(left_join, by = "date") %>% setNames(c("date", "sol_rad", "t_max", "t_min")) %>%
+#        mutate(year_n = year(date), month = month(date), day = day(date)) %>% dplyr::select(date, year_n, month, day, t_min, t_max, sol_rad)%>%na_if(-999)
+#  
+#  
+#  
+#  # Join observed and NASA data. 
+#  all_data <- right_join( data %>% 
+#                            filter(year %in% unique(data_nasa$year_n) ) %>% dplyr::select(-prec),
+#                          data_nasa %>% 
+#                            filter(year_n %in% unique(data$year)) %>% 
+#                            purrr::set_names(c('dates', 'year', 'month', 'day', 't_min_N', 't_max_N', 'sol_rad_N')))
+#  
+#  
+#  # Bias between observed data and NASA data. 
+#  mean_less <- all_data %>% 
+#    summarise(mean_max = mean(t_max-t_max_N, na.rm = TRUE), 
+#              mean_min = mean(t_min - t_min_N, na.rm = TRUE),
+#              mean_sol_rad = mean(sol_rad - sol_rad_N, na.rm = TRUE))
+#  
+#  # data full with mean NASA. 
+#  nasa_data_dw <- data_nasa %>% 
+#    filter(year_n == year_to, month == month_to) %>% 
+#    mutate(t_max = t_max + mean_less$mean_max, 
+#           t_min = t_min + mean_less$mean_min,
+#           sol_rad = sol_rad + mean_less$mean_sol_rad) %>% 
+#    mutate(t_max = ifelse(is.na(t_max), mean(t_max, na.rm = TRUE), t_max),
+#           t_min = ifelse(is.na(t_min), mean(t_min, na.rm = TRUE), t_min),
+#           sol_rad = ifelse(is.na(sol_rad), mean(sol_rad, na.rm = TRUE), sol_rad))
+#  
+#  return(nasa_data_dw)}
+#
+#
+## =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+## 2. Function to extract Chirp data and Join with NASA POWER DATA. 
+## =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+## ***** INPUT 
+## * data:  path for save files.
+## * special_data: data from Chirp and nasa for each station.
+## *****  OUTPUT
+##  This return resampling scenaries join with satellite data. 
+##
+## ***** Note: This function save files.
+#Join_extract <- function(data, special_data, path_Chirp){
+#  # Download Nasa data. 
+#  # data<-data_to_replace$stations[[33]]
+#  # special_data<-data_to_replace$data[[33]]
+#  
+#  nasa_data <- download_data_nasa(data, special_data)
+#  
+#  # Extract Chirp data 
+#  # monthly <- ifelse(month_to < 10, glue::glue('0{month_to}'), month_to)
+#  monthly <- ifelse(month_to < 10, paste0('0', month_to), month_to)
+#  
+#  chirp_data <- list.files(path_Chirp, full.names = TRUE, pattern = '.tif') %>%
+#    stack %>% 
+#    raster::extract(., data.frame(x= special_data$lon,y= special_data$lat)) %>% # arreglar aqui 
+#    t() %>% 
+#    as_tibble() %>% 
+#    set_names('prec') %>% 
+#    mutate(names = list.files(path_Chirp,  pattern = '.tif') %>% str_replace('.tif', ''), # arreglar aqui 
+#           day = names %>% str_sub(. , nchar(names) - 1, nchar(names)) %>% as.numeric()) %>% 
+#    dplyr::select(-names)
+#  
+#  # Join Chirp and NASA data. 
+#  final_month <- right_join(chirp_data, nasa_data) %>% 
+#    dplyr::select(day, month, year_n, prec, t_max, t_min, sol_rad) %>% 
+#    rename(year = year_n)
+#  
+#  return(final_month)}
+#
+## data<-data_to_replace$stations[[1]]
+## special_data<-data_to_replace$data[[1]]
+#
+## Join_extract(data = data_to_replace$stations[[33]], special_data = data_to_replace$data[[33]], path_Chirp = path_Chirp)
+## =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+## 3. Function to add 
+## =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+## ***** INPUT 
+## * path:  path for save files.
+## * Satellite: data from Chirp and nasa for each station.
+## *****  OUTPUT
+##  This return resampling scenaries join with satellite data. 
+##
+## ***** Note: This function save files.
+#complete_data <-  function(path, Satellite){
   
   complete_data <- list.files(path = path, pattern = 'escenario_', full.names = TRUE) %>% 
     as_tibble() %>% 
@@ -744,18 +751,18 @@ complete_data <-  function(path, Satellite){
     dplyr::select(complete_data)
   
   return(complete_data)}
-
-
-##############################################################################
-# ***** INPUT 
-# * data: resampling data after used complete_data function.
-# * path:  path for save files.
-# *****  OUTPUT
-# This function save replace resampling files, summary files and escenario_a (years resampled). 
-
-# ***** Note: This function save files.
-
-function_replace <- function(data, path){
+#
+#
+###############################################################################
+## ***** INPUT 
+## * data: resampling data after used complete_data function.
+## * path:  path for save files.
+## *****  OUTPUT
+## This function save replace resampling files, summary files and escenario_a (years resampled). 
+#
+## ***** Note: This function save files.
+#
+#function_replace <- function(data, path){
   
   replace_data <- data %>% 
     mutate(id = 1:100, 
@@ -767,20 +774,20 @@ function_replace <- function(data, path){
   walk2(.x = replace_data$complete_data, .y = replace_data$path,
         .f = function(.x, .y){ write_csv(x = .x, path = .y)})
 }
-
-# .------..------..------..------..------..------..------.
-# |R.--. ||E.--. ||S.--. ||U.--. ||L.--. ||T.--. ||S.--. |
-# | :(): || (\/) || :/\: || (\/) || :/\: || :/\: || :/\: |
-# | ()() || :\/: || :\/: || :\/: || (__) || (__) || :\/: |
-# | '--'R|| '--'E|| '--'S|| '--'U|| '--'L|| '--'T|| '--'S|
-# `------'`------'`------'`------'`------'`------'`------'
-
-#---------------------------------------------------------------------------------#
-#---------------- From this point we download data. ------------------------------#
-#---------------------------------------------------------------------------------#
-
-# For now don't modify.
-numberOfDays <- function(date) {
+#
+## .------..------..------..------..------..------..------.
+## |R.--. ||E.--. ||S.--. ||U.--. ||L.--. ||T.--. ||S.--. |
+## | :(): || (\/) || :/\: || (\/) || :/\: || :/\: || :/\: |
+## | ()() || :\/: || :\/: || :\/: || (__) || (__) || :\/: |
+## | '--'R|| '--'E|| '--'S|| '--'U|| '--'L|| '--'T|| '--'S|
+## `------'`------'`------'`------'`------'`------'`------'
+#
+##---------------------------------------------------------------------------------#
+##---------------- From this point we download data. ------------------------------#
+##---------------------------------------------------------------------------------#
+#
+## For now don't modify.
+#numberOfDays <- function(date) {
   m <- format(date, format="%m")
   
   while (format(date, format="%m") == m) {
@@ -789,62 +796,71 @@ numberOfDays <- function(date) {
   
   return(as.integer(format(date - 1, format="%d")))
 }
-
-# I guess this is for fix december...
-if (substring(Sys.Date(),6,7) == "01"){
-  substr_month <- "12"
-  substr_year <- year(Sys.Date()) - 1
-} else {
-  substr_month <- str_pad(as.numeric(substring(Sys.Date(),6,7))-1,2,pad = "0")
-  substr_year <- year(Sys.Date())
-}
-
-# -----------
-ini.date <- paste0(substr_year,"-",substr_month,"-01") %>%  as.Date()
-# -----------
-end.date <- paste0(substr_year,"-",substr_month,"-",numberOfDays(ini.date)) %>% as.Date()
-# -----------
-path_Chirp <- path_output
-# -----------
-
-# year_to...
-if (substring(Sys.Date(),6,7) == "01"){
-  year_to = as.numeric(format(Sys.Date(),"%Y"))-1
-  month_to = 12
-} else {
-  year_to = format(Sys.Date(),"%Y")
-  month_to = as.numeric(format(Sys.Date(),"%m"))-1
-}
-
-# =-=-=-= --------------------------------------------
-# =-=-=-=-= Change this parameter for run in parallel. 
-no_cores <- as.numeric(Sys.getenv("N_CORES"))
-
-# =-=-= Here we download Chirps data (This download is only done once). 
-download_data_chirp(ini.date, end.date, year_to, path_Chirp, no_cores)
-
-
-# =-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=...
-### Here the whole file is made. 
-data_to_replace <- Initial_data %>% 
-  dplyr::select(id, coord) %>% 
-  unnest(coord) %>% 
-  # mutate(path = glue::glue('{path_output}{id}'), year_to, month_to) %>%
-  mutate(path = paste0(path_output, '/',id), year_to, month_to) %>%
-  nest(-id, -path) %>% 
-  right_join(., Initial_data) %>% 
-  dplyr::select(-CPT_prob) %>% mutate(satellite_data = purrr::map2(.x = stations, .y = data, .f = Join_extract, path_output)) 
-
-# data_to_replace %>% dplyr::select(id, satellite_data) %>% filter(id == '5a200e4575c44204941f06db') %>% dplyr::select(-id)%>% unnest()
-
-data_to_replace <- data_to_replace %>%
-  dplyr::select(-stations, -data) %>% 
-  mutate(path = paste0(path_output, '/',id), 
-         complete_data = purrr::map2(.x = path, .y = satellite_data, .f = complete_data))
-
-
-map2(.x = data_to_replace$complete_data, .y = data_to_replace$path, .f = function_replace)
-
-
-# This remove chirp files.
-file.remove(list.files(path_output,pattern = ".tif",full.names=T))
+#
+## I guess this is for fix december...
+#if (substring(Sys.Date(),6,7) == "01"){
+#  substr_month <- "12"
+#  substr_year <- year(Sys.Date()) - 1
+#} else {
+#  substr_month <- str_pad(as.numeric(substring(Sys.Date(),6,7))-1,2,pad = "0")
+#  substr_year <- year(Sys.Date())
+#}
+#
+#
+#
+#
+## -----------
+#ini.date <- paste0(substr_year,"-",substr_month,"-01") %>%  as.Date()
+## -----------
+#end.date <- paste0(substr_year,"-",substr_month,"-",numberOfDays(ini.date)) %>% as.Date()
+## -----------
+#path_Chirp <- path_output
+## -----------
+#
+## year_to...
+#if (substring(Sys.Date(),6,7) == "01"){
+#  year_to = as.numeric(format(Sys.Date(),"%Y"))-1
+#  month_to = 12
+#} else {
+#  year_to = format(Sys.Date(),"%Y")
+#  month_to = as.numeric(format(Sys.Date(),"%m"))-1
+#}
+#
+## =-=-=-= --------------------------------------------
+## =-=-=-=-= Change this parameter for run in parallel. 
+#no_cores <- as.numeric(Sys.getenv("N_CORES"))
+#
+## =-=-= Here we download Chirps data (This download is only done once). 
+#download_data_chirp(ini.date, end.date, year_to, path_Chirp, no_cores)
+#
+#
+## =-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=...
+#### Here the whole file is made. 
+#data_to_replace <- Initial_data %>% 
+#  dplyr::select(id, coord) %>% 
+#  unnest(coord) %>% 
+#  # mutate(path = glue::glue('{path_output}{id}'), year_to, month_to) %>%
+#  mutate(path = paste0(path_output, '/',id), year_to, month_to) %>%
+#  nest(special_data = c(lat, lon, year_to, month_to)) %>% 
+#  right_join(., Initial_data) %>% 
+#  dplyr::select(-CPT_prob) 
+#
+#
+#
+#
+#data_to_replace1 %>% mutate(satellite_data = purrr::map2(.x = stations, .y = data, .f = Join_extract, path_output)) 
+#
+## data_to_replace %>% dplyr::select(id, satellite_data) %>% filter(id == '5a200e4575c44204941f06db') %>% dplyr::select(-id)%>% unnest()
+#
+#data_to_replace <- data_to_replace %>%
+#  dplyr::select(-stations, -data) %>% 
+#  mutate(path = paste0(path_output, '/',id), 
+#         complete_data = purrr::map2(.x = path, .y = satellite_data, .f = complete_data))
+#
+#
+#map2(.x = data_to_replace$complete_data, .y = data_to_replace$path, .f = function_replace)
+#
+#
+## This remove chirp files.
+#file.remove(list.files(path_output,pattern = ".tif",full.names=T))
+#
