@@ -154,8 +154,8 @@ start.time <- Sys.time()
 
 #dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
 #dirCurrent <- "C:/usaid_procesos_interfaz/"
-dirCurrent <- "/forecast/workdir/usaid_procesos_interfaz/"
-#dirCurrent <- "/forecast/usaid_procesos_interfaz/"
+#dirCurrent <- "/forecast/workdir/usaid_procesos_interfaz/"
+dirCurrent <- "/forecast/usaid_procesos_interfaz/"
 
   # forecastAppDll app - App de consola que se conecta a la base de datos
   forecastAppDll <- paste0("dotnet ", dirCurrent, "forecast_app/CIAT.DAPA.USAID.Forecast.ForecastApp.dll ", sep = "", collapse = NULL)
