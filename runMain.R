@@ -252,7 +252,7 @@ try(system(paste0(forecastAppDll,"-out -fs -p \"",CMDdirInputs), intern = TRUE, 
 runPrediccion <- source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL))
 
 # Import raster to Geoserver process
-runRasterImport <- source(paste(dirForecast,'raster_files_upload.R', sep = "", collapse = NULL))
+#runRasterImport <- source(paste(dirForecast,'raster_files_upload.R', sep = "", collapse = NULL))
 
 # Resampling process
 runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse = NULL))
