@@ -677,7 +677,10 @@ cat("\n Pronosticos probabilisticos almacenados \n")
 
 dir.create(paste0(main_dir,"/raster"))
 o_empty_3=lapply(paste0(main_dir,"raster","/",list.files(path_dpto)),dir.create)
-path_raster=lapply(paste0(main_dir,"raster","/",list.files(path_dpto)),function(x)paste0(x,"/", sample(1:999, 1),years,"_",month.abb[season],".tif"))
+path_raster <- map2(
+.x = paste0(main_dir,"raster","/",list.files(path_dpto)),
+.y = list.files(path_dpto),
+~paste0(.x, "/", .y, "_", years, "_",month.abb[season],".tif"))
 O_empty_8=Map(function(x,y,z,k,l)Map(save_areas,x,y,z,k,l),data_x,cor_tsm,best_decil,path_raster,extent_season)
 
 cat("\n áreas almacenadas en formato Raster \n")

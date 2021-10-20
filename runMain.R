@@ -45,6 +45,7 @@ library(stringr)
 library(tidyverse)
 library(trend)
 library(rjson)
+library(furrr)
 
 library(curl)
 library(askpass)
@@ -109,7 +110,7 @@ runCrop <- function(crop, setups) {
           #pathConstruct(out_dssat)
           pathConstruct(dir_run)
           runModeloMaiz <- source(paste(dirModeloMaiz,'call_functions.R', sep = "", collapse = NULL), echo = F, local = T)
-          unlink(file.path(paste0(dirModeloMaizOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
+          #unlink(file.path(paste0(dirModeloMaizOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
         }
     
         if (crop == 'arroz'){
@@ -139,8 +140,14 @@ runCrop <- function(crop, setups) {
     
         }, mc.cores = no_cores, mc.preschedule = F)
 
-  }
-  
+}
+
+
+make_error_report <- function(scenaries, failed_reasons){
+  file_report <- cbind(failed_scenaries, failed_reasons)
+  write_csv(file_report, paste0(dir_output_maiz, "scenaries_error_report.csv"))
+
+}
 
 ## MAIN PATH
 start.time <- Sys.time()
@@ -148,6 +155,7 @@ start.time <- Sys.time()
 #dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
 #dirCurrent <- "C:/usaid_procesos_interfaz/"
 dirCurrent <- "/forecast/workdir/usaid_procesos_interfaz/"
+#dirCurrent <- "/forecast/usaid_procesos_interfaz/"
 
   # forecastAppDll app - App de consola que se conecta a la base de datos
   forecastAppDll <- paste0("dotnet ", dirCurrent, "forecast_app/CIAT.DAPA.USAID.Forecast.ForecastApp.dll ", sep = "", collapse = NULL)
@@ -166,6 +174,7 @@ dirCurrent <- "/forecast/workdir/usaid_procesos_interfaz/"
   dir_dssat <- 'C:/DSSAT46/'  ## its necessary to have the parameters .CUL, .ECO, .SPE Updated for running (calibrated the crop (Frijol))
   dirModeloFrijol <- paste0(dirCurrent, "modeloFrijol/", sep = "", collapse = NULL)
 
+  dirCurrent <- "/forecast/workdir/"
   # INPUTS variables
   dirInputs <- paste0(dirCurrent, "inputs/", sep = "", collapse = NULL)
     # Input variables Forecast module
@@ -248,11 +257,15 @@ runRasterImport <- source(paste(dirForecast,'raster_files_upload.R', sep = "", c
 # Resampling process
 runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse = NULL))
 
+# Dowloading and final joining data process
+runJoinFinalData <- source(paste(dirForecast,'03_join_wth_final.R', sep = "", collapse = NULL))
+
 ## Maize crop model process
 setups <- list.dirs(dirModeloMaizInputs,full.names = T)
 # Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
 setups <- if(no_cores > 1) setups[-1] else setups
-runCrop("maiz", setups)
+runCrop("maiz", setups[49:53])
+make_error_report(failed_sceneries, failed_reasons)
 
 ## Rice crop model process
 setups <- list.dirs(dirModeloArrozInputs,full.names = T)

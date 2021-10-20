@@ -610,19 +610,19 @@ Resam <- Initial_data %>%
 ## OUTPUT: save chirp raster layers. 
 #download_data_chirp <- function(ini.date, end.date, year_to, path_Chirp, no_cores){
   
-  fechas <- seq(as.Date(ini.date), as.Date(end.date), "days") %>% str_replace_all("-", ".")
-  #urls <- paste("ftp://ftp.chg.ucsb.edu/pub/org/chg/products/CHIRP/daily/",year_to,"/chirp.",fechas,".tif",sep="")
-  urls <- paste("https://data.chc.ucsb.edu/products/CHIRP/daily/",year_to,"/chirp.",fechas,".tif",sep="")
-  file <- basename(urls)
-  path_Chirp_all <- paste0(path_Chirp,"/",file)
+#  fechas <- seq(as.Date(ini.date), as.Date(end.date), "days") %>% str_replace_all("-", ".")
+#  #urls <- paste("ftp://ftp.chg.ucsb.edu/pub/org/chg/products/CHIRP/daily/",year_to,"/chirp.",fechas,".tif",sep="")
+#  urls <- paste("https://data.chc.ucsb.edu/products/CHIRP/daily/",year_to,"/chirp.",fechas,".tif",sep="")
+#  file <- basename(urls)
+#  path_Chirp_all <- paste0(path_Chirp,"/",file)
   
-  if(.Platform$OS.type == "unix") {cl <- makeCluster(no_cores, type = "FORK")}
-  cl <- makeCluster(no_cores)
-  clusterMap(cl, download.file, url = urls, destfile = path_Chirp_all, mode = "wb", 
-             .scheduling = 'dynamic')
+#  if(.Platform$OS.type == "unix") {cl <- makeCluster(no_cores, type = "FORK")}
+#  cl <- makeCluster(no_cores)
+#  clusterMap(cl, download.file, url = urls, destfile = path_Chirp_all, mode = "wb", 
+#             .scheduling = 'dynamic')
   
-  stopCluster(cl)
-  return("CHIRPS data downloaded!") }
+#  stopCluster(cl)
+#  return("CHIRPS data downloaded!") }
 #
 #
 ## =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -744,13 +744,13 @@ Resam <- Initial_data %>%
 ## ***** Note: This function save files.
 #complete_data <-  function(path, Satellite){
   
-  complete_data <- list.files(path = path, pattern = 'escenario_', full.names = TRUE) %>% 
-    as_tibble() %>% 
-    mutate(data = purrr::map(.x = value, .f = read_csv), 
-           complete_data = purrr::map(.x = data, .f = function(.x){bind_rows(Satellite, .x) })) %>% 
-    dplyr::select(complete_data)
+#  complete_data <- list.files(path = path, pattern = 'escenario_', full.names = TRUE) %>% 
+#    as_tibble() %>% 
+#    mutate(data = purrr::map(.x = value, .f = read_csv), 
+#           complete_data = purrr::map(.x = data, .f = function(.x){bind_rows(Satellite, .x) })) %>% 
+#    dplyr::select(complete_data)
   
-  return(complete_data)}
+#  return(complete_data)}
 #
 #
 ###############################################################################
@@ -764,16 +764,16 @@ Resam <- Initial_data %>%
 #
 #function_replace <- function(data, path){
   
-  replace_data <- data %>% 
-    mutate(id = 1:100, 
-           path = list.files(path, pattern = '.csv', full.names = TRUE)) 
+#  replace_data <- data %>% 
+#    mutate(id = 1:100, 
+#           path = list.files(path, pattern = '.csv', full.names = TRUE)) 
   
   # file.remove(list.files(path, pattern = '.csv', full.names = TRUE))
   
   # Save new daily sceneries.
-  walk2(.x = replace_data$complete_data, .y = replace_data$path,
-        .f = function(.x, .y){ write_csv(x = .x, path = .y)})
-}
+#  walk2(.x = replace_data$complete_data, .y = replace_data$path,
+#        .f = function(.x, .y){ write_csv(x = .x, path = .y)})
+#}
 #
 ## .------..------..------..------..------..------..------.
 ## |R.--. ||E.--. ||S.--. ||U.--. ||L.--. ||T.--. ||S.--. |
@@ -788,14 +788,14 @@ Resam <- Initial_data %>%
 #
 ## For now don't modify.
 #numberOfDays <- function(date) {
-  m <- format(date, format="%m")
+#  m <- format(date, format="%m")
   
-  while (format(date, format="%m") == m) {
-    date <- date + 1
-  }
+#  while (format(date, format="%m") == m) {
+#    date <- date + 1
+#  }
   
-  return(as.integer(format(date - 1, format="%d")))
-}
+#  return(as.integer(format(date - 1, format="%d")))
+#}
 #
 ## I guess this is for fix december...
 #if (substring(Sys.Date(),6,7) == "01"){

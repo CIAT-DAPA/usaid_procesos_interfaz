@@ -428,7 +428,7 @@ frame_list <- function(data){
 
 
 load_coordinates <- function(dir_parameters){
-  
+  print(paste0("dir_parameters: ", dir_parameters))
   require(readr)
   coordenadas <- read_csv(paste0(dir_parameters,'coordenadas.csv')) %>%
     as.data.frame() %>%
@@ -441,6 +441,7 @@ temp_wther <- function(temp_dir){
 
   # temp_dir <- id_run
   temp_dir <- paste0(temp_dir, 'tmp', "/")
+  print(paste0("temp_dir: ", temp_dir))
 
   if(dir.exists(temp_dir)){
 

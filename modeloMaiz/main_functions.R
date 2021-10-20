@@ -437,7 +437,23 @@ run_mult_dssat <- function(dir_dssat, dir_soil, dir_run, dir_parameters, name_fi
   
   
   out_summary <- bind_rows(out_summary)
-  write_csv(out_summary, paste0(dir_output_maiz, name_csv))
+
+  failed_scenaries <- c()
+  failed_reasons <- c()
+  tryCatch({write_csv(out_summary, paste0(dir_output_maiz, name_csv))
+
+  },
+  warning = function(warn){
+    print(paste("Warning at making csv output file: ", warn))
+  },
+  error = function(err){
+    print(paste("Error at making csv output file: ", err))
+    print(paste("Adding file to error report..."))
+
+    failed_sceneries <- c(failed_sceneries, name_csv)
+    failed_reasons <- c(failed_reasons, err)
+
+  })
   return(out_summary)
 }
 

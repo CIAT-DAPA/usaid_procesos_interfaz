@@ -11,7 +11,7 @@ run_oryza <- function(dir_run, dir_files, region, cultivar, climate_scenarios, i
   ## make id run #  crea directorio a carpeta con archivos de simulacion para oryza : Control, EXP, RER, etc
 
   id_run <- make_id_run(paste0(dir_run, 'Temporal/'), region, cultivar, select_day)
-  print(id_run)
+  print(paste0("id_run: ", id_run))
   temp <- temp_wther(id_run)
 
   # make_mult_weather(climate_scenarios, id_run, filename, long, lat, elev) # crea archivos clima para oryza en carpeta ./tmp
