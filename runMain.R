@@ -264,7 +264,7 @@ runJoinFinalData <- source(paste(dirForecast,'03_join_wth_final.R', sep = "", co
 setups <- list.dirs(dirModeloMaizInputs,full.names = T)
 # Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
 setups <- if(no_cores > 1) setups[-1] else setups
-runCrop("maiz", setups[49:53])
+runCrop("maiz", setups)
 make_error_report(failed_sceneries, failed_reasons)
 
 ## Rice crop model process
