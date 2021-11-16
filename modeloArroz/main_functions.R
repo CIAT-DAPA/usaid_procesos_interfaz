@@ -176,11 +176,12 @@ add_exp_cul <- function(dir_files, region, dir_run){
 }
 
 #Executes the model depending on OS
-execute_oryza <- function(dir_run){
-
+execute_oryza <- function(dir_run, dir_oryza){
+  exe_oryza <- paste0(dir_oryza, 'ORYZA3.EXE')
+  file.copy(exe_oryza, dir_run)
   setwd(dir_run)
   if (Sys.info()['sysname'] == 'Windows'){ 
-    system2(paste0(' ORYZA3.exe'), ignore.stdout = T, show.output.on.console = F)
+    system('ORYZA3.exe')
   }
   else{
     print(paste(dir_run, "oryza ."))

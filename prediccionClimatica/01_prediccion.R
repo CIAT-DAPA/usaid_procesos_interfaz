@@ -1,12 +1,14 @@
 ########## Set .sh/.bat extension #########
 #Defines the extension of the executable depending on OS
-
+cpt_version <- ""
 ext_exe <- ""
 
 if (Sys.info()['sysname'] == "Windows") {
   ext_exe <- ".bat"
+  cpt_version <- "CPT_batch"
 } else {
   ext_exe <- ".sh"
+  cpt_version <- "CPT.x"
 }
 
 ########## Functions ##########
@@ -45,24 +47,31 @@ download.cpt=function(dir_save,areas_l,n_areas_l,month,year){
     # ----------------------------------------------------------------------------------------------------------------------
     #  > prueba que el archivo gzip no esta dannado, sino intenta descargarlo de nuevo
     # ----------------------------------------------------------------------------------------------------------------------
-    gunzipTestVal = 1
-    
-    while (gunzipTestVal == 1) {
       
-      download.file(route, filePath) ### Realiza la descarga 
+    if (Sys.info()['sysname'] == "Windows") {
+      download.file(route, filePath, method = "curl")
+      #Agregar método de chequeo para ver si el zip está corrupto (Windows)
+    } else {
       
-      gunzipTestStr <- try(system(paste("gunzip -t ", filePath, sep = "", collapse = NULL), intern = TRUE, ignore.stderr = FALSE))
-      cat (gunzipTestStr)
+      gunzipTestVal = 1
       
-      gunzipTestVal = length(grep('invalid compressed data--crc', gunzipTestStr))
-      
-      if (gunzipTestVal == 1){
-        cat ('... archivo gzip corrupto, se reitentara descargar\n\n\n')
-      }else {
-        cat(filePath)
-        cat ('\n... archivo descargado correctamente\n\n\n')
+      while (gunzipTestVal == 1) {
+        
+        download.file(route, filePath) ### Realiza la descarga 
+        gunzipTestStr <- try(system(paste("gunzip -t ", filePath, sep = "", collapse = NULL), intern = TRUE, ignore.stderr = FALSE))
+        cat (gunzipTestStr)
+        
+        gunzipTestVal = length(grep('invalid compressed data--crc', gunzipTestStr))
+        
+        if (gunzipTestVal == 1){
+          cat ('... archivo gzip corrupto, se reitentara descargar\n\n\n')
+        }else {
+          cat(filePath)
+          cat ('\n... archivo descargado correctamente\n\n\n')
+        }
       }
     }
+    
     # ----------------------------------------------------------------------------------------------------------------------    
     
   }
@@ -257,7 +266,7 @@ run_cpt=function(x,y,run,output,confi,p){
   hit_s=paste0(output,"hit_s.txt")
   hit_ss=paste0(output,"hit_ss.txt")
   
-  cmd <- "@echo off
+  cmd <- paste("@echo off
   (
   echo 611
   echo 545
@@ -335,7 +344,7 @@ run_cpt=function(x,y,run,output,confi,p){
   echo %path_prob%
   echo 0
   echo 0
-  ) | CPT.x"
+  ) |",cpt_version)
   
   cmd<-gsub("%path_x%",x,cmd)
   cmd<-gsub("%path_y%",y,cmd)

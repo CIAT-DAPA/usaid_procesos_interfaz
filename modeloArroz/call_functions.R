@@ -18,7 +18,7 @@ dir_out_csv <- dirModeloArrozOutputs
 #dir_climate <- "D:/CIAT/USAID/Oryza/Escenarios_update_csv/"
 #dir_run <- 'D:/CIAT/USAID/Oryza/usaid_forecast_rice/'
 filename <- 'USAID'  ## name files
-dir_oryza <- 'C:/Program Files (x86)/ORYZA(v3)/'  ## necesario crear una carpeta en esta direccion con los cultivares y archivos experimentales para cada region
+dir_oryza <- 'C:/ORYZA/'  ## necesario crear una carpeta en esta direccion con los cultivares y archivos experimentales para cada region
 #region <- "Salda?a"
 # cultivar <- 'D:/CIAT/USAID/Oryza/usaid_forecast_rice/Experimental_Cultivar_Files/'
 

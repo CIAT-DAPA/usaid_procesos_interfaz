@@ -165,17 +165,9 @@ files_dssat <- function(dir_dssat, dir_run, dir_soil, dir_parameters){
 # dir_run <- 'D:/CIAT/USAID/DSSAT/multiple_runs/R-DSSATv4.6/Proof_run/'
 # execute_dssat(dir_run)
 execute_dssat <- function(dir_run){
-  print(paste('ruta: ', dir_run))
-  setwd(dir_run)
-  if (Sys.info()['sysname'] == 'Windows'){ 
-    system(paste0("DSCSM046.EXE " , "MZCER046"," B ", "DSSBatch.v46"), ignore.stdout = T, show.output.on.console = F)
-  }
-  else{
-    system(paste0('dssat ',  dir_run,' B DSSBatch.v47'))
-    
-
-  }
   
+  setwd(dir_run)
+  system(paste0("DSCSM046.EXE " , "MZCER046"," B ", "DSSBatch.v46"), ignore.stdout = T, show.output.on.console = F)
   setwd('..')
   
 }
@@ -201,12 +193,12 @@ make_id_run <- function(dir_run, region, cultivar, day){
 }
 
 
-make_mult_wth <- function(scenarios, dir_run, filename, lat, long){
+make_mult_wth <- function(scenarios, dir_run, filename){
   
   # scenarios <- climate_scenarios
   num_scenarios <- 1:length(scenarios)
   filename <- paste0(filename, sprintf("%.3d", num_scenarios))
-  mapply(make_wth, scenarios, dir_run, lat, long, filename) 
+  mapply(make_wth, scenarios, dir_run, -99, -99, filename) 
 
 }
 
@@ -437,23 +429,7 @@ run_mult_dssat <- function(dir_dssat, dir_soil, dir_run, dir_parameters, name_fi
   
   
   out_summary <- bind_rows(out_summary)
-
-  failed_scenaries <- c()
-  failed_reasons <- c()
-  tryCatch({write_csv(out_summary, paste0(dir_output_maiz, name_csv))
-
-  },
-  warning = function(warn){
-    print(paste("Warning at making csv output file: ", warn))
-  },
-  error = function(err){
-    print(paste("Error at making csv output file: ", err))
-    print(paste("Adding file to error report..."))
-
-    failed_sceneries <- c(failed_sceneries, name_csv)
-    failed_reasons <- c(failed_reasons, err)
-
-  })
+  write_csv(out_summary, paste0(dir_output_maiz, name_csv))
   return(out_summary)
 }
 
@@ -479,16 +455,6 @@ read_planting <- function(dir_parameters){
   
 }
 
-#Load coordinates from csv 
-load_coordinates <- function(dir_parameters){
-  
-  require(readr)
-  coordenadas <- read_csv(paste0(dir_parameters,'coordenadas.csv')) %>%
-    as.data.frame() %>%
-    frame_list()
-  
-}
-
 
 ### data frame to list 
 
@@ -497,6 +463,4 @@ frame_list <- function(data){
   setNames(split(data[,2], seq(nrow(data))), data[,1])
   
 }
-
-
 

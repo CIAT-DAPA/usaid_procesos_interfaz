@@ -42,7 +42,7 @@ run_oryza <- function(dir_run, dir_files, region, cultivar, climate_scenarios, i
   make_reruns(parameters_reruns, id_run) # escribe archivo control
   # files_oryza(dir_oryza, id_run)
 
-  execute_oryza(id_run)  #main_function L186 
+  execute_oryza(id_run, dir_oryza)  #main_function L186 
 
   ## copy climate oryza to current directory
 

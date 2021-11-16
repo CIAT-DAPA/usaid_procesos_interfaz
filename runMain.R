@@ -1,6 +1,6 @@
 # =====================================================================
 # Cores to use when the crop models run in parallel. Change this parameter to use more cores.
-no_cores <- as.numeric(Sys.getenv("N_CORES"))
+no_cores <- 7#as.numeric(Sys.getenv("N_CORES"))
 # =====================================================================
 
 # =====================================================================
@@ -46,6 +46,7 @@ library(tidyverse)
 library(trend)
 library(rjson)
 library(furrr)
+library(future.apply)
 
 library(curl)
 library(askpass)
@@ -73,29 +74,29 @@ pathConstruct <- function(dirConstruct)
   }
 
 # Function run model process (maize and rice)
-runCrop <- function(crop, setups) {
+runCropV1 <- function(crop, setups) {
   
   # crop <-'maiz'
   # crop <- 'arroz'
-  # i = 2
+  # i = 2 
   
-  mclapply(2:length(setups), function(i) {
+  for(i in 2:length(setups)){
     tryCatch(
       {
-    
+        
         setSplit <- strsplit(setups[i],"/")
         
         longName <- setSplit[[1]][length(setSplit[[1]])]
         longNameSplit <- strsplit(longName,"_")
-    
+        
         hashStation <- longNameSplit[[1]][1]
         hashCrop <- longNameSplit[[1]][2]
         hashSoil <- longNameSplit[[1]][3]
         hashDayRange <- longNameSplit[[1]][4]
-    
+        
         dir_climate <- paste0(path_output, "/", hashStation, sep = "", collapse = NULL)
         region <- hashStation
-    
+        
         cat(paste("\n\n Crop:", crop, ", station: \"", hashStation, "\", species: \"", hashCrop, "\", soil: \"", hashSoil, "\", rango of days: \"", hashDayRange, "\"\n", sep = ""))
         
         if (crop == 'maiz'){
@@ -110,18 +111,18 @@ runCrop <- function(crop, setups) {
           #pathConstruct(out_dssat)
           pathConstruct(dir_run)
           runModeloMaiz <- source(paste(dirModeloMaiz,'call_functions.R', sep = "", collapse = NULL), echo = F, local = T)
-          #unlink(file.path(paste0(dirModeloMaizOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
+          unlink(file.path(paste0(dirModeloMaizOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
         }
-    
+        
         if (crop == 'arroz'){
           dir_run <- paste0(dirModeloArrozOutputs, longName, "/run/", sep = "", collapse = NULL)
           cultivar<- hashCrop
           name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
           dir_parameters <- paste0(dirModeloArrozInputs, longName, "/", sep = "", collapse = NULL)
           runModeloArroz <- source(paste(dirModeloArroz,'call_functions.R', sep = "", collapse = NULL), local = T, echo = F)
-          #unlink(file.path(paste0(dirModeloArrozOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
+          unlink(file.path(paste0(dirModeloArrozOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
         }   
-
+        
         if (crop == 'frijol'){
           print(longName)
           name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
@@ -138,8 +139,148 @@ runCrop <- function(crop, setups) {
         }
       }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
     
-        }, mc.cores = no_cores, mc.preschedule = F)
+  }
+  
+}
 
+# Function run model process (maize and rice)
+runCropV2 <- function(crop, setups) {
+  
+  # crop <-'maiz'
+  # crop <- 'arroz'
+  # i = 2
+  
+  #Paralellization on Windows and Linux
+  if (Sys.info()['sysname'] == "Windows") {
+    plan(multisession, workers = no_cores)
+    future_lapply(2:length(setups), function(i) {
+      tryCatch(
+        {
+          
+          setSplit <- strsplit(setups[i],"/")
+          
+          longName <- setSplit[[1]][length(setSplit[[1]])]
+          longNameSplit <- strsplit(longName,"_")
+          
+          hashStation <- longNameSplit[[1]][1]
+          hashCrop <- longNameSplit[[1]][2]
+          hashSoil <- longNameSplit[[1]][3]
+          hashDayRange <- longNameSplit[[1]][4]
+          
+          dir_climate <- paste0(path_output, "/", hashStation, sep = "", collapse = NULL)
+          region <- hashStation
+          
+          cat(paste("\n\n Crop:", crop, ", station: \"", hashStation, "\", species: \"", hashCrop, "\", soil: \"", hashSoil, "\", rango of days: \"", hashDayRange, "\"\n", sep = ""))
+          
+          if (crop == 'maiz'){
+            print(longName)
+            name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
+            print(name_csv)
+            dir_parameters <- paste0(dirModeloMaizInputs, longName, "/", sep = "", collapse = NULL)
+            dir_soil <- paste0(dirModeloMaizInputs, longName, "/SOIL.SOL", sep = "", collapse = NULL)
+            dir_run <- paste0(dirModeloMaizOutputs, longName, "/run/", sep = "", collapse = NULL)
+            pathConstruct(paste0(dirModeloMaizOutputs, longName, sep = "", collapse = NULL))
+            #out_dssat <- paste0(dirModeloMaizOutputs, longName, '/out_dssat', sep = "", collapse = NULL)
+            #pathConstruct(out_dssat)
+            pathConstruct(dir_run)
+            runModeloMaiz <- source(paste(dirModeloMaiz,'call_functions.R', sep = "", collapse = NULL), echo = F, local = T)
+            unlink(file.path(paste0(dirModeloMaizOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
+          }
+          
+          if (crop == 'arroz'){
+            dir_run <- paste0(dirModeloArrozOutputs, longName, "/run/", sep = "", collapse = NULL)
+            cultivar<- hashCrop
+            name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
+            dir_parameters <- paste0(dirModeloArrozInputs, longName, "/", sep = "", collapse = NULL)
+            runModeloArroz <- source(paste(dirModeloArroz,'call_functions.R', sep = "", collapse = NULL), local = T, echo = F)
+            unlink(file.path(paste0(dirModeloArrozOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
+            unlink(file.path(paste0(dirModeloArrozOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
+          }   
+          
+          if (crop == 'frijol'){
+            print(longName)
+            name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
+            print(name_csv)
+            dir_parameters <- paste0(dirModeloFrijolInputs, longName, "/", sep = "", collapse = NULL)
+            dir_soil <- paste0(dirModeloFrijolInputs, longName, "/SOIL.SOL", sep = "", collapse = NULL)
+            dir_run <- paste0(dirModeloFrijolOutputs, longName, "/run/", sep = "", collapse = NULL)
+            pathConstruct(paste0(dirModeloFrijolOutputs, longName, sep = "", collapse = NULL))
+            out_dssat <- paste0(dirModeloFrijolOutputs, longName, '/out_dssat', sep = "", collapse = NULL)
+            pathConstruct(out_dssat)
+            pathConstruct(dir_run)
+            runModeloFrijol <- source(paste(dirModeloFrijol,'call_functions.R', sep = "", collapse = NULL), echo = F, local = T)
+            unlink(file.path(paste0(dirModeloFrijolOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
+          }
+        }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
+      
+    })
+    
+    
+  } else {
+    mclapply(2:length(setups), function(i) {
+      tryCatch(
+        {
+          
+          setSplit <- strsplit(setups[i],"/")
+          
+          longName <- setSplit[[1]][length(setSplit[[1]])]
+          longNameSplit <- strsplit(longName,"_")
+          
+          hashStation <- longNameSplit[[1]][1]
+          hashCrop <- longNameSplit[[1]][2]
+          hashSoil <- longNameSplit[[1]][3]
+          hashDayRange <- longNameSplit[[1]][4]
+          
+          dir_climate <- paste0(path_output, "/", hashStation, sep = "", collapse = NULL)
+          region <- hashStation
+          
+          cat(paste("\n\n Crop:", crop, ", station: \"", hashStation, "\", species: \"", hashCrop, "\", soil: \"", hashSoil, "\", rango of days: \"", hashDayRange, "\"\n", sep = ""))
+          
+          if (crop == 'maiz'){
+            print(longName)
+            name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
+            print(name_csv)
+            dir_parameters <- paste0(dirModeloMaizInputs, longName, "/", sep = "", collapse = NULL)
+            dir_soil <- paste0(dirModeloMaizInputs, longName, "/SOIL.SOL", sep = "", collapse = NULL)
+            dir_run <- paste0(dirModeloMaizOutputs, longName, "/run/", sep = "", collapse = NULL)
+            pathConstruct(paste0(dirModeloMaizOutputs, longName, sep = "", collapse = NULL))
+            #out_dssat <- paste0(dirModeloMaizOutputs, longName, '/out_dssat', sep = "", collapse = NULL)
+            #pathConstruct(out_dssat)
+            pathConstruct(dir_run)
+            runModeloMaiz <- source(paste(dirModeloMaiz,'call_functions.R', sep = "", collapse = NULL), echo = F, local = T)
+            unlink(file.path(paste0(dirModeloMaizOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
+          }
+          
+          if (crop == 'arroz'){
+            dir_run <- paste0(dirModeloArrozOutputs, longName, "/run/", sep = "", collapse = NULL)
+            cultivar<- hashCrop
+            name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
+            dir_parameters <- paste0(dirModeloArrozInputs, longName, "/", sep = "", collapse = NULL)
+            runModeloArroz <- source(paste(dirModeloArroz,'call_functions.R', sep = "", collapse = NULL), local = T, echo = F)
+            unlink(file.path(paste0(dirModeloArrozOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
+          }   
+          
+          if (crop == 'frijol'){
+            print(longName)
+            name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
+            print(name_csv)
+            dir_parameters <- paste0(dirModeloFrijolInputs, longName, "/", sep = "", collapse = NULL)
+            dir_soil <- paste0(dirModeloFrijolInputs, longName, "/SOIL.SOL", sep = "", collapse = NULL)
+            dir_run <- paste0(dirModeloFrijolOutputs, longName, "/run/", sep = "", collapse = NULL)
+            pathConstruct(paste0(dirModeloFrijolOutputs, longName, sep = "", collapse = NULL))
+            out_dssat <- paste0(dirModeloFrijolOutputs, longName, '/out_dssat', sep = "", collapse = NULL)
+            pathConstruct(out_dssat)
+            pathConstruct(dir_run)
+            runModeloFrijol <- source(paste(dirModeloFrijol,'call_functions.R', sep = "", collapse = NULL), echo = F, local = T)
+            unlink(file.path(paste0(dirModeloFrijolOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
+          }
+        }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
+      
+    }, mc.cores = no_cores, mc.preschedule = F)
+    
+  }
+  
+  
 }
 
 
@@ -152,10 +293,9 @@ make_error_report <- function(scenaries, failed_reasons){
 ## MAIN PATH
 start.time <- Sys.time()
 
-#dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
-#dirCurrent <- "C:/usaid_procesos_interfaz/"
 #dirCurrent <- "/forecast/workdir/usaid_procesos_interfaz/"
-dirCurrent <- "/forecast/usaid_procesos_interfaz/"
+#dirCurrent <- "C:/forecast_process/usaid_procesos_interfaz/"
+dirCurrent <- "C:/Users/deguzman/Documents/usaid_procesos_interfaz/"
 
   # forecastAppDll app - App de consola que se conecta a la base de datos
   forecastAppDll <- paste0("dotnet ", dirCurrent, "forecast_app/CIAT.DAPA.USAID.Forecast.ForecastApp.dll ", sep = "", collapse = NULL)
@@ -174,7 +314,7 @@ dirCurrent <- "/forecast/usaid_procesos_interfaz/"
   dir_dssat <- 'C:/DSSAT46/'  ## its necessary to have the parameters .CUL, .ECO, .SPE Updated for running (calibrated the crop (Frijol))
   dirModeloFrijol <- paste0(dirCurrent, "modeloFrijol/", sep = "", collapse = NULL)
 
-  dirCurrent <- "/forecast/workdir/"
+  dirCurrent <- "C:/forecast_process/"
   # INPUTS variables
   dirInputs <- paste0(dirCurrent, "inputs/", sep = "", collapse = NULL)
     # Input variables Forecast module
@@ -264,8 +404,12 @@ runJoinFinalData <- source(paste(dirForecast,'03_join_wth_final.R', sep = "", co
 setups <- list.dirs(dirModeloMaizInputs,full.names = T)
 # Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
 setups <- if(no_cores > 1) setups[-1] else setups
-runCrop("maiz", setups[49:53])
-make_error_report(failed_sceneries, failed_reasons)
+runCropV1("maiz", setups)
+
+cl <- makeCluster(no_cores)
+clusterMap(cl, runCropV1, crop = 'maiz', setups = setups)
+stopCluster(cl)
+
 
 ## Rice crop model process
 setups <- list.dirs(dirModeloArrozInputs,full.names = T)

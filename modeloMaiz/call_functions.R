@@ -57,7 +57,6 @@ climate_PS <- tidy_climate(dir_climate, number_days)
 # climate <- climate_PS$climate
 
 
-
 ## simulating by input_dates from rows
 ## select day is a variable that configure when starting the simulation from forescast climate
 

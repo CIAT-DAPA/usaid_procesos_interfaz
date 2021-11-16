@@ -20,9 +20,9 @@ CSMbatch <- function(crop, name, filename) {
       # Batchfile headers            
       paste0("$BATCH(", crop, ")"),            
       "!",            
-      cbind(sprintf("%6s %89s %6s %6s %6s %6s", "@FILEX", "TRTNO", "RP", "SQ", "OP", 
+      cbind(sprintf("%6s %92s %6s %6s %6s %6s", "@FILEX", "TRTNO", "RP", "SQ", "OP", 
                     "CO"))),            
-    cbind(sprintf("%6s %83s %6i %6i %6i %6i",            
+    cbind(sprintf("%6s %89s %6i %6i %6i %6i",            
                   paste0(name),
                   1:99,  # Variable for treatment number            
                   1,  # Default value for RP element            
