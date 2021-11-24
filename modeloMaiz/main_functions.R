@@ -193,12 +193,12 @@ make_id_run <- function(dir_run, region, cultivar, day){
 }
 
 
-make_mult_wth <- function(scenarios, dir_run, filename){
+make_mult_wth <- function(scenarios, dir_run, filename, lat, long){
   
   # scenarios <- climate_scenarios
   num_scenarios <- 1:length(scenarios)
   filename <- paste0(filename, sprintf("%.3d", num_scenarios))
-  mapply(make_wth, scenarios, dir_run, -99, -99, filename) 
+  mapply(make_wth, scenarios, dir_run, lat, long, filename) 
 
 }
 
@@ -339,18 +339,18 @@ mgment_no_run <- function(data){
 
 conf_lower <- function(var){
   
-  t.test(var)$conf.int[1]
+  t.test(var,na.rm=TRUE)$conf.int[1]
 }
 
 conf_upper <- function(var){
   
-  t.test(var)$conf.int[2]
+  t.test(var,na.rm=TRUE)$conf.int[2]
 }
 
 
 CV <- function(var){
   
-  (sd(var)/mean(var))*100
+  (sd(var,na.rm=TRUE)/mean(var,na.rm=TRUE))*100
   
 }
 
@@ -362,18 +362,18 @@ calc_desc <- function(data, var){
   
   data <- data %>%
     mutate_(.dots = setNames(list(reclas_call), var)) %>%
-    summarise_each(funs(avg = mean(.), 
-                        median = median(.), 
-                        min = min(.), 
-                        max = max(.), 
-                        quar_1 = quantile(., 0.25), 
-                        quar_2 = quantile(., 0.50), 
-                        quar_3 = quantile(., 0.75), 
+    summarise_each(funs(avg = mean(.,na.rm=TRUE), 
+                        median = median(.,na.rm=TRUE), 
+                        min = min(.,na.rm=TRUE), 
+                        max = max(.,na.rm=TRUE), 
+                        quar_1 = quantile(., 0.25,na.rm=TRUE), 
+                        quar_2 = quantile(., 0.50,na.rm=TRUE), 
+                        quar_3 = quantile(., 0.75,na.rm=TRUE), 
                         conf_lower = conf_lower(.), 
                         conf_upper = conf_upper(.), 
-                        sd = sd(.), 
-                        perc_5 = quantile(., 0.05),
-                        perc_95 = quantile(., 0.95), 
+                        sd = sd(.,na.rm=TRUE), 
+                        perc_5 = quantile(., 0.05,na.rm=TRUE),
+                        perc_95 = quantile(., 0.95,na.rm=TRUE), 
                         coef_var = CV(.))) %>%
     mutate(measure = paste(var)) %>%
     dplyr::select(measure, everything())
@@ -417,15 +417,17 @@ run_mult_dssat <- function(dir_dssat, dir_soil, dir_run, dir_parameters, name_fi
   # input_dates <- climate_PS$input_dates
   # climate <- climate_PS$climate
   # id_soil <- ID_SOIL
-  iterators <- rep(1:number_days, by = select_day)  
+  iterators <- rep(1:number_days, by = select_day)
   
-  out_summary <- foreach(i = iterators) %do% {
+  plan(multisession, workers = no_cores)
+  out_summary <- future_lapply(iterators, function(i) {run_dssat(dir_dssat, dir_soil, dir_run, dir_parameters, name_files, input_dates, i, cultivar, climate, id_soil, name_csv, name_cultivar, name_soil, region)})
+  #out_summary <- foreach(i = iterators) %do% {
     
     # print(i)
-    run_dssat(dir_dssat, dir_soil, dir_run, dir_parameters, name_files, input_dates, i, cultivar, climate, id_soil, name_csv, name_cultivar, name_soil, region)
+    #run_dssat(dir_dssat, dir_soil, dir_run, dir_parameters, name_files, input_dates, i, cultivar, climate, id_soil, name_csv, name_cultivar, name_soil, region)
     
     
-  } 
+  #}
   
   
   out_summary <- bind_rows(out_summary)
@@ -461,6 +463,16 @@ read_planting <- function(dir_parameters){
 frame_list <- function(data){
   
   setNames(split(data[,2], seq(nrow(data))), data[,1])
+  
+}
+
+#Load coordinates from csv 
+load_coordinates <- function(dir_parameters){
+  
+  require(readr)
+  coordenadas <- read_csv(paste0(dir_parameters,'coordenadas.csv')) %>%
+    as.data.frame() %>%
+    frame_list()
   
 }
 

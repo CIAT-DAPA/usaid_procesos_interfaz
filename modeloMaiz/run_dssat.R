@@ -40,6 +40,7 @@ run_dssat <- function(dir_dssat, dir_soil, dir_run, dir_parameters, name_files, 
   PDATE <- input_dates$PDATE[select_day]  ## for now when proof change, delete [1]
   SDATE <- input_dates$SDATE[select_day]
   DATE <- input_dates$DATE[select_day]
+  location <- load_coordinates(dir_parameters)
   
   # DATE <- paste(day(DATE), sprintf("%.2d", month(DATE)), year(DATE), sep = '/')
   
@@ -47,7 +48,7 @@ run_dssat <- function(dir_dssat, dir_soil, dir_run, dir_parameters, name_files, 
   make_xfile_region(dir_parameters, paste0(name_files, sprintf("%.3d", 1:99)), paste0(dir_run_id, name_files, '.MZX'), PDATE, SDATE, cultivar, id_soil) ## Remember them can to change the filename to different regions
   
   
-  invisible(make_mult_wth(climate, dir_run_id, name_files))
+  invisible(make_mult_wth(climate, dir_run_id, name_files, location$lat, location$long))
   
   # Make Batch
   

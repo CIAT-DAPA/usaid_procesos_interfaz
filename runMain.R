@@ -1,6 +1,6 @@
 # =====================================================================
 # Cores to use when the crop models run in parallel. Change this parameter to use more cores.
-no_cores <- 7#as.numeric(Sys.getenv("N_CORES"))
+no_cores <- 4#as.numeric(Sys.getenv("N_CORES"))
 # =====================================================================
 
 # =====================================================================
@@ -80,7 +80,7 @@ runCropV1 <- function(crop, setups) {
   # crop <- 'arroz'
   # i = 2 
   
-  for(i in 2:length(setups)){
+  for(i in 1:length(setups)){
     tryCatch(
       {
         
@@ -111,7 +111,7 @@ runCropV1 <- function(crop, setups) {
           #pathConstruct(out_dssat)
           pathConstruct(dir_run)
           runModeloMaiz <- source(paste(dirModeloMaiz,'call_functions.R', sep = "", collapse = NULL), echo = F, local = T)
-          unlink(file.path(paste0(dirModeloMaizOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
+          #unlink(file.path(paste0(dirModeloMaizOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
         }
         
         if (crop == 'arroz'){
@@ -137,7 +137,7 @@ runCropV1 <- function(crop, setups) {
           runModeloFrijol <- source(paste(dirModeloFrijol,'call_functions.R', sep = "", collapse = NULL), echo = F, local = T)
           unlink(file.path(paste0(dirModeloFrijolOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
         }
-      }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
+      }, error=function(e){cat("ERRORasasa :",conditionMessage(e), "\n")})
     
   }
   
@@ -211,7 +211,7 @@ runCropV2 <- function(crop, setups) {
             runModeloFrijol <- source(paste(dirModeloFrijol,'call_functions.R', sep = "", collapse = NULL), echo = F, local = T)
             unlink(file.path(paste0(dirModeloFrijolOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
           }
-        }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
+        }, error=function(e){cat("ERRORasas :",conditionMessage(e), "\n")})
       
     })
     
@@ -314,7 +314,8 @@ dirCurrent <- "C:/Users/deguzman/Documents/usaid_procesos_interfaz/"
   dir_dssat <- 'C:/DSSAT46/'  ## its necessary to have the parameters .CUL, .ECO, .SPE Updated for running (calibrated the crop (Frijol))
   dirModeloFrijol <- paste0(dirCurrent, "modeloFrijol/", sep = "", collapse = NULL)
 
-  dirCurrent <- "C:/forecast_process/"
+  #dirCurrent <- "C:/forecast_process/colombia/"
+  dirCurrent <- "C:/forecast_process/etiopia/"
   # INPUTS variables
   dirInputs <- paste0(dirCurrent, "inputs/", sep = "", collapse = NULL)
     # Input variables Forecast module
@@ -405,17 +406,25 @@ setups <- list.dirs(dirModeloMaizInputs,full.names = T)
 # Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
 setups <- if(no_cores > 1) setups[-1] else setups
 runCropV1("maiz", setups)
+registerDoParallel(no_cores)
 
-cl <- makeCluster(no_cores)
-clusterMap(cl, runCropV1, crop = 'maiz', setups = setups)
-stopCluster(cl)
+foreach(i = seq_along(setups), .export=c('runCropV1')) %dopar% {
+  runCropV1("maiz", i)
+}
+
+closeAllConnections()
+#runCropV1("maiz", setups)
+
+#cl <- makeCluster(no_cores)
+#clusterMap(cl, runCropV1, crop = 'maiz', setups = setups)
+#stopCluster(cl)
 
 
 ## Rice crop model process
 setups <- list.dirs(dirModeloArrozInputs,full.names = T)
 # Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
 setups <- if(no_cores > 1) setups[-1] else setups
-runCrop("arroz", setups)
+runCropV2("arroz", setups)
 
 ## Frijol crop model process
 setups <- list.dirs(dirModeloFrijolInputs,full.names = T)
