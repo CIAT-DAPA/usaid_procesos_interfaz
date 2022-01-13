@@ -155,6 +155,7 @@ start.time <- Sys.time()
 #dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
 #dirCurrent <- "C:/usaid_procesos_interfaz/"
 #dirCurrent <- "/forecast/workdir/usaid_procesos_interfaz/"
+#dirCurrent <- "/forecast_process/usaid_procesos_interfaz/"
 dirCurrent <- "/forecast/usaid_procesos_interfaz/"
 
   # forecastAppDll app - App de consola que se conecta a la base de datos
@@ -240,13 +241,22 @@ pathConstruct(dirOutputs)                       # ./outputs/
 
 ## Download initial parameters from interface database
 setwd(paste0(dirCurrent,"/forecast_app"))
-CMDdirInputs <- paste0(gsub("/","\\\\",dirPrediccionInputs), "\\\"")
-try(system(paste0(forecastAppDll,"-out -cpt -p \"",CMDdirInputs), intern = TRUE, ignore.stderr = TRUE))
-try(system(paste0(forecastAppDll,"-out -s \"prec\" -p \"",CMDdirInputs," -start 1982 -end 2013"), intern = TRUE, ignore.stderr = TRUE))
-try(system(paste0(forecastAppDll,"-out -wf -p \"",CMDdirInputs," -name \"daily\""), intern = TRUE, ignore.stderr = TRUE))
-try(system(paste0(forecastAppDll,"-out -co -p \"",CMDdirInputs," -name \"daily\""), intern = TRUE, ignore.stderr = TRUE))
-CMDdirInputs <- paste0(gsub("/","\\\\",dirInputs), "\\\"")
-try(system(paste0(forecastAppDll,"-out -fs -p \"",CMDdirInputs), intern = TRUE, ignore.stderr = TRUE))
+##CMDdirInputs <- paste0(gsub("/","\\\\",dirPrediccionInputs), "\\\"")
+CMDdirInputs <- dirPrediccionInputs
+dotnet_cmd <- c(paste0(forecastAppDll,"-out -cpt -p \"",CMDdirInputs, "\""),
+              paste0(forecastAppDll,"-out -s \"prec\" -p \"",CMDdirInputs," -start 1982 -end 2013"),
+              paste0(forecastAppDll,"-out -wf -p \"",CMDdirInputs,"\" -name \"daily\""),
+              paste0(forecastAppDll,"-out -co -p \"",CMDdirInputs,"\" -name \"daily\""),
+              paste0(forecastAppDll,"-out -fs -p \"",CMDdirInputs, "\""))
+
+print(dotnet_cmd)
+
+try(system(dotnet_cmd[1], intern = TRUE, ignore.stderr = TRUE))
+try(system(dotnet_cmd[2], intern = TRUE, ignore.stderr = TRUE))
+try(system(dotnet_cmd[3], intern = TRUE, ignore.stderr = TRUE))
+try(system(dotnet_cmd[4], intern = TRUE, ignore.stderr = TRUE))
+#CMDdirInputs <- paste0(gsub("/","\\\\",dirInputs), "\\\"")
+try(system(dotnet_cmd[5], intern = TRUE, ignore.stderr = TRUE))
 
 # Prediction process
 runPrediccion <- source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL))
