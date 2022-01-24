@@ -409,7 +409,7 @@ files_x=function(raster,cor,na,years){
     #pos_data=which(!is.na(values(raster)[,1]))
     pos_selec=which(cor<quantile(cor,i,na.rm=T))
     #pos_final=pos_data*pos_selec
-    val=values(raster)
+    val=raster::values(raster)
     val[pos_selec,]=NA
     val[which(is.na(val),arr.ind = T)]= -999
     val_l=split(val,col(val))

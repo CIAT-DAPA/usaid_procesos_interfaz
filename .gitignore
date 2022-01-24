@@ -7,6 +7,6 @@ configs/
 /outputs/
 
 .Rhistory
-#/forecast_app/appsettings.json
-
+/forecast_app/appsettings.json
+/forecast_app/data_configuration
 .RData
