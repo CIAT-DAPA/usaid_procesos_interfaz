@@ -294,7 +294,7 @@ tidy_climate <- function(dir_climate, number_days){
 
 read_summary <- function(dir_run){
   
-  summary_out <- read_table(paste0(dir_run, 'summary.OUT'), skip = 3 , na = "*******", col_types = cols())
+  summary_out <- read_table(paste0(dir_run, 'Summary.OUT'), skip = 3 , na = "*******", col_types = cols())
   
 
   return(summary_out)
@@ -414,10 +414,7 @@ tidy_descriptive <- function(data, W_station, soil, cultivar, start, end){
 
 
 run_mult_dssat <- function(dir_dssat, dir_soil, dir_run, dir_parameters, name_files, input_dates, select_day, cultivar, climate, id_soil, number_days, output, region, dir_output_maiz){
-  
-  
-  # proof
-  
+
   name_csv <- output$name_csv
   name_cultivar <- output$cultivar
   name_soil <- output$soil
@@ -425,18 +422,15 @@ run_mult_dssat <- function(dir_dssat, dir_soil, dir_run, dir_parameters, name_fi
   # input_dates <- climate_PS$input_dates
   # climate <- climate_PS$climate
   # id_soil <- ID_SOIL
-  iterators <- rep(1:number_days, by = select_day)  
-  
-  out_summary <- foreach(i = iterators) %do% {
-    
-    # print(i)
-    run_dssat(dir_dssat, dir_soil, dir_run, dir_parameters, name_files, input_dates, i, cultivar, climate, id_soil, name_csv, name_cultivar, name_soil, region)
-    
-    
-  } 
-  
-  
-  out_summary <- bind_rows(out_summary)
+  # iterators <- rep(1:number_days, by = select_day)
+
+  run_dssat_safely <- possibly(run_dssat, NULL)
+
+  out_summary <- map(1:number_days,
+  ~run_dssat_safely(dir_dssat, dir_soil, dir_run, dir_parameters, name_files, input_dates, .x, cultivar, climate, id_soil, name_csv, name_cultivar, name_soil, region))
+
+  # print(i)
+  out_summary <- compact(out_summary) %>% bind_rows()
   write_csv(out_summary, paste0(dir_output_maiz, name_csv))
   return(out_summary)
 }

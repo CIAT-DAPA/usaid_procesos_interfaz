@@ -26,17 +26,22 @@
 download_data_chirp <- function(ini.date, end.date, year_to, path_Chirp, no_cores){
   
   fechas <- seq(as.Date(ini.date), as.Date(end.date), "days") %>% str_replace_all("-", ".")
-  #urls <- paste("ftp://ftp.chg.ucsb.edu/pub/org/chg/products/CHIRP/daily/",year_to,"/chirp.",fechas,".tif",sep="")
-  urls <- paste("https://data.chc.ucsb.edu/products/CHIRP/daily/",year_to,"/chirp.",fechas,".tif",sep="")
+  #urls <- paste("https://data.chc.ucsb.edu/products/CHIRP/daily/",year_to,"/chirp.",fechas,".tif",sep="") Esta ruta con https pone problemas en el servidor de linux
+  urls <- paste("http://data.chc.ucsb.edu/products/CHIRP/daily/",year_to,"/chirp.",fechas,".tif",sep="")
   file <- basename(urls)
   path_Chirp_all <- paste0(path_Chirp,"/",file)
+
+  mclapply(1:length(urls), function(i) {
+     download.file(urls[i], path_Chirp_all[i], mode = "w")
+
+   }, mc.cores = no_cores, mc.preschedule = F)
+  #download.file(url=urls[1], path_Chirp_all[1])
+  # if(.Platform$OS.type == "unix") {cl <- makeCluster(no_cores, type = "FORK")}
+  # cl <- makeCluster(no_cores)
+  # clusterMap(cl, download.file, url = urls, destfile = path_Chirp_all, mode = "wb", 
+  #            .scheduling = 'dynamic')
   
-  if(.Platform$OS.type == "unix") {cl <- makeCluster(no_cores, type = "FORK")}
-  cl <- makeCluster(no_cores)
-  clusterMap(cl, download.file, url = urls, destfile = path_Chirp_all, mode = "wb", 
-             .scheduling = 'dynamic')
-  
-  stopCluster(cl)
+  # stopCluster(cl)
   return("CHIRPS data downloaded!") }
 
 

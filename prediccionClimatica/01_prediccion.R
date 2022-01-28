@@ -535,7 +535,7 @@ save_areas=function(ras,cor,dec,name,ext){
   values(cor_raster)=cor
   selec_raster=cor_raster>=quantile(cor,as.numeric(dec),na.rm=T)
   raster_final=crop(selec_raster,extent(ext))
-  writeRaster(raster_final,name,format="GTiff")
+  writeRaster(raster_final,name,format="GTiff", overwrite=TRUE)
   return(print("área seleccionada guardada en formato Raster"))
   
 }

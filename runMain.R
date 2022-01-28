@@ -62,7 +62,12 @@ library(httr)
 # Function erase and make folder
 pathConstruct <- function(dirConstruct)
   {
+  
+  if (!(file.exists(file.path(dirCurrent)))){
+    dir.create(file.path(dirCurrent))
+    }
   setwd(dirCurrent)
+
   if (file.exists(file.path(dirConstruct))){
     unlink(file.path(dirConstruct), recursive = FALSE, force = TRUE)
     cat (paste0('\n... folder "',dirConstruct,'" deleted\n'))
@@ -282,7 +287,7 @@ runJoinFinalData <- source(paste(dirForecast,'03_join_wth_final.R', sep = "", co
 ## Maize crop model process
 setups <- list.dirs(dirModeloMaizInputs,full.names = T)
 # Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
-setups <- if(no_cores > 1) setups[-1] else setups
+#setups <- if(no_cores > 1) setups[-1] else setups
 runCrop("maiz", setups)
 #make_error_report(failed_sceneries, failed_reasons)
 
