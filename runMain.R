@@ -3,8 +3,8 @@
 # Current country for which the forecasts are being run
 # Country list with country name as key and objectid as value
 no_cores <- as.numeric(Sys.getenv("N_CORES"))
-currentCountry <- Sys.getenv("COUNTRY")
-countries <- list("COLOMBIA"="61e59d829d5d2486e18d2ea8", "ETHIOPIA"="61e59d829d5d2486e18d2ea9")
+countries_list <- list("COLOMBIA", "ETHIOPIA")
+countries_ids <- list("COLOMBIA"="61e59d829d5d2486e18d2ea8", "ETHIOPIA"="61e59d829d5d2486e18d2ea9")
 # =====================================================================
 
 # =====================================================================
@@ -144,7 +144,7 @@ runCrop <- function(crop, setups) {
           runModeloFrijol <- source(paste(dirModeloFrijol,'call_functions.R', sep = "", collapse = NULL), echo = F, local = T)
           unlink(file.path(paste0(dirModeloFrijolOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
         }
-      }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
+      }, error=function(e){cat([paste("Scenarie: ", longName, "ERROR :"),conditionMessage(e), "\n")})
     
         }, mc.cores = no_cores, mc.preschedule = F)
 
@@ -157,8 +157,7 @@ make_error_report <- function(scenaries, failed_reasons){
 
 }
 
-#Checks country for avoid conlicts
-maize_name_by_country <- if(currentCountry=="COLOMBIA") "maiz" else "maize"
+
 
 ## MAIN PATH
 start.time <- Sys.time()
@@ -186,124 +185,151 @@ dirCurrent <- "/forecast/usaid_procesos_interfaz/"
   dir_dssat <- 'C:/DSSAT46/'  ## its necessary to have the parameters .CUL, .ECO, .SPE Updated for running (calibrated the crop (Frijol))
   dirModeloFrijol <- paste0(dirCurrent, "modeloFrijol/", sep = "", collapse = NULL)
 
-  dirCurrent <- paste0("/forecast/workdir/", currentCountry, "/")
-  # INPUTS variables
-  dirInputs <- paste0(dirCurrent, "inputs/", sep = "", collapse = NULL)
-    # Input variables Forecast module
-    dirPrediccionInputs <- paste0(dirInputs, "prediccionClimatica/", sep = "", collapse = NULL)
-      dir_save <- paste0(dirPrediccionInputs, "descarga", sep = "", collapse = NULL)
-      dir_runCPT <- paste0(dirPrediccionInputs, "run_CPT", sep = "", collapse = NULL)
-      dir_response <- paste0(dirPrediccionInputs, "estacionesMensuales", sep = "", collapse = NULL)
-      dir_stations <- paste0(dirPrediccionInputs, "dailyData", sep = "", collapse = NULL)
-    dirCultivosInputs <-paste0(dirInputs, "cultivos/", sep = "", collapse = NULL)
-    # Input variables Maize model module
-    dirModeloMaizInputs <- paste0(dirInputs, "cultivos/", maize_name_by_country, "/", sep = "", collapse = NULL)
-    # Input variables rice model module
-    dirModeloArrozInputs <- paste0(dirInputs, "cultivos/arroz/", sep = "", collapse = NULL)
-    # Input variables frijol model module
-    dirModeloFrijolInputs <- paste0(dirInputs, "cultivos/frijol/", sep = "", collapse = NULL)
+##ProbForecats files lists for merging (For importation proccess)
+metrics_list <- list()
+probabilities_list <- list()
 
-  # OUTPUTS variables
-  dirOutputs <- paste0(dirCurrent, "outputs/", sep = "", collapse = NULL)
-    # Output variables Forecast module
-    dirPrediccionOutputs <- paste0(dirOutputs, "prediccionClimatica/", sep = "", collapse = NULL)
-      path_save <- paste0(dirPrediccionOutputs, "probForecast", sep = "", collapse = NULL)
-      path_rasters <- paste0(dirPrediccionOutputs, "raster", sep = "", collapse = NULL)
-      path_output <- paste0(dirPrediccionOutputs, "resampling", sep = "", collapse = NULL)
-        path_output_sum <- paste0(path_output, "/summary", sep = "", collapse = NULL)
-    dirCultivosOutputs <-paste0(dirOutputs, "cultivos/", sep = "", collapse = NULL)
-    # Output variables maize model module
-    dirModeloMaizOutputs <-paste0(dirOutputs, "cultivos/", maize_name_by_country, "/", sep = "", collapse = NULL)
-    # Output variables rice model module
-    dirModeloArrozOutputs <-paste0(dirOutputs, "cultivos/arroz/", sep = "", collapse = NULL)
-    # Output variables frijol model module
-    dirModeloFrijolOutputs <-paste0(dirOutputs, "cultivos/frijol/", sep = "", collapse = NULL)
-    
-  # Output permanent folder
-  dirResults <- paste0(dirCurrent,"results")
+for(c in countries_list){
+  currentCountry <- c
 
-  # if (!file.exists(file.path(dirResults))){
-  #   dir.create(file.path(dirResults))
-  #   cat (paste0('\n... folder "',dirResults,'" created\n\n'))}
+    #Checks country for avoid conlicts
+    maize_name_by_country <- if(currentCountry=="COLOMBIA") "maiz" else "maize"
 
-## ********************** Making inputs and outputs folders  **************************************
-# INPUTS
-pathConstruct(dirInputs)                        # ./inputs/
-  pathConstruct(dirPrediccionInputs)            # ./inputs/prediccionClimatica/
-    pathConstruct(dir_save)                     # ./inputs/prediccionClimatica/descarga
-    pathConstruct(dir_runCPT)                   # ./inputs/prediccionClimatica/run_CPT
-# OUTPUTS
-pathConstruct(dirOutputs)                       # ./outputs/
-  pathConstruct(dirPrediccionOutputs)           # ./outputs/prediccionClimatica/
-    pathConstruct(path_save)                    # ./outputs/prediccionClimatica/probForecas
-    pathConstruct(path_rasters)                 # ./outputs/prediccionClimatica/raster
-    pathConstruct(path_output)                  # ./outputs/prediccionClimatica/resampling
-      pathConstruct(path_output_sum)            # ./outputs/prediccionClimatica/resampling/summary
-  # Outoputs crop model
-  pathConstruct(dirCultivosOutputs)             # ./outputs/cultivos/
-    # Maize
-    pathConstruct(dirModeloMaizOutputs)         # ./outputs/cultivos/maiz/
-    # Rice
-    pathConstruct(dirModeloArrozOutputs)        # ./outputs/cultivos/arroz/
-    # Frijol
-    pathConstruct(dirModeloFrijolOutputs)        # ./outputs/cultivos/frijol/
-    
-## ************************************************************************************************
+    dirCurrent <- paste0("/forecast/workdir/", currentCountry, "/")
+    # INPUTS variables
+    dirInputs <- paste0(dirCurrent, "inputs/", sep = "", collapse = NULL)
+      # Input variables Forecast module
+      dirPrediccionInputs <- paste0(dirInputs, "prediccionClimatica/", sep = "", collapse = NULL)
+        dir_save <- paste0(dirPrediccionInputs, "descarga", sep = "", collapse = NULL)
+        dir_runCPT <- paste0(dirPrediccionInputs, "run_CPT", sep = "", collapse = NULL)
+        dir_response <- paste0(dirPrediccionInputs, "estacionesMensuales", sep = "", collapse = NULL)
+        dir_stations <- paste0(dirPrediccionInputs, "dailyData", sep = "", collapse = NULL)
+      dirCultivosInputs <-paste0(dirInputs, "cultivos/", sep = "", collapse = NULL)
+      # Input variables Maize model module
+      dirModeloMaizInputs <- paste0(dirInputs, "cultivos/", maize_name_by_country, "/", sep = "", collapse = NULL)
+      # Input variables rice model module
+      dirModeloArrozInputs <- paste0(dirInputs, "cultivos/arroz/", sep = "", collapse = NULL)
+      # Input variables frijol model module
+      dirModeloFrijolInputs <- paste0(dirInputs, "cultivos/frijol/", sep = "", collapse = NULL)
 
-## Download initial parameters from interface database
-scriptsDir <- "/forecast/usaid_procesos_interfaz/"
-setwd(paste0(scriptsDir, "forecast_app"))
-#CMDdirInputs <- paste0(gsub("/","\\\\",dirPrediccionInputs), "\\\"")
-CMDdirInputs <- dirPrediccionInputs
-CMDdirCropsInputs <- dirInputs
-objectIdCurrentCountry <- countries[currentCountry]
-dotnet_cmd <- c(paste0(forecastAppDll,"-out -cpt -p \"",CMDdirInputs, "\" -c \"", objectIdCurrentCountry, "\""),
-              paste0(forecastAppDll,"-out -s \"prec\" -p \"",CMDdirInputs,"\" -start 1982 -end 2013 -c \"", objectIdCurrentCountry, "\""),
-              paste0(forecastAppDll,"-out -wf -p \"",CMDdirInputs,"\" -name \"daily\" -c \"", objectIdCurrentCountry, "\""),
-              paste0(forecastAppDll,"-out -co -p \"",CMDdirInputs,"\" -name \"daily\" -c \"", objectIdCurrentCountry, "\""),
-              paste0(forecastAppDll,"-out -fs -p \"",CMDdirCropsInputs, "\" -c \"", objectIdCurrentCountry, "\""))
+    # OUTPUTS variables
+    dirUnifiedOutputs <- paste0("/forecast/workdir/", "unified_outputs", "/")
+    dirOutputs <- paste0(dirCurrent, "outputs/", sep = "", collapse = NULL)
+      # Output variables Forecast module
+      dirPrediccionOutputs <- paste0(dirOutputs, "prediccionClimatica/", sep = "", collapse = NULL)
+        path_save <- paste0(dirPrediccionOutputs, "probForecast", sep = "", collapse = NULL)
+        path_rasters <- paste0(dirPrediccionOutputs, "raster", sep = "", collapse = NULL)
+        path_output <- paste0(dirPrediccionOutputs, "resampling", sep = "", collapse = NULL)
+          path_output_sum <- paste0(path_output, "/summary", sep = "", collapse = NULL)
+      dirCultivosOutputs <-paste0(dirOutputs, "cultivos/", sep = "", collapse = NULL)
+      # Output variables maize model module
+      dirModeloMaizOutputs <-paste0(dirOutputs, "cultivos/", maize_name_by_country, "/", sep = "", collapse = NULL)
+      # Output variables rice model module
+      dirModeloArrozOutputs <-paste0(dirOutputs, "cultivos/arroz/", sep = "", collapse = NULL)
+      # Output variables frijol model module
+      dirModeloFrijolOutputs <-paste0(dirOutputs, "cultivos/frijol/", sep = "", collapse = NULL)
 
-print(dotnet_cmd)
+    # Output permanent folder
+    dirResults <- paste0(dirCurrent,"results")
 
-try(system(dotnet_cmd[1], intern = TRUE, ignore.stderr = TRUE))
-try(system(dotnet_cmd[2], intern = TRUE, ignore.stderr = TRUE))
-try(system(dotnet_cmd[3], intern = TRUE, ignore.stderr = TRUE))
-try(system(dotnet_cmd[4], intern = TRUE, ignore.stderr = TRUE))
-#CMDdirInputs <- paste0(gsub("/","\\\\",dirInputs), "\\\"")
-try(system(dotnet_cmd[5], intern = TRUE, ignore.stderr = TRUE))
+    # if (!file.exists(file.path(dirResults))){
+    #   dir.create(file.path(dirResults))
+    #   cat (paste0('\n... folder "',dirResults,'" created\n\n'))}
 
-# Prediction process
-runPrediccion <- source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL))
+  ## ********************** Making inputs and outputs folders  **************************************
+  # INPUTS
+  pathConstruct(dirInputs)                        # ./inputs/
+    pathConstruct(dirPrediccionInputs)            # ./inputs/prediccionClimatica/
+      pathConstruct(dir_save)                     # ./inputs/prediccionClimatica/descarga
+      pathConstruct(dir_runCPT)                   # ./inputs/prediccionClimatica/run_CPT
+  # OUTPUTS
+  pathConstruct(dirUnifiedOutputs)                # /unified_outputs/
+  pathConstruct(dirOutputs)                       # ./outputs/
+    pathConstruct(dirPrediccionOutputs)           # ./outputs/prediccionClimatica/
+      pathConstruct(path_save)                    # ./outputs/prediccionClimatica/probForecas
+      pathConstruct(path_rasters)                 # ./outputs/prediccionClimatica/raster
+      pathConstruct(path_output)                  # ./outputs/prediccionClimatica/resampling
+        pathConstruct(path_output_sum)            # ./outputs/prediccionClimatica/resampling/summary
+    # Outoputs crop model
+    pathConstruct(dirCultivosOutputs)             # ./outputs/cultivos/
+      # Maize
+      pathConstruct(dirModeloMaizOutputs)         # ./outputs/cultivos/maiz/
+      # Rice
+      pathConstruct(dirModeloArrozOutputs)        # ./outputs/cultivos/arroz/
+      # Frijol
+      pathConstruct(dirModeloFrijolOutputs)        # ./outputs/cultivos/frijol/
+      
+  ## ************************************************************************************************
 
-# Import raster to Geoserver process
-#runRasterImport <- source(paste(dirForecast,'raster_files_upload.R', sep = "", collapse = NULL))
+  ## Download initial parameters from interface database
+  scriptsDir <- "/forecast/usaid_procesos_interfaz/"
+  setwd(paste0(scriptsDir, "forecast_app"))
+  #CMDdirInputs <- paste0(gsub("/","\\\\",dirPrediccionInputs), "\\\"")
+  CMDdirInputs <- dirPrediccionInputs
+  CMDdirCropsInputs <- dirInputs
+  objectIdCurrentCountry <- countries_ids[currentCountry]
+  dotnet_cmd <- c(paste0(forecastAppDll,"-out -cpt -p \"",CMDdirInputs, "\" -c \"", objectIdCurrentCountry, "\""),
+                paste0(forecastAppDll,"-out -s \"prec\" -p \"",CMDdirInputs,"\" -start 1982 -end 2013 -c \"", objectIdCurrentCountry, "\""),
+                paste0(forecastAppDll,"-out -wf -p \"",CMDdirInputs,"\" -name \"daily\" -c \"", objectIdCurrentCountry, "\""),
+                paste0(forecastAppDll,"-out -co -p \"",CMDdirInputs,"\" -name \"daily\" -c \"", objectIdCurrentCountry, "\""),
+                paste0(forecastAppDll,"-out -fs -p \"",CMDdirCropsInputs, "\" -c \"", objectIdCurrentCountry, "\""))
 
-# Resampling process
-runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse = NULL))
+  print(dotnet_cmd)
 
-# Dowloading and final joining data process
-runJoinFinalData <- source(paste(dirForecast,'03_join_wth_final.R', sep = "", collapse = NULL))
+  try(system(dotnet_cmd[1], intern = TRUE, ignore.stderr = TRUE))
+  try(system(dotnet_cmd[2], intern = TRUE, ignore.stderr = TRUE))
+  try(system(dotnet_cmd[3], intern = TRUE, ignore.stderr = TRUE))
+  try(system(dotnet_cmd[4], intern = TRUE, ignore.stderr = TRUE))
+  #CMDdirInputs <- paste0(gsub("/","\\\\",dirInputs), "\\\"")
+  try(system(dotnet_cmd[5], intern = TRUE, ignore.stderr = TRUE))
 
-## Maize crop model process
-setups <- list.dirs(dirModeloMaizInputs,full.names = T)
-# Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
-#setups <- if(no_cores > 1) setups[-1] else setups
-runCrop("maiz", setups)
-#make_error_report(failed_sceneries, failed_reasons)
+  # Prediction process
+  runPrediccion <- source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL))
 
-## Rice crop model process
-#setups <- list.dirs(dirModeloArrozInputs,full.names = T)
-# Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
-#setups <- if(no_cores > 1) setups[-1] else setups
-#runCrop("arroz", setups)
+  # Import raster to Geoserver process
+  #runRasterImport <- source(paste(dirForecast,'raster_files_upload.R', sep = "", collapse = NULL))
 
-## Frijol crop model process
-#setups <- list.dirs(dirModeloFrijolInputs,full.names = T)
-#runCrop('frijol', setups)
+  # Resampling process
+  runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse = NULL))
+
+  # Dowloading and final joining data process
+  runJoinFinalData <- source(paste(dirForecast,'03_join_wth_final.R', sep = "", collapse = NULL))
+
+  ## Maize crop model process
+  setups <- list.dirs(dirModeloMaizInputs,full.names = T)
+  # Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
+  #setups <- if(no_cores > 1) setups[-1] else setups
+  runCrop("maiz", setups)
+  #make_error_report(failed_sceneries, failed_reasons)
+
+  ## Rice crop model process
+  #setups <- list.dirs(dirModeloArrozInputs,full.names = T)
+  # Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
+  #setups <- if(no_cores > 1) setups[-1] else setups
+  #runCrop("arroz", setups)
+
+  ## Frijol crop model process
+  #setups <- list.dirs(dirModeloFrijolInputs,full.names = T)
+  #runCrop('frijol', setups)
+
+  ## Copying outputs for importation
+  file.copy(dirOutputs, dirUnifiedOutputs, recursive=TRUE)
+
+  ##saving .csv probForecast for merging
+  metrics_list[[length(metrics_list) +1 ]] <- read_csv(paste0(path_save, "/metrics.csv"))
+  probabilities_list[[length(probabilities_list) +1 ]] <- read_csv(paste0(path_save, "/probabilities.csv"))
+
+}
+##Merging probForecast files
+probForecastUnifiedDir <- paste0(dirUnifiedOutputs, "outputs/prediccionClimatica/probForecast/")
+write_csv(bind_rows(metrics_list), paste0(probForecastUnifiedDir, "metrics.csv"))
+write_csv(bind_rows(probabilities_list), paste0(probForecastUnifiedDir, "probabilities.csv"))
+
+
 
 # Upload proccess results to interface database
 setwd(paste0(scriptsDir, "forecast_app"))
-CMDdirOutputs <- dirOutputs #paste0(gsub("/","\\\\",dirOutputs), "\\\"")
+CMDdirOutputs <- paste0(dirUnifiedOutputs, "outputs/") #paste0(gsub("/","\\\\",dirOutputs), "\\\"")
 try(system(paste0(forecastAppDll,"-in -fs -cf 0.5 -p \"",CMDdirOutputs, "\""), intern = TRUE, ignore.stderr = TRUE))
 try(system(paste0(forecastAppDll,"-share"), intern = TRUE, ignore.stderr = TRUE))
 
