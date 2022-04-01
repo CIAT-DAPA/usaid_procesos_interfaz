@@ -170,6 +170,7 @@ run_oryza_by_setup <- function(setup){
   zip(zipfile='inputs', './inputs')
 
   #Calling Oryza API
+  POST("http://sampledomain.com/api/data/?key=xxx", body = list(y = upload_file(system.file("my_data.zip"))))
   download.file(urls[i], path_Chirp_all[i], mode = "w")
 
   #Copying output csv on rice outputs
