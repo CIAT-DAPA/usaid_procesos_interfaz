@@ -144,7 +144,7 @@ runCrop <- function(crop, setups) {
           runModeloFrijol <- source(paste(dirModeloFrijol,'call_functions.R', sep = "", collapse = NULL), echo = F, local = T)
           unlink(file.path(paste0(dirModeloFrijolOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
         }
-      }, error=function(e){cat([paste("Scenarie: ", longName, "ERROR :"),conditionMessage(e), "\n")})
+      }, error=function(e){cat(paste("Scenarie: ", longName, "ERROR :"),conditionMessage(e), "\n")})
     
         }, mc.cores = no_cores, mc.preschedule = F)
 
