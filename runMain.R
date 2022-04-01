@@ -170,8 +170,13 @@ run_oryza_by_setup <- function(setup){
   zip(zipfile='inputs', './inputs')
 
   #Calling Oryza API
-  POST("http://sampledomain.com/api/data/?key=xxx", body = list(y = upload_file(system.file("my_data.zip"))))
-  download.file(urls[i], path_Chirp_all[i], mode = "w")
+  #POST("http://sampledomain.com/api/data/?key=xxx", body = list(y = upload_file(system.file("my_data.zip"))))
+  #download.file(urls[i], path_Chirp_all[i], mode = "w")
+  dest <- paste0(dirModeloArrozInputs, "/data/weekly_2017-02-18.zip")
+  GET("https://www.example.com/weeklydata/weekly_2017-02-18.zip", 
+     authenticate("myemail", "mypassword", "basic"), 
+     write_disk(dest, overwrite = TRUE))
+
 
   #Copying output csv on rice outputs
 
