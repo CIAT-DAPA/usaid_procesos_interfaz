@@ -157,6 +157,30 @@ make_error_report <- function(scenaries, failed_reasons){
 
 }
 
+run_oryza_by_setup <- function(setup){
+  currentWd <- getwd()
+  scenarie <- str_split_fixed(setup, '/', n=8) #current scenarie/setup
+  correction <- str_split_fixed(scenarie[8], '_', n=2)
+  station <- gsub('/', '', correction[1]) #current climatic station
+
+  #Copying a compressing files for Oryza API
+  file.copy(paste0(path_output, "/",station, "/"), dir_oryza_api_inputs_climate, recursive=TRUE)
+  file.copy(paste0(dirModeloArrozInputs, scenarie[8],"/"), dir_oryza_api_inputs_setup, recursive=TRUE)
+  setwd('/forecast/workdir/oryzaApiInputs/')
+  zip(zipfile='inputs', './inputs')
+
+  #Calling Oryza API
+  download.file(urls[i], path_Chirp_all[i], mode = "w")
+
+  #Copying output csv on rice outputs
+
+  #Deleting files
+  unlink(paste0(dir_oryza_api_inputs_climate, station), recursive = TRUE)
+  unlink(paste0(dir_oryza_api_inputs_setup, scenarie[8]), recursive = TRUE)
+  unlink(paste0(dir_oryza_api_inputs, 'inputs.zip'), recursive = TRUE)
+  setwd(currentWd)
+
+}
 
 
 ## MAIN PATH
@@ -184,6 +208,12 @@ dirCurrent <- "/forecast/usaid_procesos_interfaz/"
   ## Global variables Frijol model module
   dir_dssat <- 'C:/DSSAT46/'  ## its necessary to have the parameters .CUL, .ECO, .SPE Updated for running (calibrated the crop (Frijol))
   dirModeloFrijol <- paste0(dirCurrent, "modeloFrijol/", sep = "", collapse = NULL)
+  
+  #Common directory to send data to Oryza API
+  dir_oryza_api_inputs <- "/forecast/workdir/oryzaApiInputs/"
+  dir_oryza_api_inputs_zip <- "/forecast/workdir/oryzaApiInputs/inputs/"
+  dir_oryza_api_inputs_climate <- paste0(dir_oryza_api_inputs_zip, "climate/")
+  dir_oryza_api_inputs_setup <- paste0(dir_oryza_api_inputs_zip, "setups/")
 
 ##ProbForecats files lists for merging (For importation proccess)
 metrics_list <- list()
@@ -242,6 +272,11 @@ for(c in countries_list){
     pathConstruct(dirPrediccionInputs)            # ./inputs/prediccionClimatica/
       pathConstruct(dir_save)                     # ./inputs/prediccionClimatica/descarga
       pathConstruct(dir_runCPT)                   # ./inputs/prediccionClimatica/run_CPT
+      #Oryza API
+      pathConstruct(dir_oryza_api_inputs)         # ./workdir/oryzaApiInputs/
+      pathConstruct(dir_oryza_api_inputs_zip)     # ./workdir/oryzaApiInputs/inputs
+      pathConstruct(dir_oryza_api_inputs_climate) # ./workdir/oryzaApiInputs/inputs/climate
+      pathConstruct(dir_oryza_api_inputs_setup)   # ./workdir/oryzaApiInputs/inputs/setups
   # OUTPUTS
   pathConstruct(dirUnifiedOutputs)                # /unified_outputs/
   pathConstruct(dirOutputs)                       # ./outputs/
@@ -331,7 +366,7 @@ write_csv(bind_rows(probabilities_list), paste0(probForecastUnifiedDir, "probabi
 setwd(paste0(scriptsDir, "forecast_app"))
 CMDdirOutputs <- paste0(dirUnifiedOutputs, "outputs/") #paste0(gsub("/","\\\\",dirOutputs), "\\\"")
 try(system(paste0(forecastAppDll,"-in -fs -cf 0.5 -p \"",CMDdirOutputs, "\""), intern = TRUE, ignore.stderr = TRUE))
-try(system(paste0(forecastAppDll,"-share"), intern = TRUE, ignore.stderr = TRUE))
+#try(system(paste0(forecastAppDll,"-share"), intern = TRUE, ignore.stderr = TRUE))
 
 # # Delete cropmodels cacheS
 # pathConstruct(dirCultivosOutputs)             # ./outputs/cultivos/
