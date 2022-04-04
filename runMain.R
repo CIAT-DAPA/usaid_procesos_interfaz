@@ -157,35 +157,47 @@ make_error_report <- function(scenaries, failed_reasons){
 
 }
 
-run_oryza_by_setup <- function(setup){
+run_oryza_by_setup <- function(setups){
+  auth <- "https://oryza.aclimate.org/api/auth"
+  process <- "https://oryza.aclimate.org/api/runOryza"
+
+  #authenitcation token
+  identify_body <- '{
+      "user": "admin",
+      "pass": "1234"
+      }'
+  response <- httr::POST(auth, body=identify_body, content_type_json(), verbose())
+  token <- fromJSON(content(response, "text"))$token
   currentWd <- getwd()
-  scenarie <- str_split_fixed(setup, '/', n=8) #current scenarie/setup
-  correction <- str_split_fixed(scenarie[8], '_', n=2)
-  station <- gsub('/', '', correction[1]) #current climatic station
 
-  #Copying a compressing files for Oryza API
-  file.copy(paste0(path_output, "/",station, "/"), dir_oryza_api_inputs_climate, recursive=TRUE)
-  file.copy(paste0(dirModeloArrozInputs, scenarie[8],"/"), dir_oryza_api_inputs_setup, recursive=TRUE)
-  setwd('/forecast/workdir/oryzaApiInputs/')
-  zip(zipfile='inputs', './inputs')
+  for(setup in setups){
+    scenarie <- str_split_fixed(setup, '/', n=8) #current scenarie/setup
+    correction <- str_split_fixed(scenarie[8], '_', n=2)
+    station <- gsub('/', '', correction[1]) #current climatic station
 
-  #Calling Oryza API
-  #POST("http://sampledomain.com/api/data/?key=xxx", body = list(y = upload_file(system.file("my_data.zip"))))
-  #download.file(urls[i], path_Chirp_all[i], mode = "w")
-  dest <- paste0(dirModeloArrozInputs, "/data/weekly_2017-02-18.zip")
-  GET("https://www.example.com/weeklydata/weekly_2017-02-18.zip", 
-     authenticate("myemail", "mypassword", "basic"), 
-     write_disk(dest, overwrite = TRUE))
+    #Copying a compressing files for Oryza API
+    file.copy(paste0(path_output, "/",station, "/"), dir_oryza_api_inputs_climate, recursive=TRUE)
+    file.copy(paste0(dirModeloArrozInputs, scenarie[8],"/"), dir_oryza_api_inputs_setup, recursive=TRUE)
+    setwd('/forecast/workdir/oryzaApiInputs/')
+    zip(zipfile='inputs', './inputs')
 
+    #Calling Oryza API
+    dest <- paste0(dirModeloArrozOutputs)
+    fileZip <- upload_file(paste0(dir_oryza_api_inputs_zip, "/inputs.zip"))
+    httr::POST(process, 
+              add_headers('Content-Type'='multipart/form-data', 'access-token'=token), 
+              body = list("fileZip" = upload_file(paste0(dir_oryza_api_inputs_zip, "/inputs.zip")), 
+              write_disk(paste0(scenarie, ".csv"), overwrite = TRUE)) #Copying output csv on rice outputs
+    
 
-  #Copying output csv on rice outputs
+    #Deleting inputs files to replace
+    unlink(paste0(dir_oryza_api_inputs_climate, station), recursive = TRUE)
+    unlink(paste0(dir_oryza_api_inputs_setup, scenarie[8]), recursive = TRUE)
+    unlink(paste0(dir_oryza_api_inputs, 'inputs.zip'), recursive = TRUE)
 
-  #Deleting files
-  unlink(paste0(dir_oryza_api_inputs_climate, station), recursive = TRUE)
-  unlink(paste0(dir_oryza_api_inputs_setup, scenarie[8]), recursive = TRUE)
-  unlink(paste0(dir_oryza_api_inputs, 'inputs.zip'), recursive = TRUE)
+  }
+
   setwd(currentWd)
-
 }
 
 
