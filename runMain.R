@@ -166,11 +166,11 @@ run_oryza_by_setup <- function(setups){
       "user": "admin",
       "pass": "1234"
       }'
-  response <- httr::POST(auth, body=identify_body, content_type_json(), verbose())
-  token <- fromJSON(content(response, "text"))$token
-  currentWd <- getwd()
+  #currentWd <- getwd()
 
-  for(setup in setups){
+  make_request_oryza <- function(setup) {
+    response <- httr::POST(auth, add_headers('accept-encoding'='gzip, deflate'), body=identify_body, content_type_json(), verbose())
+    token <- fromJSON(content(response, "text"))$token
     scenarie <- str_split_fixed(setup, '/', n=8) #current scenarie/setup
     correction <- str_split_fixed(scenarie[8], '_', n=2)
     station <- gsub('/', '', correction[1]) #current climatic station
@@ -182,22 +182,28 @@ run_oryza_by_setup <- function(setups){
     zip(zipfile='inputs', './inputs')
 
     #Calling Oryza API
-    dest <- paste0(dirModeloArrozOutputs)
-    fileZip <- upload_file(paste0(dir_oryza_api_inputs_zip, "/inputs.zip"))
-    httr::POST(process, 
-              add_headers('Content-Type'='multipart/form-data', 'access-token'=token), 
-              body = list("fileZip" = upload_file(paste0(dir_oryza_api_inputs_zip, "/inputs.zip")), 
-              write_disk(paste0(scenarie, ".csv"), overwrite = TRUE)) #Copying output csv on rice outputs
-    
+    dest <- paste0(dirModeloArrozOutputs, substring(scenarie[8], 2), ".csv")
+    cat(paste("enviado", Sys.time()))
 
+   
+    httr::POST(process, 
+              add_headers('Content-Type'='multipart/form-data', 'access-token'=token, 'accept-encoding'='gzip, deflate'), 
+              body = list("fileZip" = upload_file(paste0(dir_oryza_api_inputs, "inputs.zip"))), 
+              write_disk(dest, overwrite = TRUE)) #Copying output csv on rice outputs
+      
+
+  
+    #Sys.sleep(10)
+    cat(paste("recibido", Sys.time()))
     #Deleting inputs files to replace
     unlink(paste0(dir_oryza_api_inputs_climate, station), recursive = TRUE)
     unlink(paste0(dir_oryza_api_inputs_setup, scenarie[8]), recursive = TRUE)
     unlink(paste0(dir_oryza_api_inputs, 'inputs.zip'), recursive = TRUE)
 
   }
+  results <- lapply(setups, make_request_oryza)
 
-  setwd(currentWd)
+  #setwd(currentWd)
 }
 
 
@@ -252,6 +258,7 @@ for(c in countries_list){
         dir_runCPT <- paste0(dirPrediccionInputs, "run_CPT", sep = "", collapse = NULL)
         dir_response <- paste0(dirPrediccionInputs, "estacionesMensuales", sep = "", collapse = NULL)
         dir_stations <- paste0(dirPrediccionInputs, "dailyData", sep = "", collapse = NULL)
+        dir_inputs_nextgen <- paste0(dirPrediccionInputs, "NextGen", sep = "", collapse = NULL)
       dirCultivosInputs <-paste0(dirInputs, "cultivos/", sep = "", collapse = NULL)
       # Input variables Maize model module
       dirModeloMaizInputs <- paste0(dirInputs, "cultivos/", maize_name_by_country, "/", sep = "", collapse = NULL)
@@ -265,6 +272,7 @@ for(c in countries_list){
     dirOutputs <- paste0(dirCurrent, "outputs/", sep = "", collapse = NULL)
       # Output variables Forecast module
       dirPrediccionOutputs <- paste0(dirOutputs, "prediccionClimatica/", sep = "", collapse = NULL)
+      dirNextGen <- paste0(dirOutputs, "NextGen/", sep = "", collapse = NULL)
         path_save <- paste0(dirPrediccionOutputs, "probForecast", sep = "", collapse = NULL)
         path_rasters <- paste0(dirPrediccionOutputs, "raster", sep = "", collapse = NULL)
         path_output <- paste0(dirPrediccionOutputs, "resampling", sep = "", collapse = NULL)
@@ -290,6 +298,7 @@ for(c in countries_list){
     pathConstruct(dirPrediccionInputs)            # ./inputs/prediccionClimatica/
       pathConstruct(dir_save)                     # ./inputs/prediccionClimatica/descarga
       pathConstruct(dir_runCPT)                   # ./inputs/prediccionClimatica/run_CPT
+      pathConstruct(dir_inputs_nextgen)           # ./inputs/prediccionClimatica/NextGen
       #Oryza API
       pathConstruct(dir_oryza_api_inputs)         # ./workdir/oryzaApiInputs/
       pathConstruct(dir_oryza_api_inputs_zip)     # ./workdir/oryzaApiInputs/inputs
@@ -299,6 +308,7 @@ for(c in countries_list){
   pathConstruct(dirUnifiedOutputs)                # /unified_outputs/
   pathConstruct(dirOutputs)                       # ./outputs/
     pathConstruct(dirPrediccionOutputs)           # ./outputs/prediccionClimatica/
+    pathConstruct(dirNextGen)                      # ./outputs/NextGen/
       pathConstruct(path_save)                    # ./outputs/prediccionClimatica/probForecas
       pathConstruct(path_rasters)                 # ./outputs/prediccionClimatica/raster
       pathConstruct(path_output)                  # ./outputs/prediccionClimatica/resampling
@@ -325,7 +335,9 @@ for(c in countries_list){
                 paste0(forecastAppDll,"-out -s \"prec\" -p \"",CMDdirInputs,"\" -start 1982 -end 2013 -c \"", objectIdCurrentCountry, "\""),
                 paste0(forecastAppDll,"-out -wf -p \"",CMDdirInputs,"\" -name \"daily\" -c \"", objectIdCurrentCountry, "\""),
                 paste0(forecastAppDll,"-out -co -p \"",CMDdirInputs,"\" -name \"daily\" -c \"", objectIdCurrentCountry, "\""),
-                paste0(forecastAppDll,"-out -fs -p \"",CMDdirCropsInputs, "\" -c \"", objectIdCurrentCountry, "\""))
+                paste0(forecastAppDll,"-out -fs -p \"",CMDdirCropsInputs, "\" -c \"", objectIdCurrentCountry, "\""),
+                paste0(forecastAppDll, "-out -py -p \"", dir_inputs_nextgen, "\" -c \"", objectIdCurrentCountry, "\""),
+                paste0(forecastAppDll, "-out -pyco -p \"", dir_inputs_nextgen, "\" -c \"", objectIdCurrentCountry, "\""))
 
   print(dotnet_cmd)
 
@@ -333,8 +345,10 @@ for(c in countries_list){
   try(system(dotnet_cmd[2], intern = TRUE, ignore.stderr = TRUE))
   try(system(dotnet_cmd[3], intern = TRUE, ignore.stderr = TRUE))
   try(system(dotnet_cmd[4], intern = TRUE, ignore.stderr = TRUE))
-  #CMDdirInputs <- paste0(gsub("/","\\\\",dirInputs), "\\\"")
   try(system(dotnet_cmd[5], intern = TRUE, ignore.stderr = TRUE))
+  try(system(dotnet_cmd[6], intern = TRUE, ignore.stderr = TRUE))
+  try(system(dotnet_cmd[7], intern = TRUE, ignore.stderr = TRUE))
+
 
   # Prediction process
   runPrediccion <- source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL))
@@ -356,10 +370,9 @@ for(c in countries_list){
   #make_error_report(failed_sceneries, failed_reasons)
 
   ## Rice crop model process
-  #setups <- list.dirs(dirModeloArrozInputs,full.names = T)
-  # Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
-  #setups <- if(no_cores > 1) setups[-1] else setups
-  #runCrop("arroz", setups)
+  setups <- list.dirs(dirModeloArrozInputs,full.names = T)
+  run_oryza_by_setup(setups[4:7])
+  
 
   ## Frijol crop model process
   #setups <- list.dirs(dirModeloFrijolInputs,full.names = T)
@@ -384,6 +397,8 @@ write_csv(bind_rows(probabilities_list), paste0(probForecastUnifiedDir, "probabi
 setwd(paste0(scriptsDir, "forecast_app"))
 CMDdirOutputs <- paste0(dirUnifiedOutputs, "outputs/") #paste0(gsub("/","\\\\",dirOutputs), "\\\"")
 try(system(paste0(forecastAppDll,"-in -fs -cf 0.5 -p \"",CMDdirOutputs, "\""), intern = TRUE, ignore.stderr = TRUE))
+#Raster upload ----------------
+
 #try(system(paste0(forecastAppDll,"-share"), intern = TRUE, ignore.stderr = TRUE))
 
 # # Delete cropmodels cacheS
