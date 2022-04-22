@@ -1,5 +1,7 @@
 
-url_geoserver_api <- "https://geo.aclimate.org/" #"http://172.17.0.2:8080/geoserver/rest/imports"
+#http://localhost:8600/geoserver/rest/imports
+#url_geoserver_api <- "https://geo.aclimate.org/" #"http://localhost:8600/geoserver/rest/imports"
+url_geoserver_api <- "http://localhost:8600/geoserver/rest/imports"
 #Upload and import the raster files to Geosever
 #The first POST() upload the raster files and prepare them to be import
 #The second POST() import the raster files
@@ -24,7 +26,7 @@ upload_raster_files_to_geoserver <- function(geoserver_url_api){
         },
         "data": {
           "type": "directory",
-          "location": "/usr/share/geoserver/data_dir"
+          "location": "/data/aclimate_et/"
         }
     }
   }')

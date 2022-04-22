@@ -371,7 +371,8 @@ for(c in countries_list){
 
   ## Rice crop model process
   setups <- list.dirs(dirModeloArrozInputs,full.names = T)
-  run_oryza_by_setup(setups[4:7])
+  setups <- if(no_cores > 1) setups[-1] else setups
+  run_oryza_by_setup(setups)
   
 
   ## Frijol crop model process
