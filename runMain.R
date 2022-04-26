@@ -232,6 +232,10 @@ dirCurrent <- "/forecast/usaid_procesos_interfaz/"
   ## Global variables Frijol model module
   dir_dssat <- 'C:/DSSAT46/'  ## its necessary to have the parameters .CUL, .ECO, .SPE Updated for running (calibrated the crop (Frijol))
   dirModeloFrijol <- paste0(dirCurrent, "modeloFrijol/", sep = "", collapse = NULL)
+
+  #Script that upload files to the Geoserver file system
+  dir_pysftp_script <- paste0(dirCurrent, "pythonScripts/")
+  dir_pycpt_scripts <- paste0(dirForecast, "PyCPT/")
   
   #Common directory to send data to Oryza API
   dir_oryza_api_inputs <- "/forecast/workdir/oryzaApiInputs/"
@@ -239,13 +243,13 @@ dirCurrent <- "/forecast/usaid_procesos_interfaz/"
   dir_oryza_api_inputs_climate <- paste0(dir_oryza_api_inputs_zip, "climate/")
   dir_oryza_api_inputs_setup <- paste0(dir_oryza_api_inputs_zip, "setups/")
 
+
 ##ProbForecats files lists for merging (For importation proccess)
 metrics_list <- list()
 probabilities_list <- list()
 
 for(c in countries_list){
   currentCountry <- c
-
     #Checks country for avoid conlicts
     maize_name_by_country <- if(currentCountry=="COLOMBIA") "maiz" else "maize"
 
@@ -269,6 +273,8 @@ for(c in countries_list){
 
     # OUTPUTS variables
     dirUnifiedOutputs <- paste0("/forecast/workdir/", "unified_outputs", "/")
+    #Outputs NExtGen
+    dir_outputs_nextgen <- paste0("/forecast/PyCPT/iri-pycpt/", currentCountry, "/output/")
     dirOutputs <- paste0(dirCurrent, "outputs/", sep = "", collapse = NULL)
       # Output variables Forecast module
       dirPrediccionOutputs <- paste0(dirOutputs, "prediccionClimatica/", sep = "", collapse = NULL)
@@ -351,10 +357,10 @@ for(c in countries_list){
 
 
   # Prediction process
-  runPrediccion <- source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL))
+  runPrediccion <- if(currentCountry=="COLOMBIA") source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL)) else source(paste(dirForecast, "PyCPT/", 'PyCPT_from_R.R', sep = "", collapse = NULL)
 
   # Import raster to Geoserver process
-  #runRasterImport <- source(paste(dirForecast,'raster_files_upload.R', sep = "", collapse = NULL))
+  runRasterImport <- source(paste(dirForecast,'raster_files_upload.R', sep = "", collapse = NULL))
 
   # Resampling process
   runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse = NULL))

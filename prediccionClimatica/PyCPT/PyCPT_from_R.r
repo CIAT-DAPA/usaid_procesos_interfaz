@@ -1,11 +1,12 @@
 #install.packages('rjson') #Install rjson
 library("jsonlite")
 
+#Reading json config file
 setwd(dir_inputs_nextgen) #json files location
 inputsPyCPT <- read_json("Structure ConfigurationPyCpt.json")
 inputsPyCPT
 
-region <- "ETHIOPIA"
+region <- currentCountry
 
 spatial_predictors <- paste(inputsPyCPT$spatial_predictors, collapse = " ")
 spatial_predictors <- gsub(" ", ",", spatial_predictors)
@@ -58,7 +59,9 @@ forecast_spi <- inputsPyCPT$forecast_spi
 confidence_level <- inputsPyCPT$confidence_level
 ind_exec <- inputsPyCPT$ind_exec
 
-setwd("/forecast/PyCPT/iri-pycpt/")
+#pycpt_iri <- "/forecast/PyCPT/iri-pycpt/"
+setwd(dir_pycpt_scripts)
+#Running PyCPT
 system(paste("python run_main.py", region, spatial_predictors, spatial_predictands, 
              models, obs, station, mos, predictand, predictor, mons, tgtii, 
              tgtff, tgts, tini, tend, xmodes_min, xmodes_max, ymodes_min, 
@@ -70,7 +73,7 @@ system(paste("python run_main.py", region, spatial_predictors, spatial_predictan
 #datadir <- dirNextGen
 #setwd(datadir)
 #datadir <- paste0(dirCurrent, "output/")#"/forecast/PyCPT/iri-pycpt/ETHIOPIA/output"
-datadir <- "/forecast/PyCPT/iri-pycpt/ETHIOPIA/output/"
+datadir <- dir_outputs_nextgen
 setwd(datadir)
 dir.create(file.path(datadir,"nc_files"))
 
@@ -122,7 +125,7 @@ for(i in 1:length(nextGenFileName_prob)){
   stacksBySeason [[i]] = stack(dataNextGenBelow, dataNextGenNormal, dataNextGenAbove)
 }
 monthsNumber <- list("Jan-Mar"=2, "Feb-Apr"=3, "Mar-May"=4, "Apr-Jun"=5, "May-Jul"=6, "Jun-Aug"=7, "Jul-Sep"=8, "Aug-Oct"=9, "Sep-Nov"=10, "Oct-Dec"=11, "Nov-Jan"=12, "Dec-Feb"=1)
-stations_coords <- read.table("/forecast/workdir/ETHIOPIA/inputs/prediccionClimatica/NextGenPycptData/Ethiopia/stations_coords.csv", head=TRUE, sep=",")
+stations_coords <- read.table(paste0(dirPrediccionInputs, "NextGenPycptData/Ethiopia/stations_coords.csv"), head=TRUE, sep=",")
 coords <- data.frame(stations_coords$lon, stations_coords$lat)
 names (coords)[1:2] =c("lon", "lat")
 
@@ -148,9 +151,11 @@ for (i in 2:length(list_Prob_Forec)){
 list_Prob_Forec_new = rbind(list_Prob_Forec_new, as.data.frame(list_Prob_Forec[[i]]))
 
 }
-write.table(list_Prob_Forec_new, "/forecast/workdir/ETHIOPIA/outputs/prediccionClimatica/probForecast/probabilities.csv", row.names=FALSE, sep=",")
+#Writting probabilities csv
+write.table(list_Prob_Forec_new, paste0(path_save, "/probabilities.csv"), row.names=FALSE, sep=",")
 
-
-#head(P_forecast_final)
+##uploading output file to the Geoserver file system
+setwd(dir_pysftp_script)
+system("python upload_rasters_sftp.py")
 
 

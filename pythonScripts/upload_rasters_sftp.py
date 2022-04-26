@@ -14,9 +14,5 @@ cnopts.hostkeys = None
 # change directory on remote server
 with pysftp.Connection(host, username, private_key=private_key, cnopts=cnopts) as sftp:
     print('Connected')
-    # sftp.cwd(remote_path)
     sftp.put_d(local_path, remote_path, preserve_mtime=True)
-    #sftp.put_d(local_path, preserve_mtime=True, remotepath=remote_path)
-    # print(sftp.listdir())
-    # print(sftp.pwd)
-    # print(sftp.pwd)
+    
