@@ -31,7 +31,8 @@ if(length(.libPaths()) == 1){
 #   . R librarys
 #   . CPT_batch
 #   . DSSAT
-#   . Oriza
+#   . Oryza
+#   . Pycpt NextGen
 library(corpcor)
 library(data.table)
 library(foreach)
@@ -45,11 +46,10 @@ library(raster)
 library(rebus)
 library(reshape)
 library(rgdal)
+library(ncdf4) #Must be installed on the image
 library(stringr)
 library(tidyverse)
 library(trend)
-#library(rjson)
-
 library(curl)
 library(askpass)
 library(jsonlite)
@@ -150,13 +150,6 @@ runCrop <- function(crop, setups) {
 
 }
 
-
-make_error_report <- function(scenaries, failed_reasons){
-  file_report <- cbind(failed_scenaries, failed_reasons)
-  write_csv(file_report, paste0(dir_output_maiz, "scenaries_error_report.csv"))
-
-}
-
 run_oryza_by_setup <- function(setups){
   auth <- "https://oryza.aclimate.org/api/auth"
   process <- "https://oryza.aclimate.org/api/runOryza"
@@ -209,11 +202,7 @@ run_oryza_by_setup <- function(setups){
 
 ## MAIN PATH
 start.time <- Sys.time()
-
-#dirCurrent <- paste0(get_script_path(), "/", sep = "", collapse = NULL)
-#dirCurrent <- "C:/usaid_procesos_interfaz/"
 #dirCurrent <- "/forecast/workdir/usaid_procesos_interfaz/"
-#dirCurrent <- "/forecast_process/usaid_procesos_interfaz/"
 dirCurrent <- "/forecast/usaid_procesos_interfaz/"
 
   # forecastAppDll app - App de consola que se conecta a la base de datos
@@ -234,8 +223,8 @@ dirCurrent <- "/forecast/usaid_procesos_interfaz/"
   dirModeloFrijol <- paste0(dirCurrent, "modeloFrijol/", sep = "", collapse = NULL)
 
   #Script that upload files to the Geoserver file system
-  dir_pysftp_script <- paste0(dirCurrent, "pythonScripts/")
-  dir_pycpt_scripts <- paste0(dirForecast, "PyCPT/")
+  dir_python_folder <- paste0(dirCurrent, "python/")
+  dir_pycpt_scripts <- paste0(dir_python_folder, "PyCPT/")
   
   #Common directory to send data to Oryza API
   dir_oryza_api_inputs <- "/forecast/workdir/oryzaApiInputs/"
@@ -357,10 +346,15 @@ for(c in countries_list){
 
 
   # Prediction process
-  runPrediccion <- if(currentCountry=="COLOMBIA") source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL)) else source(paste(dirForecast, "PyCPT/", 'PyCPT_from_R.R', sep = "", collapse = NULL)
+  if(currentCountry=="COLOMBIA"){
+  source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL)) 
+  } else {
+  source(paste(dir_pycpt_scripts, 'PyCPT_from_R.r', sep = "", collapse = NULL))
+  }
 
-  # Import raster to Geoserver process
-  runRasterImport <- source(paste(dirForecast,'raster_files_upload.R', sep = "", collapse = NULL))
+  ## Uploading output files to the Geoserver file system
+  setwd(dir_python_folder)
+  system("python upload_rasters_sftp.py")
 
   # Resampling process
   runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse = NULL))
@@ -373,7 +367,7 @@ for(c in countries_list){
   # Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
   #setups <- if(no_cores > 1) setups[-1] else setups
   runCrop("maiz", setups)
-  #make_error_report(failed_sceneries, failed_reasons)
+
 
   ## Rice crop model process
   setups <- list.dirs(dirModeloArrozInputs,full.names = T)
@@ -398,33 +392,13 @@ probForecastUnifiedDir <- paste0(dirUnifiedOutputs, "outputs/prediccionClimatica
 write_csv(bind_rows(metrics_list), paste0(probForecastUnifiedDir, "metrics.csv"))
 write_csv(bind_rows(probabilities_list), paste0(probForecastUnifiedDir, "probabilities.csv"))
 
-
-
 # Upload proccess results to interface database
 setwd(paste0(scriptsDir, "forecast_app"))
 CMDdirOutputs <- paste0(dirUnifiedOutputs, "outputs/") #paste0(gsub("/","\\\\",dirOutputs), "\\\"")
 try(system(paste0(forecastAppDll,"-in -fs -cf 0.5 -p \"",CMDdirOutputs, "\""), intern = TRUE, ignore.stderr = TRUE))
-#Raster upload ----------------
 
-#try(system(paste0(forecastAppDll,"-share"), intern = TRUE, ignore.stderr = TRUE))
-
-# # Delete cropmodels cacheS
-# pathConstruct(dirCultivosOutputs)             # ./outputs/cultivos/
-
-# # send mail
-# try(system(paste0(forecastAppDll,"-out -usr -p \"",CMDdirOutputs), intern = TRUE, ignore.stderr = TRUE))
-
-# sender <- "pronosticosaclimate@gmail.com"
-# #recipients <- readLines(paste0(dirOutputs, "notify/notify.csv"))
-# recipients <- c("edarague@gmail.com")
-# email <- send.mail(from = sender,
-#                    to = recipients,
-#                    subject="Resultados pronosticos",
-#                    body = "El proceso ha finalizado con 'exito",
-#                    smtp = list(host.name = "aspmx.l.google.com", port = 25),
-#                    authenticate = FALSE,
-#                    send = FALSE)
-# email$send() # execute to send email
+#Import raster to Geoserver process
+runRasterImport <- source(paste(dirForecast,'raster_files_upload.R', sep = "", collapse = NULL))
 
 end.time <- Sys.time()
 time.taken <- end.time - start.time
