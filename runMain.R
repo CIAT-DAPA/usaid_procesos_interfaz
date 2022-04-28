@@ -199,6 +199,36 @@ run_oryza_by_setup <- function(setups){
   #setwd(currentWd)
 }
 
+rasterRename <- function() {
+  forecastID <- "1"
+  trimesters <- list("Jan-Mar"="jfm", "Feb-Apr"="fma", "Mar-May"="mam", "Apr-Jun"="amj", "May-Jul"="mjj", "Jun-Aug"="jja", "Jul-Sep"="jas", "Aug-Oct"="aso", "Sep-Nov"="son", "Oct-Dec"="ond", "Nov-Jan"="ndj", "Dec-Feb"="djf")
+
+
+  #Writting deterministic raster files (to upload to geoserver)
+  for(i in 1:length(nextGenFileName_det)){
+    firstModel <- raster(paste0(datadir, "/", nextGenFileName_det[i]))
+    secondModel <- raster(paste0(datadir, "/", nextGenFileName_det[i]))
+
+    #Writting raster files in .tif
+    writeRaster(firstModel, paste0(path_rasters, "/", tolower(paste0("seasonal_", currentCountry, "_" ,trimesters[tgts[i]], "_deterministic_", monf, "_", fyr, ".tif"))), overwrite=TRUE)
+    writeRaster(secondModel, paste0(path_rasters, "/", tolower(paste0("seasonal_", currentCountry, "_" ,trimesters[tgts[i]], "_deterministic_", monf, "_", fyr, ".tif"))), overwrite=TRUE)
+
+  }
+
+  for(i in 1:length(nextGenFileName_prob)){
+    dataNextGenAbove = raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname="Above_Normal")
+    dataNextGenBelow = raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname="Below_Normal")
+    dataNextGenNormal = raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname="Normal")
+
+    #Writting raster files in .tif
+    writeRaster(dataNextGenAbove, paste0(path_rasters, "/", tolower(paste0("seasonal_", currentCountry, "_" ,trimesters[tgts[i]], "_probabilistic_above_", monf, "_", fyr, ".tif"))), overwrite=TRUE)
+    writeRaster(dataNextGenBelow, paste0(path_rasters, "/", tolower(paste0("seasonal_", currentCountry, "_" ,trimesters[tgts[i]], "_probabilistic_below_", monf, "_", fyr, ".tif"))), overwrite=TRUE)
+    writeRaster(dataNextGenNormal, paste0(path_rasters, "/", tolower(paste0("seasonal_", currentCountry, "_" ,trimesters[tgts[i]], "_probabilistic_normal_", monf, "_", fyr, ".tif"))), overwrite=TRUE)
+
+  }
+
+}
+
 
 ## MAIN PATH
 start.time <- Sys.time()
