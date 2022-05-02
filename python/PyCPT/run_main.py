@@ -62,11 +62,9 @@ forecast_spi = True if sys.argv[25] == 'TRUE' else False
 print(type(forecast_spi), forecast_spi)
 confidence_level = int(sys.argv[26])
 print(type(confidence_level), confidence_level)
-ind_exec = int(sys.argv[27])
-print(type(ind_exec), ind_exec)
 
 run_pycpt(region, spatial_predictors, spatial_predictands, models, obs, station,
           mos, predictand, predictor, mons, tgtii, tgtff, tgts, tini, tend,
           xmodes_min, xmodes_max, ymodes_min, ymodes_max, ccamodes_min,
           ccamodes_max, force_download, single_models, forecast_anomaly,
-          forecast_spi, confidence_level, ind_exec)
+          forecast_spi, confidence_level)

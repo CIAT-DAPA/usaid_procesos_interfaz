@@ -78,7 +78,7 @@ def months_short(inputdate):
 
 def run_pycpt(region, spatial_predictors, spatial_predictands, models, obs, station, mos, predictand, predictor, mons, tgtii, tgtff, tgts, tini, tend,
               xmodes_min, xmodes_max, ymodes_min, ymodes_max, ccamodes_min, ccamodes_max, force_download, single_models, forecast_anomaly, forecast_spi,
-              confidence_level, ind_exec):
+              confidence_level):
 
     current_date = datetime.date.today()
     # Work name (name of the work folder; e.g., one word followed by "_seasonal":)
