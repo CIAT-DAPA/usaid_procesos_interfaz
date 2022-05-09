@@ -4,7 +4,7 @@ private_key = r'\forecast\workdir\.ssh\id_rsa-aclimate'
 host = "172.30.0.31"
 username = "aclimate"
 #local_path = r'D:\forecast_process\workdir\ETHIOPIA\output'
-local_path = r'\forecast\workdir\ETHIOPIA\output\nc_files'
+local_path = r'\forecast\workdir\ETHIOPIA\outputs\prediccionClimatica\raster'
 remote_path = '/data/aclimate_et/'
 
 # Ignore host check

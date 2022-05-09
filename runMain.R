@@ -199,7 +199,7 @@ run_oryza_by_setup <- function(setups){
   #setwd(currentWd)
 }
 
-rasterRename <- function() {
+rasterRename <- function(forecastID) {
   forecastID <- "1"
   trimesters <- list("Jan-Mar"="jfm", "Feb-Apr"="fma", "Mar-May"="mam", "Apr-Jun"="amj", "May-Jul"="mjj", "Jun-Aug"="jja", "Jul-Sep"="jas", "Aug-Oct"="aso", "Sep-Nov"="son", "Oct-Dec"="ond", "Nov-Jan"="ndj", "Dec-Feb"="djf")
 
@@ -215,19 +215,27 @@ rasterRename <- function() {
 
   }
 
+  #Writting probabilistic raster files (to upload to geoserver)
+
   for(i in 1:length(nextGenFileName_prob)){
     dataNextGenAbove = raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname="Above_Normal")
-    dataNextGenBelow = raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname="Below_Normal")
+    dataNextGenBelow = raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname="Below_Normal") # seasonal_country_probabilistic_above_71e59d829d5d2486e18d2aa2_apr_2022_amj.tif
     dataNextGenNormal = raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname="Normal")
 
     #Writting raster files in .tif
-    writeRaster(dataNextGenAbove, paste0(path_rasters, "/", tolower(paste0("seasonal_", currentCountry, "_" ,trimesters[tgts[i]], "_probabilistic_above_", monf, "_", fyr, ".tif"))), overwrite=TRUE)
-    writeRaster(dataNextGenBelow, paste0(path_rasters, "/", tolower(paste0("seasonal_", currentCountry, "_" ,trimesters[tgts[i]], "_probabilistic_below_", monf, "_", fyr, ".tif"))), overwrite=TRUE)
-    writeRaster(dataNextGenNormal, paste0(path_rasters, "/", tolower(paste0("seasonal_", currentCountry, "_" ,trimesters[tgts[i]], "_probabilistic_normal_", monf, "_", fyr, ".tif"))), overwrite=TRUE)
+    writeRaster(dataNextGenAbove, paste0(path_rasters, "/", tolower(paste0("seasonal_country_probabilistic_above", "_" ,trimesters[tgts[i]], "_probabilistic_above_", monf, "_", fyr, ".tif"))), overwrite=TRUE)
+    writeRaster(dataNextGenBelow, paste0(path_rasters, "/", tolower(paste0("seasonal_country_probabilistic_below", currentCountry, "_" ,trimesters[tgts[i]], "_probabilistic_below_", monf, "_", fyr, ".tif"))), overwrite=TRUE)
+    writeRaster(dataNextGenNormal, paste0(path_rasters, "/", tolower(paste0("seasonal_country_probabilistic_normal", currentCountry, "_" ,trimesters[tgts[i]], "_probabilistic_normal_", monf, "_", fyr, ".tif"))), overwrite=TRUE)
 
   }
 
 }
+
+#Python upload/import function---
+#Country name, filepath
+#Main function
+#Import function if exists
+#Creates store if not exist and imports data
 
 
 ## MAIN PATH
@@ -356,12 +364,13 @@ for(c in countries_list){
   CMDdirInputs <- dirPrediccionInputs
   CMDdirCropsInputs <- dirInputs
   objectIdCurrentCountry <- countries_ids[currentCountry]
+  pyCPTMonth <- "5"
   dotnet_cmd <- c(paste0(forecastAppDll,"-out -cpt -p \"",CMDdirInputs, "\" -c \"", objectIdCurrentCountry, "\""),
                 paste0(forecastAppDll,"-out -s \"prec\" -p \"",CMDdirInputs,"\" -start 1982 -end 2013 -c \"", objectIdCurrentCountry, "\""),
                 paste0(forecastAppDll,"-out -wf -p \"",CMDdirInputs,"\" -name \"daily\" -c \"", objectIdCurrentCountry, "\""),
                 paste0(forecastAppDll,"-out -co -p \"",CMDdirInputs,"\" -name \"daily\" -c \"", objectIdCurrentCountry, "\""),
                 paste0(forecastAppDll,"-out -fs -p \"",CMDdirCropsInputs, "\" -c \"", objectIdCurrentCountry, "\""),
-                paste0(forecastAppDll, "-out -py -p \"", dir_inputs_nextgen, "\" -c \"", objectIdCurrentCountry, "\""),
+                paste0(forecastAppDll, "-out -py -p \"", dir_inputs_nextgen, "\" -c \"", objectIdCurrentCountry, "\" -m \"", pyCPTMonth, "\""),
                 paste0(forecastAppDll, "-out -pyco -p \"", dir_inputs_nextgen, "\" -c \"", objectIdCurrentCountry, "\""))
 
   print(dotnet_cmd)
@@ -371,8 +380,8 @@ for(c in countries_list){
   try(system(dotnet_cmd[3], intern = TRUE, ignore.stderr = TRUE))
   try(system(dotnet_cmd[4], intern = TRUE, ignore.stderr = TRUE))
   try(system(dotnet_cmd[5], intern = TRUE, ignore.stderr = TRUE))
-  try(system(dotnet_cmd[6], intern = TRUE, ignore.stderr = TRUE))
-  try(system(dotnet_cmd[7], intern = TRUE, ignore.stderr = TRUE))
+  try(system(dotnet_cmd[6], intern = TRUE, ignore.stderr = TRUE)) "-m numero mes"
+  try(system(dotnet_cmd[7], intern = TRUE, ignore.stderr = TRUE)) 
 
 
   # Prediction process

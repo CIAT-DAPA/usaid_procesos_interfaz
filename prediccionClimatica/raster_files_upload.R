@@ -12,7 +12,7 @@ upload_raster_files_to_geoserver <- function(url_geoserver_api){
 
   require(httr)
   workspaceName <- paste0("aclimate_", countries_ids[currentCountry]) #aclimate_61e59d829d5d2486e18d2ea9"
-  remote_location <- "/opt/geoserver/data_dir/data" #"/data/aclimate_et/"
+  remote_location <- "data/aclimate_et/" #"/data/aclimate_et/"
 
   body <- list(
       import = list(targetWorkspace= list(workspace=list(name=workspaceName)), data=list(type="directory", location=remote_location))
