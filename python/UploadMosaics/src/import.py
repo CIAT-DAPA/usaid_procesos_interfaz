@@ -2,45 +2,42 @@ import os
 import sys
 from tools import GeoserverClient
 
-current_layer = sys.argv[2]
+
+stores_aclimate = ["seasonal_country_probabilistic_above", "seasonal_country_probabilistic_normal",
+                   "seasonal_country_probabilistic_below", "seasonal_country_deterministic"]
 folder_root = "/forecast/workdir/usaid_procesos_interfaz/python/UploadMosaics/"
 folder_data = os.path.join(folder_root, "data")
 folder_layers = os.path.join(folder_data, "layers")
 folder_properties = os.path.join(folder_layers, "properties")
 folder_tmp = os.path.join(folder_data, "tmp")
-current_rasters = os.path.join(folder_layers, current_layer)
-
-layer = os.path.join(
-    current_rasters, "6273d5bda31f58003091e701_jas_202208.tif")
-
-#dir_list = os.listdir(path)
-
 geo_url = "https://geo.aclimate.org/geoserver/rest/"
-geo_user = "dguzman"
-geo_pwd = "Mvu6ygSjQ#}hYW"
-
-workspace_name = "aclimate_et"
-# ["seasonal_country_probabilistic_above", "seasonal_country_probabilistic_normal", "seasonal_country_probabilistic_below", "seasonal_country_deterministic"]
-store_name = "seasonal_country_deterministic"
-############
+geo_user = os.environ['GEO_USER']
+geo_pwd = os.environ['GEO_PWD']
+workspace_name = sys.argv[1]
+# Connecting
 geoclient = GeoserverClient(geo_url, geo_user, geo_pwd)
 
-# for s in store_name:
-print("Importing")
-geoclient.connect()
-geoclient.get_workspace(workspace_name)
-store = geoclient.get_store(store_name)
-# geoclient.check(store)
+for current_store in stores_aclimate:
 
-if not store:
-    print("Creating mosaic")
-    geoclient.create_mosaic(store_name, layer, folder_properties, folder_tmp)
-else:
-    print("Updating mosaic")
-    geoclient.update_mosaic(store, layer, folder_properties, folder_tmp)
+    current_layer = current_store.split("_")[-1]
+    current_rasters_folder = os.path.join(folder_layers, current_layer)
+    rasters_files = os.listdir(current_rasters_folder)
 
-    #files = list()
-    # if "above" in s:
-    # files =
+    store_name = current_store
+    print("Importing")
+    geoclient.connect()
+    geoclient.get_workspace(workspace_name)
 
-    # result = map()
+    for r in rasters_files:
+        store = geoclient.get_store(store_name)
+        layer = os.path.join(current_rasters_folder, r)
+        if not store:
+            print("Creating mosaic")
+            geoclient.create_mosaic(
+                store_name, layer, folder_properties, folder_tmp)
+        else:
+            print("Updating mosaic")
+            geoclient.update_mosaic(
+                store, layer, folder_properties, folder_tmp)
+
+print("Process completed")

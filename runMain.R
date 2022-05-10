@@ -199,15 +199,15 @@ run_oryza_by_setup <- function(setups){
   #setwd(currentWd)
 }
 
-rasterRename <- function(forecastID) {
+prepareRastersUpload <- function(forecastID) {
   forecastID <- "1"
   trimesters <- list("Jan-Mar"="jfm", "Feb-Apr"="fma", "Mar-May"="mam", "Apr-Jun"="amj", "May-Jul"="mjj", "Jun-Aug"="jja", "Jul-Sep"="jas", "Aug-Oct"="aso", "Sep-Nov"="son", "Oct-Dec"="ond", "Nov-Jan"="ndj", "Dec-Feb"="djf")
 
 
   #Writting deterministic raster files (to upload to geoserver)
   for(i in 1:length(nextGenFileName_det)){
-    firstModel <- raster(paste0(datadir, "/", nextGenFileName_det[i]))
-    secondModel <- raster(paste0(datadir, "/", nextGenFileName_det[i]))
+    firstModel <- raster(paste0(dir_outputs_nextgen, "/", nextGenFileName_det[i]))
+    secondModel <- raster(paste0(dir_outputs_nextgen, "/", nextGenFileName_det[i]))
 
     #Writting raster files in .tif
     writeRaster(firstModel, paste0(path_rasters, "/", tolower(paste0("seasonal_", currentCountry, "_" ,trimesters[tgts[i]], "_deterministic_", monf, "_", fyr, ".tif"))), overwrite=TRUE)
@@ -229,6 +229,15 @@ rasterRename <- function(forecastID) {
 
   }
 
+}
+
+uploadRasterFiles <- function() {
+
+  setwd(dir_upload_raster)
+  system(paste0("python import.py ", "aclimate_", objectIdCurrentCountry))
+  unlink(paste0(dir_oryza_api_inputs_climate, station), recursive = TRUE)
+  unlink(paste0(dir_oryza_api_inputs_setup, scenarie[8]), recursive = TRUE)
+  unlink(paste0(dir_oryza_api_inputs, 'inputs.zip'), recursive = TRUE)
 }
 
 #Python upload/import function---
@@ -263,6 +272,7 @@ dirCurrent <- "/forecast/usaid_procesos_interfaz/"
   #Script that upload files to the Geoserver file system
   dir_python_folder <- paste0(dirCurrent, "python/")
   dir_pycpt_scripts <- paste0(dir_python_folder, "PyCPT/")
+  dir_upload_raster <- paste0(dir_python_folder, "UploadMosaics/")
   
   #Common directory to send data to Oryza API
   dir_oryza_api_inputs <- "/forecast/workdir/oryzaApiInputs/"
@@ -380,7 +390,7 @@ for(c in countries_list){
   try(system(dotnet_cmd[3], intern = TRUE, ignore.stderr = TRUE))
   try(system(dotnet_cmd[4], intern = TRUE, ignore.stderr = TRUE))
   try(system(dotnet_cmd[5], intern = TRUE, ignore.stderr = TRUE))
-  try(system(dotnet_cmd[6], intern = TRUE, ignore.stderr = TRUE)) "-m numero mes"
+  try(system(dotnet_cmd[6], intern = TRUE, ignore.stderr = TRUE))
   try(system(dotnet_cmd[7], intern = TRUE, ignore.stderr = TRUE)) 
 
 
@@ -390,10 +400,6 @@ for(c in countries_list){
   } else {
   source(paste(dir_pycpt_scripts, 'PyCPT_from_R.r', sep = "", collapse = NULL))
   }
-
-  ## Uploading output files to the Geoserver file system
-  setwd(dir_python_folder)
-  system("python upload_rasters_sftp.py")
 
   # Resampling process
   runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse = NULL))
@@ -437,7 +443,7 @@ CMDdirOutputs <- paste0(dirUnifiedOutputs, "outputs/") #paste0(gsub("/","\\\\",d
 try(system(paste0(forecastAppDll,"-in -fs -cf 0.5 -p \"",CMDdirOutputs, "\""), intern = TRUE, ignore.stderr = TRUE))
 
 #Import raster to Geoserver process
-runRasterImport <- source(paste(dirForecast,'raster_files_upload.R', sep = "", collapse = NULL))
+
 
 end.time <- Sys.time()
 time.taken <- end.time - start.time
