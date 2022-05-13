@@ -1,4 +1,3 @@
-
 library("jsonlite")
 
 #Reading json config file
@@ -8,56 +7,82 @@ inputsPyCPT
 
 region <- currentCountry
 
-spatial_predictors <- paste(inputsPyCPT$spatial_predictors, collapse = " ")
+
+spatial_predictors <- paste(inputsPyCPT[[1]]$spatial_predictors, collapse = " ")
 spatial_predictors <- gsub(" ", ",", spatial_predictors)
+typeof(spatial_predictors)
 spatial_predictors
 
-spatial_predictands <- paste(inputsPyCPT$spatial_predictands, collapse = " ")
+spatial_predictands <- paste(inputsPyCPT[[1]]$spatial_predictands, collapse = " ")
 spatial_predictands <- gsub(" ", ",", spatial_predictands)
+typeof(spatial_predictands)
 spatial_predictands
 
-models <- paste(inputsPyCPT$models, collapse = " ")
+models <- paste(inputsPyCPT[[1]]$models, collapse = " ")
 models <- gsub(" ", ",", models)
 models <- gsub("_", "-", models)
+typeof(models)
 models
 
-obs <- inputsPyCPT$obs
-station <- inputsPyCPT$station
-mos <- inputsPyCPT$mos
-predictand <- inputsPyCPT$predictand
-predictor <- inputsPyCPT$predictors
+obs <- inputsPyCPT[[1]]$obs
+typeof(obs)
+station <- inputsPyCPT[[1]]$station
+typeof(station)
+mos <- inputsPyCPT[[1]]$mos
+typeof(mos)
+predictand <- inputsPyCPT[[1]]$predictand
+typeof(predictand)
+predictor <- inputsPyCPT[[1]]$predictors
+typeof(predictor)
 
-mons <- paste(inputsPyCPT$mons, collapse = " ")
+mons <- paste(inputsPyCPT[[1]]$mons, collapse = " ")
 mons <- gsub(" ", ",", mons)
+typeof(mons)
 mons
 
-tgtii <- paste(inputsPyCPT$tgtii, collapse = " ")
+tgtii <- paste(inputsPyCPT[[1]]$tgtii, collapse = " ")
 tgtii <- gsub(" ", ",", tgtii)
+typeof(spatial_predictands)
 tgtii
 
-tgtff <- paste(inputsPyCPT$tgtff, collapse = " ")
+tgtff <- paste(inputsPyCPT[[1]]$tgtff, collapse = " ")
 tgtff <- gsub(" ", ",", tgtff)
+typeof(tgtff)
 tgtff
 
-tgts <- paste(inputsPyCPT$tgts, collapse = " ")
+tgts <- paste(inputsPyCPT[[1]]$tgts, collapse = " ")
 tgts <- gsub(" ", ",", tgts)
+typeof(tgts)
 tgts
 
-tini <- inputsPyCPT$tini
-tend <- inputsPyCPT$tend
+tini <- inputsPyCPT[[1]]$tini
+typeof(tini)
+tend <- inputsPyCPT[[1]]$tend
+typeof(tend)
 
-xmodes_min <- inputsPyCPT$xmodes_min
-xmodes_max <- inputsPyCPT$xmodes_max
-ymodes_min <- inputsPyCPT$ymodes_min
-ymodes_max <- inputsPyCPT$ymodes_max
-ccamodes_min <- inputsPyCPT$ccamodes_min
-ccamodes_max <- inputsPyCPT$ccamodes_max
-force_download <- inputsPyCPT$force_download
-single_models <- inputsPyCPT$single_models
-forecast_anomaly <- inputsPyCPT$forecast_anomaly
-forecast_spi <- inputsPyCPT$forecast_spi
-confidence_level <- inputsPyCPT$confidence_level
-ind_exec <- inputsPyCPT$ind_exec
+xmodes_min <- inputsPyCPT[[1]]$xmodes_min
+typeof(xmodes_min)
+xmodes_max <- inputsPyCPT[[1]]$xmodes_max
+typeof(xmodes_max)
+ymodes_min <- inputsPyCPT[[1]]$ymodes_min
+typeof(ymodes_min)
+ymodes_max <- inputsPyCPT[[1]]$ymodes_max
+typeof(ymodes_max)
+ccamodes_min <- inputsPyCPT[[1]]$ccamodes_min
+typeof(ccamodes_min)
+ccamodes_max <- inputsPyCPT[[1]]$ccamodes_max
+typeof(ccamodes_max)
+force_download <- inputsPyCPT[[1]]$force_download
+typeof(force_download)
+single_models <- inputsPyCPT[[1]]$single_models
+typeof(single_models)
+forecast_anomaly <- inputsPyCPT[[1]]$forecast_anomaly
+typeof(forecast_anomaly)
+forecast_spi <- inputsPyCPT[[1]]$forecast_spi
+typeof(forecast_spi)
+confidence_level <- inputsPyCPT[[1]]$confidence_level
+typeof(confidence_level)
+
 
 setwd(dir_pycpt_scripts)
 #Running PyCPT
@@ -65,8 +90,7 @@ system(paste("python run_main.py", region, spatial_predictors, spatial_predictan
              models, obs, station, mos, predictand, predictor, mons, tgtii, 
              tgtff, tgts, tini, tend, xmodes_min, xmodes_max, ymodes_min, 
              ymodes_max, ccamodes_min, ccamodes_max, force_download, 
-             single_models, forecast_anomaly, forecast_spi, confidence_level, 
-             ind_exec))
+             single_models, forecast_anomaly, forecast_spi, confidence_level))
 
 datadir <- dir_outputs_nextgen
 setwd(datadir)
