@@ -1,86 +1,85 @@
-library("jsonlite")
 
 #Reading json config file
 setwd(dir_inputs_nextgen) #json files location
-inputsPyCPT <- read_json("Structure ConfigurationPyCpt.json")
+inputsPyCPT <- read_json("inputsPycpt.json")
 inputsPyCPT
 
 region <- currentCountry
 
 
-spatial_predictors <- paste(inputsPyCPT[[1]]$spatial_predictors, collapse = " ")
+spatial_predictors <- paste(inputsPyCPT[[1]][[1]]$spatial_predictors, collapse = " ")
 spatial_predictors <- gsub(" ", ",", spatial_predictors)
 typeof(spatial_predictors)
 spatial_predictors
 
-spatial_predictands <- paste(inputsPyCPT[[1]]$spatial_predictands, collapse = " ")
+spatial_predictands <- paste(inputsPyCPT[[1]][[1]]$spatial_predictands, collapse = " ")
 spatial_predictands <- gsub(" ", ",", spatial_predictands)
 typeof(spatial_predictands)
 spatial_predictands
 
-models <- paste(inputsPyCPT[[1]]$models, collapse = " ")
+models <- paste(inputsPyCPT[[1]][[1]]$models, collapse = " ")
 models <- gsub(" ", ",", models)
 models <- gsub("_", "-", models)
 typeof(models)
 models
 
-obs <- inputsPyCPT[[1]]$obs
+obs <- inputsPyCPT[[1]][[1]]$obs
 typeof(obs)
-station <- inputsPyCPT[[1]]$station
+station <- inputsPyCPT[[1]][[1]]$station
 typeof(station)
-mos <- inputsPyCPT[[1]]$mos
+mos <- inputsPyCPT[[1]][[1]]$mos
 typeof(mos)
-predictand <- inputsPyCPT[[1]]$predictand
+predictand <- inputsPyCPT[[1]][[1]]$predictand
 typeof(predictand)
-predictor <- inputsPyCPT[[1]]$predictors
+predictor <- inputsPyCPT[[1]][[1]]$predictors
 typeof(predictor)
 
-mons <- paste(inputsPyCPT[[1]]$mons, collapse = " ")
+mons <- paste(inputsPyCPT[[1]][[1]]$mons, collapse = " ")
 mons <- gsub(" ", ",", mons)
 typeof(mons)
 mons
 
-tgtii <- paste(inputsPyCPT[[1]]$tgtii, collapse = " ")
+tgtii <- paste(inputsPyCPT[[1]][[1]]$tgtii, collapse = " ")
 tgtii <- gsub(" ", ",", tgtii)
 typeof(spatial_predictands)
 tgtii
 
-tgtff <- paste(inputsPyCPT[[1]]$tgtff, collapse = " ")
+tgtff <- paste(inputsPyCPT[[1]][[1]]$tgtff, collapse = " ")
 tgtff <- gsub(" ", ",", tgtff)
 typeof(tgtff)
 tgtff
 
-tgts <- paste(inputsPyCPT[[1]]$tgts, collapse = " ")
+tgts <- paste(inputsPyCPT[[1]][[1]]$tgts, collapse = " ")
 tgts <- gsub(" ", ",", tgts)
 typeof(tgts)
 tgts
 
-tini <- inputsPyCPT[[1]]$tini
+tini <- inputsPyCPT[[1]][[1]]$tini
 typeof(tini)
-tend <- inputsPyCPT[[1]]$tend
+tend <- inputsPyCPT[[1]][[1]]$tend
 typeof(tend)
 
-xmodes_min <- inputsPyCPT[[1]]$xmodes_min
+xmodes_min <- inputsPyCPT[[1]][[1]]$xmodes_min
 typeof(xmodes_min)
-xmodes_max <- inputsPyCPT[[1]]$xmodes_max
+xmodes_max <- inputsPyCPT[[1]][[1]]$xmodes_max
 typeof(xmodes_max)
-ymodes_min <- inputsPyCPT[[1]]$ymodes_min
+ymodes_min <- inputsPyCPT[[1]][[1]]$ymodes_min
 typeof(ymodes_min)
-ymodes_max <- inputsPyCPT[[1]]$ymodes_max
+ymodes_max <- inputsPyCPT[[1]][[1]]$ymodes_max
 typeof(ymodes_max)
-ccamodes_min <- inputsPyCPT[[1]]$ccamodes_min
+ccamodes_min <- inputsPyCPT[[1]][[1]]$ccamodes_min
 typeof(ccamodes_min)
-ccamodes_max <- inputsPyCPT[[1]]$ccamodes_max
+ccamodes_max <- inputsPyCPT[[1]][[1]]$ccamodes_max
 typeof(ccamodes_max)
-force_download <- inputsPyCPT[[1]]$force_download
+force_download <- inputsPyCPT[[1]][[1]]$force_download
 typeof(force_download)
-single_models <- inputsPyCPT[[1]]$single_models
+single_models <- inputsPyCPT[[1]][[1]]$single_models
 typeof(single_models)
-forecast_anomaly <- inputsPyCPT[[1]]$forecast_anomaly
+forecast_anomaly <- inputsPyCPT[[1]][[1]]$forecast_anomaly
 typeof(forecast_anomaly)
-forecast_spi <- inputsPyCPT[[1]]$forecast_spi
+forecast_spi <- inputsPyCPT[[1]][[1]]$forecast_spi
 typeof(forecast_spi)
-confidence_level <- inputsPyCPT[[1]]$confidence_level
+confidence_level <- inputsPyCPT[[1]][[1]]$confidence_level
 typeof(confidence_level)
 
 
@@ -96,13 +95,13 @@ datadir <- dir_outputs_nextgen
 setwd(datadir)
 dir.create(file.path(datadir,"nc_files"))
 
-models=as.character(inputsPyCPT$models)
+models=as.character(inputsPyCPT[[1]][[1]]$models)
 MOS = mos
 PREDICTAND = predictand
 PREDICTOR = predictor
-monf = 'Apr'	# Initialization month 
-tgts = as.character(inputsPyCPT$tgts)
-mons = as.character(inputsPyCPT$mons)
+monf = 'May'	# Initialization month 
+tgts = as.character(inputsPyCPT[[1]][[1]]$tgts)
+mons = as.character(inputsPyCPT[[1]][[1]]$mons)
 
 fyr=2022	# Forecast year
 
@@ -169,6 +168,83 @@ list_Prob_Forec_new = as.data.frame(list_Prob_Forec[[1]])
 for (i in 2:length(list_Prob_Forec)){
 
 list_Prob_Forec_new = rbind(list_Prob_Forec_new, as.data.frame(list_Prob_Forec[[i]]))
+
+}
+#Writting probabilities csv
+write.table(list_Prob_Forec_new, paste0(path_save, "/probabilities.csv"), row.names=FALSE, sep=",")
+
+################################ Working on metrics.csv ####################################
+
+#station location
+loc = data.frame(lon = c(38.90,36.5),
+                 lat=c(8.25, 7.764))
+
+#setwd("/forecast/PyCPT/iri-pycpt/Ethiopia/output/")
+##### NextGen skill matrix translator
+skilmetrics <- c("2AFC","GROC","Ignorance","Pearson","RPSS","Spearman")
+MOS='CCA'
+PREDICTAND='PRCP'
+PREDICTOR='PRCP'
+tgts=c('May-Jul', 'Aug-Oct')
+#lismonf='May'	# Initialization month 
+metrics <- data.frame()
+ncMetricsFiles <- list()
+for (skill in skilmetrics){
+	for (seas in tgts){
+		
+	ctlinput <- paste0("NextGen_",PREDICTAND,PREDICTOR,"_",MOS,"_",skill,"_", seas,"_",monf,".ctl")
+	ncout <- paste0("NextGen_",PREDICTAND,PREDICTOR,"_",MOS,"_",skill,"_", seas,"_",monf,".nc")	
+
+	system(paste0("cdo -f nc -import_binary ", ctlinput, " ", ncout))
+	ncMetricsFiles <- append(ncMetricsFiles, paste0("NextGen_",PREDICTAND,PREDICTOR,"_",MOS,"_",skill,"_", seas,"_",monf,".nc"))
+	  
+	}
+}
+
+#ncMetricsFiles <- paste0("NextGen_",PREDICTAND,PREDICTOR,"_",MOS,"_",skilmetrics,"_", tgts,"_",monf,".nc")
+
+list_Prob_Forec = list()
+raster_metrics = list()
+
+
+#rastersMetrics <- lapply(ncMetricsFiles, raster)
+
+## Organize raster stacks by metric
+for(i in seq(from=0, to=length(ncMetricsFiles), by=length(tgts))){
+	
+	#i=0
+	if(i!=length(ncMetricsFiles)){
+		temp_raster_list <- list()
+		for(j in 1: length(tgts)){
+			temp_raster_list[[j]] = raster(ncMetricsFiles[[i+j]])
+			print(j)
+			
+		}
+		raster_metrics = append(raster_metrics, stack(temp_raster_list))
+
+	}
+
+}
+
+metricsCoords = lapply(raster_metrics, extract(raster_metrics, coords))
+for(i in length(raster_metrics)){
+
+  P_forecast_final = data.frame(rep(fyr, nrow(coords)), rep(as.numeric(monthsNumber[tgts[i]]), nrow(coords)),stations_coords[,1],P_forecast_1) ##ciclo 018000912345
+  names(P_forecast_final)[1:6]=c("year", "month", "id", "below", "normal", "above")
+
+  list_Prob_Forec [[i]] = P_forecast_final 
+
+}
+
+
+
+list_Prob_Forec_new = lapply(listMetricsForec, rbind)#list_Prob_Forec [[1]]
+
+list_Prob_Forec_new = as.data.frame(listMetricsForec[[1]])
+
+for (i in 2:length(listMetricsForec)){
+
+list_Prob_Forec_new = rbind(list_Prob_Forec_new, as.data.frame(listMetricsForec[[i]]))
 
 }
 #Writting probabilities csv
