@@ -48,7 +48,7 @@ library(reshape)
 library(rgdal)
 library(ncdf4) #Must be installed on the image
 library(stringr)
-library(tidyverse)
+#library(tidyverse)
 library(trend)
 library(curl)
 library(askpass)

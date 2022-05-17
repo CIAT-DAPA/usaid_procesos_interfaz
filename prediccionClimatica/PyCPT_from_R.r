@@ -6,7 +6,6 @@ inputsPyCPT
 
 region <- currentCountry
 
-
 spatial_predictors <- paste(inputsPyCPT[[1]][[1]]$spatial_predictors, collapse = " ")
 spatial_predictors <- gsub(" ", ",", spatial_predictors)
 typeof(spatial_predictors)
@@ -91,7 +90,7 @@ system(paste("python run_main.py", region, spatial_predictors, spatial_predictan
              ymodes_max, ccamodes_min, ccamodes_max, force_download, 
              single_models, forecast_anomaly, forecast_spi, confidence_level))
 
-datadir <- dir_outputs_nextgen
+datadir <- getwd() #dir_outputs_nextgen
 setwd(datadir)
 dir.create(file.path(datadir,"nc_files"))
 
@@ -107,7 +106,6 @@ fyr=2022	# Forecast year
 
 for (seas in tgts)
 {
-  #seas=tgts[1]
 	#### translate all  output data to netcdf
 	for (i in 1:length(models)) {
 	  #probablistics forecast
@@ -155,13 +153,13 @@ for( i in 1: length(stacksBySeason)){
   stacksBySeasonCurrent = stack(stacksBySeason[[i]])
   P_forecast_1= extract(stacksBySeasonCurrent, coords)
 
-  P_forecast_final = data.frame(rep(fyr, nrow(coords)), rep(as.numeric(monthsNumber[tgts[i]]), nrow(coords)),stations_coords[,1],P_forecast_1) ##ciclo 018000912345
+  P_forecast_final = data.frame(rep(fyr, nrow(coords)), rep(as.numeric(monthsNumber[tgts[i]]), nrow(coords)),stations_coords[,1],P_forecast_1)
   names(P_forecast_final)[1:6]=c("year", "month", "id", "below", "normal", "above")
 
   list_Prob_Forec [[i]] = P_forecast_final 
 }
 
-list_Prob_Forec_new = lapply(list_Prob_Forec, rbind)#list_Prob_Forec [[1]]
+list_Prob_Forec_new = lapply(list_Prob_Forec, rbind)
 
 list_Prob_Forec_new = as.data.frame(list_Prob_Forec[[1]])
 
@@ -171,22 +169,17 @@ list_Prob_Forec_new = rbind(list_Prob_Forec_new, as.data.frame(list_Prob_Forec[[
 
 }
 #Writting probabilities csv
-write.table(list_Prob_Forec_new, paste0(path_save, "/probabilities.csv"), row.names=FALSE, sep=",")
+write.table(list_Prob_Forec_new, paste0(path_save, "/probabilities.csv"), row.names=FALSE, sep=",", overwrite=TRUE)
 
 ################################ Working on metrics.csv ####################################
 
+################# .nc files metrics ##########################
 #station location
 loc = data.frame(lon = c(38.90,36.5),
                  lat=c(8.25, 7.764))
 
-#setwd("/forecast/PyCPT/iri-pycpt/Ethiopia/output/")
 ##### NextGen skill matrix translator
 skilmetrics <- c("2AFC","GROC","Ignorance","Pearson","RPSS","Spearman")
-MOS='CCA'
-PREDICTAND='PRCP'
-PREDICTOR='PRCP'
-tgts=c('May-Jul', 'Aug-Oct')
-#lismonf='May'	# Initialization month 
 metrics <- data.frame()
 ncMetricsFiles <- list()
 for (skill in skilmetrics){
@@ -200,52 +193,54 @@ for (skill in skilmetrics){
 	  
 	}
 }
+################# .nc files metrics ##########################
 
-#ncMetricsFiles <- paste0("NextGen_",PREDICTAND,PREDICTOR,"_",MOS,"_",skilmetrics,"_", tgts,"_",monf,".nc")
-
-list_Prob_Forec = list()
+################### working on writting metrics.csv ##########################
 raster_metrics = list()
-
-
-#rastersMetrics <- lapply(ncMetricsFiles, raster)
 
 ## Organize raster stacks by metric
 for(i in seq(from=0, to=length(ncMetricsFiles), by=length(tgts))){
 	
-	#i=0
 	if(i!=length(ncMetricsFiles)){
 		temp_raster_list <- list()
 		for(j in 1: length(tgts)){
 			temp_raster_list[[j]] = raster(ncMetricsFiles[[i+j]])
-			print(j)
-			
 		}
 		raster_metrics = append(raster_metrics, stack(temp_raster_list))
-
 	}
+}
+
+##Extracting values of metrics by coords
+metricsCoords <- matrix(NA, ncol=3 + length(raster_metrics), nrow=nrow(coords) * length(tgts))
+
+##Year
+metricsCoords[, 1] <- rep(fyr, nrow(coords) * length(tgts))
+##Month
+for(i in 1:length(tgts)){
+	ini <- (nrow(coords) * i) - (nrow(coords) - 1)
+	end <- nrow(coords) * i
+	metricsCoords[ini:end, 2] <- rep(as.numeric(monthsNumber[tgts[i]]), nrow(coords))
 
 }
 
-metricsCoords = lapply(raster_metrics, extract(raster_metrics, coords))
-for(i in length(raster_metrics)){
-
-  P_forecast_final = data.frame(rep(fyr, nrow(coords)), rep(as.numeric(monthsNumber[tgts[i]]), nrow(coords)),stations_coords[,1],P_forecast_1) ##ciclo 018000912345
-  names(P_forecast_final)[1:6]=c("year", "month", "id", "below", "normal", "above")
-
-  list_Prob_Forec [[i]] = P_forecast_final 
+for(i in 1:length(raster_metrics)){
+	metricsCoords[, 3+i] <- extract(raster_metrics[[i]], coords)
 
 }
 
+metricsCoords <- as.data.frame(metricsCoords)
+names(metricsCoords)[1:ncol(metricsCoords)]=c("year", "month", "id", "2AFC","GROC","Ignorance","Pearson","RPSS","Spearman")
 
-
-list_Prob_Forec_new = lapply(listMetricsForec, rbind)#list_Prob_Forec [[1]]
-
-list_Prob_Forec_new = as.data.frame(listMetricsForec[[1]])
-
-for (i in 2:length(listMetricsForec)){
-
-list_Prob_Forec_new = rbind(list_Prob_Forec_new, as.data.frame(listMetricsForec[[i]]))
+##Adding Ids to final dataframe
+totalMonths <- unique(metricsCoords$month)
+monthAuxList <- list()
+for(i in 1:length(totalMonths)){
+	monthAuxList[[i]] <- subset(metricsCoords, month==totalMonths[i])
+	monthAuxList[[i]]$id <- stations_coords$id
 
 }
-#Writting probabilities csv
-write.table(list_Prob_Forec_new, paste0(path_save, "/probabilities.csv"), row.names=FALSE, sep=",")
+finalMetricsCsv <- as.data.frame(do.call(rbind, monthAuxList))
+#Writting metrics csv
+write.table(finalMetricsCsv, paste0(path_save, "/metrics.csv"), row.names=FALSE, sep=",")
+
+################### end of writting metrics.csv ##########################
