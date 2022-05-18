@@ -90,7 +90,7 @@ system(paste("python run_main.py", region, spatial_predictors, spatial_predictan
              ymodes_max, ccamodes_min, ccamodes_max, force_download, 
              single_models, forecast_anomaly, forecast_spi, confidence_level))
 
-datadir <- getwd() #dir_outputs_nextgen
+datadir <- getwd() #dir_outputs_nextgen #------------------------------------------------------
 setwd(datadir)
 dir.create(file.path(datadir,"nc_files"))
 
@@ -129,13 +129,15 @@ nextGenFileName_prob <- paste0("NextGEN_",PREDICTAND,PREDICTOR,"_",MOS,"FCST_P_"
 nextGenFileName_det <- paste0("NextGEN_",PREDICTAND,PREDICTOR,"_",MOS,"FCST_mu_",tgts,"_",monf,fyr,".nc")
 
 stacksBySeason <- list()
-monthsNumber <- list("Jan-Mar"=2, "Feb-Apr"=3, "Mar-May"=4, "Apr-Jun"=5, "May-Jul"=6, "Jun-Aug"=7, "Jul-Sep"=8, "Aug-Oct"=9, "Sep-Nov"=10, "Oct-Dec"=11, "Nov-Jan"=12, "Dec-Feb"=1)
+monthsNumber <- list("Jan-Mar"=02, "Feb-Apr"=03, "Mar-May"=04, "Apr-Jun"=05, "May-Jul"=06, "Jun-Aug"=07, "Jul-Sep"=08, "Aug-Oct"=09, "Sep-Nov"=10, "Oct-Dec"=11, "Nov-Jan"=12, "Dec-Feb"=01)
+trimesters <- list("Jan-Mar"="jfm", "Feb-Apr"="fma", "Mar-May"="mam", "Apr-Jun"="amj", "May-Jul"="mjj", "Jun-Aug"="jja", "Jul-Sep"="jas", "Aug-Oct"="aso", "Sep-Nov"="son", "Oct-Dec"="ond", "Nov-Jan"="ndj", "Dec-Feb"="djf")
 
 #Writting probabilistic raster files (to upload to geoserver) and stacking (to create .csv files) 
 for(i in 1:length(nextGenFileName_prob)){
-  dataNextGenAbove = raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname="Above_Normal")
-  dataNextGenBelow = raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname="Below_Normal")
-  dataNextGenNormal = raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname="Normal")
+	#It divides by 100 in orden to have a 0-1 data and not a 1-100
+  dataNextGenAbove = raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname="Above_Normal")/100
+  dataNextGenBelow = raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname="Below_Normal")/100
+  dataNextGenNormal = raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname="Normal")/100
 
   #Stack structure in order to extract to create .csv files
   stacksBySeason [[i]] = stack(dataNextGenBelow, dataNextGenNormal, dataNextGenAbove)
@@ -169,7 +171,7 @@ list_Prob_Forec_new = rbind(list_Prob_Forec_new, as.data.frame(list_Prob_Forec[[
 
 }
 #Writting probabilities csv
-write.table(list_Prob_Forec_new, paste0(path_save, "/probabilities.csv"), row.names=FALSE, sep=",", overwrite=TRUE)
+write.table(list_Prob_Forec_new, paste0(path_save, "/probabilities.csv"), row.names=FALSE, sep=",")
 
 ################################ Working on metrics.csv ####################################
 
@@ -229,7 +231,7 @@ for(i in 1:length(raster_metrics)){
 }
 
 metricsCoords <- as.data.frame(metricsCoords)
-names(metricsCoords)[1:ncol(metricsCoords)]=c("year", "month", "id", "2AFC","GROC","Ignorance","Pearson","RPSS","Spearman")
+names(metricsCoords)[1:ncol(metricsCoords)]=c("year", "month", "id", "afc2","groc","ignorance","pearson","rpss","spearman")
 
 ##Adding Ids to final dataframe
 totalMonths <- unique(metricsCoords$month)

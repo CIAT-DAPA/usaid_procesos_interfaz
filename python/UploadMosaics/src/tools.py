@@ -144,3 +144,18 @@ class GeoserverClient(object):
             (coverages[b"coverages"][b"coverage"][0][b"name"]).decode("utf-8"), store)
         granules_count = len(granules[b"features"])
         print("granules", granules_count)
+
+    def delete_folder_content(self, folder_path):
+        list_dir = os.listdir(folder_path)
+        for filename in list_dir:
+            file_path = os.path.join(folder_path, filename)
+
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                print("deleting file:", file_path)
+                os.unlink(file_path)
+
+            elif os.path.isdir(file_path):
+                print("deleting folder:", file_path)
+                shutil.rmtree(file_path)
+
+

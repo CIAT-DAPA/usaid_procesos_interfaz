@@ -199,19 +199,22 @@ run_oryza_by_setup <- function(setups){
   #setwd(currentWd)
 }
 
-prepareRastersUpload <- function(forecastID) {
-  forecastID <- "1"
-  trimesters <- list("Jan-Mar"="jfm", "Feb-Apr"="fma", "Mar-May"="mam", "Apr-Jun"="amj", "May-Jul"="mjj", "Jun-Aug"="jja", "Jul-Sep"="jas", "Aug-Oct"="aso", "Sep-Nov"="son", "Oct-Dec"="ond", "Nov-Jan"="ndj", "Dec-Feb"="djf")
-
+#This inputs come from /prediccionClimatica/PyCPT_from_R.r
+prepareRastersUpload <- function(trimesters, nextGenFileName_det, datadir, monthsNumber, monf, fyr, nextGenFileName_prob) {
+  require(readr)
+  forecastID <- read_csv(paste0(dirUnifiedOutputs, "outputs/", "forecast.csv"))
+  forecastID <- forecastID$forecast_id
 
   #Writting deterministic raster files (to upload to geoserver)
   for(i in 1:length(nextGenFileName_det)){
-    firstModel <- raster(paste0(dir_outputs_nextgen, "/", nextGenFileName_det[i]))
-    secondModel <- raster(paste0(dir_outputs_nextgen, "/", nextGenFileName_det[i]))
+    first <- raster(paste0(datadir, "/", nextGenFileName_det[i]))
+    second <- raster(paste0(datadir, "/", nextGenFileName_det[i]))
+
+    monthFormat <- if(monthsNumber[tgts[i]] < 10) paste0("0", monthsNumber[tgts[i]]) else monthsNumber[tgts[i]]
 
     #Writting raster files in .tif
-    writeRaster(firstModel, paste0(path_rasters, "/", tolower(paste0("seasonal_", currentCountry, "_" ,trimesters[tgts[i]], "_deterministic_", monf, "_", fyr, ".tif"))), overwrite=TRUE)
-    writeRaster(secondModel, paste0(path_rasters, "/", tolower(paste0("seasonal_", currentCountry, "_" ,trimesters[tgts[i]], "_deterministic_", monf, "_", fyr, ".tif"))), overwrite=TRUE)
+    writeRaster(first, paste0(dir_upload_raster, "/deterministic/", tolower(paste0("seasonal_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_deterministic_", fyr, monthFormat,".tif"))), overwrite=TRUE)
+    writeRaster(second, paste0(dir_upload_raster, "/deterministic/", tolower(paste0("seasonal_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_deterministic_", fyr, monthFormat,".tif"))), overwrite=TRUE)
 
   }
 
@@ -219,26 +222,35 @@ prepareRastersUpload <- function(forecastID) {
 
   for(i in 1:length(nextGenFileName_prob)){
     dataNextGenAbove = raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname="Above_Normal")
-    dataNextGenBelow = raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname="Below_Normal") # seasonal_country_probabilistic_above_71e59d829d5d2486e18d2aa2_apr_2022_amj.tif
+    dataNextGenBelow = raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname="Below_Normal")
     dataNextGenNormal = raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname="Normal")
 
+    monthFormat <- if(monthsNumber[tgts[i]] < 10) paste0("0", monthsNumber[tgts[i]]) else monthsNumber[tgts[i]]
+
     #Writting raster files in .tif
-    writeRaster(dataNextGenAbove, paste0(path_rasters, "/", tolower(paste0("seasonal_country_probabilistic_above", "_" ,trimesters[tgts[i]], "_probabilistic_above_", monf, "_", fyr, ".tif"))), overwrite=TRUE)
-    writeRaster(dataNextGenBelow, paste0(path_rasters, "/", tolower(paste0("seasonal_country_probabilistic_below", currentCountry, "_" ,trimesters[tgts[i]], "_probabilistic_below_", monf, "_", fyr, ".tif"))), overwrite=TRUE)
-    writeRaster(dataNextGenNormal, paste0(path_rasters, "/", tolower(paste0("seasonal_country_probabilistic_normal", currentCountry, "_" ,trimesters[tgts[i]], "_probabilistic_normal_", monf, "_", fyr, ".tif"))), overwrite=TRUE)
+    writeRaster(dataNextGenAbove, paste0(dir_upload_raster, "/above/", tolower(paste0("seasonal_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_above_", fyr, monthFormat,".tif"))), overwrite=TRUE)
+    writeRaster(dataNextGenBelow, paste0(dir_upload_raster, "/below/", tolower(paste0("seasonal_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_below_", fyr, monthFormat,".tif"))), overwrite=TRUE)
+    writeRaster(dataNextGenNormal, paste0(dir_upload_raster, "/normal/", tolower(paste0("seasonal_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_normal_", fyr, monthFormat,".tif"))), overwrite=TRUE)
 
   }
+
+  #Copying raster in path_rasters (backup)
+  file.copy(paste0(dir_upload_raster, "/above/"), path_rasters,  overwrite=TRUE)
+  file.copy(paste0(dir_upload_raster, "/below/"), path_rasters,  overwrite=TRUE)
+  file.copy(paste0(dir_upload_raster, "/normal/"), path_rasters,  overwrite=TRUE)
+  file.copy(paste0(dir_upload_raster, "/deterministic/"), path_rasters,  overwrite=TRUE)
 
 }
 
 uploadRasterFiles <- function() {
 
-  setwd(dir_upload_raster)
-  system(paste0("python import.py ", "aclimate_", objectIdCurrentCountry))
-  unlink(paste0(dir_oryza_api_inputs_climate, station), recursive = TRUE)
-  unlink(paste0(dir_oryza_api_inputs_setup, scenarie[8]), recursive = TRUE)
-  unlink(paste0(dir_oryza_api_inputs, 'inputs.zip'), recursive = TRUE)
-}
+  tryCatch({
+    prepareRastersUpload(trimesters, nextGenFileName_det, datadir, monthsNumber, monf, fyr, nextGenFileName_prob)
+    setwd("/forecast/usaid_procesos_interfaz/python/UploadMosaics/src/") #dir_upload_raster
+    system(paste0("python import.py ", "aclimate_", country_iso))
+
+  }, error=function(e){cat("Error while uploading rasters files: "),conditionMessage(e), "\n")})
+
 
 #Python upload/import function---
 #Country name, filepath
@@ -272,7 +284,7 @@ dirCurrent <- "/forecast/usaid_procesos_interfaz/"
   #Script that upload files to the Geoserver file system
   dir_python_folder <- paste0(dirCurrent, "python/")
   dir_pycpt_scripts <- paste0(dir_python_folder, "PyCPT/")
-  dir_upload_raster <- paste0(dir_python_folder, "UploadMosaics/")
+  dir_upload_raster <- paste0(dir_python_folder, "UploadMosaics/data/layers")
   
   #Common directory to send data to Oryza API
   dir_oryza_api_inputs <- "/forecast/workdir/oryzaApiInputs/"
@@ -287,6 +299,7 @@ probabilities_list <- list()
 
 for(c in countries_list){
   currentCountry <- c
+  country_iso <- if(currentCountry=="COLOMBIA") "co" else "et"
     #Checks country for avoid conlicts
     maize_name_by_country <- if(currentCountry=="COLOMBIA") "maiz" else "maize"
 

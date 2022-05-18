@@ -3,8 +3,8 @@ import sys
 from tools import GeoserverClient
 
 
-stores_aclimate = ["seasonal_country_probabilistic_above", "seasonal_country_probabilistic_normal",
-                   "seasonal_country_probabilistic_below", "seasonal_country_deterministic"]
+
+
 folder_root = "/forecast/workdir/usaid_procesos_interfaz/python/UploadMosaics/"
 folder_data = os.path.join(folder_root, "data")
 folder_layers = os.path.join(folder_data, "layers")
@@ -14,6 +14,14 @@ geo_url = "https://geo.aclimate.org/geoserver/rest/"
 geo_user = os.environ['GEO_USER']
 geo_pwd = os.environ['GEO_PWD']
 workspace_name = sys.argv[1]
+country_iso = workspace_name.split("_")[1]
+
+
+
+stores_aclimate = ["seasonal_country_"+country_iso+"_probabilistic_above", "seasonal_country_"+country_iso+"_probabilistic_normal",
+                   "seasonal_country_"+country_iso+"_probabilistic_below", "seasonal_country_"+country_iso+"_deterministic"]
+
+
 # Connecting
 geoclient = GeoserverClient(geo_url, geo_user, geo_pwd)
 
@@ -39,5 +47,11 @@ for current_store in stores_aclimate:
             print("Updating mosaic")
             geoclient.update_mosaic(
                 store, layer, folder_properties, folder_tmp)
+
+#Deletes .tif files
+geoclient.delete_folder_content(os.path.join(folder_layers, "above"))
+geoclient.delete_folder_content(os.path.join(folder_layers, "below"))
+geoclient.delete_folder_content(os.path.join(folder_layers, "normal"))
+geoclient.delete_folder_content(os.path.join(folder_layers, "deterministic"))
 
 print("Process completed")
