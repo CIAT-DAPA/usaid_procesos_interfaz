@@ -3,9 +3,7 @@ import sys
 from tools import GeoserverClient
 
 
-
-
-folder_root = "/forecast/workdir/usaid_procesos_interfaz/python/UploadMosaics/"
+folder_root = "/forecast/usaid_procesos_interfaz/python/UploadMosaics/"
 folder_data = os.path.join(folder_root, "data")
 folder_layers = os.path.join(folder_data, "layers")
 folder_properties = os.path.join(folder_layers, "properties")
@@ -15,7 +13,6 @@ geo_user = os.environ['GEO_USER']
 geo_pwd = os.environ['GEO_PWD']
 workspace_name = sys.argv[1]
 country_iso = workspace_name.split("_")[1]
-
 
 
 stores_aclimate = ["seasonal_country_"+country_iso+"_probabilistic_above", "seasonal_country_"+country_iso+"_probabilistic_normal",
@@ -48,7 +45,7 @@ for current_store in stores_aclimate:
             geoclient.update_mosaic(
                 store, layer, folder_properties, folder_tmp)
 
-#Deletes .tif files
+# Deletes .tif files
 geoclient.delete_folder_content(os.path.join(folder_layers, "above"))
 geoclient.delete_folder_content(os.path.join(folder_layers, "below"))
 geoclient.delete_folder_content(os.path.join(folder_layers, "normal"))

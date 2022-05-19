@@ -90,7 +90,8 @@ system(paste("python run_main.py", region, spatial_predictors, spatial_predictan
              ymodes_max, ccamodes_min, ccamodes_max, force_download, 
              single_models, forecast_anomaly, forecast_spi, confidence_level))
 
-datadir <- getwd() #dir_outputs_nextgen #------------------------------------------------------
+#Where outputs files of Pycpt are
+datadir <- dir_outputs_nextgen
 setwd(datadir)
 dir.create(file.path(datadir,"nc_files"))
 
