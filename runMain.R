@@ -151,19 +151,19 @@ runCrop <- function(crop, setups) {
 }
 
 run_oryza_by_setup <- function(setups){
-  auth <- "https://oryza.aclimate.org/api/auth"
-  process <- "https://oryza.aclimate.org/api/runOryza"
+  auth <- "https://oryza.aclimate.org/api/v1/login"
+  process <- "https://oryza.aclimate.org/api/v1/run"
 
   #authenitcation token
   identify_body <- '{
-      "user": "admin",
-      "pass": "1234"
+      "user": "aclimate_forecast",
+      "password": "p*M$3Hp,X*h_ME@-s"
       }'
   #currentWd <- getwd()
 
+  response <- httr::POST(auth, add_headers('accept-encoding'='deflate'), body=identify_body, content_type_json(), verbose())
+  token <- fromJSON(content(response, "text"))$token
   make_request_oryza <- function(setup) {
-    response <- httr::POST(auth, add_headers('accept-encoding'='gzip, deflate'), body=identify_body, content_type_json(), verbose())
-    token <- fromJSON(content(response, "text"))$token
     scenarie <- str_split_fixed(setup, '/', n=8) #current scenarie/setup
     correction <- str_split_fixed(scenarie[8], '_', n=2)
     station <- gsub('/', '', correction[1]) #current climatic station
@@ -174,20 +174,19 @@ run_oryza_by_setup <- function(setups){
     setwd('/forecast/workdir/oryzaApiInputs/')
     zip(zipfile='inputs', './inputs')
 
+    #dest <- paste0(dirModeloArrozOutputs, substring(scenarie[8], 2), ".csv")
     #Calling Oryza API
-    dest <- paste0(dirModeloArrozOutputs, substring(scenarie[8], 2), ".csv")
-    cat(paste("enviado", Sys.time()))
+    cat(paste("send request at: ", Sys.time()))
+    #Dir outputs rice
+    setwd(dirModeloArrozOutputs)
+    #Making curl post request (problems with httr in this part)
+    req <- paste0('curl -X POST "', process, '" -H "accept: */*"', ' -H ', '"x-access-token: ' , token, '"', " -H ", '"Content-Type: multipart/form-data"', 
+      " -F ", '"inputs=@', paste0(dir_oryza_api_inputs, "inputs.zip"), ';type=application/x-zip-compressed"', 
+      ' -O "', 'hola.csv', '"')
+    #req <- gsub('"\"', "", req)
+      #"-O ", paste0(substring(scenarie[8], 2), ".csv"))
 
-   
-    httr::POST(process, 
-              add_headers('Content-Type'='multipart/form-data', 'access-token'=token, 'accept-encoding'='gzip, deflate'), 
-              body = list("fileZip" = upload_file(paste0(dir_oryza_api_inputs, "inputs.zip"))), 
-              write_disk(dest, overwrite = TRUE)) #Copying output csv on rice outputs
-      
-
-  
-    #Sys.sleep(10)
-    cat(paste("recibido", Sys.time()))
+    cat(paste("received at: ", Sys.time()))
     #Deleting inputs files to replace
     unlink(paste0(dir_oryza_api_inputs_climate, station), recursive = TRUE)
     unlink(paste0(dir_oryza_api_inputs_setup, scenarie[8]), recursive = TRUE)
