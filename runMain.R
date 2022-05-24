@@ -150,7 +150,36 @@ runCrop <- function(crop, setups) {
 
 }
 
-run_oryza_by_setup <- function(setups){
+prepare_setups_api_oryza <- function(setups){
+
+  #Preparing inputs for parallelization
+  lapply(2:length(setups), function(i){
+
+    scenarie <- str_split_fixed(setups[i], '/', n=8) #current scenarie/setup
+    correction <- str_split_fixed(scenarie[8], '_', n=2)
+    station <- gsub('/', '', correction[1]) #current climatic station
+  
+    #Copying a compressing files for Oryza API
+    file.copy(paste0(path_output, "/",station, "/"), dir_oryza_api_inputs_climate, recursive=TRUE)
+    file.copy(paste0(dirModeloArrozInputs, scenarie[8],"/"), dir_oryza_api_inputs_setup, recursive=TRUE)
+    
+    setwd(dir_oryza_api_inputs)
+    zip(zipfile='inputs', './inputs')
+
+    currentFolder <- paste0(dir_oryza_api_inputs, substring(scenarie[8], 2), '/')
+    dir.create(currentFolder)
+    file.copy('inputs.zip', currentFolder, recursive=TRUE)
+
+    #Deleting inputs files to replace
+    unlink(paste0(dir_oryza_api_inputs_climate, station), recursive = TRUE)
+    unlink(paste0(dir_oryza_api_inputs_setup, scenarie[8]), recursive = TRUE)
+    unlink(paste0(dir_oryza_api_inputs, 'inputs.zip'), recursive = TRUE)
+
+  })#, mc.cores = no_cores, mc.preschedule = F)
+
+}
+
+run_oryza_by_setup <- function(){
   auth <- "https://oryza.aclimate.org/api/v1/login"
   process <- "https://oryza.aclimate.org/api/v1/run"
 
@@ -163,39 +192,29 @@ run_oryza_by_setup <- function(setups){
 
   response <- httr::POST(auth, add_headers('accept-encoding'='deflate'), body=identify_body, content_type_json(), verbose())
   token <- fromJSON(content(response, "text"))$token
-  make_request_oryza <- function(setup) {
-    scenarie <- str_split_fixed(setup, '/', n=8) #current scenarie/setup
-    correction <- str_split_fixed(scenarie[8], '_', n=2)
-    station <- gsub('/', '', correction[1]) #current climatic station
 
-    #Copying a compressing files for Oryza API
-    file.copy(paste0(path_output, "/",station, "/"), dir_oryza_api_inputs_climate, recursive=TRUE)
-    file.copy(paste0(dirModeloArrozInputs, scenarie[8],"/"), dir_oryza_api_inputs_setup, recursive=TRUE)
-    setwd('/forecast/workdir/oryzaApiInputs/')
-    zip(zipfile='inputs', './inputs')
-
-    #dest <- paste0(dirModeloArrozOutputs, substring(scenarie[8], 2), ".csv")
-    #Calling Oryza API
-    cat(paste("send request at: ", Sys.time()))
-    #Dir outputs rice
-    setwd(dirModeloArrozOutputs)
+  inputsList <- list.files(dir_oryza_api_inputs)
+  inputsList <- head(inputsList, - 1) #To ignore inputs folder
+  make_request_oryza <- function(currentInputFolder) {
+    #CSV name
+    csvName <- paste0(currentInputFolder, ".csv")
     #Making curl post request (problems with httr in this part)
     req <- paste0('curl -X POST "', process, '" -H "accept: */*"', ' -H ', '"x-access-token: ' , token, '"', " -H ", '"Content-Type: multipart/form-data"', 
-      " -F ", '"inputs=@', paste0(dir_oryza_api_inputs, "inputs.zip"), ';type=application/x-zip-compressed"', 
-      ' -O "', 'hola.csv', '"')
-    #req <- gsub('"\"', "", req)
-      #"-O ", paste0(substring(scenarie[8], 2), ".csv"))
+      " -F ", '"inputs=@', paste0(dir_oryza_api_inputs, currentInputFolder, "/inputs.zip"), ';type=application/x-zip-compressed"', 
+      ' -o "', csvName, '"')
 
+    #Sending request
+    cat(paste("send request at: ", Sys.time()))
+    system(req)
     cat(paste("received at: ", Sys.time()))
-    #Deleting inputs files to replace
-    unlink(paste0(dir_oryza_api_inputs_climate, station), recursive = TRUE)
-    unlink(paste0(dir_oryza_api_inputs_setup, scenarie[8]), recursive = TRUE)
-    unlink(paste0(dir_oryza_api_inputs, 'inputs.zip'), recursive = TRUE)
+    #Deleting used inputs (storage control)
+    unlink(paste0(dir_oryza_api_inputs, currentInputFolder), recursive = TRUE)
 
   }
-  results <- lapply(setups, make_request_oryza)
+  setwd(dirModeloArrozOutputs)
+  #no_cores = 3 in server
+  results <- mclapply(inputsList, make_request_oryza, mc.cores = 3, mc.preschedule = F)
 
-  #setwd(currentWd)
 }
 
 #This inputs come from /prediccionClimatica/PyCPT_from_R.r
@@ -430,8 +449,10 @@ for(c in countries_list){
 
   ## Rice crop model process
   setups <- list.dirs(dirModeloArrozInputs,full.names = T)
-  setups <- if(no_cores > 1) setups[-1] else setups
-  run_oryza_by_setup(setups)
+  #Preparing inputs files
+  prepare_setups_api_oryza(setups)
+  #Making post request to oryza api
+  run_oryza_by_setup()
   
 
   ## Frijol crop model process
