@@ -43,7 +43,7 @@ run_dssat <- function(dir_dssat, dir_soil, dir_run, dir_parameters, name_files, 
   ## here add function to load de output necessary
   
   summary_out <- suppressWarnings(read_summary(dir_run_id)) %>%
-    mutate(yield_0 = HWAM,
+    dplyr::mutate(yield_0 = HWAM,
            d_dry = as.numeric(as.Date(as.character(MDAT), format("%Y%j")) - as.Date(as.character(PDAT), format("%Y%j"))),
            prec_acu = PRCP,
            bio_acu = CWAM)

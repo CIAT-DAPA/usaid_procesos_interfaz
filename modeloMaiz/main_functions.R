@@ -77,9 +77,9 @@ make_date <- function(data){
   # is possible to eliminate some variables?
   
   data <-  tbl_df(data.frame(data, frcast_date)) %>%
-    mutate(julian_day = yday(frcast_date),
+    dplyr::mutate(julian_day = yday(frcast_date),
            year_2 = as.numeric(substr(year(frcast_date), 3, 4))) %>%
-    mutate(date_dssat = mapply(date_for_dssat, year_2, julian_day))
+    dplyr::mutate(date_dssat = mapply(date_for_dssat, year_2, julian_day))
   
   return(data)
   
@@ -110,7 +110,7 @@ load_climate <- function(dir_climate){
     # filter_text(omit_files, different = T) %>%
     # .[1:99]             ## luego quitar el cargar solo las 99 veces
   
-  climate_list_df <- lapply(climate_list, read_csv, col_types = cols()) %>%
+  climate_list_df <- lapply(climate_list, readr::read_csv, col_types = readr::cols()) %>%
     lapply(make_date)
   
   return(climate_list_df)
@@ -230,7 +230,7 @@ make_PS <- function(data, number_days){
   after_days <- data[[1]] %>%
     filter( row_number() == 1:number_days) %>%
     dplyr::select(frcast_date) %>%
-    mutate(pdate = frcast_date + months(1)) %>%
+    dplyr::mutate(pdate = frcast_date + months(1)) %>%
     dplyr::select(pdate) %>%
     filter( row_number() == 1) %>%
     magrittr::extract2(1) 
@@ -294,7 +294,7 @@ tidy_climate <- function(dir_climate, number_days){
 
 read_summary <- function(dir_run){
   
-  summary_out <- read_table(paste0(dir_run, 'Summary.OUT'), skip = 3 , na = "*******", col_types = cols())
+  summary_out <- read_table(paste0(dir_run, 'Summary.OUT'), skip = 3 , na = "*******", col_types = readr::cols())
   
 
   return(summary_out)
@@ -315,8 +315,8 @@ read_weather <- function(data, skip_lines, i){
   suppressWarnings(suppressMessages(fread(data, skip = skip_lines, stringsAsFactors = F, na.strings = "NaN", header = T, colClasses = list(
     integer = 1:3, numeric = 4:18)))) %>%
     tbl_df() %>%
-    mutate_all(funs(as.numeric)) %>%
-    mutate(scenario = rep(i, length(DOY)))
+    dplyr::mutate_all(funs(as.numeric)) %>%
+    dplyr::mutate(scenario = rep(i, length(DOY)))
 
   
 }
@@ -369,7 +369,7 @@ calc_desc <- function(data, var){
   reclas_call <- lazyeval::interp(~ mgment_no_run(var), var = as.name(var))
   
   data <- data %>%
-    mutate_(.dots = setNames(list(reclas_call), var)) %>%
+    dplyr::mutate_(.dots = setNames(list(reclas_call), var)) %>%
     summarise_each(funs(avg = mean(.,na.rm=TRUE), 
                         median = median(.,na.rm=TRUE),
                         min = min(.,na.rm=TRUE),
@@ -383,7 +383,7 @@ calc_desc <- function(data, var){
                         perc_5 = quantile(., 0.05,na.rm=TRUE),
                         perc_95 = quantile(., 0.95,na.rm=TRUE), 
                         coef_var = CV(.))) %>%
-    mutate(measure = paste(var)) %>%
+    dplyr::mutate(measure = paste(var)) %>%
     dplyr::select(measure, everything())
   return(data)
 }
@@ -395,7 +395,7 @@ tidy_descriptive <- function(data, W_station, soil, cultivar, start, end){
   require(lubridate)
   
   data <- data %>%
-    mutate(weather_station = W_station,
+    dplyr::mutate(weather_station = W_station,
            soil = soil, 
            cultivar = cultivar, 
            start = start, 
@@ -453,7 +453,7 @@ read_planting <- function(dir_parameters){
   
   require(tidyverse)
   
-  details <- read_csv(paste0(dir_parameters, 'planting_details.csv'), col_types = cols())
+  details <- readr::read_csv(paste0(dir_parameters, 'planting_details.csv'), col_types = readr::cols())
   
 }
 
@@ -461,7 +461,7 @@ read_planting <- function(dir_parameters){
 load_coordinates <- function(dir_parameters){
   
   require(readr)
-  coordenadas <- read_csv(paste0(dir_parameters,'coordenadas.csv')) %>%
+  coordenadas <- readr::read_csv(paste0(dir_parameters,'coordenadas.csv')) %>%
     as.data.frame() %>%
     frame_list()
   
