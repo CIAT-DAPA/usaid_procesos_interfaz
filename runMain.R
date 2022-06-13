@@ -46,9 +46,9 @@ library(raster)
 library(rebus)
 library(reshape)
 library(rgdal)
-library(ncdf4) #Must be installed on the image
+library(ncdf4) 
 library(stringr)
-#library(tidyverse)
+library(tidyverse)
 library(trend)
 library(curl)
 library(askpass)
@@ -217,7 +217,7 @@ run_oryza_by_setup <- function(){
 
 }
 
-#This inputs come from /prediccionClimatica/PyCPT_from_R.r
+#These inputs come from /prediccionClimatica/PyCPT_from_R.r
 prepareRastersUpload <- function(trimesters, nextGenFileName_det, datadir, monthsNumber, monf, fyr, nextGenFileName_prob) {
   require(readr)
   forecastID <- read_csv(paste0(dirUnifiedOutputs, "outputs/", "forecast.csv"))
@@ -431,7 +431,8 @@ for(c in countries_list){
   if(currentCountry=="COLOMBIA"){
   source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL)) 
   } else {
-  source(paste(dir_pycpt_scripts, 'PyCPT_from_R.r', sep = "", collapse = NULL))
+  system(paste0("conda activate ", Sys.getenv("CONDA_ENV_PYCPT")))
+  source(paste(dirForecast, 'PyCPT_from_R.r', sep = "", collapse = NULL))
   }
 
   # Resampling process
