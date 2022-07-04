@@ -26,13 +26,26 @@ make_dir_run <- function(dir_run_main, sim_number){
 
 
 # Funcion copia inputs base en directorio de simulacion de cada setups
-copy_inputs <- function(dir_inputs, dir_run, crop){
+# Posible adicionar folder con genotipos de todos los cultivares
+copy_inputs <- function(dir_inputs_setup, dir_inputs_soil, dir_inputs_cultivar, crop, dir_run){
+  
+  CR <- tibble(
+    crop_name = c("rice", "maize", "bean", "barley", "sorghum", "wheat", "teff"),
+    CR = c("RI", "MZ", "BN", "BA", "SG", "WH", "TF")) %>% filter(crop_name==crop)%>%
+    pull(CR)
   
   
-  patt <- 
+  gen_files <- list.files(dir_inputs_cultivar, full.names = T, pattern = "ECO|SPE|CUL") %>%
+    str_subset(CR)
   
-  dir_files <- list.files(dir_inputs, full.names = T)
-  file.copy(dir_files, dir_run)
+  
+  setting_files <- list.files(dir_inputs_setup, full.names = T, pattern = "csv")
+  
+  soil_files <- list.files(dir_inputs_soil, full.names = T, pattern = ".SOL$")
+    
+  
+#  dir_files <- list.files(dir_inputs, full.names = T)
+  file.copy(c(gen_files, setting_files, soil_files), dir_run)
   
 #  map2(.x = c("*.SPE", "*.ECO", "*.CUL"), 
 #       .y = paste0("standard", c("*.SPE", "*.ECO", "*.CUL")), 
@@ -66,8 +79,9 @@ load_coordinates <- function(dir_inputs_run){
 crop_name_setup <- function(id_name, crop){
   
   base_tb <- tibble(
-    crop_name = c("rice", "maize", "bean", "barley", "sorghum", "wheat", "teff"),
-    CR = c("RI", "MZ", "BN", "BA", "SG", "WH", "TF"))
+    crop_name = c("rice", "maize", "barley", "sorghum", "wheat", "bean", "fababean", "teff"),
+    CR = c("RI", "MZ", "BA", "SG", "WH", "BN", "FB",  "TF"),
+    model = c(paste0(c("RI", "MZ", "BA", "SG", "WH"), "CER"), rep("CRGRO", 2), "TFAPS"))
   
   cul <- base_tb %>% 
     dplyr::filter(crop_name %in% crop) %>%
@@ -115,7 +129,7 @@ write_batch_aclimate <- function(crop, xfile, treatments_number, filename){
 # conevrt date to DSSAT format 
 date_for_dssat <- function(date) {
   stopifnot(class(date)=="Date")
-  stopifnot(require(lubridate))
+#  stopifnot(require(lubridate))
   
   yr <- str_sub(year(date), -2)
   doy <- yday(date)

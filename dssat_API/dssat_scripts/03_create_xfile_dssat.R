@@ -149,7 +149,7 @@ write_exp_dssat <- function(path, id_name, crop, cultivar, soil, wth_station, pl
   # INGENO <- 'CI0027' # Cultivar indentifier, this is the code for cultivar to run depend of crop
   # CNAME <- 'PIO 30F35HRB_'  # Whatever code to identify the cultivar ran, maybe no too long string
   
-  CR <- crop_name_setup(id_name, crop)[[2]]
+  CR <- crop_name_setup(id_name, crop)[["CR"]]
   
   cultivars <- data.frame(C = 1 , CR, INGENO = cultivar[1], CNAME = cultivar[2])
   
@@ -527,7 +527,7 @@ write_exp_dssat <- function(path, id_name, crop, cultivar, soil, wth_station, pl
     
   }
   
-  name_exp <- paste0(path, "/", crop_name_setup(id_name, crop)[[3]])
+  name_exp <- paste0(path, "/", crop_name_setup(id_name, crop)[["ext"]])
   
   xfile <- file(name_exp, open = "w")
   

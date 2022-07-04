@@ -11,122 +11,39 @@
 
 read_summary <- function(dir_run){
   
-  summary_out <- read_table(paste0(dir_run, 'Summary.OUT'), skip = 3 , na = "*******", col_types = cols())
+  summary_out <- read_table(paste0(dir_run, 'Summary.OUT'), skip = 3 , na = "*******", col_types = cols()) %>%
+    dplyr::mutate(yield_0 = HWAM,
+                  d_dry = as.numeric(as.Date(as.character(MDAT), format("%Y%j")) - as.Date(as.character(PDAT), format("%Y%j"))),
+                  prec_acu = PRCP,
+                  bio_acu = CWAM)
+  
   
   
   return(summary_out)
 }
 
 
-
-
-
-
-read_weather <- function(data, skip_lines, i){
+read_wth_out <- function(dir_run){
   
-  require(data.table)
-  require(tidyverse)
-  require(lubridate)
-  options(warn = -1)
+
+file <- paste0(dir_run, "Weather.OUT")
+skip <- read_lines(file)  %>% str_detect("@YEAR") %>% which()-1 
+
+cal_summ <- function(data){
   
-  suppressWarnings(suppressMessages(fread(data, skip = skip_lines, stringsAsFactors = F, na.strings = "NaN", header = T, colClasses = list(
-    integer = 1:3, numeric = 4:18)))) %>%
-    tbl_df() %>%
-    mutate_all(funs(as.numeric)) %>%
-    mutate(scenario = rep(i, length(DOY)))
-  
+  data %>% tibble %>% mutate(across(.fns = as.numeric)) %>%
+    summarise(t_max_acu = sum(TMXD), t_min_acu = sum(TMND), srad_acu = sum(SRAD))
   
 }
 
-read_mult_weather <- function(data){
-  
-  require(tidyverse)
-  
-  data <- paste0(data, 'Weather.OUT')
-  lines <- readLines(data)
-  posToread <- grep("@YEAR", lines) - 1
-  weather <- lapply(1:length(posToread), function(i) read_weather(data, posToread[i], i)) %>%
-    bind_rows()
-  
-  return(weather)
-  
+data_wth <- map(skip, ~fread(file, skip = .x)) %>% 
+  map(cal_summ)
+
+
+data_wth %>% bind_rows(.id = "scenario")
+
 }
-
-
-mgment_no_run <- function(data){
   
-  ifelse(data == -99, 0, data)
-  
-}
-
-
-
-
-conf_lower <- function(var){
-  
-  t.test(var,na.rm=TRUE)$conf.int[1]
-}
-
-conf_upper <- function(var){
-  
-  t.test(var,na.rm=TRUE)$conf.int[2]
-}
-
-
-CV <- function(var){
-  
-  (sd(var,na.rm=TRUE)/mean(var,na.rm=TRUE))*100
-  
-}
-
-
-calc_desc <- function(data, var){
-  
-  data <- dplyr::select_(data, var)
-  reclas_call <- lazyeval::interp(~ mgment_no_run(var), var = as.name(var))
-  
-  data <- data %>%
-    mutate_(.dots = setNames(list(reclas_call), var)) %>%
-    summarise_each(funs(avg = mean(.,na.rm=TRUE), 
-                        median = median(.,na.rm=TRUE),
-                        min = min(.,na.rm=TRUE),
-                        max = max(.,na.rm=TRUE),
-                        quar_1 = quantile(., 0.25,na.rm=TRUE),
-                        quar_2 = quantile(., 0.50,na.rm=TRUE),
-                        quar_3 = quantile(., 0.75,na.rm=TRUE),
-                        conf_lower = conf_lower(.),
-                        conf_upper = conf_upper(.),
-                        sd = sd(.,na.rm=TRUE),
-                        perc_5 = quantile(., 0.05,na.rm=TRUE),
-                        perc_95 = quantile(., 0.95,na.rm=TRUE), 
-                        coef_var = CV(.))) %>%
-    mutate(measure = paste(var)) %>%
-    dplyr::select(measure, everything())
-  return(data)
-}
-
-
-
-tidy_descriptive <- function(data, W_station, soil, cultivar, start, end){
-  
-  require(lubridate)
-  
-  data <- data %>%
-    mutate(weather_station = W_station,
-           soil = soil, 
-           cultivar = cultivar, 
-           start = start, 
-           end = end) %>%
-    dplyr::select(weather_station, 
-                  soil, 
-                  cultivar, 
-                  start, 
-                  end, 
-                  everything())
-  
-  return(data)
-  
-}
 
 
 
@@ -142,12 +59,7 @@ tidy_descriptive <- function(data, W_station, soil, cultivar, start, end){
 extract_summary_aclimate <- function(data, var){
   
   
-  mgment_no_run <- function(data){
-    
-    ifelse(data == -99, 0, data)
-    
-  }
-  
+
   conf_lower <- function(var){
     
     t.test(var)$conf.int[1]
@@ -167,26 +79,26 @@ extract_summary_aclimate <- function(data, var){
   
   
 
-  data <- dplyr::select_(data, var)
-  reclas_call <- lazyeval::interp(~ mgment_no_run(var), var = as.name(var))
+  data <- dplyr::select_(data, var) %>% drop_na()
+  
   
   data <- data %>%
-    mutate_(.dots = setNames(list(reclas_call), var)) %>%
-    summarise_each(funs(avg = mean(.), 
-                        median = median(.), 
-                        min = min(.), 
-                        max = max(.), 
-                        quar_1 = quantile(., 0.25), 
-                        quar_2 = quantile(., 0.50), 
-                        quar_3 = quantile(., 0.75), 
-                        conf_lower = conf_lower(.), 
-                        conf_upper = conf_upper(.), 
-                        sd = sd(.), 
-                        perc_5 = quantile(., 0.05),
-                        perc_95 = quantile(., 0.95), 
-                        coef_var = CV(.))) %>%
+    summarise(across(var, .fns =list(avg = mean, 
+                        median = median, 
+                        min = min, 
+                        max = max, 
+                        quar_1 = ~quantile(.x, 0.25), 
+                        quar_2 = ~quantile(.x, 0.50), 
+                        quar_3 = ~quantile(.x, 0.75), 
+                        conf_lower = conf_lower, 
+                        conf_upper = conf_upper, 
+                        sd = sd, 
+                        perc_5 = ~quantile(.x, 0.05),
+                        perc_95 = ~quantile(.x, 0.95), 
+                        coef_var = CV))) %>%
     mutate(measure = paste(var)) %>%
-    dplyr::select(measure, everything())
+    dplyr::select(measure, everything()) %>% 
+    rename_with(~str_remove(., paste0(var, "_")))
   return(data)
 }
 
