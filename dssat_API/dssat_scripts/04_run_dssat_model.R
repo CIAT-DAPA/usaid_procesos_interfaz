@@ -1,5 +1,5 @@
 ### Run Model - DSSAT Aclimate - EDACaP
-# Author: Rodriguez-Espinoza J.
+# Author: Rodriguez-Espinoza J. Mesa-Diez J.
 # https://github.com/jrodriguez88/
 # 2022
 

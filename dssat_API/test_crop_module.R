@@ -1,50 +1,113 @@
-# Test module
+### Test Crop module - DSSAT - API - Aclimate,  EDACaP
+# Author: Rodriguez-Espinoza J.
+# https://github.com/jrodriguez88/
+# 2022
+
+# DSSAT Version 4.8
+# Crops tested : c("rice", "maize", "barley", "sorghum", "wheat", "bean", "fababean", "teff")
+
+##Settings:
+# Number of Climate Scenaries: 99 ( max allow by DSSAT x file)
+# 11 Planting dates (30 days - 1 sim/3 days) ..first planting date = 15 days after first day forecast (climate scenaries)
+# 1 Soil - DSSAT ID
+# irri <- F  --  Rainfed mode
+# fert_in <- NULL - No fertilization
+
+library(profvis)
+library(bench)
+library(tictoc)
+
+
 
 tictoc::tic()
+
 
 ### Wheat
 crop <- "wheat"
 cultivar <- c("AW0071","Yecora_Rojo")
+soil <- "IB00000001"
 source("00_run_dssat_aclimate.R")
+
 
 ### Barley
 crop <- "barley"
 cultivar <- c( "IB0030", "Maris Badger")
+soil <- "IB00000001"
 source("00_run_dssat_aclimate.R")
 
 ### Maize
 crop <- "maize"
 cultivar <- c( "990002", "MEDIUM SEASON")
+soil <- "IB00000001"
 source("00_run_dssat_aclimate.R")
 
 ### Sorghum
 crop <- "sorghum"
 cultivar <- c( "990004", "W.AFRICAN")
+soil <- "IB00000001"
 source("00_run_dssat_aclimate.R")
 
 ### Rice
 crop <- "rice"
 cultivar <- c( "IB0115",  "IR 64*")
+soil <- "IB00000001"
 source("00_run_dssat_aclimate.R")
-
 
 ### Beans
 crop <- "bean"
 cultivar <- c( "990005", "Meso Amer. Hab.1")
+soil <- "IB00000001"
+source("00_run_dssat_aclimate.R")
+
+### Faba Beans
+crop <- "fababean"
+cultivar <- c( "CORD01", "ALAME LD170 1.2g")
+soil <- "IB00000001"
 source("00_run_dssat_aclimate.R")
 
 ### Teff
 crop <- "teff"
 cultivar <- c("IB0304", "Wajera (local)")
+soil <- "IB00000001"
 source("00_run_dssat_aclimate.R")
 
 tictoc::toc()
+
+#> tictoc::toc()
+#556.36 sec elapsed
+
+
+run_crop_dssat <- function(path, crop, cultivar, soil){
+  
+  setwd(path)
+  
+  crop <- crop
+  cultivar <- cultivar
+  soil <- soil
+  
+  source("00_run_dssat_aclimate.R")
+  
+  
+}
+
+run_crop_dssat(path = "dssat_API/", crop = "wheat", cultivar = c("AW0071","Yecora_Rojo"),  soil = "IB00000001")
+
+### Workflow Profile - 
+#profvis({
+#  crop <- "wheat"
+#  cultivar <- c("AW0071","Yecora_Rojo")
+#  soil <- "IB00000001"
+#  source("00_run_dssat_aclimate.R")}
+#)
 
 
 ### Test analysis
 
 library(ggplot2)
 library(plotly)
+
+sim_data <- list.files("outputs/", full.names = T) %>% map(read_csv) %>%
+  bind_rows() %>% rename(crop = weather_station)
 
 
 sim_data %>% 
@@ -60,8 +123,7 @@ sim_data %>%
   )
 
 
-sim_data <- list.files("outputs/", full.names = T) %>% map(read_csv) %>%
-  bind_rows() %>% rename(crop = weather_station)
+
 
 plot_ly(
     data = sim_data %>% filter(measure =="yield_0"),
@@ -74,7 +136,7 @@ plot_ly(
     q3 = ~ quar_3,
     upperfence = ~ max) %>%
     layout(
-      yaxis = list(exponentformat = "SI",type="log",title = "TEST"),
+      yaxis = list(exponentformat = "SI",type="log",title = "Yield - kg/ha"),
       xaxis = list(title = "Date"),
       boxmode = "group")
 

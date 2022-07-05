@@ -24,7 +24,6 @@ climate_files <- list.files(dir_climate, full.names = T)
 
     
 
-
 # Crea formatos de fechas de simulacion 
 make_sim_dates <- function(initial_date, planting_before, number_days, freq_sim){
   
@@ -43,6 +42,7 @@ make_sim_dates <- function(initial_date, planting_before, number_days, freq_sim)
   
 
 }
+
 
 
 ## escribe archivo climatico (*.wth) en formato DSSAT

@@ -5,6 +5,13 @@
 
 #### Process start here ---
 
+#run_crop_aclimate <- function(){
+#profvis({
+#  
+#  crop <- "wheat"
+#  cultivar <- c("AW0071","Yecora_Rojo")
+#  soil <- "IB00000001"
+
 #library(tidyverse)
 #library(rstudioapi) 
 library(foreach)
@@ -33,7 +40,7 @@ library(raster)
 #crop <- "barley"
 #cultivar <- c("AW0071","Yecora_Rojo")
 #cultivar <- c( "IB0030", "Maris Badger")
-soil <- "IB00000001"
+#soil <- "IB00000001"
 #id <- "5a7e2e6a57d7f316c8bc514a_59b024a0b74a4a10f487eaa6_5b3edfe7b16a0d2edc1107e4_1"
 id <- paste(crop, cultivar[2], soil, sep = "_") %>% str_remove('\\*')
 #site <- map_chr(str_split(id, "_"), 1)
@@ -42,8 +49,8 @@ id <- paste(crop, cultivar[2], soil, sep = "_") %>% str_remove('\\*')
 
 
 # Set working directory
-script_dir <- dirname(sys.frame(1)$ofile)
-setwd(paste0(script_dir, "/"))
+#script_dir <- dirname(sys.frame(1)$ofile)
+#setwd(paste0(script_dir, "/"))
 
 # Folders
 dir_scripts <- "dssat_scripts/"
@@ -176,4 +183,6 @@ write_csv(bind_rows(outputs_df1, outputs_df2), paste0("outputs/", id, ".csv"))
 
 map(dir_run, ~unlink(.x, recursive=TRUE))
 
+#}
 
+#})

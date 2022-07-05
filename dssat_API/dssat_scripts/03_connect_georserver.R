@@ -1,5 +1,5 @@
 ### Function to doawnload data from aclimate geoserver "https://geo.aclimate.org/geoserver/" 
-# Author: Rodriguez-Espinoza J., Mesa J., 
+# Author: Rodriguez-Espinoza J.
 # https://github.com/jrodriguez88/
 # 2022
 

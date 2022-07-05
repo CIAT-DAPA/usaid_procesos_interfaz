@@ -1,11 +1,11 @@
-### Set Model - DSSAT RUN Aclimate--->> 
-# Author: Rodriguez-Espinoza J.
+### Set Model - DSSAT API -  Aclimate - EDACaP--->> 
+# Author: Rodriguez-Espinoza J. Mesa-Diez J.
 # https://github.com/jrodriguez88/
 # 2022
 
 
 
-
+# Crea directorios de simulacion - 1 carpeta por cada configuracion 
 make_dir_run <- function(dir_run_main, sim_number){
   
   
@@ -26,7 +26,6 @@ make_dir_run <- function(dir_run_main, sim_number){
 
 
 # Funcion copia inputs base en directorio de simulacion de cada setups
-# Posible adicionar folder con genotipos de todos los cultivares
 copy_inputs <- function(dir_inputs_setup, dir_inputs_soil, dir_inputs_cultivar, crop, dir_run){
   
   CR <- tibble(
@@ -58,6 +57,7 @@ copy_inputs <- function(dir_inputs_setup, dir_inputs_soil, dir_inputs_cultivar, 
 
 
 # Lee informacion de geolocalizacion
+# puede agregarse en un solo archivo - setups
 load_coordinates <- function(dir_inputs_run){
   
   frame_list <- function(data){
@@ -75,7 +75,8 @@ load_coordinates <- function(dir_inputs_run){
   
 }
 
-# Function to write Crop names/extension into DSSAT format
+
+# Function to write Crop names/model/extension into DSSAT format
 crop_name_setup <- function(id_name, crop){
   
   base_tb <- tibble(
@@ -93,13 +94,8 @@ crop_name_setup <- function(id_name, crop){
   
 }
 
-#crop_name_setup("CIAT0001", "barley")[[3]]
 
-
-#Crea archivo X file  en el directorio especifico de la simulacion
-
-
-#Crea archivo reruns en el directorio especifico de la simulacion
+# Crea archivo batch en el directorio especifico de la simulacion
 write_batch_aclimate <- function(crop, xfile, treatments_number, filename){
   
   batchfile <- rbind(
@@ -125,8 +121,7 @@ write_batch_aclimate <- function(crop, xfile, treatments_number, filename){
 }
 
 
-
-# conevrt date to DSSAT format 
+# convert date to DSSAT format 
 date_for_dssat <- function(date) {
   stopifnot(class(date)=="Date")
 #  stopifnot(require(lubridate))

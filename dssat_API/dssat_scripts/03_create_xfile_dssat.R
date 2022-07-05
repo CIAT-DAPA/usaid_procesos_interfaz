@@ -1,10 +1,10 @@
 ### Create Experimental file DSSAT - xfile --->> Aclimate - EDACaP
-# Author: Rodriguez-Espinoza J.
+# Author: Rodriguez-Espinoza J. Mesa-Diez J.
 # https://github.com/jrodriguez88/
 # 2022
 
 
-#library(tidyverse)
+#Crea archivo X file  en el directorio especifico de la simulacion
 
 
 #planting_details <- read_tsv(clipboard()) %>% pivot_wider(names_from = name)
@@ -24,22 +24,6 @@
 #treatments_number <- length(wth_station)
 #xfile <- crop_name_setup(id_name, crop)[[3]]
 #
-#
-#
-#crop <- test$crop
-#path <- test$path
-#id_name <- test$id_name
-#cultivar <- test$cultivar[[1]]    #same as .CUL file @VAR#  VAR-NAME  = c("AW0071","Yecora_Rojo")
-#soil <- test$soil
-#wth_station <- test$wth_station[[1]]
-#planting_details <- test$planting_details[[1]]
-#irri <- test$irri
-#fert_in <- test$fert_in[[1]]
-#start_date <- test$start_date
-#planting_date <- test$planting_date
-#emergence_date = test$emergence_date
-#treatments_number <- test$treatments_number
-#xfile <- crop_name_setup(id_name, crop)[[3]]
 
 write_exp_dssat <- function(path, id_name, crop, cultivar, soil, wth_station, planting_details, 
                 irri, fert_in, start_date, planting_date, emergence_date, treatments_number){
@@ -545,21 +529,5 @@ write_exp_dssat <- function(path, id_name, crop, cultivar, soil, wth_station, pl
   
 }
 
-
-#write_exp_dssat(path, id_name, crop, cultivar, soil, wth_station, 
-#                planting_details, irri, fert_in, start_date, planting_date, emergence_date, treatments_number)
-#
-#
-#batch_filename <- paste0(path, "/", "DSSBatch.v47")
-#
-#write_batch_aclimate(crop, xfile, treatments_number, batch_filename)
-#
-#
-#walk2(.x = list.files("dta/", full.names = T), 
-#      .y = list.files("dta/", full.names = T) %>% str_replace_all("USAID", "CIAT0" ), 
-#      ~file.rename(
-#        from = .x, 
-#        to = .y)
-#wth_station <- list.files(path, pattern = "WTH") %>% str_remove_all(".WTH")
 
 
