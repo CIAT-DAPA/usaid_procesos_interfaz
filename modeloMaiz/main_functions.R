@@ -171,7 +171,7 @@ execute_dssat <- function(dir_run){
     system(paste0("DSCSM046.EXE " , "MZCER046"," B ", "DSSBatch.v46"), ignore.stdout = T, show.output.on.console = F)
   }
   else{
-    system(paste0('$MODELS_DSSAT_DIR/dscsm047 B DSSBatch.v47'))
+    system(paste0('$MODELS_DSSAT_DIR/dscsm048 B DSSBatch.v48'))
     
 
   }

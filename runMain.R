@@ -4,29 +4,32 @@
 # Country list with country name as key and objectid as value
 no_cores <- as.numeric(Sys.getenv("N_CORES"))
 countries_list <- list("COLOMBIA", "ETHIOPIA")
-countries_ids <- list("COLOMBIA"="61e59d829d5d2486e18d2ea8", "ETHIOPIA"="61e59d829d5d2486e18d2ea9")
+countries_ids <- list("COLOMBIA" = "61e59d829d5d2486e18d2ea8", "ETHIOPIA" = "61e59d829d5d2486e18d2ea9")
 # =====================================================================
 
 # =====================================================================
-# For compatibility with Rscript.exe: 
+# For compatibility with Rscript.exe:
 # =====================================================================
-if(length(.libPaths()) == 1){
+if (length(.libPaths()) == 1) {
   # We're in Rscript.exe
-  possible_lib_paths <- file.path(Sys.getenv(c('USERPROFILE','R_USER')),
-                                  "R","win-library",
-                                  paste(R.version$major,
-                                        substr(R.version$minor,1,1),
-                                        sep='.'))
+  possible_lib_paths <- file.path(
+    Sys.getenv(c("USERPROFILE", "R_USER")),
+    "R", "win-library",
+    paste(R.version$major,
+      substr(R.version$minor, 1, 1),
+      sep = "."
+    )
+  )
   indx <- which(file.exists(possible_lib_paths))
-  if(length(indx)){
+  if (length(indx)) {
     .libPaths(possible_lib_paths[indx[1]])
   }
   # CLEAN UP
-  rm(indx,possible_lib_paths)
+  rm(indx, possible_lib_paths)
 }
 # =====================================================================
 
-# Librerias y prerequisitos: 
+# Librerias y prerequisitos:
 #   . gunzip
 #   . R librarys
 #   . CPT_batch
@@ -46,7 +49,7 @@ library(raster)
 library(rebus)
 library(reshape)
 library(rgdal)
-library(ncdf4) 
+library(ncdf4)
 library(stringr)
 library(tidyverse)
 library(trend)
@@ -60,53 +63,49 @@ library(sys)
 library(httr)
 
 # Function erase and make folder
-pathConstruct <- function(dirConstruct)
-  {
-  
-  if (!(file.exists(file.path(dirCurrent)))){
+pathConstruct <- function(dirConstruct) {
+  if (!(file.exists(file.path(dirCurrent)))) {
     dir.create(file.path(dirCurrent))
-    }
+  }
   setwd(dirCurrent)
 
-  if (file.exists(file.path(dirConstruct))){
+  if (file.exists(file.path(dirConstruct))) {
     unlink(file.path(dirConstruct), recursive = FALSE, force = TRUE)
-    cat (paste0('\n... folder "',dirConstruct,'" deleted\n'))
+    cat(paste0('\n... folder "', dirConstruct, '" deleted\n'))
     dir.create(file.path(dirConstruct))
-    cat (paste0('... folder "',dirConstruct,'" created\n\n'))
-    }
-    else {
-      dir.create(file.path(dirConstruct))
-      cat (paste0('\n... folder "',dirConstruct,'" created\n\n'))
-    }
+    cat(paste0('... folder "', dirConstruct, '" created\n\n'))
+  } else {
+    dir.create(file.path(dirConstruct))
+    cat(paste0('\n... folder "', dirConstruct, '" created\n\n'))
   }
+}
 
 # Function run model process (maize and rice)
 runCrop <- function(crop, setups) {
-  
+
   # crop <-'maiz'
   # crop <- 'arroz'
   # i = 2
-  
+
   mclapply(2:length(setups), function(i) {
     tryCatch(
       {
-    
-        setSplit <- strsplit(setups[i],"/")
-        
+        setSplit <- strsplit(setups[i], "/")
+
         longName <- setSplit[[1]][length(setSplit[[1]])]
-        longNameSplit <- strsplit(longName,"_")
-    
+        longNameSplit <- strsplit(longName, "_")
+
         hashStation <- longNameSplit[[1]][1]
         hashCrop <- longNameSplit[[1]][2]
         hashSoil <- longNameSplit[[1]][3]
         hashDayRange <- longNameSplit[[1]][4]
-    
+
         dir_climate <- paste0(path_output, "/", hashStation, sep = "", collapse = NULL)
         region <- hashStation
-    
+
         cat(paste("\n\n Crop:", crop, ", station: \"", hashStation, "\", species: \"", hashCrop, "\", soil: \"", hashSoil, "\", rango of days: \"", hashDayRange, "\"\n", sep = ""))
-        
-        if (crop == 'maiz'){
+
+        if (crop == "maiz") {
           print(longName)
           name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
           print(name_csv)
@@ -114,23 +113,23 @@ runCrop <- function(crop, setups) {
           dir_soil <- paste0(dirModeloMaizInputs, longName, "/SOIL.SOL", sep = "", collapse = NULL)
           dir_run <- paste0(dirModeloMaizOutputs, longName, "/run/", sep = "", collapse = NULL)
           pathConstruct(paste0(dirModeloMaizOutputs, longName, sep = "", collapse = NULL))
-          #out_dssat <- paste0(dirModeloMaizOutputs, longName, '/out_dssat', sep = "", collapse = NULL)
-          #pathConstruct(out_dssat)
+          # out_dssat <- paste0(dirModeloMaizOutputs, longName, '/out_dssat', sep = "", collapse = NULL)
+          # pathConstruct(out_dssat)
           pathConstruct(dir_run)
-          runModeloMaiz <- source(paste(dirModeloMaiz,'call_functions.R', sep = "", collapse = NULL), echo = F, local = T)
+          runModeloMaiz <- source(paste(dirModeloMaiz, "call_functions.R", sep = "", collapse = NULL), echo = F, local = T)
           unlink(file.path(paste0(dirModeloMaizOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
         }
-    
-        if (crop == 'arroz'){
+
+        if (crop == "arroz") {
           dir_run <- paste0(dirModeloArrozOutputs, longName, "/run/", sep = "", collapse = NULL)
-          cultivar<- hashCrop
+          cultivar <- hashCrop
           name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
           dir_parameters <- paste0(dirModeloArrozInputs, longName, "/", sep = "", collapse = NULL)
-          runModeloArroz <- source(paste(dirModeloArroz,'call_functions.R', sep = "", collapse = NULL), local = T, echo = F)
+          runModeloArroz <- source(paste(dirModeloArroz, "call_functions.R", sep = "", collapse = NULL), local = T, echo = F)
           unlink(file.path(paste0(dirModeloArrozOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
-        }   
+        }
 
-        if (crop == 'frijol'){
+        if (crop == "frijol") {
           print(longName)
           name_csv <- paste0(longName, ".csv", sep = "", collapse = NULL)
           print(name_csv)
@@ -138,283 +137,287 @@ runCrop <- function(crop, setups) {
           dir_soil <- paste0(dirModeloFrijolInputs, longName, "/SOIL.SOL", sep = "", collapse = NULL)
           dir_run <- paste0(dirModeloFrijolOutputs, longName, "/run/", sep = "", collapse = NULL)
           pathConstruct(paste0(dirModeloFrijolOutputs, longName, sep = "", collapse = NULL))
-          out_dssat <- paste0(dirModeloFrijolOutputs, longName, '/out_dssat', sep = "", collapse = NULL)
+          out_dssat <- paste0(dirModeloFrijolOutputs, longName, "/out_dssat", sep = "", collapse = NULL)
           pathConstruct(out_dssat)
           pathConstruct(dir_run)
-          runModeloFrijol <- source(paste(dirModeloFrijol,'call_functions.R', sep = "", collapse = NULL), echo = F, local = T)
+          runModeloFrijol <- source(paste(dirModeloFrijol, "call_functions.R", sep = "", collapse = NULL), echo = F, local = T)
           unlink(file.path(paste0(dirModeloFrijolOutputs, longName, sep = "", collapse = NULL)), recursive = TRUE, force = TRUE)
         }
-      }, error=function(e){cat(paste("Scenarie: ", longName, "ERROR :"),conditionMessage(e), "\n")})
-    
-        }, mc.cores = no_cores, mc.preschedule = F)
-
+      },
+      error = function(e) {
+        cat(paste("Scenarie: ", longName, "ERROR :"), conditionMessage(e), "\n")
+      }
+    )
+  }, mc.cores = no_cores, mc.preschedule = F)
 }
 
-prepare_setups_api_oryza <- function(setups){
+prepare_setups_api_oryza <- function(setups) {
 
-  #Preparing inputs for parallelization
-  lapply(2:length(setups), function(i){
+  # Preparing inputs for parallelization
+  lapply(2:length(setups), function(i) {
+    scenarie <- str_split_fixed(setups[i], "/", n = 8) # current scenarie/setup
+    correction <- str_split_fixed(scenarie[8], "_", n = 2)
+    station <- gsub("/", "", correction[1]) # current climatic station
 
-    scenarie <- str_split_fixed(setups[i], '/', n=8) #current scenarie/setup
-    correction <- str_split_fixed(scenarie[8], '_', n=2)
-    station <- gsub('/', '', correction[1]) #current climatic station
-  
-    #Copying a compressing files for Oryza API
-    file.copy(paste0(path_output, "/",station, "/"), dir_oryza_api_inputs_climate, recursive=TRUE)
-    file.copy(paste0(dirModeloArrozInputs, scenarie[8],"/"), dir_oryza_api_inputs_setup, recursive=TRUE)
-    
+    # Copying a compressing files for Oryza API
+    file.copy(paste0(path_output, "/", station, "/"), dir_oryza_api_inputs_climate, recursive = TRUE)
+    file.copy(paste0(dirModeloArrozInputs, scenarie[8], "/"), dir_oryza_api_inputs_setup, recursive = TRUE)
+
     setwd(dir_oryza_api_inputs)
-    zip(zipfile='inputs', './inputs')
+    zip(zipfile = "inputs", "./inputs")
 
-    currentFolder <- paste0(dir_oryza_api_inputs, substring(scenarie[8], 2), '/')
+    currentFolder <- paste0(dir_oryza_api_inputs, substring(scenarie[8], 2), "/")
     dir.create(currentFolder)
-    file.copy('inputs.zip', currentFolder, recursive=TRUE)
+    file.copy("inputs.zip", currentFolder, recursive = TRUE)
 
-    #Deleting inputs files to replace
+    # Deleting inputs files to replace
     unlink(paste0(dir_oryza_api_inputs_climate, station), recursive = TRUE)
     unlink(paste0(dir_oryza_api_inputs_setup, scenarie[8]), recursive = TRUE)
-    unlink(paste0(dir_oryza_api_inputs, 'inputs.zip'), recursive = TRUE)
+    unlink(paste0(dir_oryza_api_inputs, "inputs.zip"), recursive = TRUE)
+  }) # , mc.cores = no_cores, mc.preschedule = F)
 
-  })#, mc.cores = no_cores, mc.preschedule = F)
-
+  # This return TRUE indicates that the process is done
+  return(TRUE)
 }
 
-run_oryza_by_setup <- function(){
+run_oryza_by_setup <- function() {
   auth <- "https://oryza.aclimate.org/api/v1/login"
   process <- "https://oryza.aclimate.org/api/v1/run"
 
-  #authenitcation token
+  # authenitcation token
   identify_body <- '{
       "user": "aclimate_forecast",
       "password": "p*M$3Hp,X*h_ME@-s"
       }'
-  #currentWd <- getwd()
+  # currentWd <- getwd()
 
-  response <- httr::POST(auth, add_headers('accept-encoding'='deflate'), body=identify_body, content_type_json(), verbose())
+  response <- httr::POST(auth, add_headers("accept-encoding" = "deflate"), body = identify_body, content_type_json(), verbose())
   token <- fromJSON(content(response, "text"))$token
 
   inputsList <- list.files(dir_oryza_api_inputs)
-  inputsList <- head(inputsList, - 1) #To ignore inputs folder
+  inputsList <- head(inputsList, -1) # To ignore inputs folder
   make_request_oryza <- function(currentInputFolder) {
-    #CSV name
+    # CSV name
     csvName <- paste0(currentInputFolder, ".csv")
-    #Making curl post request (problems with httr in this part)
-    req <- paste0('curl -X POST "', process, '" -H "accept: */*"', ' -H ', '"x-access-token: ' , token, '"', " -H ", '"Content-Type: multipart/form-data"', 
-      " -F ", '"inputs=@', paste0(dir_oryza_api_inputs, currentInputFolder, "/inputs.zip"), ';type=application/x-zip-compressed"', 
-      ' -o "', csvName, '"')
+    # Making curl post request (problems with httr in this part)
+    req <- paste0(
+      'curl -X POST "', process, '" -H "accept: */*"', " -H ", '"x-access-token: ', token, '"', " -H ", '"Content-Type: multipart/form-data"',
+      " -F ", '"inputs=@', paste0(dir_oryza_api_inputs, currentInputFolder, "/inputs.zip"), ';type=application/x-zip-compressed"',
+      ' -o "', csvName, '"'
+    )
 
-    #Sending request
+    # Sending request
     cat(paste("send request at: ", Sys.time()))
     system(req)
     cat(paste("received at: ", Sys.time()))
-    #Deleting used inputs (storage control)
+    # Deleting used inputs (storage control)
     unlink(paste0(dir_oryza_api_inputs, currentInputFolder), recursive = TRUE)
-
   }
   setwd(dirModeloArrozOutputs)
-  #no_cores = 3 in server
+  # no_cores = 3 in server
   results <- mclapply(inputsList, make_request_oryza, mc.cores = 3, mc.preschedule = F)
-
 }
 
-#These inputs come from /prediccionClimatica/PyCPT_from_R.r
+# These inputs come from /prediccionClimatica/PyCPT_from_R.r
 prepareRastersUpload <- function(trimesters, nextGenFileName_det, datadir, monthsNumber, monf, fyr, nextGenFileName_prob) {
   require(readr)
   forecastID <- read_csv(paste0(dirUnifiedOutputs, "outputs/", "forecast.csv"))
   forecastID <- forecastID$forecast_id
 
-  #Writting deterministic raster files (to upload to geoserver)
-  for(i in 1:length(nextGenFileName_det)){
+  # Writting deterministic raster files (to upload to geoserver)
+  for (i in 1:length(nextGenFileName_det)) {
     first <- raster(paste0(datadir, "/", nextGenFileName_det[i]))
     second <- raster(paste0(datadir, "/", nextGenFileName_det[i]))
 
-    monthFormat <- if(monthsNumber[tgts[i]] < 10) paste0("0", monthsNumber[tgts[i]]) else monthsNumber[tgts[i]]
+    monthFormat <- if (monthsNumber[tgts[i]] < 10) paste0("0", monthsNumber[tgts[i]]) else monthsNumber[tgts[i]]
 
-    #Writting raster files in .tif
-    writeRaster(first, paste0(dir_upload_raster_layers, "/deterministic/", tolower(paste0("seasonal_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_deterministic_", fyr, monthFormat,".tif"))), overwrite=TRUE)
-    writeRaster(second, paste0(dir_upload_raster_layers, "/deterministic/", tolower(paste0("seasonal_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_deterministic_", fyr, monthFormat,".tif"))), overwrite=TRUE)
-
+    # Writting raster files in .tif
+    writeRaster(first, paste0(dir_upload_raster_layers, "/deterministic/", tolower(paste0("seasonal_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_deterministic_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
+    writeRaster(second, paste0(dir_upload_raster_layers, "/deterministic/", tolower(paste0("seasonal_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_deterministic_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
   }
 
-  #Writting probabilistic raster files (to upload to geoserver)
+  # Writting probabilistic raster files (to upload to geoserver)
 
-  for(i in 1:length(nextGenFileName_prob)){
-    dataNextGenAbove = raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname="Above_Normal")
-    dataNextGenBelow = raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname="Below_Normal")
-    dataNextGenNormal = raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname="Normal")
+  for (i in 1:length(nextGenFileName_prob)) {
+    dataNextGenAbove <- raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname = "Above_Normal")
+    dataNextGenBelow <- raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname = "Below_Normal")
+    dataNextGenNormal <- raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname = "Normal")
 
-    monthFormat <- if(monthsNumber[tgts[i]] < 10) paste0("0", monthsNumber[tgts[i]]) else monthsNumber[tgts[i]]
+    monthFormat <- if (monthsNumber[tgts[i]] < 10) paste0("0", monthsNumber[tgts[i]]) else monthsNumber[tgts[i]]
 
-    #Writting raster files in .tif
-    writeRaster(dataNextGenAbove, paste0(dir_upload_raster_layers, "/above/", tolower(paste0("seasonal_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_above_", fyr, monthFormat,".tif"))), overwrite=TRUE)
-    writeRaster(dataNextGenBelow, paste0(dir_upload_raster_layers, "/below/", tolower(paste0("seasonal_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_below_", fyr, monthFormat,".tif"))), overwrite=TRUE)
-    writeRaster(dataNextGenNormal, paste0(dir_upload_raster_layers, "/normal/", tolower(paste0("seasonal_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_normal_", fyr, monthFormat,".tif"))), overwrite=TRUE)
-
+    # Writting raster files in .tif
+    writeRaster(dataNextGenAbove, paste0(dir_upload_raster_layers, "/above/", tolower(paste0("seasonal_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_above_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
+    writeRaster(dataNextGenBelow, paste0(dir_upload_raster_layers, "/below/", tolower(paste0("seasonal_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_below_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
+    writeRaster(dataNextGenNormal, paste0(dir_upload_raster_layers, "/normal/", tolower(paste0("seasonal_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_normal_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
   }
 
-  #Copying raster in path_rasters (backup)
+  # Copying raster in path_rasters (backup)
   system(paste0("cp -R ", paste0(dir_upload_raster_layers, "/above/ "), paste0(path_rasters, "/")))
   system(paste0("cp -R ", paste0(dir_upload_raster_layers, "/below/ "), paste0(path_rasters, "/")))
   system(paste0("cp -R ", paste0(dir_upload_raster_layers, "/normal/ "), paste0(path_rasters, "/")))
   system(paste0("cp -R ", paste0(dir_upload_raster_layers, "/deterministic/ "), paste0(path_rasters, "/")))
-
 }
 
 uploadRasterFiles <- function() {
-
-  tryCatch({
-    prepareRastersUpload(trimesters, nextGenFileName_det, datadir, monthsNumber, monf, fyr, nextGenFileName_prob)
-    setwd(dir_upload_raster_script) 
-    system(paste0("python import.py ", "aclimate_", country_iso))
-
-  }, error=function(e){cat("Error while uploading rasters files: ",conditionMessage(e), "\n")})
+  tryCatch(
+    {
+      prepareRastersUpload(trimesters, nextGenFileName_det, datadir, monthsNumber, monf, fyr, nextGenFileName_prob)
+      setwd(dir_upload_raster_script)
+      system(paste0("python import.py ", "aclimate_", country_iso))
+    },
+    error = function(e) {
+      cat("Error while uploading rasters files: ", conditionMessage(e), "\n")
+    }
+  )
 }
 
 
-#Python upload/import function---
-#Country name, filepath
-#Main function
-#Import function if exists
-#Creates store if not exist and imports data
+# Python upload/import function---
+# Country name, filepath
+# Main function
+# Import function if exists
+# Creates store if not exist and imports data
 
 
 ## MAIN PATH
 start.time <- Sys.time()
-#dirCurrent <- "/forecast/workdir/usaid_procesos_interfaz/"
+# dirCurrent <- "/forecast/workdir/usaid_procesos_interfaz/"
 dirCurrent <- "/forecast/usaid_procesos_interfaz/"
 
-  # forecastAppDll app - App de consola que se conecta a la base de datos
-  forecastAppDll <- paste0("dotnet ", dirCurrent, "forecast_app/CIAT.DAPA.USAID.Forecast.ForecastApp.dll ", sep = "", collapse = NULL)
+# forecastAppDll app - App de consola que se conecta a la base de datos
+forecastAppDll <- paste0("dotnet ", dirCurrent, "forecast_app/CIAT.DAPA.USAID.Forecast.ForecastApp.dll ", sep = "", collapse = NULL)
 
-  ## Global variables Forecast module
-  dirForecast <- paste0(dirCurrent, "prediccionClimatica/", sep = "", collapse = NULL)
+## Global variables Forecast module
+dirForecast <- paste0(dirCurrent, "prediccionClimatica/", sep = "", collapse = NULL)
 
-  ## Global variables maize model module
-  dir_dssat <- 'C:/DSSAT46/'  ## its necessary to have the parameters .CUL, .ECO, .SPE Updated for running (calibrated the crop (Maize))
-  dirModeloMaiz <- paste0(dirCurrent, "modeloMaiz/", sep = "", collapse = NULL)
+## Global variables maize model module
+dir_dssat <- "C:/DSSAT46/" ## its necessary to have the parameters .CUL, .ECO, .SPE Updated for running (calibrated the crop (Maize))
+dirModeloMaiz <- paste0(dirCurrent, "modeloMaiz/", sep = "", collapse = NULL)
 
-  ## Global variables rice model module
-  dirModeloArroz <- paste0(dirCurrent, "modeloArroz/", sep = "", collapse = NULL)
-  
-  ## Global variables Frijol model module
-  dir_dssat <- 'C:/DSSAT46/'  ## its necessary to have the parameters .CUL, .ECO, .SPE Updated for running (calibrated the crop (Frijol))
-  dirModeloFrijol <- paste0(dirCurrent, "modeloFrijol/", sep = "", collapse = NULL)
+## Global variables rice model module
+dirModeloArroz <- paste0(dirCurrent, "modeloArroz/", sep = "", collapse = NULL)
 
-  #Script that upload files to the Geoserver file system
-  dir_python_folder <- paste0(dirCurrent, "python/")
-  dir_pycpt_scripts <- paste0(dir_python_folder, "PyCPT/")
-  dir_upload_raster_script <- paste0(dir_python_folder, "UploadMosaics/src")
-  dir_upload_raster_layers <- paste0(dir_python_folder, "UploadMosaics/data/layers")
-  
-  #Common directory to send data to Oryza API
-  dir_oryza_api_inputs <- "/forecast/workdir/oryzaApiInputs/"
-  dir_oryza_api_inputs_zip <- "/forecast/workdir/oryzaApiInputs/inputs/"
-  dir_oryza_api_inputs_climate <- paste0(dir_oryza_api_inputs_zip, "climate/")
-  dir_oryza_api_inputs_setup <- paste0(dir_oryza_api_inputs_zip, "setups/")
+## Global variables Frijol model module
+dir_dssat <- "C:/DSSAT46/" ## its necessary to have the parameters .CUL, .ECO, .SPE Updated for running (calibrated the crop (Frijol))
+dirModeloFrijol <- paste0(dirCurrent, "modeloFrijol/", sep = "", collapse = NULL)
+
+# Script that upload files to the Geoserver file system
+dir_python_folder <- paste0(dirCurrent, "python/")
+dir_pycpt_scripts <- paste0(dir_python_folder, "PyCPT/")
+dir_upload_raster_script <- paste0(dir_python_folder, "UploadMosaics/src")
+dir_upload_raster_layers <- paste0(dir_python_folder, "UploadMosaics/data/layers")
+
+# Common directory to send data to Oryza API
+dir_oryza_api_inputs <- "/forecast/workdir/oryzaApiInputs/"
+dir_oryza_api_inputs_zip <- "/forecast/workdir/oryzaApiInputs/inputs/"
+dir_oryza_api_inputs_climate <- paste0(dir_oryza_api_inputs_zip, "climate/")
+dir_oryza_api_inputs_setup <- paste0(dir_oryza_api_inputs_zip, "setups/")
 
 
-##ProbForecats files lists for merging (For importation proccess)
+## ProbForecats files lists for merging (For importation proccess)
 metrics_list <- list()
 probabilities_list <- list()
 
-for(c in countries_list){
+for (c in countries_list) {
   currentCountry <- c
-  country_iso <- if(currentCountry=="COLOMBIA") "co" else "et"
-    #Checks country for avoid conlicts
-    maize_name_by_country <- if(currentCountry=="COLOMBIA") "maiz" else "maize"
+  country_iso <- if (currentCountry == "COLOMBIA") "co" else "et"
+  # Checks country for avoid conlicts
+  maize_name_by_country <- if (currentCountry == "COLOMBIA") "maiz" else "maize"
 
-    dirCurrent <- paste0("/forecast/workdir/", currentCountry, "/")
-    # INPUTS variables
-    dirInputs <- paste0(dirCurrent, "inputs/", sep = "", collapse = NULL)
-      # Input variables Forecast module
-      dirPrediccionInputs <- paste0(dirInputs, "prediccionClimatica/", sep = "", collapse = NULL)
-        dir_save <- paste0(dirPrediccionInputs, "descarga", sep = "", collapse = NULL)
-        dir_runCPT <- paste0(dirPrediccionInputs, "run_CPT", sep = "", collapse = NULL)
-        dir_response <- paste0(dirPrediccionInputs, "estacionesMensuales", sep = "", collapse = NULL)
-        dir_stations <- paste0(dirPrediccionInputs, "dailyData", sep = "", collapse = NULL)
-        dir_inputs_nextgen <- paste0(dirPrediccionInputs, "NextGen", sep = "", collapse = NULL)
-      dirCultivosInputs <-paste0(dirInputs, "cultivos/", sep = "", collapse = NULL)
-      # Input variables Maize model module
-      dirModeloMaizInputs <- paste0(dirInputs, "cultivos/", maize_name_by_country, "/", sep = "", collapse = NULL)
-      # Input variables rice model module
-      dirModeloArrozInputs <- paste0(dirInputs, "cultivos/arroz/", sep = "", collapse = NULL)
-      # Input variables frijol model module
-      dirModeloFrijolInputs <- paste0(dirInputs, "cultivos/frijol/", sep = "", collapse = NULL)
+  dirCurrent <- paste0("/forecast/workdir/", currentCountry, "/")
+  # INPUTS variables
+  dirInputs <- paste0(dirCurrent, "inputs/", sep = "", collapse = NULL)
+  # Input variables Forecast module
+  dirPrediccionInputs <- paste0(dirInputs, "prediccionClimatica/", sep = "", collapse = NULL)
+  dir_save <- paste0(dirPrediccionInputs, "descarga", sep = "", collapse = NULL)
+  dir_runCPT <- paste0(dirPrediccionInputs, "run_CPT", sep = "", collapse = NULL)
+  dir_response <- paste0(dirPrediccionInputs, "estacionesMensuales", sep = "", collapse = NULL)
+  dir_stations <- paste0(dirPrediccionInputs, "dailyData", sep = "", collapse = NULL)
+  dir_inputs_nextgen <- paste0(dirPrediccionInputs, "NextGen/", sep = "", collapse = NULL)
+  dirCultivosInputs <- paste0(dirInputs, "cultivos/", sep = "", collapse = NULL)
+  # Input variables Maize model module
+  dirModeloMaizInputs <- paste0(dirInputs, "cultivos/", maize_name_by_country, "/", sep = "", collapse = NULL)
+  # Input variables rice model module
+  dirModeloArrozInputs <- paste0(dirInputs, "cultivos/arroz/", sep = "", collapse = NULL)
+  # Input variables frijol model module
+  dirModeloFrijolInputs <- paste0(dirInputs, "cultivos/frijol/", sep = "", collapse = NULL)
 
-    # OUTPUTS variables
-    dirUnifiedOutputs <- paste0("/forecast/workdir/", "unified_outputs", "/")
-    #Outputs NExtGen
-    dir_outputs_nextgen <- paste0("/forecast/PyCPT/iri-pycpt/", currentCountry, "/output/")
-    dirOutputs <- paste0(dirCurrent, "outputs/", sep = "", collapse = NULL)
-      # Output variables Forecast module
-      dirPrediccionOutputs <- paste0(dirOutputs, "prediccionClimatica/", sep = "", collapse = NULL)
-      dirNextGen <- paste0(dirOutputs, "NextGen/", sep = "", collapse = NULL)
-        path_save <- paste0(dirPrediccionOutputs, "probForecast", sep = "", collapse = NULL)
-        path_rasters <- paste0(dirPrediccionOutputs, "raster", sep = "", collapse = NULL)
-        path_output <- paste0(dirPrediccionOutputs, "resampling", sep = "", collapse = NULL)
-          path_output_sum <- paste0(path_output, "/summary", sep = "", collapse = NULL)
-      dirCultivosOutputs <-paste0(dirOutputs, "cultivos/", sep = "", collapse = NULL)
-      # Output variables maize model module
-      dirModeloMaizOutputs <-paste0(dirOutputs, "cultivos/", maize_name_by_country, "/", sep = "", collapse = NULL)
-      # Output variables rice model module
-      dirModeloArrozOutputs <-paste0(dirOutputs, "cultivos/arroz/", sep = "", collapse = NULL)
-      # Output variables frijol model module
-      dirModeloFrijolOutputs <-paste0(dirOutputs, "cultivos/frijol/", sep = "", collapse = NULL)
+  # OUTPUTS variables
+  dirUnifiedOutputs <- paste0("/forecast/workdir/", "unified_outputs", "/")
+  # Outputs NExtGen
+  dir_outputs_nextgen <- paste0("/forecast/PyCPT/iri-pycpt/", currentCountry, "/output/")
+  dirOutputs <- paste0(dirCurrent, "outputs/", sep = "", collapse = NULL)
+  # Output variables Forecast module
+  dirPrediccionOutputs <- paste0(dirOutputs, "prediccionClimatica/", sep = "", collapse = NULL)
+  dirNextGen <- paste0(dirOutputs, "NextGen/", sep = "", collapse = NULL)
+  path_save <- paste0(dirPrediccionOutputs, "probForecast", sep = "", collapse = NULL)
+  path_rasters <- paste0(dirPrediccionOutputs, "raster", sep = "", collapse = NULL)
+  path_output <- paste0(dirPrediccionOutputs, "resampling", sep = "", collapse = NULL)
+  path_output_sum <- paste0(path_output, "/summary", sep = "", collapse = NULL)
+  dirCultivosOutputs <- paste0(dirOutputs, "cultivos/", sep = "", collapse = NULL)
+  # Output variables maize model module
+  dirModeloMaizOutputs <- paste0(dirOutputs, "cultivos/", maize_name_by_country, "/", sep = "", collapse = NULL)
+  # Output variables rice model module
+  dirModeloArrozOutputs <- paste0(dirOutputs, "cultivos/arroz/", sep = "", collapse = NULL)
+  # Output variables frijol model module
+  dirModeloFrijolOutputs <- paste0(dirOutputs, "cultivos/frijol/", sep = "", collapse = NULL)
 
-    # Output permanent folder
-    dirResults <- paste0(dirCurrent,"results")
+  # Output permanent folder
+  dirResults <- paste0(dirCurrent, "results")
 
-    # if (!file.exists(file.path(dirResults))){
-    #   dir.create(file.path(dirResults))
-    #   cat (paste0('\n... folder "',dirResults,'" created\n\n'))}
+  # if (!file.exists(file.path(dirResults))){
+  #   dir.create(file.path(dirResults))
+  #   cat (paste0('\n... folder "',dirResults,'" created\n\n'))}
 
   ## ********************** Making inputs and outputs folders  **************************************
   # INPUTS
-  pathConstruct(dirInputs)                        # ./inputs/
-    pathConstruct(dirPrediccionInputs)            # ./inputs/prediccionClimatica/
-      pathConstruct(dir_save)                     # ./inputs/prediccionClimatica/descarga
-      pathConstruct(dir_runCPT)                   # ./inputs/prediccionClimatica/run_CPT
-      pathConstruct(dir_inputs_nextgen)           # ./inputs/prediccionClimatica/NextGen
-      #Oryza API
-      pathConstruct(dir_oryza_api_inputs)         # ./workdir/oryzaApiInputs/
-      pathConstruct(dir_oryza_api_inputs_zip)     # ./workdir/oryzaApiInputs/inputs
-      pathConstruct(dir_oryza_api_inputs_climate) # ./workdir/oryzaApiInputs/inputs/climate
-      pathConstruct(dir_oryza_api_inputs_setup)   # ./workdir/oryzaApiInputs/inputs/setups
+  pathConstruct(dirInputs) # ./inputs/
+  pathConstruct(dirPrediccionInputs) # ./inputs/prediccionClimatica/
+  pathConstruct(dir_save) # ./inputs/prediccionClimatica/descarga
+  pathConstruct(dir_runCPT) # ./inputs/prediccionClimatica/run_CPT
+  pathConstruct(dir_inputs_nextgen) # ./inputs/prediccionClimatica/NextGen
+  # Oryza API
+  pathConstruct(dir_oryza_api_inputs) # ./workdir/oryzaApiInputs/
+  pathConstruct(dir_oryza_api_inputs_zip) # ./workdir/oryzaApiInputs/inputs
+  pathConstruct(dir_oryza_api_inputs_climate) # ./workdir/oryzaApiInputs/inputs/climate
+  pathConstruct(dir_oryza_api_inputs_setup) # ./workdir/oryzaApiInputs/inputs/setups
   # OUTPUTS
-  pathConstruct(dirUnifiedOutputs)                # /unified_outputs/
-  pathConstruct(dirOutputs)                       # ./outputs/
-    pathConstruct(dirPrediccionOutputs)           # ./outputs/prediccionClimatica/
-    pathConstruct(dirNextGen)                      # ./outputs/NextGen/
-      pathConstruct(path_save)                    # ./outputs/prediccionClimatica/probForecas
-      pathConstruct(path_rasters)                 # ./outputs/prediccionClimatica/raster
-      pathConstruct(path_output)                  # ./outputs/prediccionClimatica/resampling
-        pathConstruct(path_output_sum)            # ./outputs/prediccionClimatica/resampling/summary
-    # Outoputs crop model
-    pathConstruct(dirCultivosOutputs)             # ./outputs/cultivos/
-      # Maize
-      pathConstruct(dirModeloMaizOutputs)         # ./outputs/cultivos/maiz/
-      # Rice
-      pathConstruct(dirModeloArrozOutputs)        # ./outputs/cultivos/arroz/
-      # Frijol
-      pathConstruct(dirModeloFrijolOutputs)        # ./outputs/cultivos/frijol/
-      
+  pathConstruct(dirUnifiedOutputs) # /unified_outputs/
+  pathConstruct(dirOutputs) # ./outputs/
+  pathConstruct(dirPrediccionOutputs) # ./outputs/prediccionClimatica/
+  pathConstruct(dirNextGen) # ./outputs/NextGen/
+  pathConstruct(path_save) # ./outputs/prediccionClimatica/probForecas
+  pathConstruct(path_rasters) # ./outputs/prediccionClimatica/raster
+  pathConstruct(path_output) # ./outputs/prediccionClimatica/resampling
+  pathConstruct(path_output_sum) # ./outputs/prediccionClimatica/resampling/summary
+  # Outoputs crop model
+  pathConstruct(dirCultivosOutputs) # ./outputs/cultivos/
+  # Maize
+  pathConstruct(dirModeloMaizOutputs) # ./outputs/cultivos/maiz/
+  # Rice
+  pathConstruct(dirModeloArrozOutputs) # ./outputs/cultivos/arroz/
+  # Frijol
+  pathConstruct(dirModeloFrijolOutputs) # ./outputs/cultivos/frijol/
+
   ## ************************************************************************************************
 
   ## Download initial parameters from interface database
   scriptsDir <- "/forecast/usaid_procesos_interfaz/"
   setwd(paste0(scriptsDir, "forecast_app"))
-  #CMDdirInputs <- paste0(gsub("/","\\\\",dirPrediccionInputs), "\\\"")
+  # CMDdirInputs <- paste0(gsub("/","\\\\",dirPrediccionInputs), "\\\"")
   CMDdirInputs <- dirPrediccionInputs
   CMDdirCropsInputs <- dirInputs
   objectIdCurrentCountry <- countries_ids[currentCountry]
   pyCPTMonth <- month(Sys.Date())
-  dotnet_cmd <- c(paste0(forecastAppDll,"-out -cpt -p \"",CMDdirInputs, "\" -c \"", objectIdCurrentCountry, "\""),
-                paste0(forecastAppDll,"-out -s \"prec\" -p \"",CMDdirInputs,"\" -start 1982 -end 2013 -c \"", objectIdCurrentCountry, "\""),
-                paste0(forecastAppDll,"-out -wf -p \"",CMDdirInputs,"\" -name \"daily\" -c \"", objectIdCurrentCountry, "\""),
-                paste0(forecastAppDll,"-out -co -p \"",CMDdirInputs,"\" -name \"daily\" -c \"", objectIdCurrentCountry, "\""),
-                paste0(forecastAppDll,"-out -fs -p \"",CMDdirCropsInputs, "\" -c \"", objectIdCurrentCountry, "\""),
-                paste0(forecastAppDll, "-out -py -p \"", dir_inputs_nextgen, "\" -c \"", objectIdCurrentCountry, "\" -m \"", pyCPTMonth, "\""),
-                paste0(forecastAppDll, "-out -pyco -p \"", dir_inputs_nextgen, "\" -c \"", objectIdCurrentCountry, "\""))
+  dotnet_cmd <- c(
+    paste0(forecastAppDll, "-out -cpt -p \"", CMDdirInputs, "\" -c \"", objectIdCurrentCountry, "\""),
+    paste0(forecastAppDll, "-out -s \"prec\" -p \"", CMDdirInputs, "\" -start 1982 -end 2013 -c \"", objectIdCurrentCountry, "\""),
+    paste0(forecastAppDll, "-out -wf -p \"", CMDdirInputs, "\" -name \"daily\" -c \"", objectIdCurrentCountry, "\""),
+    paste0(forecastAppDll, "-out -co -p \"", CMDdirInputs, "\" -name \"daily\" -c \"", objectIdCurrentCountry, "\""),
+    paste0(forecastAppDll, "-out -fs -p \"", CMDdirCropsInputs, "\" -c \"", objectIdCurrentCountry, "\""),
+    paste0(forecastAppDll, "-out -py -p \"", dir_inputs_nextgen, "\" -c \"", objectIdCurrentCountry, "\" -m \"", pyCPTMonth, "\""),
+    paste0(forecastAppDll, "-out -pyco -p \"", dir_inputs_nextgen, "\" -c \"", objectIdCurrentCountry, "\"")
+  )
 
   print(dotnet_cmd)
 
@@ -424,61 +427,64 @@ for(c in countries_list){
   try(system(dotnet_cmd[4], intern = TRUE, ignore.stderr = TRUE))
   try(system(dotnet_cmd[5], intern = TRUE, ignore.stderr = TRUE))
   try(system(dotnet_cmd[6], intern = TRUE, ignore.stderr = TRUE))
-  try(system(dotnet_cmd[7], intern = TRUE, ignore.stderr = TRUE)) 
+  try(system(dotnet_cmd[7], intern = TRUE, ignore.stderr = TRUE))
 
 
   # Prediction process
-  if(currentCountry=="COLOMBIA"){
-  source(paste(dirForecast,'01_prediccion.R', sep = "", collapse = NULL)) 
+  if (currentCountry == "COLOMBIA") {
+    source(paste(dirForecast, "01_prediccion.R", sep = "", collapse = NULL))
   } else {
-  system(paste0("conda activate ", Sys.getenv("CONDA_ENV_PYCPT")))
-  source(paste(dirForecast, 'PyCPT_from_R.r', sep = "", collapse = NULL))
+    source(paste(dirForecast, "PyCPT_from_R.r", sep = "", collapse = NULL))
   }
 
   # Resampling process
-  runRemuestreo <- source(paste(dirForecast,'02_remuestreo.R', sep = "", collapse = NULL))
+  runRemuestreo <- source(paste(dirForecast, "02_remuestreo.R", sep = "", collapse = NULL))
 
   # Dowloading and final joining data process
-  runJoinFinalData <- source(paste(dirForecast,'03_join_wth_final.R', sep = "", collapse = NULL))
+  runJoinFinalData <- source(paste(dirForecast, "03_join_wth_final.R", sep = "", collapse = NULL))
 
   ## Maize crop model process
-  setups <- list.dirs(dirModeloMaizInputs,full.names = T)
+  setups <- list.dirs(dirModeloMaizInputs, full.names = T)
   # Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
-  #setups <- if(no_cores > 1) setups[-1] else setups
+  # setups <- if(no_cores > 1) setups[-1] else setups
   runCrop("maiz", setups)
 
-
   ## Rice crop model process
-  setups <- list.dirs(dirModeloArrozInputs,full.names = T)
-  #Preparing inputs files
-  prepare_setups_api_oryza(setups)
-  #Making post request to oryza api
-  run_oryza_by_setup()
-  
+  if (currentCountry == "COLOMBIA") {
+    setups <- list.dirs(dirModeloArrozInputs, full.names = T)
+    # Preparing inputs files
+    if (prepare_setups_api_oryza(setups)) {
+      # Making post request to oryza api
+      run_oryza_by_setup()
+    }
+  }
+
 
   ## Frijol crop model process
-  #setups <- list.dirs(dirModeloFrijolInputs,full.names = T)
-  #runCrop('frijol', setups)
+  # setups <- list.dirs(dirModeloFrijolInputs,full.names = T)
+  # runCrop('frijol', setups)
 
   ## Copying outputs for importation
-  file.copy(dirOutputs, dirUnifiedOutputs, recursive=TRUE)
+  file.copy(dirOutputs, dirUnifiedOutputs, recursive = TRUE)
 
-  ##saving .csv probForecast for merging
-  metrics_list[[length(metrics_list) +1 ]] <- read_csv(paste0(path_save, "/metrics.csv"))
-  probabilities_list[[length(probabilities_list) +1 ]] <- read_csv(paste0(path_save, "/probabilities.csv"))
-
+  ## saving .csv probForecast for merging
+  metrics_list[[length(metrics_list) + 1]] <- read_csv(paste0(path_save, "/metrics.csv"))
+  probabilities_list[[length(probabilities_list) + 1]] <- read_csv(paste0(path_save, "/probabilities.csv"))
 }
-##Merging probForecast files
+## Merging probForecast files
 probForecastUnifiedDir <- paste0(dirUnifiedOutputs, "outputs/prediccionClimatica/probForecast/")
-write_csv(bind_rows(metrics_list), paste0(probForecastUnifiedDir, "metrics.csv"))
+metricsMerged <- bind_rows(metrics_list)
+# Replacing NA values
+metricsMerged[is.na(metricsMerged)] <- 0
+write_csv(metricsMerged, paste0(probForecastUnifiedDir, "metrics.csv"))
 write_csv(bind_rows(probabilities_list), paste0(probForecastUnifiedDir, "probabilities.csv"))
 
 # Upload proccess results to interface database
 setwd(paste0(scriptsDir, "forecast_app"))
-CMDdirOutputs <- paste0(dirUnifiedOutputs, "outputs/") #paste0(gsub("/","\\\\",dirOutputs), "\\\"")
-try(system(paste0(forecastAppDll,"-in -fs -cf 0.5 -p \"",CMDdirOutputs, "\""), intern = TRUE, ignore.stderr = TRUE))
+CMDdirOutputs <- paste0(dirUnifiedOutputs, "outputs/") # paste0(gsub("/","\\\\",dirOutputs), "\\\"")
+try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\""), intern = TRUE, ignore.stderr = TRUE))
 
-#Import rasters to Geoserver
+# Import rasters to Geoserver
 uploadRasterFiles()
 
 end.time <- Sys.time()
