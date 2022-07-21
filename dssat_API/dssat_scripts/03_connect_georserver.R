@@ -1,5 +1,5 @@
 ### Function to doawnload data from aclimate geoserver "https://geo.aclimate.org/geoserver/" 
-# Author: Rodriguez-Espinoza J.
+# Author: Rodriguez-Espinoza J., Mesa J., 
 # https://github.com/jrodriguez88/
 # 2022
 
@@ -65,8 +65,14 @@ get_geoserver_data <- function(crop, data_type, country, format, outpath){
                 "&", bbox_raster, "&srs=EPSG%3A4326&styles=&format=image%2F",
                 format_string)
   
+ if(all(map_lgl(names_tif, file.exists))){message("Geoserver tif files already downloaded!")
+ } else {
+   
+      walk2(url, names_tif, ~download.file(url = .x, destfile = .y, method = "curl"))
+   
+   }
   
-  walk2(url, names_tif, ~download.file(url = .x, destfile = .y, method = "curl"))
+ 
   
   return(names_tif)
 
@@ -99,26 +105,114 @@ extract_raster_geos <- function(raster_geos, lat, lon) {
 
 #test <- extract_raster_geos(downloaded_tif, 35, 8.38)
 
-#"inputs/seasonal_country_et_probabilistic_above.tif" %>% raster() %>%  raster::extract(., cbind(41.88538, 8.6352))
+# urea : Urea amount (kg/ha
+# nps : NPS amount (kg/ha)
+# apps_dap : Number application - Days after planting
+# urea_split = Rate application
+# nps_split : Rate application
 
 
-#convert_FertApp_dssat <- function(N, P)
+convert_FertApp_dssat <- function(urea, nps, apps_dap = c(1, 40), urea_split = c(1/3, 2/3), nps_split = c(1, 0)){
+  
+  
+  base_tb <- bind_rows(tibble(dap = apps_dap, fert = "nps", value = nps * nps_split) %>% 
+                         dplyr::filter(value > 0),
+                       tibble(dap = apps_dap, fert= "urea", value = urea * urea_split) %>% 
+                         dplyr::filter(value > 0)) 
+  
+  
+  
+  fert_to_N <-function(fert, amount){
+    
+    if(fert == "nps"){
+      N = amount*0.19   # https://www.tandfonline.com/doi/full/10.1080/23311932.2018.1439663
+    } else if(fert == "urea"){
+      N = amount*0.46
+    } else {
+      message("No detected Fertilizer")
+      N = -99
+    }
+    
+    return(N)
+  }
+  
+  fert_to_P <-function(fert, amount){
+    
+    if(fert == "nps"){
+      P = amount*0.38
+    } else if(fert == "urea"){
+      P = -99
+    } else {
+      message("No detected Fertilizer")
+      P = -99
+    }
+    
+    return(P)
+  }
+  
+  # AP001    Broadcast, not incorporated            
+  # AP002    Broadcast, incorporated
+  
+  # FE005    Urea
+  # FE006    Diammonium phosphate (DAP)     
+  # FE028    NPK - urea  
+  
+  base_tb <- base_tb %>% 
+    mutate(N = map2_dbl(fert, value, fert_to_N),
+           P = map2_dbl(fert, value, fert_to_P),
+           FMCD = case_when(fert == "nps" ~ "FE006",
+                            fert == "urea" ~"FE005",
+                            TRUE  ~ NA_character_),
+           FACD = case_when(dap < 5 ~ "AP002",
+                            dap > 15 ~ "AP001",
+                            TRUE ~ NA_character_),
+           FDEP = case_when(dap < 5 ~ 5,
+                            dap > 15 ~ 1,
+                            TRUE ~ NA_real_))
+  
+  
+  # De acuerdo a las recomendaciones: 2 aplicaciones,
+  # 1 app: (nps) + 1(urea)/3  -- Incorporated
+  # 2 app: 2(urea)/3          --  No incorporated
+  
+  #*FERTILIZERS (INORGANIC)
+  #@F FDATE  FMCD  FACD  FDEP  FAMN  FAMP  FAMK  FAMC  FAMO  FOCD FERNAME
+  # 1     1 FE006 AP002     5    10    20   -99   -99   -99   -99 fertApp
+  # 1     1 FE005 AP002     5    30   -99   -99   -99   -99   -99 fertApp
+  # 1    40 FE005 AP001     1    10    30    10   -99   -99   -99 fertApp
+  
+  FDATE <- base_tb$dap
+  FMCD <-  base_tb$FMCD
+  FACD <-  base_tb$FACD
+  FDEP <-  base_tb$FDEP 
+  FAMN <-  round(base_tb$N)
+  FAMP <-  round(base_tb$P)
+  FAMK <-  -99
+  FAMC <-  -99 
+  FAMO <-  -99
+  FOCD <-  -99
+  FERNAME <- "AgroClimR"
+  #  
+  #  fertilizer <- data.frame(F = 1, FDATE, FMCD, FACD, FDEP, FAMN, FAMP, FAMK,
+  #                           FAMC, FAMO, FOCD, FERNAME)
+  
+  
+  
+  
+  fertilizer <- tibble(F = 1, FDATE, FMCD, FACD, FDEP, FAMN, FAMP, FAMK,
+                       FAMC, FAMO, FOCD, FERNAME)
+  
+  
+  return(fertilizer)
+  
+}
+
+#c(FALSE , "auto", "fertapp")
+
 
   
-#list.files("inputs/", full.names = T, pattern = "tif") %>% map(raster)
-
-
-#
-#nps <-raster("inputs/fertilizer_et-et_wheat_optimal_nutrients_p_normal.tif")
-#aclimate <-raster("inputs/climate_geo/aclimate_et-seasonal_country_et_probabilistic_above.tif")
-#
-#
-#
-#range(nps[], na.rm = T)
-#range(aclimate[]*100/255, na.rm = T)
-#
-#
-#shp <-   st_read("inputs/climate_geo/et_wheat_fertilizer_recommendation_normal.shp")
+  
+  
 
 
 

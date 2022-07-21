@@ -96,8 +96,10 @@ write_exp_dssat <- function(path, id_name, crop, cultivar, soil, wth_station, pl
   MF <- if(is.null(fert_in)){0} else {1}
   MH <- 0
   
-  treatments <- data.frame(N = 1:treatments_number, R = 1, O = 0, C = 0, TNAME = "CIAT_",
-                           CU = 1, FL = 1:treatments_number, SA = 0, IC, MP = 1,
+  leng_tb <- 1:treatments_number
+  
+  treatments <- data.frame(N = leng_tb, R = 1, O = 0, C = 0, TNAME = "CIAT_",
+                           CU = 1, FL = leng_tb, SA = 0, IC, MP = 1,
                            MI, MF, MR = 0, MC = 0, MT = 0, ME = 0, MH, SM = 1)
   
   
@@ -163,7 +165,9 @@ write_exp_dssat <- function(path, id_name, crop, cultivar, soil, wth_station, pl
   # @L ID_FIELD WSTA....  FLSA  FLOB  FLDT  FLDD  FLDS  FLST SLTX  SLDP  ID_SOIL    FLNAME
   #  1 -99      CCBR1502   -99   -99 DR000   -99   -99     0 SL      30  CCBuga0001 Calibracion
   # 
-  fields <- data.frame(L = 1:treatments_number, ID_FIELD = "CIAT_", WSTA = wth_station, FLSA = -99, FLOB = -99, FLDT = -99,
+  
+  
+  fields <- data.frame(L = leng_tb, ID_FIELD = "CIAT_", WSTA = wth_station, FLSA = -99, FLOB = -99, FLDT = -99,
                          FLDD = -99, FLDS = -99, FLST = -99, SLTX = -99, SLDP = -99, ID_SOIL = soil,
                          FLNAME = "FIELD01", XCRD = -99, YCRD = -99, ELEV = -99, AREA = -99, SLEN=-99,
                          FLWR = -99, SLAS = -99, FLHST = -99, FHDUR=-99)
@@ -255,7 +259,7 @@ write_exp_dssat <- function(path, id_name, crop, cultivar, soil, wth_station, pl
   PLRS <- planting_details$PLRS  
   PLRD <- planting_details$PLRD  
   PLDP <- planting_details$PLDP  
-  PLNAME <- planting_details$PLNAME  
+  PLNAME <- "JRE"  
   
   planting <- data.frame( P = 1, PDATE, EDATE , PPOP, PPOE, PLME, 
                           PLDS, PLRS = 80, PLRD, PLDP,
@@ -334,7 +338,7 @@ write_exp_dssat <- function(path, id_name, crop, cultivar, soil, wth_station, pl
     
     for(i in 1:dim(fert_in)[1]){
       
-      cat(paste(sprintf("%2d %5i %5s %5i %5i %5.2f %5.2f %5.2f %5i %5i %5i %5-i", 1, fert_in$FDATE[i], fert_in$FMCD[i],
+      cat(paste(sprintf("%2d %5d %5s %5s %5d %5d %5d %5d %5d %5d %5d %5s", 1, fert_in$FDATE[i], fert_in$FMCD[i],
                         fert_in$FACD[i], fert_in$FDEP[i], fert_in$FAMN[i], fert_in$FAMP[i], 
                         fert_in$FAMK[i], fert_in$FAMC[i], fert_in$FAMO[i], 
                         fert_in$FOCD[i], fert_in$FERNAME[i]), '\n'), file = name_exp)
@@ -376,7 +380,7 @@ write_exp_dssat <- function(path, id_name, crop, cultivar, soil, wth_station, pl
   input_sControls$NITRO <-  'Y'  ## Y = utiliza balance nitrogeno, N =  no utiliza balance nitrogeno
   input_sControls$PLANT <- 'R'  # R = planting on reporting date ## Add the other options
   input_sControls$IRRIG <- IRR  ##  R =  on reporting date, A automatically irragated, N Nothing, add the other options
-  input_sControls$FERTI = 'N' ## add more options
+  input_sControls$FERTI = FERT ## add more options
   #input_sControls$SDATE <- SDATE
   
   
@@ -519,7 +523,8 @@ write_exp_dssat <- function(path, id_name, crop, cultivar, soil, wth_station, pl
   write_treatments(xfile, treatments)  ## the parameter FL its to identify the run with a specific .WTH
   write_cultivars(xfile, cultivars)
   write_fields(xfile,fields)
-  write_planting(xfile, planting)     
+  write_planting(xfile, planting)
+  if(FERT == 'D'){write_fertilizer(xfile, fert_in)}
   write_sim_control(xfile, sim_ctrl)
   write_sim_setup(xfile, simulation_options)
   close(xfile)

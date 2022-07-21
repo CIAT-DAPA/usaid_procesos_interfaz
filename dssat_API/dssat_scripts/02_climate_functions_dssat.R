@@ -14,7 +14,7 @@ load_all_climate <- function(dir_climate){
 climate_files <- list.files(dir_climate, full.names = T)  
   
 # crea lista de datos de escenarios climaticos  
- data_list <- map(climate_files, read_csv)
+ data_list <- map(climate_files, read_csv, show_col_types =F)
     
  data_wth <- data_list %>% 
    map(~.x %>% mutate(date = make_date(year, month, day),

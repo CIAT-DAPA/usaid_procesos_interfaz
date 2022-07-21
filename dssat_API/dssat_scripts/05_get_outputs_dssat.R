@@ -66,7 +66,7 @@ extract_summary_aclimate <- function(data, var){
   
   
 
-  data <- dplyr::select_(data, var) %>% drop_na()
+  data <- dplyr::select(data, var) %>% drop_na()
   
   
   data <- data %>%

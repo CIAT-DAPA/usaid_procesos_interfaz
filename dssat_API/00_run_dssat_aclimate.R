@@ -16,9 +16,7 @@
 #library(rstudioapi) 
 library(foreach)
 library(parallel)
-library(iterators)
 library(doParallel)
-library(rebus)
 library(dplyr)
 library(tidyr)
 library(tibble)
@@ -26,13 +24,12 @@ library(purrr)
 library(readr)
 library(lubridate)
 library(stringr)
-library(lazyeval)
 library(magrittr)
 library(data.table)
 
 ##Conect geoserver
 library(raster)
-
+options(warn = 1)
 
 
 #Set crop
@@ -42,7 +39,7 @@ library(raster)
 #cultivar <- c( "IB0030", "Maris Badger")
 #soil <- "IB00000001"
 #id <- "5a7e2e6a57d7f316c8bc514a_59b024a0b74a4a10f487eaa6_5b3edfe7b16a0d2edc1107e4_1"
-id <- paste(crop, cultivar[2], soil, sep = "_") %>% str_remove('\\*')
+#id <- paste(crop, cultivar[2], soil, irri, fert, sep = "_") %>% str_remove('\\*')
 #site <- map_chr(str_split(id, "_"), 1)
 #cultivar <- map_chr(str_split(id, "_"), 2)
 #soil <- map_chr(str_split(id, "_"), 3)
@@ -69,6 +66,9 @@ walk(list.files(dir_scripts, pattern = ".R$", full.names = T), ~source(.x))
 ## Location vars/ data / resampling scenaries / planting dates
 location <- load_coordinates(dir_inputs_setup)
 climate_scenaries <- load_all_climate(dir_inputs_climate)[-100]
+
+planting_details <- read_csv(paste0(dir_inputs_setup, "planting_details.csv"), show_col_types = F) %>%
+  dplyr::select(name, crop) %>%  pivot_wider(names_from = name, values_from = crop)
 
 # Definir fecha inicial de simulacion/  
 #En este caso la define automaticamente de la fecha inicial de los escenarios climaticos
@@ -105,11 +105,10 @@ map(batch_filename, ~write_batch_aclimate(crop, xfile, treatments_number, .x))
 ## Write Xfile - Set management params
 
 wth_station <- paste0("CIAT", sprintf("%.4d", 1:treatments_number))
-planting_details <- map(paste0(dir_run, "planting_details.csv"), read_csv) %>% 
-  map(~.x %>% pivot_wider(names_from = name))
 
-irri <- F
-fert_in <- NULL
+
+irri <- ifelse(planting_details$IRR == "YES", T, F)
+fert_in <- get_fertilizer(planting_details)
 
 X_param <- dir_run %>% unlist() %>% enframe(name = NULL, value = "path") %>%
   mutate(id_name = id_name,
@@ -117,7 +116,7 @@ X_param <- dir_run %>% unlist() %>% enframe(name = NULL, value = "path") %>%
          cultivar = list(cultivar),
          soil = soil, 
          wth_station = list(wth_station),
-         planting_details = planting_details, 
+         planting_details = list(planting_details), 
          irri = irri,
          fert_in = list(fert_in),
          start_date = input_dates$start_date,
@@ -175,7 +174,9 @@ write_csv(bind_rows(outputs_df1, outputs_df2), paste0("outputs/", id, ".csv"))
 
 #tictoc::toc()
 
-
+message(paste0("Successful Simulation \n Crop: ", 
+               crop, " - Cultivar: ", cultivar[2], "\n Soil: ", soil, 
+               "\n Irrigation: ", planting_details$IRR, "\n Fertilization: ", planting_details$FERT ))
 
 #dir_oryza = "oryza_API/"
 #list.files(dir_oryza, pattern = ".EXE$", full.names = T) 
