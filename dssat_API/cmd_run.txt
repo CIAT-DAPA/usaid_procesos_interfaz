@@ -1,0 +1,8 @@
+
+
+
+"C:\Program Files\R\R-4.0.4\bin\Rscript.exe" 
+"C:\Program Files\R\R-4.0.4\bin\R.exe"
+
+source("D:/03_DEVELOPER/ACLIMATE/oryza_API/dssat_RUN/00_run_dssat_aclimate.R")
+
