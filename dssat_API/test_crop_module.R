@@ -23,49 +23,61 @@ tictoc::tic()
 
 
 ### Wheat
+id <- "5a7e2e6a57d7f316c8bc514a_59b024a0b74a4a10f487eaa6_5b3edfe7b16a0d2edc1107e4_1"
 crop <- "wheat"
 cultivar <- c("AW0071","Yecora_Rojo")
 soil <- "IB00000001"
+#irri <- T
+#fert <-  "fertapp"#  TRUE = auto, FALSE = not fertilized  
 source("00_run_dssat_aclimate.R")
 
 
 ### Barley
+id <- "5a7e2e6a57d7f316c8bc514a_59b024a0b74a4a10f487eaa6_5b3edfe7b16a0d2edc1107e4_2"
 crop <- "barley"
 cultivar <- c( "IB0030", "Maris Badger")
 soil <- "IB00000001"
+irri <- T
+fert <-  "auto"
 source("00_run_dssat_aclimate.R")
 
 ### Maize
+id <- "5a7e2e6a57d7f316c8bc514a_59b024a0b74a4a10f487eaa6_5b3edfe7b16a0d2edc1107e4_3"
 crop <- "maize"
 cultivar <- c( "990002", "MEDIUM SEASON")
 soil <- "IB00000001"
 source("00_run_dssat_aclimate.R")
 
 ### Sorghum
+id <- "5a7e2e6a57d7f316c8bc514a_59b024a0b74a4a10f487eaa6_5b3edfe7b16a0d2edc1107e4_4"
 crop <- "sorghum"
 cultivar <- c( "990004", "W.AFRICAN")
 soil <- "IB00000001"
 source("00_run_dssat_aclimate.R")
 
 ### Rice
+id <- "5a7e2e6a57d7f316c8bc514a_59b024a0b74a4a10f487eaa6_5b3edfe7b16a0d2edc1107e4_5"
 crop <- "rice"
 cultivar <- c( "IB0115",  "IR 64*")
 soil <- "IB00000001"
 source("00_run_dssat_aclimate.R")
 
 ### Beans
+id <- "5a7e2e6a57d7f316c8bc514a_59b024a0b74a4a10f487eaa6_5b3edfe7b16a0d2edc1107e4_6"
 crop <- "bean"
 cultivar <- c( "990005", "Meso Amer. Hab.1")
 soil <- "IB00000001"
 source("00_run_dssat_aclimate.R")
 
 ### Faba Beans
+id <- "5a7e2e6a57d7f316c8bc514a_59b024a0b74a4a10f487eaa6_5b3edfe7b16a0d2edc1107e4_7"
 crop <- "fababean"
 cultivar <- c( "CORD01", "ALAME LD170 1.2g")
 soil <- "IB00000001"
 source("00_run_dssat_aclimate.R")
 
 ### Teff
+id <- "5a7e2e6a57d7f316c8bc514a_59b024a0b74a4a10f487eaa6_5b3edfe7b16a0d2edc1107e4_8"
 crop <- "teff"
 cultivar <- c("IB0304", "Wajera (local)")
 soil <- "IB00000001"
