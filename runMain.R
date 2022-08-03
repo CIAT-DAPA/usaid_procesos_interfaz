@@ -271,12 +271,28 @@ uploadRasterFiles <- function() {
   )
 }
 
+runDssatModule <- function(){
 
-# Python upload/import function---
-# Country name, filepath
-# Main function
-# Import function if exists
-# Creates store if not exist and imports data
+  ## Maize setups
+  setups <- list.dirs(dirModeloMaizInputs, full.names = T)
+  crop <- "maize"
+  
+  lapply(2:length(setups), function(i) {
+
+    id <- gsub("/", "", str_split_fixed(setups[2], "/", n = 8)) # current scenarie/setup
+    id <- id[8]
+    culFile <- read_lines(paste0(setups[2], "/MZCER048.CUL"), skip = 48)
+    cultivar <- strsplit(culFile, " ", fixed=T)
+    cultivar <- c(cultivar[[1]][1], cultivar[[1]][2])
+    soilFile <- read_lines(paste0(setups[2], "/SOIL.SOL"), skip = 0, n_max = 1)
+    soil <- strsplit(soilFile, " ", fixed=T)
+    soil <- substring(soil[[1]][1], 2)
+    setwd("/forecast/usaid_procesos_interfaz/dssat_API/")
+    source("00_run_dssat_aclimate.R")
+    
+
+  })
+}
 
 
 ## MAIN PATH

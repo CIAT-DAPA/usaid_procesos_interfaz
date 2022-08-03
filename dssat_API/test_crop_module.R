@@ -24,7 +24,7 @@ tictoc::tic()
 
 ### Wheat
 id <- "5a7e2e6a57d7f316c8bc514a_59b024a0b74a4a10f487eaa6_5b3edfe7b16a0d2edc1107e4_1"
-crop <- "wheat"
+crop <-"wheat"
 cultivar <- c("AW0071","Yecora_Rojo")
 soil <- "IB00000001"
 #irri <- T
