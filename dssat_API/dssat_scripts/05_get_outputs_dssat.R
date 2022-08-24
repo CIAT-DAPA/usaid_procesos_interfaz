@@ -8,23 +8,24 @@
 ## read summary dssat - 'Summary.OUT' file
 read_summary <- function(dir_run){
   
-  summary_out <- read_table(paste0(dir_run, 'Summary.OUT'), skip = 3 , na = "*******", col_types = cols()) %>%
+  var_names <- read_lines(paste0(dir_run, 'Summary.OUT'))[4] %>%
+    str_sub(5, -1) %>% str_split("\\s{1,}") %>% pluck(1)
+  
+  summary_out <-  fread(paste0(dir_run, 'Summary.OUT'), header = F, col.names = var_names) %>%
     dplyr::mutate(yield_0 = HWAM,
                   d_dry = as.numeric(as.Date(as.character(MDAT), format("%Y%j")) - as.Date(as.character(PDAT), format("%Y%j"))),
                   prec_acu = PRCP,
                   bio_acu = CWAM)
   
-  
-  
   return(summary_out)
 }
 
+
 ## read weather dssat - "Weather.OUT" file
 read_wth_out <- function(dir_run){
-  
 
 file <- paste0(dir_run, "Weather.OUT")
-skip <- read_lines(file)  %>% str_detect("@YEAR") %>% which()-1 
+skip <- read_lines(file)  %>% str_detect("@YEAR") %>% which()-1
 
 cal_summ <- function(data){
   
@@ -33,14 +34,12 @@ cal_summ <- function(data){
   
 }
 
-data_wth <- map(skip, ~fread(file, skip = .x)) %>% 
+data_wth <- suppressWarnings(map(skip, ~fread(file, skip = .x))) %>%
   map(cal_summ)
-
 
 data_wth %>% bind_rows(.id = "scenario")
 
-}
-  
+}  
 
 ## functions to make descriptive - Extract summary - STATS-metrics
 extract_summary_aclimate <- function(data, var){
