@@ -16,10 +16,14 @@ from matplotlib.colors import LinearSegmentedColormap
 from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
 import calendar
 
+
+print("Python libraries loaded")
+print("Now in the work directory:")
+
 #=================================================================================
 #         Case name (name of the case/experiment, try one word)
 #---------------------------------------------------------------------------------
-case='ETH_s2s'
+case='ETH_subseasonal'
 
 #---------------------------------------------------------------------------------
 #                       Some folder and file options:
@@ -49,8 +53,8 @@ obs='CHIRPS'
 #---------------------------------------------------------------------------------
 #          MOS method (choose between None, PCR, CCA and ELR)
 #---------------------------------------------------------------------------------
-#MOS='CCA'
-MOS='PCR'
+MOS='CCA'
+#MOS='PCR'
 if MOS=='ELR':
     from sklearn.linear_model import LogisticRegression
 
@@ -188,8 +192,6 @@ os.mkdir(os.path.join(workdir, case))
 with open(workdir+'/.IRIDLAUTH') as file:
     authkey = file.read() 
 
-print("Python libraries loaded")
-print("Now in the work directory:")
     #%cd $case
 os.chdir(os.path.join(workdir, case))
 workdir = os.getcwd()
@@ -226,8 +228,8 @@ if list(calendar.month_abbr).index(mon)+1==13:
 else:
     print(c.formatmonth(fyr,list(calendar.month_abbr).index(mon)+1))
 
-#Plot domains
-pltdomain(wlo1,elo1,nla1,sla1,wlo2,elo2,nla2,sla2)
+# #Plot domains
+# pltdomain(wlo1,elo1,nla1,sla1,wlo2,elo2,nla2,sla2)
 
 from urllib import parse
 GEPShdate1 = 'dummy_string'
@@ -314,41 +316,41 @@ for model in models:
     print('')
     print('\033[1mPROCESS COMPLETED \033[0;0m')
 
-    neofs_plot = 3
+#     neofs_plot = 3
 
-print("Present folder:")
-#%cd $workdir/output
-os.chdir(os.path.join(workdir, 'output'))
-print('')
-print('')
+# print("Present folder:")
+# #%cd $workdir/output
+# os.chdir(os.path.join(workdir, 'output'))
+# print('')
+# print('')
 
-if MOS=='None':
-    print("To compute EOFs you need to choose MOS=PCR or MOS=CCA")
-else:
-    # EOF loop
-    plt.rcParams.update({'font.size': 11})
-    for imod in range(neofs_plot):
-        for L in range(nwk):
-            plteofs_eofts(models,imod,neofs_plot,wlo1,elo1,sla1,nla1,wlo2,elo2,sla2,nla2,fprefix,mpref,training_season,nwk, wk[L], wknam[L], map_color, colorbar_option, use_ocean)
-            plt.show()
+# if MOS=='None':
+#     print("To compute EOFs you need to choose MOS=PCR or MOS=CCA")
+# else:
+#     # EOF loop
+#     plt.rcParams.update({'font.size': 11})
+#     for imod in range(neofs_plot):
+#         for L in range(nwk):
+#             plteofs_eofts(models,imod,neofs_plot,wlo1,elo1,sla1,nla1,wlo2,elo2,sla2,nla2,fprefix,mpref,training_season,nwk, wk[L], wknam[L], map_color, colorbar_option, use_ocean)
+#             plt.show()
 
-nccas_plot=2
+# nccas_plot=2
 
-print("Present folder:")
-#%cd $workdir/output
-os.chdir(os.path.join(workdir, 'output'))
-print('')
-print('')
+# print("Present folder:")
+# #%cd $workdir/output
+# os.chdir(os.path.join(workdir, 'output'))
+# print('')
+# print('')
 
-if MOS=='None':
-    print("To compute CCAs you need to choose MOS=CCA")  
-else:
-    # CCA loop
-    for imod in range(nccas_plot):
-        for L in range(nwk):    
-            plt.rcParams.update({'font.size': 11})
-            pltccas_ccats(models,imod,nccas_plot,wlo1,elo1,sla1,nla1,wlo2,elo2,sla2,nla2,fprefix,mpref,training_season,nwk, wk[L], map_color, colorbar_option, use_ocean)
-            plt.show()
+# if MOS=='None':
+#     print("To compute CCAs you need to choose MOS=CCA")  
+# else:
+#     # CCA loop
+#     for imod in range(nccas_plot):
+#         for L in range(nwk):    
+#             plt.rcParams.update({'font.size': 11})
+#             #pltccas_ccats(models,imod,nccas_plot,wlo1,elo1,sla1,nla1,wlo2,elo2,sla2,nla2,fprefix,mpref,training_season,nwk, wk[L], map_color, colorbar_option, use_ocean)
+#             plt.show()
 
 model = models[0]
 print("New folder:")
@@ -370,67 +372,69 @@ print('')
 print('')
 print('\033[1mPROCESS COMPLETED \033[0;0m')
 
-print("Folder:")
-#%cd $workdir/output
-os.chdir(os.path.join(workdir, 'output'))
+# print("Folder:")
+# #%cd $workdir/output
+# os.chdir(os.path.join(workdir, 'output'))
 
-#Desired scores: 
-#score=('Spearman','2AFC','RocAbove','RocBelow','Ignorance','RPSS','GROC')
-score=('Spearman','2AFC','RocAbove','RocBelow')
-#Coordinates of the box:
-lon1=35 #lon of upper left point of geographical sub-domain
-lat1=5  #lat of upper left point of geographical sub-domain
-lon2=40 #lon of lower right point of geographical sub-domain
-lat2=10  #lat of lower right point of geographical sub-domain
-# Skill scores loop
-df=skilltab(model,score,wknam,lon1,lat1,lat2,lon2,wlo2,elo2,sla2,nla2,fprefix,mpref,training_season,mon,fday,nwk,wk)
-df
+# #Desired scores: 
+# #score=('Spearman','2AFC','RocAbove','RocBelow','Ignorance','RPSS','GROC')
+# score=('Spearman','2AFC','RocAbove','RocBelow')
+# #Coordinates of the box:
+# lon1=35 #lon of upper left point of geographical sub-domain
+# lat1=5  #lat of upper left point of geographical sub-domain
+# lon2=40 #lon of lower right point of geographical sub-domain
+# lat2=10  #lat of lower right point of geographical sub-domain
+# # Skill scores loop
+# df=skilltab(model,score,wknam,lon1,lat1,lat2,lon2,wlo2,elo2,sla2,nla2,fprefix,mpref,training_season,mon,fday,nwk,wk)
+# df
 
-modeli=['ECMWF']
-model='ECMWF'
-print(model)
-print("Folder:")
-#%cd $workdir/output
-os.chdir(os.path.join(workdir, 'output'))
+# modeli=['ECMWF']
+# model='ECMWF'
+# print(model)
+# print("Folder:")
+# ##--------------------------------------------------------------------------------------------------------------------
+# #%cd $workdir/output
+# # os.chdir(os.path.join(workdir, 'output'))
 
-plt.rcParams.update({'font.size': 10})
-pltmap(model,mpref+'FCST_V',wlo2,elo2,sla2,nla2,fprefix,mpref,training_season, mon, fday, nwk, wk)
-plt.savefig('figures/Deterministic-'+model+'-'+obs+'-'+MOS+'.pdf', dpi=300)
-print('----------------------------------------------')
-print('')
-plt.rcParams.update({'font.size': 11})
-#pltmapProb(model,wlo2,elo2,sla2,nla2,fprefix,mpref,training_season, mon, fday, nwk, wk)
-#%cd $workdir 
-os.chdir(os.path.join(workdir))
-plt_ng_probabilistic(modeli,wlo2,elo2,sla2,nla2,fprefix,mpref,training_season,wk,nwk,fday,mon,fyr, use_ocean)
-#%cd $workdir/output
-os.chdir(os.path.join(workdir, 'output'))
-plt.savefig('../output/figures/ProbFcst'+model+'-'+obs+'-'+MOS+'.pdf', dpi=300)
+# # plt.rcParams.update({'font.size': 10})
+# # pltmap(model,mpref+'FCST_V',wlo2,elo2,sla2,nla2,fprefix,mpref,training_season, mon, fday, nwk, wk)
+# # plt.savefig('figures/Deterministic-'+model+'-'+obs+'-'+MOS+'.pdf', dpi=300)
+# # print('----------------------------------------------')
+# # print('')
+# # plt.rcParams.update({'font.size': 11})
+# #pltmapProb(model,wlo2,elo2,sla2,nla2,fprefix,mpref,training_season, mon, fday, nwk, wk)
+# #%cd $workdir 
+# ##--------------------------------------------------------------------------------------------------------------------
+# os.chdir(os.path.join(workdir))
+# plt_ng_probabilistic(modeli,wlo2,elo2,sla2,nla2,fprefix,mpref,training_season,wk,nwk,fday,mon,fyr, use_ocean)
+# #%cd $workdir/output
+# os.chdir(os.path.join(workdir, 'output'))
+# plt.savefig('../output/figures/ProbFcst'+model+'-'+obs+'-'+MOS+'.pdf', dpi=300)
 
-#threshold for the flexible format map (in mm/week -- remember: fcsts are in ANOMALIES!):
-flexformat_threshold = [0.5,0.5,0.5,0.5] #array (we need one threshold per forecast week)
-ffthres_ispctl=True  #If True, flex format threshold is a percentile: 0.001 - 0.999
+# #threshold for the flexible format map (in mm/week -- remember: fcsts are in ANOMALIES!):
+# flexformat_threshold = [0.5,0.5,0.5,0.5] #array (we need one threshold per forecast week)
+# ffthres_ispctl=True  #If True, flex format threshold is a percentile: 0.001 - 0.999
 
-print("Folder:")
-#%cd $workdir/output
-os.chdir(os.path.join(workdir, 'output'))
-plt.rcParams.update({'font.size': 12})
-if mpref=='noMOS' and fprefix=='PRCP':
-    pltmapff(flexformat_threshold,ffthres_ispctl,ntrain,wlo1,elo1,sla1,nla1,fprefix,mpref,training_season,mon,fday,nwk,wk)
-else:
-    pltmapff(model,flexformat_threshold,ffthres_ispctl,ntrain,wlo2,elo2,sla2,nla2,fprefix,mpref,training_season,mon,fday,nwk,wk)
-plt.savefig('figures/ProbFcst-Flexplt'+model+'-'+obs+'-'+MOS+'.pdf', dpi=300)
+# print("Folder:")
+# #%cd $workdir/output
+# os.chdir(os.path.join(workdir, 'output'))
+# plt.rcParams.update({'font.size': 12})
+# if mpref=='noMOS' and fprefix=='PRCP':
+#     pltmapff(flexformat_threshold,ffthres_ispctl,ntrain,wlo1,elo1,sla1,nla1,fprefix,mpref,training_season,mon,fday,nwk,wk)
+# else:
+#     pltmapff(model,flexformat_threshold,ffthres_ispctl,ntrain,wlo2,elo2,sla2,nla2,fprefix,mpref,training_season,mon,fday,nwk,wk)
+# plt.savefig('figures/ProbFcst-Flexplt'+model+'-'+obs+'-'+MOS+'.pdf', dpi=300)
 
-#threshold for the flexible format map (in mm/week -- remember: fcsts are in ANOMALIES!):
-flexformat_threshold = [0.5,0.5,0.5,0.5] #array (we need one threshold per week to forecast)
-ffthres_ispctl=True  #If True, flex format threshold is a percentile: 0.001 - 0.999
-#Location coordinates:
-lon=38
-lat=9.
+# #threshold for the flexible format map (in mm/week -- remember: fcsts are in ANOMALIES!):
+# flexformat_threshold = [0.5,0.5,0.5,0.5] #array (we need one threshold per week to forecast)
+# ffthres_ispctl=True  #If True, flex format threshold is a percentile: 0.001 - 0.999
+# #Location coordinates:
+# lon=38
+# lat=9.
  
-print("Folder:")
-#%cd $workdir/output
-os.chdir(os.path.join(workdir, 'output'))
-plt.rcParams.update({'font.size': 12})
-pltprobff(model,flexformat_threshold,ffthres_ispctl,ntrain,lon,lat,wlo2,elo2,sla2,nla2,fprefix,mpref,training_season,mon,fday,nwk,wk)
-plt.savefig('figures/ProbExceed-'+model+'-'+obs+'-'+MOS+'.pdf', dpi=300)
+# print("Folder:")
+# #%cd $workdir/output
+# os.chdir(os.path.join(workdir, 'output'))
+# plt.rcParams.update({'font.size': 12})
+# pltprobff(model,flexformat_threshold,ffthres_ispctl,ntrain,lon,lat,wlo2,elo2,sla2,nla2,fprefix,mpref,training_season,mon,fday,nwk,wk)
+# plt.savefig('figures/ProbExceed-'+model+'-'+obs+'-'+MOS+'.pdf', dpi=300)

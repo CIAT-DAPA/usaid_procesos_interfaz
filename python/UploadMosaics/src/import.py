@@ -3,21 +3,22 @@ import sys
 from tools import GeoserverClient
 
 
-folder_root = "/forecast/usaid_procesos_interfaz/python/UploadMosaics/"
-folder_data = os.path.join(folder_root, "data")
-folder_layers = os.path.join(folder_data, "layers")
-folder_properties = os.path.join(folder_layers, "properties")
-folder_tmp = os.path.join(folder_data, "tmp")
 geo_url = "https://geo.aclimate.org/geoserver/rest/"
 geo_user = os.environ['GEO_USER']
 geo_pwd = os.environ['GEO_PWD']
 workspace_name = sys.argv[1]
+forecast_type = sys.argv[2]
 country_iso = workspace_name.split("_")[1]
 
+folder_root = "/forecast/usaid_procesos_interfaz/python/UploadMosaics/"
+folder_data = os.path.join(folder_root, "data")
+folder_layers = os.path.join(folder_data, "layers")
+folder_properties = os.path.join(folder_layers, forecast_type+"_properties")
+folder_tmp = os.path.join(folder_data, "tmp")
 
-stores_aclimate = ["seasonal_country_"+country_iso+"_probabilistic_above", "seasonal_country_"+country_iso+"_probabilistic_normal",
-                   "seasonal_country_"+country_iso+"_probabilistic_below", "seasonal_country_"+country_iso+"_deterministic"]
 
+stores_aclimate = [forecast_type+"_country_"+country_iso+"_probabilistic_above", forecast_type+"_country_"+country_iso+"_probabilistic_normal",
+                   forecast_type+"_country_"+country_iso+"_probabilistic_below", forecast_type+"_country_"+country_iso+"_deterministic"]
 
 # Connecting
 geoclient = GeoserverClient(geo_url, geo_user, geo_pwd)

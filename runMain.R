@@ -218,22 +218,27 @@ run_oryza_by_setup <- function() {
   results <- mclapply(inputsList, make_request_oryza, mc.cores = 3, mc.preschedule = F)
 }
 
-# These inputs come from /prediccionClimatica/PyCPT_from_R.r
-prepareRastersUpload <- function(trimesters, nextGenFileName_det, datadir, monthsNumber, monf, fyr, nextGenFileName_prob) {
+# The variables used in this function come from /prediccionClimatica/PyCPT_sub/seasonal_outputs_process_R.r
+prepareRastersUpload <- function(ru_forecast_type) {
   require(readr)
-  forecastID <- read_csv(paste0(dirUnifiedOutputs, "outputs/", "forecast.csv"))
+  forecastID <- read_csv(paste0(dirUnifiedOutputs, "outputs/", "forecast.csv")) 
   forecastID <- forecastID$forecast_id
 
   # Writting deterministic raster files (to upload to geoserver)
   for (i in 1:length(nextGenFileName_det)) {
-    first <- raster(paste0(datadir, "/", nextGenFileName_det[i]))
-    second <- raster(paste0(datadir, "/", nextGenFileName_det[i]))
+    det <- raster(paste0(datadir, "/", nextGenFileName_det[i]))
 
+    if (ru_forecast_type == "seasonal"){
     monthFormat <- if (monthsNumber[tgts[i]] < 10) paste0("0", monthsNumber[tgts[i]]) else monthsNumber[tgts[i]]
-
     # Writting raster files in .tif
-    writeRaster(first, paste0(dir_upload_raster_layers, "/deterministic/", tolower(paste0("seasonal_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_deterministic_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
-    writeRaster(second, paste0(dir_upload_raster_layers, "/deterministic/", tolower(paste0("seasonal_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_deterministic_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
+    writeRaster(det, paste0(dir_upload_raster_layers, "/deterministic/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_deterministic_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
+
+    }
+    else {
+      monthFormat <- if (month(Sys.Date()) < 10) paste0("0", month(Sys.Date())) else month(Sys.Date())
+      writeRaster(det, paste0(dir_upload_raster_layers, "/deterministic/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", forecastID, "_", monf, "_deterministic_", fyr, monthFormat, i, ".tif"))), overwrite = TRUE)
+
+    }
   }
 
   # Writting probabilistic raster files (to upload to geoserver)
@@ -243,12 +248,23 @@ prepareRastersUpload <- function(trimesters, nextGenFileName_det, datadir, month
     dataNextGenBelow <- raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname = "Below_Normal")
     dataNextGenNormal <- raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname = "Normal")
 
-    monthFormat <- if (monthsNumber[tgts[i]] < 10) paste0("0", monthsNumber[tgts[i]]) else monthsNumber[tgts[i]]
+    if (ru_forecast_type == "seasonal"){
+      monthFormat <- if (monthsNumber[tgts[i]] < 10) paste0("0", monthsNumber[tgts[i]]) else monthsNumber[tgts[i]]
 
-    # Writting raster files in .tif
-    writeRaster(dataNextGenAbove, paste0(dir_upload_raster_layers, "/above/", tolower(paste0("seasonal_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_above_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
-    writeRaster(dataNextGenBelow, paste0(dir_upload_raster_layers, "/below/", tolower(paste0("seasonal_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_below_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
-    writeRaster(dataNextGenNormal, paste0(dir_upload_raster_layers, "/normal/", tolower(paste0("seasonal_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_normal_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
+      # Writting raster files in .tif
+      writeRaster(dataNextGenAbove, paste0(dir_upload_raster_layers, "/above/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_above_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
+      writeRaster(dataNextGenBelow, paste0(dir_upload_raster_layers, "/below/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_below_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
+      writeRaster(dataNextGenNormal, paste0(dir_upload_raster_layers, "/normal/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_normal_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
+    }
+    else {
+      monthFormat <- if (month(Sys.Date()) < 10) paste0("0", month(Sys.Date())) else month(Sys.Date())
+
+      # Writting raster files in .tif
+      writeRaster(dataNextGenAbove, paste0(dir_upload_raster_layers, "/above/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", forecastID, "_", monf, "_above_", fyr, monthFormat, i, ".tif"))), overwrite = TRUE)
+      writeRaster(dataNextGenBelow, paste0(dir_upload_raster_layers, "/below/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", forecastID, "_", monf, "_below_", fyr, monthFormat, i, ".tif"))), overwrite = TRUE)
+      writeRaster(dataNextGenNormal, paste0(dir_upload_raster_layers, "/normal/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", forecastID, "_", monf, "_normal_", fyr, monthFormat, i, ".tif"))), overwrite = TRUE)
+      
+    }
   }
 
   # Copying raster in path_rasters (backup)
@@ -261,9 +277,17 @@ prepareRastersUpload <- function(trimesters, nextGenFileName_det, datadir, month
 uploadRasterFiles <- function() {
   tryCatch(
     {
-      prepareRastersUpload(trimesters, nextGenFileName_det, datadir, monthsNumber, monf, fyr, nextGenFileName_prob)
       setwd(dir_upload_raster_script)
-      system(paste0("python import.py ", "aclimate_", country_iso))
+
+      #ru - raster upload
+      ru_workspace <- paste0("aclimate_", country_iso)
+      ru_forecast_type <- "seasonal"
+      prepareRastersUpload(ru_forecast_type)
+      system(paste("python import.py", ru_workspace, ru_forecast_type))
+
+      ru_forecast_type <- "subseasonal"
+      prepareRastersUpload(ru_forecast_type)
+      system(paste("python import.py", ru_workspace, ru_forecast_type))
     },
     error = function(e) {
       cat("Error while uploading rasters files: ", conditionMessage(e), "\n")

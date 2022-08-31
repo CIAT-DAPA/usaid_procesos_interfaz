@@ -4,7 +4,7 @@ setwd(dir_inputs_nextgen) # json files location
 inputsPyCPT <- read_json("inputsPycpt.json")
 inputsPyCPT
 
-region <- currentCountry
+region <- paste0(currentCountry, "_seasonal")
 
 spatial_predictors <- paste(inputsPyCPT[[1]]$spatial_predictors, collapse = " ")
 spatial_predictors <- gsub(" ", ",", spatial_predictors)
