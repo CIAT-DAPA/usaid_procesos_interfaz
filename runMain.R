@@ -471,6 +471,7 @@ for (c in countries_list) {
     paste0(forecastAppDll, "-out -co -p \"", CMDdirInputs, "\" -name \"daily\" -c \"", objectIdCurrentCountry, "\""),
     paste0(forecastAppDll, "-out -fs -p \"", CMDdirCropsInputs, "\" -c \"", objectIdCurrentCountry, "\""),
     paste0(forecastAppDll, "-out -py -p \"", dir_inputs_nextgen, "\" -c \"", objectIdCurrentCountry, "\" -m \"", pyCPTMonth, "\""),
+    paste0(forecastAppDll, "-out -sub -p \"", dir_inputs_nextgen, "\" -c \"", objectIdCurrentCountry, "\" -m \"", pyCPTMonth, "\""),
     paste0(forecastAppDll, "-out -pyco -p \"", dir_inputs_nextgen, "\" -c \"", objectIdCurrentCountry, "\"")
   )
 
@@ -483,6 +484,7 @@ for (c in countries_list) {
   try(system(dotnet_cmd[5], intern = TRUE, ignore.stderr = TRUE))
   try(system(dotnet_cmd[6], intern = TRUE, ignore.stderr = TRUE))
   try(system(dotnet_cmd[7], intern = TRUE, ignore.stderr = TRUE))
+  try(system(dotnet_cmd[8], intern = TRUE, ignore.stderr = TRUE))
 
 
   # Prediction process

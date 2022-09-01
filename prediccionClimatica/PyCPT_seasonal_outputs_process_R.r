@@ -1,7 +1,7 @@
 
 # Reading json config file
 setwd(dir_inputs_nextgen) # json files location
-inputsPyCPT <- read_json("inputsPycpt.json")
+inputsPyCPT <- read_json("seasonal_pycpt.json")
 inputsPyCPT
 
 region <- paste0(currentCountry, "_seasonal")
@@ -83,9 +83,10 @@ typeof(confidence_level)
 
 
 setwd(dir_pycpt_scripts)
+ru_forecast_type <- "seasonal"
 # Running PyCPT
 system(paste(
-    "python run_main.py", region, spatial_predictors, spatial_predictands,
+    "python run_main.py", ru_forecast_type, region, spatial_predictors, spatial_predictands,
     models, obs, station, mos, predictand, predictor, mons, tgtii,
     tgtff, tgts, tini, tend, xmodes_min, xmodes_max, ymodes_min,
     ymodes_max, ccamodes_min, ccamodes_max, force_download,

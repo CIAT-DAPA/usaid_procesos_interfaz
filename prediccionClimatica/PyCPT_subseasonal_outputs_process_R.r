@@ -1,11 +1,10 @@
 
 # Reading json config file
 setwd(dir_inputs_nextgen) # json files location
-inputsPyCPT <- read_json("inputsPycpt.json")
+inputsPyCPT <- read_json("subseasonal_pycpt.json")
 inputsPyCPT
 
-region <- currentCountry
-
+region <- paste0(currentCountry, "_subseasonal")
 spatial_predictors <- paste(inputsPyCPT[[1]]$spatial_predictors, collapse = " ")
 spatial_predictors <- gsub(" ", ",", spatial_predictors)
 typeof(spatial_predictors)
@@ -83,9 +82,10 @@ typeof(confidence_level)
 
 
 setwd(dir_pycpt_scripts)
+ru_forecast_type <- "subseasonal"
 # Running PyCPT
 system(paste(
-    "python run_main.py", region, spatial_predictors, spatial_predictands,
+    "python run_main.py", ru_forecast_type, region, spatial_predictors, spatial_predictands,
     models, obs, station, mos, predictand, predictor, mons, tgtii,
     tgtff, tgts, tini, tend, xmodes_min, xmodes_max, ymodes_min,
     ymodes_max, ccamodes_min, ccamodes_max, force_download,
