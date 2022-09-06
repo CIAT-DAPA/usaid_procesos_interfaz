@@ -159,8 +159,8 @@ for (i in 1:length(stacksBySeason)) {
     stacksBySeasonCurrent <- stack(stacksBySeason[[i]])
     P_forecast_1 <- raster::extract(stacksBySeasonCurrent, coords)
 
-    P_forecast_final <- data.frame(rep(fyr, nrow(coords)), rep(as.numeric(monthsNumber[tgts[i]]), nrow(coords)), stations_coords[, 1], P_forecast_1)
-    names(P_forecast_final)[1:6] <- c("year", "month", "id", "below", "normal", "above")
+    P_forecast_final <- data.frame(rep(fyr, nrow(coords)), rep(i, nrow(coords)), rep(as.numeric(month(Sys.Date()), nrow(coords))), stations_coords[, 1], P_forecast_1)
+    names(P_forecast_final)[1:7] <- c("year", "week", "month", "id", "below", "normal", "above")
 
     list_Prob_Forec[[i]] <- P_forecast_final
 }
@@ -179,22 +179,26 @@ write.table(list_Prob_Forec_new, paste0(path_save, "/probabilities.csv"), row.na
 
 ################# .nc files metrics ##########################
 # station location
-loc <- data.frame(
-    lon = c(38.90, 36.5),
-    lat = c(8.25, 7.764)
-)
+# loc <- data.frame(
+#     lon = c(38.90, 36.5),
+#     lat = c(8.25, 7.764)
+# )
 
 ##### NextGen skill matrix translator
 skilmetrics <- c("2AFC", "GROC", "Ignorance", "Pearson", "RPSS", "Spearman")
 metrics <- data.frame()
 ncMetricsFiles <- list()
 for (skill in skilmetrics) {
-    for (seas in tgts) {
-        ctlinput <- paste0("NextGen_", PREDICTAND, PREDICTOR, "_", MOS, "_", skill, "_", seas, "_", monf, ".ctl")
-        ncout <- paste0("NextGen_", PREDICTAND, PREDICTOR, "_", MOS, "_", skill, "_", seas, "_", monf, ".nc")
+    for(m in models){
+        for (wks in weeks) {
+            #ctl_input <- paste0(datadir, models[i], PREDICTAND,"_CCAFCST_P_",monf,"_",mon_fcst_ini,"_",wks,".ctl")
+            ctlinput <- paste0(datadir, m, PREDICTAND, "_", MOS, "_", skill, "_", monf, "_", wks, ".ctl")
+            ncout <- paste0(datadir, "NextGen_", m, "_", MOS, "_", skill, "_", monf, "_", wks, ".nc")
 
-        system(paste0("cdo -f nc -import_binary ", ctlinput, " ", ncout))
-        ncMetricsFiles <- append(ncMetricsFiles, paste0("NextGen_", PREDICTAND, PREDICTOR, "_", MOS, "_", skill, "_", seas, "_", monf, ".nc"))
+            #system(paste0("cdo -f nc import_binary ", ctl_input, " ", nc_output))
+            system(paste0("cdo -f nc import_binary ", ctlinput, " ", ncout))
+            ncMetricsFiles <- append(ncMetricsFiles, paste0(datadir, "NextGen_", m, "_",  MOS, "_", skill, "_", monf, "_", wks, ".nc"))
+        }
     }
 }
 ################# .nc files metrics ##########################
@@ -203,10 +207,11 @@ for (skill in skilmetrics) {
 raster_metrics <- list()
 
 ## Organize raster stacks by metric
-for (i in seq(from = 0, to = length(ncMetricsFiles), by = length(tgts))) {
+weeksxmodels <- length(weeks) * length(models)
+for (i in seq(from = 0, to = length(ncMetricsFiles), by = weeksxmodels)) {
     if (i != length(ncMetricsFiles)) {
         temp_raster_list <- list()
-        for (j in 1:length(tgts)) {
+        for (j in 1:weeksxmodels) {
             temp_raster_list[[j]] <- raster(ncMetricsFiles[[i + j]])
         }
         raster_metrics <- append(raster_metrics, stack(temp_raster_list))
@@ -214,23 +219,31 @@ for (i in seq(from = 0, to = length(ncMetricsFiles), by = length(tgts))) {
 }
 
 ## Extracting values of metrics by coords
-metricsCoords <- matrix(NA, ncol = 3 + length(raster_metrics), nrow = nrow(coords) * length(tgts))
+metricsCoords <- matrix(NA, ncol = 4 + length(raster_metrics), nrow = nrow(coords) * length(weeks))
 
 ## Year
-metricsCoords[, 1] <- rep(fyr, nrow(coords) * length(tgts))
+metricsCoords[, 1] <- rep(fyr, nrow(coords) * length(weeks))
+
 ## Month
-for (i in 1:length(tgts)) {
+for (i in 1:length(weeks)) {
     ini <- (nrow(coords) * i) - (nrow(coords) - 1)
     end <- nrow(coords) * i
-    metricsCoords[ini:end, 2] <- rep(as.numeric(monthsNumber[tgts[i]]), nrow(coords))
+    metricsCoords[ini:end, 3] <- rep(as.numeric(month(Sys.Date())), nrow(coords))
+}
+
+## Weeks
+for (i in 1:length(weeks)) {
+    ini <- (nrow(coords) * i) - (nrow(coords) - 1)
+    end <- nrow(coords) * i
+    metricsCoords[ini:end, 2] <- rep(i, nrow(coords))
 }
 
 for (i in 1:length(raster_metrics)) {
-    metricsCoords[, 3 + i] <- raster::extract(raster_metrics[[i]], coords)
+    metricsCoords[, 4 + i] <- raster::extract(raster_metrics[[i]], coords)
 }
 
 metricsCoords <- as.data.frame(metricsCoords)
-names(metricsCoords)[1:ncol(metricsCoords)] <- c("year", "month", "id", "afc2", "groc", "ignorance", "pearson", "rpss", "spearman")
+names(metricsCoords)[1:ncol(metricsCoords)] <- c("year", "week", "month", "id", "afc2", "groc", "ignorance", "pearson", "rpss", "spearman")
 
 ## Adding Ids to final dataframe
 totalMonths <- unique(metricsCoords$month)

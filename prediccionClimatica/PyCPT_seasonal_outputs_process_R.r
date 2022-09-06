@@ -177,10 +177,10 @@ write.table(list_Prob_Forec_new, paste0(path_save, "/probabilities.csv"), row.na
 
 ################# .nc files metrics ##########################
 # station location
-loc <- data.frame(
-    lon = c(38.90, 36.5),
-    lat = c(8.25, 7.764)
-)
+# loc <- data.frame(
+#     lon = c(38.90, 36.5),
+#     lat = c(8.25, 7.764)
+# )
 
 ##### NextGen skill matrix translator
 skilmetrics <- c("2AFC", "GROC", "Ignorance", "Pearson", "RPSS", "Spearman")
