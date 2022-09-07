@@ -8,7 +8,7 @@
 ## read summary dssat - 'Summary.OUT' file
 read_summary <- function(dir_run){
   
-  var_names <- read_lines(paste0(dir_run, 'Summary.OUT'))[4] %>%
+  var_names <- read_lines(paste0(dir_run, 'Summary.OUT'))[4] %>% 
     str_sub(5, -1) %>% str_split("\\s{1,}") %>% pluck(1)
   
   summary_out <-  fread(paste0(dir_run, 'Summary.OUT'), header = F, col.names = var_names) %>%
@@ -17,15 +17,17 @@ read_summary <- function(dir_run){
                   prec_acu = PRCP,
                   bio_acu = CWAM)
   
+  
+  
   return(summary_out)
 }
 
-
 ## read weather dssat - "Weather.OUT" file
 read_wth_out <- function(dir_run){
+  
 
 file <- paste0(dir_run, "Weather.OUT")
-skip <- read_lines(file)  %>% str_detect("@YEAR") %>% which()-1
+skip <- read_lines(file)  %>% str_detect("@YEAR") %>% which()-1 
 
 cal_summ <- function(data){
   
@@ -34,12 +36,14 @@ cal_summ <- function(data){
   
 }
 
-data_wth <- suppressWarnings(map(skip, ~fread(file, skip = .x))) %>%
+data_wth <- suppressWarnings(map(skip, ~fread(file, skip = .x))) %>% 
   map(cal_summ)
+
 
 data_wth %>% bind_rows(.id = "scenario")
 
-}  
+}
+  
 
 ## functions to make descriptive - Extract summary - STATS-metrics
 extract_summary_aclimate <- function(data, var){
@@ -65,11 +69,11 @@ extract_summary_aclimate <- function(data, var){
   
   
 
-  data <- dplyr::select(data, var) %>% drop_na()
+  data <- dplyr::select(data, all_of(var)) %>% drop_na()
   
   
   data <- data %>%
-    summarise(across(var, .fns =list(avg = mean, 
+    summarise(across(all_of(var), .fns =list(avg = mean, 
                         median = median, 
                         min = min, 
                         max = max, 
@@ -110,10 +114,4 @@ tidy_descriptive <- function(data, region, soil, cultivar, start, end){
   return(data)
   
 }
-
-
-
-
-
-
 

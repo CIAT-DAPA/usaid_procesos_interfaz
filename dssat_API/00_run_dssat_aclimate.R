@@ -12,24 +12,25 @@
 #  cultivar <- c("AW0071","Yecora_Rojo")
 #  soil <- "IB00000001"
 
-# library(tidyverse)
-# library(rstudioapi)
-library(foreach)
-library(parallel)
-library(doParallel)
-library(dplyr)
-library(tidyr)
-library(tibble)
-library(purrr)
-library(readr)
-library(lubridate)
-library(stringr)
-library(magrittr)
-library(data.table)
+#library(tidyverse)
+#library(rstudioapi) 
+#library(foreach)
+#library(parallel)
+#library(doParallel)
+#library(dplyr)
+#library(tidyr)
+#library(tibble)
+#library(purrr)
+#library(readr)
+#library(lubridate)
+#library(stringr)
+#library(magrittr)
+#library(data.table)
+#
+###Conect geoserver
+#library(raster)
+##library(furrr)
 
-## Conect geoserver
-library(raster)
-options(warn = 1)
 
 
 # Set crop
@@ -48,7 +49,12 @@ options(warn = 1)
 # Set working directory
 # script_dir <- dirname(sys.frame(1)$ofile)
 # setwd(paste0(script_dir, "/"))
-runDssatModuleMain <- function() {
+run_crop_dssat <- function(id, path, crop, cultivar, soil, current_dir_inputs_climate, current_setup_dir, no_cores){
+
+  wd_p <- paste0(getwd(), "/")
+  if(str_detect(wd_p, pattern = path, negate = T)) {setwd(path)}
+
+  options(warn = 1)
 
 
   # Folders
@@ -63,7 +69,7 @@ runDssatModuleMain <- function() {
   dir_inputs_cultivar <- current_setup_dir
 
   # Source dssat-aclimate functions
-  walk(list.files(dir_scripts, pattern = ".R$", full.names = T), ~ source(.x))
+  #walk(list.files(dir_scripts, pattern = ".R$", full.names = T), ~ source(.x))
 
   # ISO code / codigo iso de cada configuracion --- define el nombre del archivo de salida
   ## Location vars/ data / resampling scenaries / planting dates
@@ -71,16 +77,20 @@ runDssatModuleMain <- function() {
   climate_scenaries <- load_all_climate(dir_inputs_climate)[-100]
   planting_details_column_name <- "value"
   planting_details <- read_csv(paste0(dir_inputs_setup, "planting_details.csv"), show_col_types = F) %>%
-    dplyr::select(name, planting_details_column_name) %>%
-    pivot_wider(names_from = name, values_from = planting_details_column_name)
+    dplyr::select(name, all_of(planting_details_column_name)) %>%
+    pivot_wider(names_from = name, values_from = all_of(planting_details_column_name))
 
   # Definir fecha inicial de simulacion/
   # En este caso la define automaticamente de la fecha inicial de los escenarios climaticos
   initial_date <- climate_scenaries[[1]]$date[[1]] + days(15)
 
-  input_dates <- make_sim_dates(initial_date, planting_before = 15, number_days = 3, freq_sim = strtoi(strsplit(id, "_", fixed=T)[[1]][4]))
+  input_dates <- make_sim_dates(initial_date, planting_before = 15, number_days = 44, freq_sim = strtoi(strsplit(id, "_", fixed=T)[[1]][4]))
   sim_number <- length(input_dates$start_date) # It depends of planting window form forecast
 
+  ## Parallel computing 
+  ncores <- no_cores
+  if(ncores > sim_number){ncores <- sim_number}
+  #plan(multisession, workers = ncores)
 
   ### RUN DSSAT
   # select_day <- sim_ini_day
@@ -114,7 +124,7 @@ runDssatModuleMain <- function() {
 
 
   irri <- ifelse(planting_details$IRR == "YES", T, F)
-  fert_in <- get_fertilizer(planting_details)
+  fert_in <- get_fertilizer(crop, planting_details, dir_inputs_setup, lat, long)
 
   X_param <- dir_run %>%
     unlist() %>%
@@ -139,12 +149,8 @@ runDssatModuleMain <- function() {
 
 
   # tictoc::tic()
-  ncores <- detectCores() - 2
-  if (ncores > sim_number) {
-    ncores <- sim_number
-  }
+ 
   registerDoParallel(ncores)
-
 
   sim_data <- foreach(
     i = dir_run,
@@ -160,40 +166,27 @@ runDssatModuleMain <- function() {
 
   # tictoc::toc()
 
-  site <- map_chr(str_split(id, "_"), 1)
-  cultivar <- map_chr(str_split(id, "_"), 2)
-  soil <- map_chr(str_split(id, "_"), 3)
 
 
-  outputs_df1 <- map2(
-    .x = map(sim_data, "summary"),
-    .y = input_dates$planting_date,
-    function(x, y) {
-      map(
-        c("yield_0", "d_dry", "prec_acu", "bio_acu"),
-        ~ extract_summary_aclimate(x, .x)
-      ) %>%
-        bind_rows() %>%
-        tidy_descriptive(., site, soil, cultivar, y, y)
-    }
-  ) %>%
-    compact() %>%
-    bind_rows()
 
-  outputs_df2 <- map2(
-    .x = map(sim_data, "weather"),
-    .y = input_dates$planting_date,
-    function(x, y) {
-      map(
-        c("t_max_acu", "t_min_acu"),
-        ~ extract_summary_aclimate(x, .x)
-      ) %>%
-        bind_rows() %>%
-        tidy_descriptive(., site, soil, cultivar, y, y)
-    }
-  ) %>%
-    compact() %>%
-    bind_rows()
+ outputs_df1 <- map2(.x = map(sim_data, "summary"),
+                   .y = input_dates$planting_date, 
+                   function(x,y){
+                     map(c('yield_0', 'd_dry', 'prec_acu', 'bio_acu'), 
+                         ~extract_summary_aclimate(x, .x)) %>% 
+                       bind_rows() %>% 
+                       tidy_descriptive(., crop, soil, cultivar[2], y, y)}) %>% 
+  compact %>% bind_rows()
+
+outputs_df2 <- map2(.x = map(sim_data, "weather"),
+     .y = input_dates$planting_date, 
+     function(x,y){
+       map(c('t_max_acu', 't_min_acu'), 
+           ~extract_summary_aclimate(x, .x)) %>% 
+         bind_rows() %>% 
+         tidy_descriptive(., crop, soil, cultivar[2], y, y)}) %>% 
+  compact %>% bind_rows()
+
 
 
   # execute_dssat(dir_run[[3]])
@@ -217,5 +210,6 @@ runDssatModuleMain <- function() {
   # }
 
   # })
+  setwd(wd_p)
 
 }

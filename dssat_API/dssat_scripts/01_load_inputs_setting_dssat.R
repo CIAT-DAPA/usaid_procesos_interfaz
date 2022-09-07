@@ -11,7 +11,7 @@ make_dir_run <- function(dir_run_main, sim_number){
   
 #  require(stringr)
   dir <- paste0(dir_run_main, sim_number, '/')
-  dir <- stringr::str_replace(dir, "ñ", "n")
+#  dir <- stringr::str_replace(dir, "ñ", "n")
   
   if (!dir.exists(dir)) { 
     
@@ -29,8 +29,8 @@ make_dir_run <- function(dir_run_main, sim_number){
 copy_inputs <- function(dir_inputs_setup, dir_inputs_soil, dir_inputs_cultivar, crop, dir_run){
   
   CR <- tibble(
-    crop_name = c("rice", "maize", "bean", "barley", "sorghum", "wheat", "teff"),
-    CR = c("RI", "MZ", "BN", "BA", "SG", "WH", "TF")) %>% filter(crop_name==crop)%>%
+    crop_name = c("rice", "maize", "barley", "sorghum", "wheat", "bean", "fababean", "teff"),
+    CR = c("RI", "MZ", "BA", "SG", "WH", "BN", "FB",  "TF")) %>% filter(crop_name==crop)%>%
     pull(CR)
   
   
@@ -85,7 +85,7 @@ crop_name_setup <- function(id_name, crop){
     model = c(paste0(c("RI", "MZ", "BA", "SG", "WH"), "CER"), rep("CRGRO", 2), "TFAPS"))
   
   cul <- base_tb %>% 
-    dplyr::filter(crop_name %in% crop) %>%
+    dplyr::filter(crop_name %in% all_of(crop)) %>%
     mutate(crop_name =  toupper(crop_name),
            ext = paste0(id_name, ".", CR, "X"))
   
@@ -232,7 +232,7 @@ create_fert_dssat <- function(urea, dap, apps_dap = c(1, 40), urea_split = c(1/3
 
 #c(FALSE , "auto", "fertapp")
 
-get_fertilizer <- function(planting_details){
+get_fertilizer <- function(crop, planting_details, dir_inputs_setup, lat, long){
   
   fert_option <- planting_details$FERT
     
@@ -265,9 +265,4 @@ get_fertilizer <- function(planting_details){
   
   
 }
-
-
-
-
-
 

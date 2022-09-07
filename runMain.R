@@ -43,6 +43,7 @@ library(funr)
 library(lazyeval)
 library(lubridate)
 library(parallel)
+library(doParallel)
 library(pcaPP)
 library(R.utils)
 library(raster)
@@ -295,15 +296,31 @@ uploadRasterFiles <- function() {
   )
 }
 
-runDssatModule <- function(cropName){
+runDssatModule <- function(crop){
 
   ## Maize setups
   setups <- list.dirs(dirModeloMaizInputs, full.names = T)
   #setups <- setups[1:4]
-  crop <- "maize"#cropName
+  setwd(dir_dssat_api)
   
-  setwd("/forecast/usaid_procesos_interfaz/dssat_API/")
-  for (i in 2:length(setups)) {
+  tryCatch(
+    {
+      source("00_run_dssat_aclimate.R")
+      source("dssat_scripts/01_load_inputs_setting_dssat.R")
+      source("dssat_scripts/02_climate_functions_dssat.R")
+      source("dssat_scripts/03_connect_georserver.R")
+      source("dssat_scripts/03_create_xfile_dssat.R")
+      source("dssat_scripts/04_run_dssat_model.R")
+      source("dssat_scripts/05_get_outputs_dssat.R")
+
+    },
+    error = function(e) {
+      
+    }
+  )
+
+  lapply(2:length(setups), function(i) {
+    
     tictoc::tic()
     id <- gsub("/", "", str_split_fixed(setups[i], "/", n = 8)) # current scenarie/setup
     correction <- str_split_fixed(id[8], "_", n = 2)
@@ -325,11 +342,10 @@ runDssatModule <- function(cropName){
     soil <- substring(soil[[1]][1], 2)
     
     
-    source("00_run_dssat_aclimate.R")
-    runDssatModuleMain()
+    run_crop_dssat(id, dir_dssat_api, crop, cultivar, soil, current_dir_inputs_climate, current_setup_dir, no_cores)
     tictoc::toc()
   
-  }
+  })
 
 }
 
@@ -367,6 +383,9 @@ dir_oryza_api_inputs <- "/forecast/workdir/oryzaApiInputs/"
 dir_oryza_api_inputs_zip <- "/forecast/workdir/oryzaApiInputs/inputs/"
 dir_oryza_api_inputs_climate <- paste0(dir_oryza_api_inputs_zip, "climate/")
 dir_oryza_api_inputs_setup <- paste0(dir_oryza_api_inputs_zip, "setups/")
+
+# Commom directories DSSAT API
+dir_dssat_api <- "/forecast/usaid_procesos_interfaz/dssat_API/"
 
 
 ## ProbForecats files lists for merging (For importation proccess)
@@ -505,11 +524,8 @@ for (c in countries_list) {
   # # Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
   # # setups <- if(no_cores > 1) setups[-1] else setups
   # runCrop("maiz", setups)
-  tictoc::tic()
 
   runDssatModule("maize")
-
-  tictoc::toc()
 
   ## Rice crop model process
   if (currentCountry == "COLOMBIA") {
