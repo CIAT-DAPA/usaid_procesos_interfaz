@@ -191,7 +191,7 @@ outputs_df2 <- map2(.x = map(sim_data, "weather"),
 
   # execute_dssat(dir_run[[3]])
 
-  write_csv(bind_rows(outputs_df1, outputs_df2), paste0(dir_outputs, id, ".csv"))
+  write_csv(bind_rows(outputs_df1, outputs_df2) %>% drop_na, paste0(dir_outputs, id, ".csv"))
 
   # tictoc::toc()
 

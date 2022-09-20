@@ -17,7 +17,7 @@ spatial_predictands
 
 models <- paste(inputsPyCPT[[1]]$models, collapse = " ")
 models <- gsub(" ", ",", models)
-models <- gsub("_", "-", models)
+#models <- gsub("_", "-", models)
 typeof(models)
 models
 
@@ -93,7 +93,7 @@ system(paste(
 ))
 
 # Where outputs files of Pycpt are
-datadir <- "/forecast/PyCPT/iri-pycpt/ETH_subseasonal/output/"
+datadir <- dir_outputs_nextgen_subseasonal
 setwd(datadir)
 dir.create(file.path(datadir, "nc_files"))
 
@@ -103,8 +103,8 @@ models <- c('ECMWF','CFSv2_SubX')
 MOS <- 'CCA'
 PREDICTAND <- "PRCP"
 PREDICTOR <- "PRCP"
-#monf <- inputsPyCPT[[1]]$mons[[1]] # Initialization month
-monf <- "Aug"
+monf <- inputsPyCPT[[1]]$mons[[1]] # Initialization month
+#monf <- "Aug"
 mon_fcst_ini <- paste0(monf,1)
 weeks = paste0("wk",c(1:3,34))
 
@@ -130,8 +130,8 @@ for (wks in weeks)
     system(paste0("rm -rf ", datadir, "nc_files/*.nc"))
 }
 
-nextGenFileName_prob <- paste0("NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_P_", monf,"_",mon_fcst_ini,"_",weeks,".nc")
-nextGenFileName_det <- paste0("NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_mu_", monf,"_",mon_fcst_ini,"_",weeks,".nc")
+nextGenFileName_prob_sub <- paste0("NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_P_", monf,"_",mon_fcst_ini,"_",weeks,".nc")
+nextGenFileName_det_sub <- paste0("NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_mu_", monf,"_",mon_fcst_ini,"_",weeks,".nc")
 
 stacksBySeason <- list()
 monthsNumber <- list("Jan-Mar" = 02, "Feb-Apr" = 03, "Mar-May" = 04, "Apr-Jun" = 05, "May-Jul" = 06, "Jun-Aug" = 07, "Jul-Sep" = 08, "Aug-Oct" = 09, "Sep-Nov" = 10, "Oct-Dec" = 11, "Nov-Jan" = 12, "Dec-Feb" = 01)
@@ -173,7 +173,7 @@ for (i in 2:length(list_Prob_Forec)) {
     list_Prob_Forec_new <- rbind(list_Prob_Forec_new, as.data.frame(list_Prob_Forec[[i]]))
 }
 # Writting probabilities csv
-write.table(list_Prob_Forec_new, paste0(path_save, "/probabilities.csv"), row.names = FALSE, sep = ",")
+write.table(list_Prob_Forec_new, paste0(path_save, "/probabilities_subseasonal.csv"), row.names = FALSE, sep = ",")
 
 ################################ Working on metrics.csv ####################################
 
@@ -254,6 +254,6 @@ for (i in 1:length(totalMonths)) {
 }
 finalMetricsCsv <- as.data.frame(do.call(rbind, monthAuxList))
 # Writting metrics csv
-write.table(finalMetricsCsv, paste0(path_save, "/metrics.csv"), row.names = FALSE, sep = ",")
+write.table(finalMetricsCsv, paste0(path_save, "/metrics_subseasonal.csv"), row.names = FALSE, sep = ",")
 
 ################### end of writting metrics.csv ##########################

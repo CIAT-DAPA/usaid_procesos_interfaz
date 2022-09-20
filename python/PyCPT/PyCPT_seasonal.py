@@ -76,7 +76,7 @@ def months_short(inputdate):
     return inputdate.strftime('%B')[0:3]
 
 
-def run_pycpt(region, spatial_predictors, spatial_predictands, models, obs, station, mos, predictand, predictor, mons, tgtii, tgtff, tgts, tini, tend,
+def run_pycpt_seasonal(region, spatial_predictors, spatial_predictands, models, obs, station, mos, predictand, predictor, mons, tgtii, tgtff, tgts, tini, tend,
               xmodes_min, xmodes_max, ymodes_min, ymodes_max, ccamodes_min, ccamodes_max, force_download, single_models, forecast_anomaly, forecast_spi,
               confidence_level):
 

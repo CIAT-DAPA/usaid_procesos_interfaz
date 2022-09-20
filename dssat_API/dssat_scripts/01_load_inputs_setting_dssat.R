@@ -234,34 +234,41 @@ create_fert_dssat <- function(urea, dap, apps_dap = c(1, 40), urea_split = c(1/3
 
 get_fertilizer <- function(crop, planting_details, dir_inputs_setup, lat, long){
   
-  fert_option <- planting_details$FERT
+  #Checking if FERT row exists
+  if(any(planting_details=="FERT")){
     
-  
-  
-  if(fert_option == "NO"){
-    NULL
-  } else if(fert_option == "YES"){
+    fert_option <- planting_details$FERT
     
-    urea <- dplyr::select(planting_details, contains("urea")) %>% 
-      pull(1) %>% as.numeric()
-    
-    dap <- dplyr::select(planting_details, contains("dap")) %>% 
-      pull(1) %>% as.numeric()
-    
-    return(create_fert_dssat(urea, dap))
+    if(fert_option == "NO"){
+      NULL
+    } else if(fert_option == "YES"){
       
-    
-    } else if(fert_option == "fertapp"){
-    
-    downloaded_tif <- get_geoserver_data(crop, "fertilizer", country = "et", format = "geotiff", outpath = dir_inputs_setup)
-    
-    fertApp_data <- extract_raster_geos(downloaded_tif, lat, long) %>%
-      pivot_wider(names_from = file, values_from = V1) %>%
-      set_names(c("nps", "urea"))
-    
-    return(convert_FertApp_dssat(fertApp_data$nps, fertApp_data$urea))
-    
-  } else {message("No detected data")}
+      urea <- dplyr::select(planting_details, contains("urea")) %>% 
+        pull(1) %>% as.numeric()
+      
+      dap <- dplyr::select(planting_details, contains("dap")) %>% 
+        pull(1) %>% as.numeric()
+      
+      return(create_fert_dssat(urea, dap))
+        
+      
+      } else if(fert_option == "fertapp"){
+      
+      downloaded_tif <- get_geoserver_data(crop, "fertilizer", country = "et", format = "geotiff", outpath = dir_inputs_setup)
+      
+      fertApp_data <- extract_raster_geos(downloaded_tif, lat, long) %>%
+        pivot_wider(names_from = file, values_from = V1) %>%
+        set_names(c("nps", "urea"))
+      
+      return(convert_FertApp_dssat(fertApp_data$nps, fertApp_data$urea))
+      
+    } else {message("No detected data")}
+  
+  }
+  else {
+    NULL
+  }
+
   
   
 }

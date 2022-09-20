@@ -94,7 +94,7 @@ system(paste(
 ))
 
 # Where outputs files of Pycpt are
-datadir <- dir_outputs_nextgen
+datadir <- dir_outputs_nextgen_seasonal
 setwd(datadir)
 dir.create(file.path(datadir, "nc_files"))
 
