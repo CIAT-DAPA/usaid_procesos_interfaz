@@ -49,7 +49,7 @@
 # Set working directory
 # script_dir <- dirname(sys.frame(1)$ofile)
 # setwd(paste0(script_dir, "/"))
-run_crop_dssat <- function(id, path, crop, cultivar, soil, current_dir_inputs_climate, current_setup_dir, no_cores){
+run_crop_dssat <- function(id, path, crop, current_dir_inputs_climate, current_setup_dir, no_cores){
 
   wd_p <- paste0(getwd(), "/")
   if(str_detect(wd_p, pattern = path, negate = T)) {setwd(path)}
@@ -59,7 +59,7 @@ run_crop_dssat <- function(id, path, crop, cultivar, soil, current_dir_inputs_cl
 
   # Folders
   dir_scripts <- "dssat_scripts/"
-  dir_outputs <- dirModeloMaizOutputs
+  dir_outputs <- dirModeloWheatOutputs
   #dir.create(dir_outputs)
 
   # Set up run paths
@@ -75,7 +75,7 @@ run_crop_dssat <- function(id, path, crop, cultivar, soil, current_dir_inputs_cl
   ## Location vars/ data / resampling scenaries / planting dates
   location <- load_coordinates(dir_inputs_setup)
   climate_scenaries <- load_all_climate(dir_inputs_climate)[-100]
-  planting_details_column_name <- "value"
+  planting_details_column_name <- "wheat"
   planting_details <- read_csv(paste0(dir_inputs_setup, "planting_details.csv"), show_col_types = F) %>%
     dplyr::select(name, all_of(planting_details_column_name)) %>%
     pivot_wider(names_from = name, values_from = all_of(planting_details_column_name))
@@ -94,9 +94,13 @@ run_crop_dssat <- function(id, path, crop, cultivar, soil, current_dir_inputs_cl
 
   ### RUN DSSAT
   # select_day <- sim_ini_day
-  lat <- location$lat
-  long <- location$long
-  elev <- location$elev
+  lat <- round(as.numeric(location$lat), 2)
+  long <- round(as.numeric(location$long), 2)
+  elev <- as.numeric(location$elev)
+  soil <- location$id_soil %>% str_sub(., 2,-1)
+  cultivar <- c(location$var_cul, location$cul_name)
+
+
 
   ## Crea las configuraciones  para simular 45 dias
   current_dir_run <- paste0(dir_outputs, id, "/")
@@ -167,27 +171,25 @@ run_crop_dssat <- function(id, path, crop, cultivar, soil, current_dir_inputs_cl
   # tictoc::toc()
 
 
+safe_read_summary <- purrr::possibly(extract_summary_aclimate, NULL)
 
-
- outputs_df1 <- map2(.x = map(sim_data, "summary"),
-                   .y = input_dates$planting_date, 
+outputs_df1 <- map2(.x = map(sim_data, "summary"),
+                   .y = input_dates$planting_date,
                    function(x,y){
-                     map(c('yield_0', 'd_dry', 'prec_acu', 'bio_acu'), 
-                         ~extract_summary_aclimate(x, .x)) %>% 
-                       bind_rows() %>% 
-                       tidy_descriptive(., crop, soil, cultivar[2], y, y)}) %>% 
+                     map(c('yield_0', 'd_dry', 'prec_acu', 'bio_acu'),
+                         ~safe_read_summary(x, .x)) %>% compact() %>%
+                       bind_rows() %>%
+                       tidy_descriptive(., crop, soil, cultivar[2], y, y)}) %>%
   compact %>% bind_rows()
 
 outputs_df2 <- map2(.x = map(sim_data, "weather"),
-     .y = input_dates$planting_date, 
+     .y = input_dates$planting_date,
      function(x,y){
-       map(c('t_max_acu', 't_min_acu'), 
-           ~extract_summary_aclimate(x, .x)) %>% 
-         bind_rows() %>% 
-         tidy_descriptive(., crop, soil, cultivar[2], y, y)}) %>% 
+       map(c('t_max_acu', 't_min_acu'),
+           ~safe_read_summary(x, .x)) %>% compact() %>%
+         bind_rows() %>%
+         tidy_descriptive(., crop, soil, cultivar[2], y, y)}) %>%
   compact %>% bind_rows()
-
-
 
   # execute_dssat(dir_run[[3]])
 

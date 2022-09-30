@@ -308,7 +308,7 @@ uploadRasterFiles <- function() {
 runDssatModule <- function(crop){
 
   ## Maize setups
-  setups <- list.dirs(dirModeloMaizInputs, full.names = T)
+  setups <- list.dirs(dirModeloWheatInputs, full.names = T)
   #setups <- setups[1:4]
   setwd(dir_dssat_api)
   
@@ -338,20 +338,21 @@ runDssatModule <- function(crop){
 
     # Set up run paths
     current_dir_inputs_climate <- paste0(path_output, "/", station, "/")
-    current_setup_dir <- paste0(dirCultivosInputs, if (currentCountry == "COLOMBIA") "maiz" else "maize", "/", id, "/")
+    #current_setup_dir <- paste0(dirCultivosInputs, if (currentCountry == "COLOMBIA") "maiz" else "maize", "/", id, "/")
+    current_setup_dir <- paste0(dirCultivosInputs, "wheat", "/", id, "/")
     
-    skip_cul <- read_lines(paste0(setups[i], "/MZCER048.CUL")) %>% str_detect("@VAR#") %>% which() +2
-    culFile <- read_lines(paste0(setups[i], "/MZCER048.CUL"))[skip_cul[1]]
-    cultivar <- strsplit(culFile, " ", fixed=T)
-    cultivar <- c(cultivar[[1]][1], cultivar[[1]][2])
+    # skip_cul <- read_lines(paste0(setups[i], "/MZCER048.CUL")) %>% str_detect("@VAR#") %>% which() +2
+    # culFile <- read_lines(paste0(setups[i], "/MZCER048.CUL"))[skip_cul[1]]
+    # cultivar <- strsplit(culFile, " ", fixed=T)
+    # cultivar <- c(cultivar[[1]][1], cultivar[[1]][2])
     
-    skip_soil <- read_lines(paste0(setups[i], "/SOIL.SOL")) %>% str_detect("@SITE") %>% which() -1
-    soilFile <- read_lines(paste0(setups[i], "/SOIL.SOL"))[skip_soil[1]]
-    soil <- strsplit(soilFile, " ", fixed=T)
-    soil <- substring(soil[[1]][1], 2)
+    # skip_soil <- read_lines(paste0(setups[i], "/SOIL.SOL")) %>% str_detect("@SITE") %>% which() -1
+    # soilFile <- read_lines(paste0(setups[i], "/SOIL.SOL"))[skip_soil[1]]
+    # soil <- strsplit(soilFile, " ", fixed=T)
+    # soil <- substring(soil[[1]][1], 2)
     
     
-    run_crop_dssat(id, dir_dssat_api, crop, cultivar, soil, current_dir_inputs_climate, current_setup_dir, no_cores)
+    run_crop_dssat(id, dir_dssat_api, crop, current_dir_inputs_climate, current_setup_dir, no_cores)
     tictoc::toc()
   
   })
@@ -422,6 +423,8 @@ for (c in countries_list) {
   dirModeloMaizInputs <- paste0(dirInputs, "cultivos/", maize_name_by_country, "/", sep = "", collapse = NULL)
   # Input variables rice model module
   dirModeloArrozInputs <- paste0(dirInputs, "cultivos/arroz/", sep = "", collapse = NULL)
+  # Input variables rice model module
+  dirModeloWheatInputs <- paste0(dirInputs, "cultivos/wheat/", sep = "", collapse = NULL)
   # Input variables frijol model module
   dirModeloFrijolInputs <- paste0(dirInputs, "cultivos/frijol/", sep = "", collapse = NULL)
 
@@ -443,6 +446,8 @@ for (c in countries_list) {
   dirModeloMaizOutputs <- paste0(dirOutputs, "cultivos/", maize_name_by_country, "/", sep = "", collapse = NULL)
   # Output variables rice model module
   dirModeloArrozOutputs <- paste0(dirOutputs, "cultivos/arroz/", sep = "", collapse = NULL)
+  # Output variables dssat wheat  module
+  dirModeloWheatOutputs <- paste0(dirOutputs, "cultivos/wheat/", sep = "", collapse = NULL)
   # Output variables frijol model module
   dirModeloFrijolOutputs <- paste0(dirOutputs, "cultivos/frijol/", sep = "", collapse = NULL)
 
@@ -480,6 +485,8 @@ for (c in countries_list) {
   pathConstruct(dirModeloMaizOutputs) # ./outputs/cultivos/maiz/
   # Rice
   pathConstruct(dirModeloArrozOutputs) # ./outputs/cultivos/arroz/
+  # Wheat
+  pathConstruct(dirModeloWheatOutputs) # ./outputs/cultivos/wheat/
   # Frijol
   pathConstruct(dirModeloFrijolOutputs) # ./outputs/cultivos/frijol/
 
@@ -536,7 +543,7 @@ for (c in countries_list) {
   # setups <- if(no_cores > 1) setups[-1] else setups
   runCrop("maiz", setups)
 
-  runDssatModule("maize")
+  runDssatModule("wheat")
 
   ## Rice crop model process
   if (currentCountry == "COLOMBIA") {
