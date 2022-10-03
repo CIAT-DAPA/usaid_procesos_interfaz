@@ -135,10 +135,6 @@ stacksBySeason <- list()
 monthsNumber <- list("Jan-Mar" = 02, "Feb-Apr" = 03, "Mar-May" = 04, "Apr-Jun" = 05, "May-Jul" = 06, "Jun-Aug" = 07, "Jul-Sep" = 08, "Aug-Oct" = 09, "Sep-Nov" = 10, "Oct-Dec" = 11, "Nov-Jan" = 12, "Dec-Feb" = 01)
 trimesters <- list("Jan-Mar" = "jfm", "Feb-Apr" = "fma", "Mar-May" = "mam", "Apr-Jun" = "amj", "May-Jul" = "mjj", "Jun-Aug" = "jja", "Jul-Sep" = "jas", "Aug-Oct" = "aso", "Sep-Nov" = "son", "Oct-Dec" = "ond", "Nov-Jan" = "ndj", "Dec-Feb" = "djf")
 
-dataNextGenAbove <- raster()
-dataNextGenBelow <- raster()
-dataNextGenNormal <- raster()
-
 # Writting probabilistic raster files (to upload to geoserver) and stacking (to create .csv files)
 for (i in 1:length(nextGenFileName_prob)) {
     # It divides by 100 in orden to have a 0-1 data and not a 1-100
@@ -150,26 +146,13 @@ for (i in 1:length(nextGenFileName_prob)) {
     stacksBySeason[[i]] <- stack(dataNextGenBelow, dataNextGenNormal, dataNextGenAbove)
 }
 
-dominantRasterFile <- dataNextGenAbove
-#Writting dominant raster file
-for (i in 1:length(dataNextGenAbove)) {
-    if(dataNextGenAbove[dataNextGenAbove][i] > dataNextGenBelow[dataNextGenBelow][i]){
-        if(dataNextGenAbove[dataNextGenAbove][i] > dataNextGenNormal[dataNextGenNormal][i]){
-            dominantRasterFile[dominantRasterFile][i] <- 0
-        }
-        else{
-            dominantRasterFile[dominantRasterFile][i] <- 1
-        }
-    }
-    else if(dataNextGenBelow[dataNextGenBelow][i] > dataNextGenNormal[dataNextGenNormal][i]){
-        dominantRasterFile[dominantRasterFile][i] <- 2
-    }
-    else{
-        dominantRasterFile[dominantRasterFile][i] <- 1
-    }
-    
+# reclassification function
+rc <- function(x1, x2, x3) {
+#   ifelse( x1 > x2, ifelse( x1 > x3, 0, 1), ifelse(x2 > x3, 2, 1) )
+ifelse( x1 > x2, ifelse( x1 > x3, 0, 1), ifelse(x2 > x3, 2, 1) )
 }
 
+dominantRasterFile <- overlay(stack(dataNextGenAbove, dataNextGenBelow, dataNextGenNormal), fun=rc)
 
 
 
