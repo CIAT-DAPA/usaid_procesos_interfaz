@@ -275,6 +275,16 @@ prepareRastersUpload <- function(ru_forecast_type) {
         writeRaster(dataNextGenNormal, paste0(dir_upload_raster_layers, "/normal/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", forecastID, "_", monf, "_normal_", fyr, monthFormat, i, ".tif"))), overwrite = TRUE)
       }
     }
+
+    #stacksBySeason and rc function are define in PyCPT_seasonal_outputs_process_R.r
+    # if (ru_forecast_type == "seasonal"){
+
+    #   dominantRasterFile <- lapply(1:length(stacksBySeason), function(i) {
+    #     overlay(stacksBySeason[[i]], fun=rc)
+
+    #   }) 
+
+    # }
   
 
   # Copying raster in path_rasters (backup)

@@ -97,14 +97,14 @@ datadir <- dir_outputs_nextgen_subseasonal
 setwd(datadir)
 dir.create(file.path(datadir, "nc_files"))
 
-#models <- as.character(inputsPyCPT[[1]]$models)
-models <- c('ECMWF','CFSv2_SubX')
+models <- as.character(inputsPyCPT[[1]]$models)
+#models <- c('ECMWF','CFSv2_SubX')
 #MOS <- mos
 MOS <- 'CCA'
 PREDICTAND <- "PRCP"
 PREDICTOR <- "PRCP"
 monf <- inputsPyCPT[[1]]$mons[[1]] # Initialization month
-#monf <- "Aug"
+#monf <- "Oct"
 mon_fcst_ini <- paste0(monf,1)
 weeks = paste0("wk",c(1:3,34))
 
@@ -192,6 +192,7 @@ for (skill in skilmetrics) {
     for(m in models){
         for (wks in weeks) {
             #ctl_input <- paste0(datadir, models[i], PREDICTAND,"_CCAFCST_P_",monf,"_",mon_fcst_ini,"_",wks,".ctl")
+            #CFSv2_SubXPRCP_CCA_Spearman_Sep_wk3.ctl
             ctlinput <- paste0(datadir, m, PREDICTAND, "_", MOS, "_", skill, "_", monf, "_", wks, ".ctl")
             ncout <- paste0(datadir, "NextGen_", m, "_", MOS, "_", skill, "_", monf, "_", wks, ".nc")
 
@@ -237,11 +238,11 @@ for (i in 1:length(weeks)) {
     end <- nrow(coords) * i
     metricsCoords[ini:end, 2] <- rep(i, nrow(coords))
 }
-
+## Metrics values
 for (i in 1:length(raster_metrics)) {
     metricsCoords[, 4 + i] <- raster::extract(raster_metrics[[i]], coords)
 }
-
+## Naming columns
 metricsCoords <- as.data.frame(metricsCoords)
 names(metricsCoords)[1:ncol(metricsCoords)] <- c("year", "week", "month", "id", "afc2", "groc", "ignorance", "pearson", "rpss", "spearman")
 

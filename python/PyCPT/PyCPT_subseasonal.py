@@ -70,7 +70,8 @@ def run_pycpt_subseasonal(region, spatial_predictors, spatial_predictands, model
     #.                             SubX MME should start on Wednesday 
     #----------------------------------------------------------------------------------------------------------
 
-    mon=current_date.strftime('%B')[0:3] 	# Forecast month 
+    #mon=current_date.strftime('%B')[0:3] 	# Forecast month 
+    mon="Sep"
 
     fyr=current_date.year  	# Forecast year
 
