@@ -39,8 +39,8 @@ if ru_forecast_type == 'seasonal':
     print(type(tgtii), tgtii)
     tgtff = sys.argv[13].split(",")
     print(type(tgtff), tgtff)
-    tgts = sys.argv[14].split(",")
-    print(type(tgts), tgts)
+    tgts_j = sys.argv[14].split(",")
+    print(type(tgts_j), tgts_j)
     tini = int(sys.argv[15])
     print(type(tini), tini)
     tend = int(sys.argv[16])
@@ -69,7 +69,7 @@ if ru_forecast_type == 'seasonal':
     print(type(confidence_level), confidence_level)
 
     run_pycpt_seasonal(region, spatial_predictors, spatial_predictands, models, obs, station,
-            mos, predictand, predictor, mons, tgtii, tgtff, tgts, tini, tend,
+            mos, predictand, predictor, mons, tgtii, tgtff, tgts_j, tini, tend,
             xmodes_min, xmodes_max, ymodes_min, ymodes_max, ccamodes_min,
             ccamodes_max, force_download, single_models, forecast_anomaly,
             forecast_spi, confidence_level)

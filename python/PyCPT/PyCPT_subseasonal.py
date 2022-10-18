@@ -50,7 +50,7 @@ def run_pycpt_subseasonal(region, spatial_predictors, spatial_predictands, model
 
     # models to plot for individual models skill
     modeli=[models[0]] # choose any model from the list
-    model=models[0]
+    model=models
     #---------------------------------------------------------------------------------
     #     Obs (choose between CHIRPS, TRMM, CPC, IMD1deg, IMDp25deg)
     #---------------------------------------------------------------------------------
@@ -70,8 +70,8 @@ def run_pycpt_subseasonal(region, spatial_predictors, spatial_predictands, model
     #.                             SubX MME should start on Wednesday 
     #----------------------------------------------------------------------------------------------------------
 
-    #mon=current_date.strftime('%B')[0:3] 	# Forecast month 
-    mon="Sep"
+    mon=current_date.strftime('%B')[0:3] 	# Forecast month 
+    #mon="Sep"
 
     fyr=current_date.year  	# Forecast year
 

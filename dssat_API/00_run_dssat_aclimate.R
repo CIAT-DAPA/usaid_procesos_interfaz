@@ -207,7 +207,7 @@ outputs_df2 <- map2(.x = map(sim_data, "weather"),
   # list.files(dir_oryza, pattern = ".EXE$", full.names = T)
 
 
-  map(dir_run, ~ unlink(.x, recursive = TRUE))
+  #map(dir_run, ~ unlink(.x, recursive = TRUE))
 
   # }
 

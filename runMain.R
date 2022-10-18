@@ -219,105 +219,10 @@ run_oryza_by_setup <- function() {
   results <- mclapply(inputsList, make_request_oryza, mc.cores = 3, mc.preschedule = F)
 }
 
-# The variables used in this function come from /prediccionClimatica/PyCPT_sub/seasonal_outputs_process_R.r
-prepareRastersUpload <- function(ru_forecast_type) {
-  require(readr)
-  forecastID <- read_csv(paste0(dirUnifiedOutputs, "outputs/", "forecast.csv")) 
-  forecastID <- forecastID$forecast_id
-
-  # Writting deterministic raster files (to upload to geoserver)
-
-    if (ru_forecast_type == "seasonal"){
-      for (i in 1:length(nextGenFileName_det)) {
-        det <- raster(paste0(datadir, "/", nextGenFileName_det[i]))
-        monthFormat <- if (monthsNumber[tgts[i]] < 10) paste0("0", monthsNumber[tgts[i]]) else monthsNumber[tgts[i]]
-        # Writting raster files in .tif
-        writeRaster(det, paste0(dir_upload_raster_layers, "/deterministic/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_deterministic_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
-      }
-    }
-    else {
-      for (i in 1:length(nextGenFileName_det_sub)) {
-        det <- raster(paste0(datadir, "/", nextGenFileName_det_sub[i]))
-        monthFormat <- if (month(Sys.Date()) < 10) paste0("0", month(Sys.Date())) else month(Sys.Date())
-        writeRaster(det, paste0(dir_upload_raster_layers, "/deterministic/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", forecastID, "_", monf, "_deterministic_", fyr, monthFormat, i, ".tif"))), overwrite = TRUE)
-        
-      }
-
-    }
-  
-  # Writting probabilistic raster files (to upload to geoserver)
-
-    if (ru_forecast_type == "seasonal"){
-      for (i in 1:length(nextGenFileName_prob)) {
-        dataNextGenAbove <- raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname = "Above_Normal")
-        dataNextGenBelow <- raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname = "Below_Normal")
-        dataNextGenNormal <- raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname = "Normal")
-        monthFormat <- if (monthsNumber[tgts[i]] < 10) paste0("0", monthsNumber[tgts[i]]) else monthsNumber[tgts[i]]
-
-        # Writting raster files in .tif
-        writeRaster(dataNextGenAbove, paste0(dir_upload_raster_layers, "/above/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_above_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
-        writeRaster(dataNextGenBelow, paste0(dir_upload_raster_layers, "/below/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_below_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
-        writeRaster(dataNextGenNormal, paste0(dir_upload_raster_layers, "/normal/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_normal_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
-
-      }
-    }
-    else {
-
-      for (i in 1:length(nextGenFileName_prob_sub)) {
-        dataNextGenAbove <- raster(paste0(datadir, "/", nextGenFileName_prob_sub[i]), varname = "Above_Normal")
-        dataNextGenBelow <- raster(paste0(datadir, "/", nextGenFileName_prob_sub[i]), varname = "Below_Normal")
-        dataNextGenNormal <- raster(paste0(datadir, "/", nextGenFileName_prob_sub[i]), varname = "Normal")
-        monthFormat <- if (month(Sys.Date()) < 10) paste0("0", month(Sys.Date())) else month(Sys.Date())
-
-        # Writting raster files in .tif
-        writeRaster(dataNextGenAbove, paste0(dir_upload_raster_layers, "/above/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", forecastID, "_", monf, "_above_", fyr, monthFormat, i, ".tif"))), overwrite = TRUE)
-        writeRaster(dataNextGenBelow, paste0(dir_upload_raster_layers, "/below/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", forecastID, "_", monf, "_below_", fyr, monthFormat, i, ".tif"))), overwrite = TRUE)
-        writeRaster(dataNextGenNormal, paste0(dir_upload_raster_layers, "/normal/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", forecastID, "_", monf, "_normal_", fyr, monthFormat, i, ".tif"))), overwrite = TRUE)
-      }
-    }
-
-    #stacksBySeason and rc function are define in PyCPT_seasonal_outputs_process_R.r
-    # if (ru_forecast_type == "seasonal"){
-
-    #   dominantRasterFile <- lapply(1:length(stacksBySeason), function(i) {
-    #     overlay(stacksBySeason[[i]], fun=rc)
-
-    #   }) 
-
-    # }
-  
-
-  # Copying raster in path_rasters (backup)
-  system(paste0("cp -R ", paste0(dir_upload_raster_layers, "/above/ "), paste0(path_rasters, "/")))
-  system(paste0("cp -R ", paste0(dir_upload_raster_layers, "/below/ "), paste0(path_rasters, "/")))
-  system(paste0("cp -R ", paste0(dir_upload_raster_layers, "/normal/ "), paste0(path_rasters, "/")))
-  system(paste0("cp -R ", paste0(dir_upload_raster_layers, "/deterministic/ "), paste0(path_rasters, "/")))
-}
-
-uploadRasterFiles <- function() {
-  tryCatch(
-    {
-      setwd(dir_upload_raster_script)
-
-      #ru - raster upload
-      ru_workspace <- paste0("aclimate_", country_iso)
-      ru_forecast_type <- "seasonal"
-      prepareRastersUpload(ru_forecast_type)
-      system(paste("python import.py", ru_workspace, ru_forecast_type))
-
-      ru_forecast_type <- "subseasonal"
-      prepareRastersUpload(ru_forecast_type)
-      system(paste("python import.py", ru_workspace, ru_forecast_type))
-    },
-    error = function(e) {
-      cat("Error while uploading rasters files: ", conditionMessage(e), "\n")
-    }
-  )
-}
-
+################################### Working on wheat (this is not the final version of this function)
 runDssatModule <- function(crop){
 
-  ## Maize setups
+  ## Wheat setups
   setups <- list.dirs(dirModeloWheatInputs, full.names = T)
   #setups <- setups[1:4]
   setwd(dir_dssat_api)
@@ -406,7 +311,6 @@ dir_oryza_api_inputs_setup <- paste0(dir_oryza_api_inputs_zip, "setups/")
 
 # Commom directories DSSAT API
 dir_dssat_api <- "/forecast/usaid_procesos_interfaz/dssat_API/"
-
 
 ## ProbForecats files lists for merging (For importation proccess)
 metrics_list <- list()
@@ -535,8 +439,10 @@ for (c in countries_list) {
 
   # Prediction process
   if (currentCountry == "COLOMBIA"|| currentCountry == "ANGOLA") {
+    Sys.setenv(CPT_BIN_DIR = "/forecast/models/CPT/15.5.10/bin/")
     source(paste(dirForecast, "01_prediccion.R", sep = "", collapse = NULL))
   } else {
+    Sys.setenv(CPT_BIN_DIR = "/forecast/models/CPT/17.6.1/bin/")
     source(paste(dirForecast, "PyCPT_seasonal_outputs_process_R.r", sep = "", collapse = NULL))
     source(paste(dirForecast, "PyCPT_subseasonal_outputs_process_R.r", sep = "", collapse = NULL))
   }
@@ -592,6 +498,7 @@ CMDdirOutputs <- paste0(dirUnifiedOutputs, "outputs/") # paste0(gsub("/","\\\\",
 try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\""), intern = TRUE, ignore.stderr = TRUE))
 
 # Import rasters to Geoserver
+source("/forecast/usaid_procesos_interfaz/prediccionCLimatica/raster_upload.r")
 uploadRasterFiles()
 
 end.time <- Sys.time()

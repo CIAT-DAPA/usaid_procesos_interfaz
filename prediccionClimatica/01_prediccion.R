@@ -335,7 +335,7 @@ run_cpt=function(x,y,run,output,confi,p){
   echo %path_prob%
   echo 0
   echo 0
-  ) | CPT.x"
+  ) | /forecast/models/CPT/15.5.10/bin/CPT.x"
   
   cmd<-gsub("%path_x%",x,cmd)
   cmd<-gsub("%path_y%",y,cmd)

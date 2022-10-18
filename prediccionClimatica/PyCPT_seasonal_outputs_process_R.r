@@ -48,10 +48,13 @@ tgtff <- gsub(" ", ",", tgtff)
 typeof(tgtff)
 tgtff
 
-tgts <- paste(inputsPyCPT[[1]]$tgts, collapse = " ")
+tgts <- ""
+for(i in 1:length(inputsPyCPT[[1]]$tgts)){
+    tgts <- paste(tgts, inputsPyCPT[[1]]$tgts[[i]][[1]], inputsPyCPT[[1]]$tgts[[i]][[2]], collapse = " ")
+
+}
 tgts <- gsub(" ", ",", tgts)
-typeof(tgts)
-tgts
+tgts <- sub(',', '', tgts)
 
 tini <- inputsPyCPT[[1]]$tini
 typeof(tini)
@@ -138,23 +141,13 @@ trimesters <- list("Jan-Mar" = "jfm", "Feb-Apr" = "fma", "Mar-May" = "mam", "Apr
 # Writting probabilistic raster files (to upload to geoserver) and stacking (to create .csv files)
 for (i in 1:length(nextGenFileName_prob)) {
     # It divides by 100 in orden to have a 0-1 data and not a 1-100
-       <- raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname = "Above_Normal") / 100
+    dataNextGenAbove <- raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname = "Above_Normal") / 100
     dataNextGenBelow <- raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname = "Below_Normal") / 100
     dataNextGenNormal <- raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname = "Normal") / 100
 
     # Stack structure in order to extract to create .csv files
     stacksBySeason[[i]] <- stack(dataNextGenBelow, dataNextGenNormal, dataNextGenAbove)
 }
-
-#0-above
-#1-normal
-#2-below
-# reclassification function
-rc <- function(x1, x2, x3) {
-#   ifelse( x1 > x2, ifelse( x1 > x3, 0, 1), ifelse(x2 > x3, 2, 1) )
-    ifelse( x1 > x2, ifelse( x1 > x3, 2, 0), ifelse(x2 > x3, 1, 0) )
-}
-
 
 # Writing probabilities.csv process
 stations_coords <- read.table(paste0(dir_inputs_nextgen, "stations_coords.csv"), head = TRUE, sep = ",")
