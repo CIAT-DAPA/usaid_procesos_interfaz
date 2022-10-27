@@ -10,8 +10,8 @@ rc <- function(x1, x2, x3) {
 # Some of the variables used in this function come from /prediccionClimatica/PyCPT_sub/seasonal_outputs_process_R.r
 prepareRastersUpload <- function(ru_forecast_type) {
   require(readr)
-  forecastID <- read_csv(paste0(dirUnifiedOutputs, "outputs/", "forecast.csv")) 
-  forecastID <- forecastID$forecast_id
+  #forecastID <- read_csv(paste0(dirUnifiedOutputs, "outputs/", "forecast.csv")) 
+  #forecastID <- forecastID$forecast_id
 
     #Seasonal
     if (ru_forecast_type == "seasonal"){
@@ -20,7 +20,7 @@ prepareRastersUpload <- function(ru_forecast_type) {
         det <- raster(paste0(datadir, "/", nextGenFileName_det[i]))
         monthFormat <- if (monthsNumber[tgts[i]] < 10) paste0("0", monthsNumber[tgts[i]]) else monthsNumber[tgts[i]]
         # Writting raster files in .tif
-        writeRaster(det, paste0(dir_upload_raster_layers, "/deterministic/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", forecastID, "_", monf, "_", trimesters[tgts[i]], "_deterministic_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
+        writeRaster(det, paste0(dir_upload_raster_layers, "/deterministic/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", monf, "_", trimesters[tgts[i]], "_deterministic_", years[i], monthFormat, ".tif"))), overwrite = TRUE)
       }
 
       # Writting probabilistic and dominant raster files (to upload to geoserver)
@@ -31,13 +31,13 @@ prepareRastersUpload <- function(ru_forecast_type) {
         monthFormat <- if (monthsNumber[tgts[i]] < 10) paste0("0", monthsNumber[tgts[i]]) else monthsNumber[tgts[i]]
 
         # Writting probabilistic raster files in .tif
-        writeRaster(dataNextGenAbove, paste0(dir_upload_raster_layers, "/above/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", monf, "_", trimesters[tgts[i]], "_above_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
-        writeRaster(dataNextGenNormal, paste0(dir_upload_raster_layers, "/normal/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", monf, "_", trimesters[tgts[i]], "_normal_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
-        writeRaster(dataNextGenBelow, paste0(dir_upload_raster_layers, "/below/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", monf, "_", trimesters[tgts[i]], "_below_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
+        writeRaster(dataNextGenAbove, paste0(dir_upload_raster_layers, "/above/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", monf, "_", trimesters[tgts[i]], "_above_", years[i], monthFormat, ".tif"))), overwrite = TRUE)
+        writeRaster(dataNextGenNormal, paste0(dir_upload_raster_layers, "/normal/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", monf, "_", trimesters[tgts[i]], "_normal_", years[i], monthFormat, ".tif"))), overwrite = TRUE)
+        writeRaster(dataNextGenBelow, paste0(dir_upload_raster_layers, "/below/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", monf, "_", trimesters[tgts[i]], "_below_", years[i], monthFormat, ".tif"))), overwrite = TRUE)
 
         # Writting dominant raster files in .tif
         dominantRasterFile <- overlay(stack(dataNextGenAbove, dataNextGenNormal, dataNextGenBelow), fun=rc)
-        writeRaster(dominantRasterFile, paste0(dir_upload_raster_layers, "/seasonal_dominant/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", monf, "_", trimesters[tgts[i]], "_dominant_", fyr, monthFormat, ".tif"))), overwrite = TRUE)
+        writeRaster(dominantRasterFile, paste0(dir_upload_raster_layers, "/seasonal_dominant/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", monf, "_", trimesters[tgts[i]], "_dominant_", years[i], monthFormat, ".tif"))), overwrite = TRUE)
         
 
       }

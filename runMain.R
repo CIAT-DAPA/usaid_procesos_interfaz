@@ -222,8 +222,10 @@ run_oryza_by_setup <- function() {
 ################################### Working on wheat (this is not the final version of this function)
 runDssatModule <- function(crop){
 
+  dirCurrentCropInputs <- paste0(dirInputs, "cultivos/",crop, "/", sep = "", collapse = NULL)
+
   ## Wheat setups
-  setups <- list.dirs(dirModeloWheatInputs, full.names = T)
+  setups <- list.dirs(dirCurrentCropInputs, full.names = T)
   #setups <- setups[1:4]
   setwd(dir_dssat_api)
   
@@ -254,7 +256,7 @@ runDssatModule <- function(crop){
     # Set up run paths
     current_dir_inputs_climate <- paste0(path_output, "/", station, "/")
     #current_setup_dir <- paste0(dirCultivosInputs, if (currentCountry == "COLOMBIA") "maiz" else "maize", "/", id, "/")
-    current_setup_dir <- paste0(dirCultivosInputs, "wheat", "/", id, "/")
+    current_setup_dir <- paste0(dirCurrentCropInputs, id, "/")
     
     # skip_cul <- read_lines(paste0(setups[i], "/MZCER048.CUL")) %>% str_detect("@VAR#") %>% which() +2
     # culFile <- read_lines(paste0(setups[i], "/MZCER048.CUL"))[skip_cul[1]]
@@ -459,7 +461,7 @@ for (c in countries_list) {
   # setups <- if(no_cores > 1) setups[-1] else setups
   runCrop("maiz", setups)
 
-  runDssatModule("wheat")
+  runDssatModule("maize")
 
   ## Rice crop model process
   if (currentCountry == "COLOMBIA") {

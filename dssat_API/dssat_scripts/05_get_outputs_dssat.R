@@ -11,7 +11,7 @@ read_summary <- function(dir_run){
   var_names <- read_lines(paste0(dir_run, 'Summary.OUT'))[4] %>% 
     str_sub(5, -1) %>% str_split("\\s{1,}") %>% pluck(1)
   
-  summary_out <-  fread(paste0(dir_run, 'Summary.OUT'), header = F, col.names = var_names) %>%
+  summary_out <-  fread(paste0(dir_run, 'Summary.OUT'), header = F, col.names = var_names, na.strings = "-99") %>%
     dplyr::mutate(yield_0 = HWAM,
                   d_dry = as.numeric(as.Date(as.character(MDAT), format("%Y%j")) - as.Date(as.character(PDAT), format("%Y%j"))),
                   prec_acu = PRCP,
@@ -91,7 +91,7 @@ extract_summary_aclimate <- function(data, var){
     rename_with(~str_remove(., paste0(var, "_")))
   return(data)
 }
-
+safe_extract_summary <- purrr::possibly(extract_summary_aclimate, NULL)
 
 ## Function to arrange data to final data frame
 tidy_descriptive <- function(data, region, soil, cultivar, start, end){

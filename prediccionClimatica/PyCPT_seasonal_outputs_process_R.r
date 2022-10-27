@@ -48,13 +48,20 @@ tgtff <- gsub(" ", ",", tgtff)
 typeof(tgtff)
 tgtff
 
-tgts <- ""
+tgts <- c()
 for(i in 1:length(inputsPyCPT[[1]]$tgts)){
-    tgts <- paste(tgts, inputsPyCPT[[1]]$tgts[[i]][[1]], inputsPyCPT[[1]]$tgts[[i]][[2]], collapse = " ")
+    tgts <- append(tgts, inputsPyCPT[[1]]$tgts[[i]][[1]])
 
 }
-tgts <- gsub(" ", ",", tgts)
-tgts <- sub(',', '', tgts)
+tgts
+
+years <- c()
+for(i in 1:length(inputsPyCPT[[1]]$tgts)){
+    years <- append(years, inputsPyCPT[[1]]$tgts[[i]][[2]])
+
+}
+years
+
 
 tini <- inputsPyCPT[[1]]$tini
 typeof(tini)
@@ -91,7 +98,7 @@ ru_forecast_type <- "seasonal"
 system(paste(
     "python run_main.py", ru_forecast_type, region, spatial_predictors, spatial_predictands,
     models, obs, station, mos, predictand, predictor, mons, tgtii,
-    tgtff, tgts, tini, tend, xmodes_min, xmodes_max, ymodes_min,
+    tgtff, tini, tend, xmodes_min, xmodes_max, ymodes_min,
     ymodes_max, ccamodes_min, ccamodes_max, force_download,
     single_models, forecast_anomaly, forecast_spi, confidence_level
 ))
@@ -106,33 +113,33 @@ MOS <- mos
 PREDICTAND <- predictand
 PREDICTOR <- predictor
 monf <- inputsPyCPT[[1]]$mons[[1]] # Initialization month
-tgts <- as.character(inputsPyCPT[[1]]$tgts)
+#tgts <- as.character(inputsPyCPT[[1]]$tgts)
 mons <- as.character(inputsPyCPT[[1]]$mons)
 
 fyr <- year(Sys.Date()) # Forecast year
 
-for (seas in tgts)
+for (j in 1:length(tgts))
 {
     #### translate all  output data to netcdf
     for (i in 1:length(models)) {
         # probablistics forecast
-        ctl_input <- paste0(datadir, models[i], "_", PREDICTAND, PREDICTOR, "_CCAFCST_P_", seas, "_", monf, fyr, ".ctl")
-        nc_output <- paste0(datadir, "nc_files/", models[i], "_", PREDICTAND, PREDICTOR, "_CCAFCST_P_", seas, "_", monf, fyr, ".nc")
+        ctl_input <- paste0(datadir, models[i], "_", PREDICTAND, PREDICTOR, "_CCAFCST_P_", tgts[j], "_", monf, fyr, ".ctl")
+        nc_output <- paste0(datadir, "nc_files/", models[i], "_", PREDICTAND, PREDICTOR, "_CCAFCST_P_", tgts[j], "_", monf, years[j], ".nc")
         system(paste0("cdo -f nc import_binary ", ctl_input, " ", nc_output))
         # Deterministic forecast
-        ctl_input2 <- paste0(datadir, models[i], "_", PREDICTAND, PREDICTOR, "_CCAFCST_mu_", seas, "_", monf, fyr, ".ctl")
-        nc_output2 <- paste0(datadir, "nc_files/", models[i], "_", PREDICTAND, PREDICTOR, "_CCAFCST_mu_", seas, "_", monf, fyr, ".nc")
+        ctl_input2 <- paste0(datadir, models[i], "_", PREDICTAND, PREDICTOR, "_CCAFCST_mu_", tgts[j], "_", monf, fyr, ".ctl")
+        nc_output2 <- paste0(datadir, "nc_files/", models[i], "_", PREDICTAND, PREDICTOR, "_CCAFCST_mu_", tgts[j], "_", monf, years[j], ".nc")
         system(paste0("cdo -f nc import_binary ", ctl_input2, " ", nc_output2))
     }
 
-    system(paste0("cdo --no_history -ensmean  nc_files/*_CCAFCST_P_*.nc NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_P_", seas, "_", monf, fyr, ".nc"))
-    system(paste0("ncrename -v a,Below_Normal -v b,Normal -v c,Above_Normal  NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_P_", seas, "_", monf, fyr, ".nc"))
-    system(paste0("cdo --no_history -ensmean  nc_files/*_CCAFCST_mu_*.nc NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_mu_", seas, "_", monf, fyr, ".nc"))
+    system(paste0("cdo --no_history -ensmean  nc_files/*_CCAFCST_P_*.nc NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_P_", tgts[j], "_", monf, years[j], ".nc"))
+    system(paste0("ncrename -v a,Below_Normal -v b,Normal -v c,Above_Normal  NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_P_", tgts[j], "_", monf, years[j], ".nc"))
+    system(paste0("cdo --no_history -ensmean  nc_files/*_CCAFCST_mu_*.nc NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_mu_", tgts[j], "_", monf, years[j], ".nc"))
     system(paste0("rm -rf ", datadir, "nc_files/*.nc"))
 }
 
-nextGenFileName_prob <- paste0("NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_P_", tgts, "_", monf, fyr, ".nc")
-nextGenFileName_det <- paste0("NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_mu_", tgts, "_", monf, fyr, ".nc")
+nextGenFileName_prob <- paste0("NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_P_", tgts, "_", monf, years, ".nc")
+nextGenFileName_det <- paste0("NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_mu_", tgts, "_", monf, years, ".nc")
 
 stacksBySeason <- list()
 monthsNumber <- list("Jan-Mar" = 02, "Feb-Apr" = 03, "Mar-May" = 04, "Apr-Jun" = 05, "May-Jul" = 06, "Jun-Aug" = 07, "Jul-Sep" = 08, "Aug-Oct" = 09, "Sep-Nov" = 10, "Oct-Dec" = 11, "Nov-Jan" = 12, "Dec-Feb" = 01)

@@ -39,37 +39,37 @@ if ru_forecast_type == 'seasonal':
     print(type(tgtii), tgtii)
     tgtff = sys.argv[13].split(",")
     print(type(tgtff), tgtff)
-    tgts_j = sys.argv[14].split(",")
-    print(type(tgts_j), tgts_j)
-    tini = int(sys.argv[15])
+    # tgts_j = sys.argv[14].split(",")
+    # print(type(tgts_j), tgts_j)
+    tini = int(sys.argv[14])
     print(type(tini), tini)
-    tend = int(sys.argv[16])
+    tend = int(sys.argv[15])
     print(type(tend), tend)
-    xmodes_min = int(sys.argv[17])
+    xmodes_min = int(sys.argv[16])
     print(type(xmodes_min), xmodes_min)
-    xmodes_max = int(sys.argv[18])
+    xmodes_max = int(sys.argv[17])
     print(type(xmodes_max), xmodes_max)
-    ymodes_min = int(sys.argv[19])
+    ymodes_min = int(sys.argv[18])
     print(type(ymodes_min), ymodes_min)
-    ymodes_max = int(sys.argv[20])
+    ymodes_max = int(sys.argv[19])
     print(type(ymodes_max), ymodes_max)
-    ccamodes_min = int(sys.argv[21])
+    ccamodes_min = int(sys.argv[20])
     print(type(ccamodes_min), ccamodes_min)
-    ccamodes_max = int(sys.argv[22])
+    ccamodes_max = int(sys.argv[21])
     print(type(ccamodes_max), ccamodes_max)
-    force_download = True if sys.argv[23] == 'TRUE' else False
+    force_download = True if sys.argv[22] == 'TRUE' else False
     print(type(force_download), force_download)
-    single_models = True if sys.argv[24] == 'TRUE' else False
+    single_models = True if sys.argv[23] == 'TRUE' else False
     print(type(single_models), single_models)
-    forecast_anomaly = True if sys.argv[25] == 'TRUE' else False
+    forecast_anomaly = True if sys.argv[24] == 'TRUE' else False
     print(type(forecast_anomaly), forecast_anomaly)
-    forecast_spi = True if sys.argv[26] == 'TRUE' else False
+    forecast_spi = True if sys.argv[25] == 'TRUE' else False
     print(type(forecast_spi), forecast_spi)
-    confidence_level = int(sys.argv[27])
+    confidence_level = int(sys.argv[26])
     print(type(confidence_level), confidence_level)
 
     run_pycpt_seasonal(region, spatial_predictors, spatial_predictands, models, obs, station,
-            mos, predictand, predictor, mons, tgtii, tgtff, tgts_j, tini, tend,
+            mos, predictand, predictor, mons, tgtii, tgtff, tini, tend,
             xmodes_min, xmodes_max, ymodes_min, ymodes_max, ccamodes_min,
             ccamodes_max, force_download, single_models, forecast_anomaly,
             forecast_spi, confidence_level)

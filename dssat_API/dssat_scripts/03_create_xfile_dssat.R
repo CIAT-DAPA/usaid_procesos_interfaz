@@ -262,7 +262,7 @@ write_exp_dssat <- function(path, id_name, crop, cultivar, soil, wth_station, pl
   PLNAME <- "JRE"  
   
   planting <- data.frame( P = 1, PDATE, EDATE , PPOP, PPOE, PLME, 
-                          PLDS, PLRS = 80, PLRD, PLDP,
+                          PLDS, PLRS, PLRD, PLDP,
                           PLWT = -99, PAGE = -99, PENV = -99, PLPH = -99, SPRL = -99, PLNAME)
   
   
@@ -273,10 +273,10 @@ write_exp_dssat <- function(path, id_name, crop, cultivar, soil, wth_station, pl
     cat("*PLANTING DETAILS\n",file = name_exp)
     cat("@P PDATE EDATE  PPOP  PPOE  PLME  PLDS  PLRS  PLRD  PLDP  PLWT  PAGE  PENV  PLPH  SPRL                        PLNAME\n",file=name_exp)
     cat(paste(sprintf("%2d",as.integer(planting$P))," ",sprintf("%5s",planting$PDATE),
-              " ",sprintf("%5s",planting$EDATE)," ",sprintf("%5d",as.integer(planting$PPOP)),
+              " ",sprintf("%5s",planting$EDATE)," ",sprintf("%5s",as.character(planting$PPOP)),
               " ",sprintf("%5s",as.numeric(as.character(planting$PPOE)))," ",sprintf("%5s",planting$PLME),
-              " ",sprintf("%5s",planting$PLDS)," ",sprintf("%5d",as.integer(planting$PLRS)),
-              " ",sprintf("%5d",as.integer(planting$PLRD))," ",sprintf("%5d",as.integer(planting$PLDP)),
+              " ",sprintf("%5s",planting$PLDS)," ",sprintf("%5s",as.character(planting$PLRS)),
+              " ",sprintf("%5s",as.character(planting$PLRD))," ",sprintf("%5s",as.character(planting$PLDP)),
               " ",sprintf("%5d",as.integer(planting$PLWT))," ",sprintf("%5d",as.integer(planting$PAGE)),
               " ",sprintf("%5d",as.integer(planting$PENV))," ",sprintf("%5d",as.integer(planting$PLPH)),
               " ",sprintf("%5d",as.integer(planting$SPRL))," ",sprintf("%29s",planting$PLNAME),
@@ -404,8 +404,8 @@ write_exp_dssat <- function(path, id_name, crop, cultivar, soil, wth_station, pl
                          PLANT, IRRIG,
                          FERTI, RESID = "R", HARVS = "M", OUTPUTS = "OU", FNAME = "N",
                          OVVEW = "Y", SUMRY = "Y", FROPT = 1, GROUT = "Y", CAOUT = "N",
-                         WAOUT = "N", NIOUT = "N", MIOUT = "N",
-                         DIOUT = "N", VBOSE = "N", CHOUT = "N", OPOUT = "N")
+                         WAOUT = "Y", NIOUT = "N", MIOUT = "N",
+                         DIOUT = "N", VBOSE = "Y", CHOUT = "N", OPOUT = "N")
   
   
   

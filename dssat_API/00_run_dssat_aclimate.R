@@ -59,7 +59,7 @@ run_crop_dssat <- function(id, path, crop, current_dir_inputs_climate, current_s
 
   # Folders
   dir_scripts <- "dssat_scripts/"
-  dir_outputs <- dirModeloWheatOutputs
+  dir_outputs <- paste0(dirOutputs, "cultivos/", crop, "/", sep = "", collapse = NULL)
   #dir.create(dir_outputs)
 
   # Set up run paths
