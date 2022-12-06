@@ -314,6 +314,9 @@ dir_oryza_api_inputs_setup <- paste0(dir_oryza_api_inputs_zip, "setups/")
 # Commom directories DSSAT API
 dir_dssat_api <- "/forecast/usaid_procesos_interfaz/dssat_API/"
 
+# Common directories prepare observed data
+dir_prepare_observed_data <- paste0(dirForecast,"prepareObservedData/")
+
 ## ProbForecats files lists for merging (For importation proccess)
 metrics_list <- list()
 probabilities_list <- list()
@@ -356,6 +359,7 @@ for (c in countries_list) {
   path_save <- paste0(dirPrediccionOutputs, "probForecast", sep = "", collapse = NULL)
   path_rasters <- paste0(dirPrediccionOutputs, "raster", sep = "", collapse = NULL)
   path_output <- paste0(dirPrediccionOutputs, "resampling", sep = "", collapse = NULL)
+  path_output_observed_data <- paste0(dirPrediccionOutputs, "observedData/", sep = "", collapse = NULL)
   path_output_sum <- paste0(path_output, "/summary", sep = "", collapse = NULL)
   dirCultivosOutputs <- paste0(dirOutputs, "cultivos/", sep = "", collapse = NULL)
   # Output variables maize model module
@@ -438,6 +442,9 @@ for (c in countries_list) {
   try(system(dotnet_cmd[7], intern = TRUE, ignore.stderr = TRUE))
   try(system(dotnet_cmd[8], intern = TRUE, ignore.stderr = TRUE))
 
+  #Downloading observed data for prepare climate scenaries
+  source(paste0(dir_prepare_observed_data, "downloadObservedData.R"))
+  downloadObservedData(dir_stations, format(strptime(as.character(Sys.Date()), "%Y-%m-%d"),"%d/%m/%Y" ), path_output_observed_data)
 
   # Prediction process
   if (currentCountry == "COLOMBIA"|| currentCountry == "ANGOLA") {

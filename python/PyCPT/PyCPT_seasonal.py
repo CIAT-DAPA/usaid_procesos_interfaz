@@ -137,9 +137,9 @@ def run_pycpt_seasonal(region, spatial_predictors, spatial_predictands, models, 
     # for now, just write the target period (for DL)
     # ['Mar-May'] #'Aug-Oct','Mar-May','Apr-Jun','May-Jul']   #Needs to be any of the seasons computed.
     #tgts = tgts
-    tgts = [str(months_short(season1_start)+'-' + months_short(season1_end)) +
-            '', '' + str(months_short(season2_start)+'-' + months_short(season2_end))]
-    #tgts = ['May-Jul','Aug-Oct']
+    #tgts = [str(months_short(season1_start)+'-' + months_short(season1_end)) +
+    #        '', '' + str(months_short(season2_start)+'-' + months_short(season2_end))]
+    tgts = ['Feb-Apr']
     monss = tgts
     # tgts=['Jan','Feb']
     #tgts =['Jan-Mar']
@@ -156,7 +156,7 @@ def run_pycpt_seasonal(region, spatial_predictors, spatial_predictands, models, 
     #monf = 'May'  # todays_date.month  # Initialization month
     monf = current_date.strftime('%B')[0:3]
     # fyr = 2021  # Forecast year
-    fyr = current_date.year  # Forecast year
+    fyr = 2023 #current_date.year  # Forecast year
     # for s in range(len(tgts)):
     #     #tgts_j=["Mon-Mon", "year", "Mon-Mon", "year"]
     #     if(s == 1 and tgts_j[1] != tgts_j[3]):

@@ -98,19 +98,23 @@ stress_risk = function(folder,type,limits){
   })
   return(answer)
 }
+#Gets stress risk for all planting dates
+stress_risk_all <- function(data_files_all, dir_inputs_setup){
+  
+  crop_conf = read.csv(paste0(dir_inputs_setup,"crop_conf.csv"), header = T)
+  stresses_list <- list()
 
-root <- "D:/CIAT/ToBackup/OneDrive - CGIAR/Desktop/ethiopia/"
-setwd(root)
+  data <- lapply(1:length(data_files_all), function(i) {
+    data_files <- paste0(data_files_all[i])
 
-data_files = paste0(root,"/1")
-type_input = "w"
-crop_conf = read.csv(paste0(root,"crop_conf.csv"), header = T)
+    values_w <- stress_risk(data_files,"w",crop_conf)
+    values_n <- stress_risk(data_files,"n",crop_conf)
 
-stress_risk(data_files,type_input,crop_conf)
-values = stress_risk(data_files,type_input,crop_conf)
-print(values)
+    stresses_list <- append(stresses_list, c(values_w, values_n))
+  
+  })
+  return(data)
 
-
-
+}
 
 

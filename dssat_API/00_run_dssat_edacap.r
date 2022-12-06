@@ -111,6 +111,7 @@ run_crop_dssat <- function(id, path, crop, ndays = 30){
   
   
   climate_scenaries <- load_all_climate(dir_inputs_climate)[-100]
+  #santiago_reeplace_function(path_plating_window, climate_scenaries, path_resampling_observed, id_station)
   
   planting_details <- read_csv(paste0(dir_inputs_setup, "planting_details.csv"), show_col_types = F) %>%
     dplyr::select(name, all_of(crop)) %>%  pivot_wider(names_from = name, values_from = all_of(crop))
@@ -214,11 +215,23 @@ run_crop_dssat <- function(id, path, crop, ndays = 30){
                           bind_rows() %>% 
                           tidy_descriptive(., id_station, id_soil, id_cultivar, y, y)}) %>% 
     compact %>% bind_rows()
-  
-  
+
+  values <- c(values_w, values_n)
+  names_op <- names(outputs_df1)
+
+  outputs_df3 <- map2(.x = values_list,
+                      .y = input_dates$planting_date, 
+                      function(x,y){
+                        tidy_stress(x, names_op) %>%
+                          tidy_descriptive(., id_station, id_soil, id_cultivar, y, y)}) %>% 
+    compact %>% bind_rows()
+
+
+
+
   #execute_dssat(dir_run[[3]])
   
-  write_csv(bind_rows(outputs_df1, outputs_df2), paste0("outputs/", id, ".csv"))
+  write_csv(bind_rows(outputs_df1, outputs_df2, outputs_df3), paste0("outputs/", id, ".csv"))
   
   #tictoc::toc()
   

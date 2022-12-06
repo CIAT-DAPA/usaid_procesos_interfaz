@@ -196,6 +196,7 @@ write.table(list_Prob_Forec_new, paste0(path_save, "/probabilities.csv"), row.na
 skilmetrics <- c("2AFC", "GROC", "Ignorance", "Pearson", "RPSS", "Spearman")
 metrics <- data.frame()
 ncMetricsFiles <- list()
+ncMetricsFiles <- append(ncMetricsFiles, paste0("NextGen_", PREDICTAND, PREDICTOR, "_", MOS, "_", skill, "_", seas, "_", monf, ".nc"))
 for (skill in skilmetrics) {
     for (seas in tgts) {
         ctlinput <- paste0("NextGen_", PREDICTAND, PREDICTOR, "_", MOS, "_", skill, "_", seas, "_", monf, ".ctl")
@@ -206,9 +207,13 @@ for (skill in skilmetrics) {
     }
 }
 ################# .nc files metrics ##########################
+raster_metrics <- list()
+for (skill in skilmetrics) {
+    
+}
 
 ################### working on writting metrics.csv ##########################
-raster_metrics <- list()
+
 
 ## Organize raster stacks by metric
 for (i in seq(from = 0, to = length(ncMetricsFiles), by = length(tgts))) {

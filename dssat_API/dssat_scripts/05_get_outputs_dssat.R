@@ -93,6 +93,20 @@ extract_summary_aclimate <- function(data, var){
 }
 safe_extract_summary <- purrr::possibly(extract_summary_aclimate, NULL)
 
+#list_st = list of values
+tidy_stress <- function(list_st, names_op) {
+  
+  names_st <- names_op[-c(1:5)]
+  
+  dat_st <- map(list_st, 
+                ~tibble(names = names_st, values = .x) %>% 
+                  pivot_wider(names_from = names, values_from = values)) %>% 
+    bind_rows()
+  
+  return(dat_st)
+    
+}
+
 ## Function to arrange data to final data frame
 tidy_descriptive <- function(data, region, soil, cultivar, start, end){
   
