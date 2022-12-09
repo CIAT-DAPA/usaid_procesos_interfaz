@@ -45,7 +45,7 @@ options(warn = 1)
 
 ### Inputs - Arguments
 
-id = "5ebad2164c06b707e80d6525_6334a7e4dafa3125501ea8b3_6334a6d330243c12cc1fa8c8_3"
+id = "60a1416375d3bc12d0acb5d4_6334a7e4dafa3125501ea8b3_6334a6d330243c12cc1fa8c7_3"
 path = "/forecast/workdir/dssat_API/"
 crop = "wheat"
 #cultivar = c("AW0071","Yecora_Rojo")
@@ -120,7 +120,7 @@ run_crop_dssat <- function(id, path, crop, ndays = 30){
   #En este caso la define automaticamente de la fecha inicial de los escenarios climaticos
   initial_date  <- climate_scenaries[[1]]$date[[1]] + days(15)
   
-  input_dates <- make_sim_dates(initial_date, planting_before = 15, number_days = ndays, freq_sim = sim_freq)
+  input_dates <- make_sim_dates(initial_date, planting_before = 15, number_days = ndays, freq_sim = strtoi(strsplit(id, "_", fixed=T)[[1]][4]))
   sim_number <- length(input_dates$start_date)  # It depends of planting window form forecast
   
   ## Parallel computing 
@@ -216,22 +216,29 @@ run_crop_dssat <- function(id, path, crop, ndays = 30){
                           tidy_descriptive(., id_station, id_soil, id_cultivar, y, y)}) %>% 
     compact %>% bind_rows()
 
-  values <- c(values_w, values_n)
-  names_op <- names(outputs_df1)
 
-  outputs_df3 <- map2(.x = values_list,
+#If crop_conf exists run stress_risk
+if(file.exists(paste0(dir_inputs_setup, "crop_conf.csv"))){
+  stress_risk_all_days <- stress_risk_all(dir_run, dir_inputs_setup)
+  names_op <- names(outputs_df1)
+  outputs_df3 <- map2(.x = stress_risk_all_days,
                       .y = input_dates$planting_date, 
                       function(x,y){
-                        tidy_stress(x, names_op) %>%
+                        tidy_stress(x, names_op) %>% 
+                        mutate(across(.cols = -measure, .fns = as.numeric))%>%
                           tidy_descriptive(., id_station, id_soil, id_cultivar, y, y)}) %>% 
     compact %>% bind_rows()
-
-
-
 
   #execute_dssat(dir_run[[3]])
   
   write_csv(bind_rows(outputs_df1, outputs_df2, outputs_df3), paste0("outputs/", id, ".csv"))
+  message(paste0("Successful Simulation \n Crop: ", 
+                 crop, " - Cultivar: ", cultivar[2], "\n Soil: ", soil, 
+                 "\n Irrigation: ", planting_details$IRR, "\n Fertilization: ", planting_details$FERT ))
+  
+  setwd(wd_p)
+} else {
+  write_csv(bind_rows(outputs_df1, outputs_df2), paste0("outputs/", id, ".csv"))
   
   #tictoc::toc()
   
@@ -239,14 +246,10 @@ run_crop_dssat <- function(id, path, crop, ndays = 30){
                  crop, " - Cultivar: ", cultivar[2], "\n Soil: ", soil, 
                  "\n Irrigation: ", planting_details$IRR, "\n Fertilization: ", planting_details$FERT ))
   
-  #dir_oryza = "oryza_API/"
-  #list.files(dir_oryza, pattern = ".EXE$", full.names = T) 
-  
-  
-#  map(dir_run, ~unlink(.x, recursive=TRUE))
-  
-  
   setwd(wd_p)
+
+}
+
   
 }
 

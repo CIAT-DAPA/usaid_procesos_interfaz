@@ -1,7 +1,24 @@
+
+##Begin Functions
+#Get two trimesters (based on current date)
+get_seasons <- function(){
+
+  seasons <- c(paste0(month(month(Sys.Date()), label=TRUE), "-", month(month(Sys.Date() %m+% months(2)), label=TRUE)),
+  paste0(month(month(Sys.Date() %m+% months(3)), label=TRUE), "-", month(month(Sys.Date() %m+% months(5)), label=TRUE))
+  )
+  return(seasons)
+
+}
+
+get_season_year <-function(seasons, season, monthsNumber){
+  if(monthsNumber[season] != )
+
+}
+
 download_insivumeh_probabilities_scenaries <- function(month, scenarie, file_name){
 
-  #urls <- paste("https://data.chc.ucsb.edu/products/CHIRP/daily/",year_to,"/chirp.",fechas,".tif",sep="") Esta ruta con https pone problemas en el servidor de linux
-  urls <- paste0("http://dl.insivumeh.gob.gt/SOURCES/.NextGen/.CPT/.Estacional/.CHIRPS/.Guatemala/.REALTIME/.NextGen/.Forecast/.Probabilities-Categories/C/(",scenarie,")/VALUE/S/751.0/VALUE/X/-92.65/-88.05/RANGEEDGES/Y/13.60167/17.90167/RANGEEDGES/%5BX/Y/%5D/palettecolor.tiff?filename=", file_name, ".tiff")
+  #http://dl.insivumeh.gob.gt/SOURCES/.NextGen/.CPT/.Estacional/.CHIRPS/.Guatemala/.REALTIME/.NextGen/.Forecast/.Probabilities-Categories/C/(Sobre)/VALUE/S/755.0/VALUE/X/-92.41666/-88.11666/RANGEEDGES/Y/13.57528/17.87528/RANGEEDGES/%5BX/Y/%5D/data.tiff?filename=dataSobre20221201T0000.tiff
+  urls <- paste0("http://dl.insivumeh.gob.gt/SOURCES/.NextGen/.CPT/.Estacional/.CHIRPS/.Guatemala/.REALTIME/.NextGen/.Forecast/.Probabilities-Categories/C/(",scenarie,")/VALUE/S/755.0/VALUE/X/-92.41666/-88.11666/RANGEEDGES/Y/13.57528/17.87528/RANGEEDGES/%5BX/Y/%5D/data.tiff?filename=", file_name, ".tiff")
   file <- basename(urls)
   path_guatemala_rasters_files <- paste0("/forecast/workdir/GUATEMALA/outputs/prediccionClimatica/rasterCategories","/",file_name, ".tif")
     download.file(urls, path_guatemala_rasters_files, mode = "w")
@@ -12,21 +29,31 @@ download_insivumeh_probabilities_scenaries <- function(month, scenarie, file_nam
 
 }
 
-for (i in 1:length(nextGenFileName_prob)) {
+##End functions
+
+
+
+
+####Begin probabilities.csv process
+#Reading rasters downloaded
+stacksBySeason <- list()
+monthsNumber <- list("Jan-Mar" = 02, "Feb-Apr" = 03, "Mar-May" = 04, "Apr-Jun" = 05, "May-Jul" = 06, "Jun-Aug" = 07, "Jul-Sep" = 08, "Aug-Oct" = 09, "Sep-Nov" = 10, "Oct-Dec" = 11, "Nov-Jan" = 12, "Dec-Feb" = 01)
+for (i in 1:2) {
+
     # It divides by 100 in orden to have a 0-1 data and not a 1-100
-    dataNextGenAbove <- raster(paste0("/forecast/workdir/GUATEMALA/outputs/prediccionClimatica/rasterCategories","/","above", ".tif")) / 250
-    dataNextGenBelow <- raster(paste0("/forecast/workdir/GUATEMALA/outputs/prediccionClimatica/rasterCategories","/","below", ".tif"))
-    dataNextGenNormal <- raster(paste0("/forecast/workdir/GUATEMALA/outputs/prediccionClimatica/rasterCategories","/","normal", ".tif"))
+    dataNextGenAbove <- raster(paste0("/forecast/workdir/GUATEMALA/outputs/prediccionClimatica/rasterCategories","/","above",i, ".tiff")) / 100
+    dataNextGenBelow <- raster(paste0("/forecast/workdir/GUATEMALA/outputs/prediccionClimatica/rasterCategories","/","below",i, ".tiff")) / 100
+    dataNextGenNormal <- raster(paste0("/forecast/workdir/GUATEMALA/outputs/prediccionClimatica/rasterCategories","/","normal",i, ".tiff")) / 100
 
     # Stack structure in order to extract to create .csv files
     stacksBySeason[[i]] <- stack(dataNextGenBelow, dataNextGenNormal, dataNextGenAbove)
 }
 
-
-# Writing probabilities.csv process
 stations_coords <- read.table(paste0(dir_inputs_nextgen, "stations_coords.csv"), head = TRUE, sep = ",")
 coords <- data.frame(stations_coords$lon, stations_coords$lat)
 names(coords)[1:2] <- c("lon", "lat")
+fyr <- year(Sys.Date())
+tgts <- get_seasons()
 
 list_Prob_Forec <- list()
 
@@ -47,5 +74,7 @@ list_Prob_Forec_new <- as.data.frame(list_Prob_Forec[[1]])
 for (i in 2:length(list_Prob_Forec)) {
     list_Prob_Forec_new <- rbind(list_Prob_Forec_new, as.data.frame(list_Prob_Forec[[i]]))
 }
+
 # Writting probabilities csv
 write.table(list_Prob_Forec_new, paste0(path_save, "/probabilities.csv"), row.names = FALSE, sep = ",")
+####End probabilities.csv process

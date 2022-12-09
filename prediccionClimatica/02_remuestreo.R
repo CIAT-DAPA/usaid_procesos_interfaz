@@ -240,34 +240,30 @@ day_sample <- function(Season, cat, data, Intial_year, last_year){
 }
 
 # (F.to.resampling). This function return a tibble with daily sceneries min and max. 
-Find_Summary <- function(daily_by_season){
+Find_Summary=function(daily_by_season){
   # Only the monthly grouping is done.
-  monthly <- daily_by_season %>% 
-    group_by(year) %>% 
-    summarise(monthly = sum(prec)) 
+  monthly <- daily_by_season %>%
+    group_by(year) %>%
+    summarise(monthly = sum(prec))
   
   # the minimum and maximum precitation is extracted.
-  Min_Max <-  monthly %>% 
-    arrange(monthly) %>% 
-    slice(c(1,n())) %>% 
-    mutate(Type = c('min', 'max')) %>% 
+  Min_Max <-  monthly %>%
+    arrange(monthly) %>%
+    slice(c(1,n())) %>%
+    mutate(Type = c('min', 'max')) %>%
     dplyr::select(-monthly)
   
-  Lenght <-  daily_by_season %>% 
-    filter(year %in% Min_Max$year) %>% 
-    count(id) %>% 
-    filter(row_number() == 1) %>% 
-    dplyr::select(n) %>% 
-    as.numeric
   
-  Indicators <-  daily_by_season %>% 
-    filter(year %in% Min_Max$year) %>% 
-    dplyr::select(-id) %>% 
-    unique %>%
-    mutate(Type = rep(Min_Max$Type, each = Lenght )) %>% 
+  Indicators <-  daily_by_season %>%
+    filter(year %in% Min_Max$year) %>%
+    dplyr::select(-id) %>%
+    unique %>% left_join(Min_Max)%>%
     nest(-Type)
-  
-  return(Indicators)}
+
+
+
+ return(Indicators)
+}
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=

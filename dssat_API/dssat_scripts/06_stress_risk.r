@@ -65,7 +65,7 @@ stress_risk = function(folder,type,limits){
   
   answer = lapply(1:nrow(limits), function(j) {
     
-    measure = paste0(limits[j,c("name")],"_",type)
+    measure = paste0("st_",limits[j,c("name")],"_",type)
     
     for(i in 1:99){
       a<-subset(df_plantgro,df_plantgro$GSTD > limits[j,c("min")] & df_plantgro$GSTD < limits[j,c("max")])
@@ -81,19 +81,19 @@ stress_risk = function(folder,type,limits){
       nstress[,i]<-b
     }
     output = c(measure,
-                mean(nstress),
-                median(nstress),
-                min(nstress),
-                max(nstress),
+                mean(nstress,na.rm=T),
+                median(nstress,na.rm=T),
+                min(nstress,na.rm=T),
+                max(nstress,na.rm=T),
                 quantile(nstress, 0.25,na.rm=T),
                 quantile(nstress, 0.50,na.rm=T),
                 quantile(nstress, 0.75,na.rm=T),
                 0,
                 0,
-                sd(nstress),
+                sd(nstress,na.rm=T),
                 quantile(nstress, 0.05,na.rm=T),
                 quantile(nstress, 0.95,na.rm=T),
-                sd(nstress) / mean(nstress) * 100) 
+                sd(nstress,na.rm=T) / mean(nstress,na.rm=T) * 100) 
     return(output)
   })
   return(answer)
@@ -104,7 +104,7 @@ stress_risk_all <- function(data_files_all, dir_inputs_setup){
   crop_conf = read.csv(paste0(dir_inputs_setup,"crop_conf.csv"), header = T)
   stresses_list <- list()
 
-  data <- lapply(1:length(data_files_all), function(i) {
+  data <- mclapply(1:length(data_files_all), function(i) {
     data_files <- paste0(data_files_all[i])
 
     values_w <- stress_risk(data_files,"w",crop_conf)
@@ -112,7 +112,7 @@ stress_risk_all <- function(data_files_all, dir_inputs_setup){
 
     stresses_list <- append(stresses_list, c(values_w, values_n))
   
-  })
+  }, mc.cores = no_cores, mc.preschedule = F)
   return(data)
 
 }
