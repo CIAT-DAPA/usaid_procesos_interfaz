@@ -96,7 +96,7 @@ setwd(dir_pycpt_scripts)
 ru_forecast_type <- "seasonal"
 # Running PyCPT
 system(paste(
-    "python run_main.py", ru_forecast_type, region, spatial_predictors, spatial_predictands,
+    "ipython run_main.py", ru_forecast_type, region, spatial_predictors, spatial_predictands,
     models, obs, station, mos, predictand, predictor, mons, tgtii,
     tgtff, tini, tend, xmodes_min, xmodes_max, ymodes_min,
     ymodes_max, ccamodes_min, ccamodes_max, force_download,

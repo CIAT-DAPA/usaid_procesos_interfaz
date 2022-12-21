@@ -540,6 +540,16 @@ save_areas=function(ras,cor,dec,name,ext){
   
 }
 
+get_season_years <- function(month, year){
+  if(month==9 | month==10 | month==11) {
+    return(c(as.numeric(year), as.numeric(year)+1))
+  } else if (month==12) {
+    return(c(as.numeric(year)+1, as.numeric(year)+1))
+  } else {
+    return(c(as.numeric(year), as.numeric(year)))
+  }
+}
+
 ########## Run ##############
 start.time <- Sys.time()
 options(timeout=180)
@@ -555,8 +565,8 @@ main_dir=dirPrediccionInputs
 month=as.numeric(format(Sys.Date(),"%m"))
 year=format(Sys.Date(),"%Y")
 season=month+c(1,4)
-y_1=format(seq(Sys.Date(), by = "month", length = 2) ,"%Y")
-years=ifelse(season>12,as.numeric(y_1)+1,y_1)
+years=format(seq(Sys.Date()+30, by = "month", length = 6) ,"%Y")[c(1,4)]
+#years=get_season_years(month, year)
 season[season>12]=season[season>12]-12
 path_months_l=lapply(paste0(main_dir,"run_CPT","/",list.files(path_dpto)),function(x)paste0(x,"/",month.abb[season]))
 path_months=unlist(path_months_l)

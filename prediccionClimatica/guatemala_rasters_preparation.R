@@ -10,9 +10,14 @@ get_seasons <- function(){
 
 }
 
-get_season_year <-function(seasons, season, monthsNumber){
-  if(monthsNumber[season] != )
-
+get_season_years <- function(month, year){
+  if(month==9 | month==10 | month==11) {
+    return(c(as.numeric(year), as.numeric(year)+1))
+  } else if (month==12) {
+    return(c(as.numeric(year)+1, as.numeric(year)+1))
+  } else {
+    return(c(as.numeric(year), as.numeric(year)))
+  }
 }
 
 download_insivumeh_probabilities_scenaries <- function(month, scenarie, file_name){
@@ -54,6 +59,7 @@ coords <- data.frame(stations_coords$lon, stations_coords$lat)
 names(coords)[1:2] <- c("lon", "lat")
 fyr <- year(Sys.Date())
 tgts <- get_seasons()
+years <- get_season_years(month(Sys.Date()), fyr)
 
 list_Prob_Forec <- list()
 

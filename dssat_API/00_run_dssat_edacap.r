@@ -108,8 +108,6 @@ run_crop_dssat <- function(id, path, crop, ndays = 30){
   soil <- location$id_soil %>% str_sub(., 2,-1)
   cultivar <- c(location$var_cul, location$cul_name)
   
-  
-  
   climate_scenaries <- load_all_climate(dir_inputs_climate)[-100]
   #santiago_reeplace_function(path_plating_window, climate_scenaries, path_resampling_observed, id_station)
   

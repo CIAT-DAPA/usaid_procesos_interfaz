@@ -8,7 +8,7 @@ replaceNameCsv <- function(prefix) {
     "T.Min"="t_min")  
 }
 
-createScenarios <- function(data_stations, output_path,format_chirps_data) {
+createScenarios <- function(data_stations, output_path) {
   coordinates = data_stations
   range <- 1:nrow(coordinates)
   filenames = c("Prec","T.Min","T.Max","S.Rad")
@@ -24,20 +24,21 @@ createScenarios <- function(data_stations, output_path,format_chirps_data) {
     for (filename in filenames) {
       
       dataset = NULL
-      if(filename != "Prec"){
-        output_path_get = paste(output_path,paste(filename,".data.observed.csv",sep="" ),sep="")
-        dataset = read.csv(file =output_path_get,header=T, row.names=1)
-        dataset$day = format(strptime(as.character(row.names(split_dataset)), "%m/%d/%Y"),"%d" )
-      }else{
-        dataset = format_chirps_data
-      }
-      
+  
+      output_path_get = paste(output_path,paste(filename,".data.observed.csv",sep="" ),sep="")
+      dataset = read.csv(file =output_path_get,header=T, row.names=1)
       
       split_dataset = dataset[1:rows,]
       if(filename == "Prec"){
-        new_csv$day = format(strptime(as.character(row.names(split_dataset)), "%m/%d/%Y"),"%d" )
-        new_csv$month = format(strptime(as.character(row.names(split_dataset)), "%m/%d/%Y"),"%m" )
-        new_csv$year = format(strptime(as.character(row.names(split_dataset)), "%m/%d/%Y"),"%Y" )
+        if(!is.na(format(strptime(as.character(row.names(split_dataset[1,][1])), "%m/%d/%Y"),"%d" ))){
+          new_csv$day = as.numeric(format(strptime(as.character(row.names(split_dataset)), "%m/%d/%Y"),"%d" ))
+          new_csv$month = as.numeric(format(strptime(as.character(row.names(split_dataset)), "%m/%d/%Y"),"%m" ))
+          new_csv$year = as.numeric(format(strptime(as.character(row.names(split_dataset)), "%m/%d/%Y"),"%Y" ))
+        }else{
+          new_csv$day = as.numeric(format(strptime(as.character(row.names(split_dataset)), "%Y-%m-%d"),"%d" ))
+          new_csv$month = as.numeric(format(strptime(as.character(row.names(split_dataset)), "%Y-%m-%d"),"%m" ))
+          new_csv$year = as.numeric(format(strptime(as.character(row.names(split_dataset)), "%Y-%m-%d"),"%Y" ))
+        }
       }
       new_csv[replaceNameCsv(filename)] = cbind(split_dataset[station])
       
@@ -52,7 +53,4 @@ createScenarios <- function(data_stations, output_path,format_chirps_data) {
     cat("\n")
   }
 }
-
-
-
 

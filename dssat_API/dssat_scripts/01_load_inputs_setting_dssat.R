@@ -139,11 +139,12 @@ create_fert_dssat <- function(urea, dap, apps_dap = c(1, 40), urea_split = c(1/3
   #dap = Days after Planting
   #"dap" = Diammonium phosphate (DAP)  
   
+  dap_f <- dap
   
-  base_tb <- bind_rows(tibble(dap = apps_dap, fert = "dap", value = dap * dap_split) %>% 
+  base_tb <- bind_rows(tibble(dap = apps_dap, fert = "dap", value = dap_f * dap_split) %>%
                          dplyr::filter(value > 0),
-                       tibble(dap = apps_dap, fert= "urea", value = urea * urea_split) %>% 
-                         dplyr::filter(value > 0)) 
+                       tibble(dap = apps_dap, fert= "urea", value = urea * urea_split) %>%
+                         dplyr::filter(value > 0))
   
   
 
@@ -235,36 +236,43 @@ create_fert_dssat <- function(urea, dap, apps_dap = c(1, 40), urea_split = c(1/3
 #c(FALSE , "auto", "fertapp")
 
 get_fertilizer <- function(crop, planting_details, dir_inputs_setup, lat, long){
-  
-  fert_option <- planting_details$FERT
-    
-  
-  
-  if(fert_option == "NO"){
-    NULL
-  } else if(fert_option == "YES"){
-    
-    urea <- dplyr::select(planting_details, contains("urea")) %>% 
-      pull(1) %>% as.numeric()
-    
-    dap <- dplyr::select(planting_details, contains("dap")) %>% 
-      pull(1) %>% as.numeric()
-    
-    return(create_fert_dssat(urea, dap))
+
+  tryCatch(
+    {
+      fert_option <- planting_details$FERT
+
+      if(fert_option == "NO"){
+        NULL
+      } else if(fert_option == "YES"){
+        
+        urea <- dplyr::select(planting_details, contains("urea")) %>% 
+          pull(1) %>% as.numeric()
+        
+        dap <- dplyr::select(planting_details, contains("dap")) %>% 
+          pull(1) %>% as.numeric()
+        
+        return(create_fert_dssat(urea, dap))
+          
+        
+        } else if(fert_option == "fertapp"){
+        
+        downloaded_tif <- get_geoserver_data(crop, "fertilizer", country = "et", format = "geotiff", outpath = dir_inputs_setup)
+        
+        fertApp_data <- extract_raster_geos(downloaded_tif, lat, long) %>%
+          pivot_wider(names_from = file, values_from = V1) %>%
+          set_names(c("nps", "urea"))
+        
+        return(convert_FertApp_dssat(fertApp_data$nps, fertApp_data$urea))
+        
+      } else {message("No detected data")}
       
-    
-    } else if(fert_option == "fertapp"){
-    
-    downloaded_tif <- get_geoserver_data(crop, "fertilizer", country = "et", format = "geotiff", outpath = dir_inputs_setup)
-    
-    fertApp_data <- extract_raster_geos(downloaded_tif, lat, long) %>%
-      pivot_wider(names_from = file, values_from = V1) %>%
-      set_names(c("nps", "urea"))
-    
-    return(convert_FertApp_dssat(fertApp_data$nps, fertApp_data$urea))
-    
-  } else {message("No detected data")}
-  
+    },
+    error = function(e) {
+      message("No detected data")
+      NULL
+      
+    }
+  )
   
 }
 

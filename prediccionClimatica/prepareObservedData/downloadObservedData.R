@@ -8,15 +8,14 @@ library("remotes")
 install_github("agrdatasci/ag5Tools", build_vignettes = TRUE, build = FALSE)
 library(ag5Tools)
 
-
-#install_github("ropensci/chirps", build_vignettes = TRUE, build = FALSE)
-install.packages("chirps")
-library("chirps")
-
-setwd(dir_prepare_observed_data)
-source("getDataFromAgera5.R")
+setwd("D:/CIAT/plantingWindow")
+source("agera5.R")
 source("createScenarios.R")
 
+# daily_path = "D:/CIAT/plantingWindow/dailyData" 
+# output_path = "D:/CIAT/plantingWindow/resampling/" 
+
+# date_now = "12/12/2022"
 
 moveFiles <- function(path,year){
   list_of_files = list.files(path = paste(path,year,sep=""), pattern="^.*nc$", all.files=TRUE, full.names=TRUE)
@@ -43,7 +42,7 @@ extract_data  <- function(variable, month, year, output_path) {
                                   path = path_to_export
     )
     
-  }else if(variable == "S.Rad"){
+  }else{
     test = ag5Tools::ag5_download(variable = replaceName(variable),
                                   day = "all",
                                   month = month,
@@ -56,50 +55,6 @@ extract_data  <- function(variable, month, year, output_path) {
   
 }
 
-getPresipitationData <- function(data_stations, dateStart, dateEnd) {
-  range <- 1:nrow(data_stations)
-  vec_lat <- c()
-  vec_long <- c()
-  
-  for (i in range) {
-    latd <- data_stations[[2]][i]
-    long <- data_stations[[1]][i]
-    vec_lat <- c(vec_lat,latd)
-    vec_long <- c(vec_long,long)
-    
-  }
-  lonlat <- data.frame(lon = vec_long, lat = vec_lat)
-  dates <- c(as.character(dateStart), as.character(dateEnd)) # CHANGE THIS DATES
-  data <- get_chirps(lonlat, dates, server = "ClimateSERV" )
-  
-  data
-}
-
-createFinalFileFromChirps <- function(chirps_data,data_stations){
-  range <- 1:nrow(data_stations)
-  frame_rows = chirps_data[chirps_data$id == 1, ]
-  dataset = data.frame(matrix(NA, nrow =nrow(frame_rows) , ncol = nrow(data_stations)))
-  
-  
-  for (row in range) {
-    new_data = chirps_data[chirps_data$id == row, ]
-    if(row == 1){
-      rownames(dataset) = format(strptime(as.character(new_data$date), "%Y-%m-%d"),"%m/%d/%Y" )
-    }
-    dataset[row] = new_data$chirps
-  }
-  array = c()
-  
-  for (coor in 1:nrow(data_stations)) {
-    array = c(array,gsub(" ", "", data_stations [coor,3]))
-  }
-  
-  names(dataset)[1:nrow(data_stations)] = array
-  
-  dataset
-  
-}
-
 
 
 downloadObservedData <- function(daily_path, date_now, output_path) {
@@ -107,7 +62,6 @@ downloadObservedData <- function(daily_path, date_now, output_path) {
   # START Extract Coordinates and station Ids
   
   variables_to_extract = c("S.Rad","T.Max","T.Min","Prec")
-  variables_to_extract_agera5 = c("S.Rad","T.Max","T.Min")
   regex = "^.*_coords.csv$" 
   files = list.files(path = daily_path, pattern=regex, all.files=TRUE, full.names=TRUE)
   data_stations = data.frame(Lon=character(),Lat=character(),station=character())
@@ -153,7 +107,7 @@ downloadObservedData <- function(daily_path, date_now, output_path) {
   
   count = 1
   for (year in year_to_download) {
-    for (variable in variables_to_extract_agera5) {
+    for (variable in variables_to_extract) {
       if(count != 1){
         extract_data(variable,month_to_download_temp,year,output_path)
       }else{
@@ -189,9 +143,9 @@ downloadObservedData <- function(daily_path, date_now, output_path) {
   
   # END Format date to get dateStart and dateEnd
   
-# START Extract data from nc files
+  # START Extract data from nc files
   
-  for (variable in variables_to_extract_agera5) {
+  for (variable in variables_to_extract) {
     tryCatch(
       {
         extractDataAgera5(variable, dateStart, dateEnd,output_path,data_stations,paste(output_path,replaceName(variable),sep=""))
@@ -206,21 +160,14 @@ downloadObservedData <- function(daily_path, date_now, output_path) {
   
   # END Extract data from nc files
   
-  # START Extract data from chirps
-  
-  chirps_data = getPresipitationData(data_stations, dateStart, dateEnd)
-  format_chirps_data = createFinalFileFromChirps(chirps_data,data_stations)
-  
-  # END Extract data from chirps
-  
   
   # START Create files with format to create scenarios
   
-  createScenarios(data_stations, output_path,format_chirps_data)
+  createScenarios(data_stations, output_path)
   
   # END Create files with format to create scenarios
   
-  for (var_folder in variables_to_extract_agera5) {
+  for (var_folder in variables_to_extract) {
     if(var_folder != "T.Min"){
       unlink(paste(output_path,replaceName(var_folder),sep=""),recursive=TRUE)
     }
@@ -232,4 +179,4 @@ downloadObservedData <- function(daily_path, date_now, output_path) {
 }
 
 
-#downloadObservedData(daily_path,date_now,output_path)
+downloadObservedData(daily_path,date_now,output_path)

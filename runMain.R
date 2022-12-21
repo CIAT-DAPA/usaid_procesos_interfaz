@@ -4,7 +4,7 @@
 # Country list with country name as key and objectid as value
 no_cores <- as.numeric(Sys.getenv("N_CORES"))
 countries_list <- list("COLOMBIA", "ETHIOPIA", "ANGOLA")
-countries_ids <- list("COLOMBIA" = "61e59d829d5d2486e18d2ea8", "ETHIOPIA" = "61e59d829d5d2486e18d2ea9", "ANGOLA" = "62a739250dd05810f0e2938d")
+countries_ids <- list("COLOMBIA" = "61e59d829d5d2486e18d2ea8", "ETHIOPIA" = "61e59d829d5d2486e18d2ea9", "ANGOLA" = "62a739250dd05810f0e2938d", "GUATEMALA"="636c0813e57f2e6ac61394e6")
 # =====================================================================
 
 # =====================================================================
@@ -222,7 +222,7 @@ run_oryza_by_setup <- function() {
 ################################### Working on wheat (this is not the final version of this function)
 runDssatModule <- function(crop){
 
-  dirCurrentCropInputs <- paste0(dirInputs, "cultivos/",crop, "/", sep = "", collapse = NULL)
+  dirCurrentCropInputs <- paste0(dirInputs, "cultivos/",maize_name_by_country, "/", sep = "", collapse = NULL)
 
   ## Wheat setups
   setups <- list.dirs(dirCurrentCropInputs, full.names = T)
@@ -238,6 +238,7 @@ runDssatModule <- function(crop){
       source("dssat_scripts/03_create_xfile_dssat.R")
       source("dssat_scripts/04_run_dssat_model.R")
       source("dssat_scripts/05_get_outputs_dssat.R")
+      source("dssat_scripts/06_stress_risk.R")
 
     },
     error = function(e) {
@@ -323,7 +324,7 @@ probabilities_list <- list()
 
 for (c in countries_list) {
   currentCountry <- c
-  country_iso <- if (currentCountry == "COLOMBIA") "co" else "et"
+  country_iso <- ifelse(currentCountry == "COLOMBIA", "co", ifelse(currentCountry == "ETHIOPIA", "et", ifelse(currentCountry == "ANGOLA", "ao", "gt")))
   # Checks country for avoid conlicts
   maize_name_by_country <- if (currentCountry == "COLOMBIA") "maiz" else "maize"
 
@@ -442,9 +443,11 @@ for (c in countries_list) {
   try(system(dotnet_cmd[7], intern = TRUE, ignore.stderr = TRUE))
   try(system(dotnet_cmd[8], intern = TRUE, ignore.stderr = TRUE))
 
-  #Downloading observed data for prepare climate scenaries
-  source(paste0(dir_prepare_observed_data, "downloadObservedData.R"))
-  downloadObservedData(dir_stations, format(strptime(as.character(Sys.Date()), "%Y-%m-%d"),"%d/%m/%Y" ), path_output_observed_data)
+  #Downloading observed data for prepare climate scenaries in crops setups
+   if (currentCountry == "COLOMBIA"|| currentCountry == "ETHIOPIA") {
+    source(paste0(dir_prepare_observed_data, "downloadObservedData.R"))
+    downloadObservedData(dir_stations, format(strptime(as.character(Sys.Date()), "%Y-%m-%d"),"%d/%m/%Y" ), path_output_observed_data)
+   }
 
   # Prediction process
   if (currentCountry == "COLOMBIA"|| currentCountry == "ANGOLA") {
