@@ -540,16 +540,6 @@ save_areas=function(ras,cor,dec,name,ext){
   
 }
 
-get_season_years <- function(month, year){
-  if(month==9 | month==10 | month==11) {
-    return(c(as.numeric(year), as.numeric(year)+1))
-  } else if (month==12) {
-    return(c(as.numeric(year)+1, as.numeric(year)+1))
-  } else {
-    return(c(as.numeric(year), as.numeric(year)))
-  }
-}
-
 ########## Run ##############
 start.time <- Sys.time()
 options(timeout=180)

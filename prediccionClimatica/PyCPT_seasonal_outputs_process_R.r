@@ -96,7 +96,7 @@ setwd(dir_pycpt_scripts)
 ru_forecast_type <- "seasonal"
 # Running PyCPT
 system(paste(
-    "ipython run_main.py", ru_forecast_type, region, spatial_predictors, spatial_predictands,
+    "python run_main.py", ru_forecast_type, region, spatial_predictors, spatial_predictands,
     models, obs, station, mos, predictand, predictor, mons, tgtii,
     tgtff, tini, tend, xmodes_min, xmodes_max, ymodes_min,
     ymodes_max, ccamodes_min, ccamodes_max, force_download,
@@ -183,6 +183,7 @@ for (i in 2:length(list_Prob_Forec)) {
 # Writting probabilities csv
 write.table(list_Prob_Forec_new, paste0(path_save, "/probabilities.csv"), row.names = FALSE, sep = ",")
 
+
 ################################ Working on metrics.csv ####################################
 
 ################# .nc files metrics ##########################
@@ -196,7 +197,6 @@ write.table(list_Prob_Forec_new, paste0(path_save, "/probabilities.csv"), row.na
 skilmetrics <- c("2AFC", "GROC", "Ignorance", "Pearson", "RPSS", "Spearman")
 metrics <- data.frame()
 ncMetricsFiles <- list()
-ncMetricsFiles <- append(ncMetricsFiles, paste0("NextGen_", PREDICTAND, PREDICTOR, "_", MOS, "_", skill, "_", seas, "_", monf, ".nc"))
 for (skill in skilmetrics) {
     for (seas in tgts) {
         ctlinput <- paste0("NextGen_", PREDICTAND, PREDICTOR, "_", MOS, "_", skill, "_", seas, "_", monf, ".ctl")
@@ -207,13 +207,9 @@ for (skill in skilmetrics) {
     }
 }
 ################# .nc files metrics ##########################
-raster_metrics <- list()
-for (skill in skilmetrics) {
-    
-}
 
 ################### working on writting metrics.csv ##########################
-
+raster_metrics <- list()
 
 ## Organize raster stacks by metric
 for (i in seq(from = 0, to = length(ncMetricsFiles), by = length(tgts))) {

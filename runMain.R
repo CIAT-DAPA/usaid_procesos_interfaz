@@ -221,8 +221,16 @@ run_oryza_by_setup <- function() {
 
 ################################### Working on wheat (this is not the final version of this function)
 runDssatModule <- function(crop){
+  cul_file <- ''
+  if(crop == "maize"){
+    crop <- maize_name_by_country
+    cul_file <- 'MZCER048'
+  } else if(crop=="wheat"){
+    cul_file <- 'WHCER048'
+  }
 
-  dirCurrentCropInputs <- paste0(dirInputs, "cultivos/",maize_name_by_country, "/", sep = "", collapse = NULL)
+
+  dirCurrentCropInputs <- paste0(dirInputs, "cultivos/",crop, "/", sep = "", collapse = NULL)
 
   ## Wheat setups
   setups <- list.dirs(dirCurrentCropInputs, full.names = T)
@@ -231,7 +239,7 @@ runDssatModule <- function(crop){
   
   tryCatch(
     {
-      source("00_run_dssat_aclimate.R")
+      source("00_run_dssat_edacap.r")
       source("dssat_scripts/01_load_inputs_setting_dssat.R")
       source("dssat_scripts/02_climate_functions_dssat.R")
       source("dssat_scripts/03_connect_georserver.R")
@@ -258,20 +266,28 @@ runDssatModule <- function(crop){
     current_dir_inputs_climate <- paste0(path_output, "/", station, "/")
     #current_setup_dir <- paste0(dirCultivosInputs, if (currentCountry == "COLOMBIA") "maiz" else "maize", "/", id, "/")
     current_setup_dir <- paste0(dirCurrentCropInputs, id, "/")
+    if(currentCountry=="COLOMBIA"){
+
+      # skip_cul <- read_lines(paste0(setups[i], "/", cul_file, ".CUL")) %>% str_detect("@VAR#") %>% which() +2
+      # culFile <- read_lines(paste0(setups[i], "/", cul_file, ".CUL")))[skip_cul[1]]
+      # cultivar <- strsplit(culFile, " ", fixed=T)
+      # cultivar <- c(cultivar[[1]][1], cultivar[[1]][2])
+      
+      # skip_soil <- read_lines(paste0(setups[i], "/SOIL.SOL")) %>% str_detect("@SITE") %>% which() -1
+      # soilFile <- read_lines(paste0(setups[i], "/SOIL.SOL"))[skip_soil[1]]
+      # soil <- strsplit(soilFile, " ", fixed=T)
+      # soil <- substring(soil[[1]][1], 2)
+
+      # #run_crop_dssat(id, crop, current_dir_inputs_climate, current_setup_dir, soil, cultivar)
+      # tictoc::toc()
+
+    } else {
+
+      run_crop_dssat(id, crop, current_dir_inputs_climate, current_setup_dir)
+      tictoc::toc()
+    }
     
-    # skip_cul <- read_lines(paste0(setups[i], "/MZCER048.CUL")) %>% str_detect("@VAR#") %>% which() +2
-    # culFile <- read_lines(paste0(setups[i], "/MZCER048.CUL"))[skip_cul[1]]
-    # cultivar <- strsplit(culFile, " ", fixed=T)
-    # cultivar <- c(cultivar[[1]][1], cultivar[[1]][2])
     
-    # skip_soil <- read_lines(paste0(setups[i], "/SOIL.SOL")) %>% str_detect("@SITE") %>% which() -1
-    # soilFile <- read_lines(paste0(setups[i], "/SOIL.SOL"))[skip_soil[1]]
-    # soil <- strsplit(soilFile, " ", fixed=T)
-    # soil <- substring(soil[[1]][1], 2)
-    
-    
-    run_crop_dssat(id, dir_dssat_api, crop, current_dir_inputs_climate, current_setup_dir, no_cores)
-    tictoc::toc()
   
   })
 
@@ -444,13 +460,13 @@ for (c in countries_list) {
   try(system(dotnet_cmd[8], intern = TRUE, ignore.stderr = TRUE))
 
   #Downloading observed data for prepare climate scenaries in crops setups
-   if (currentCountry == "COLOMBIA"|| currentCountry == "ETHIOPIA") {
-    source(paste0(dir_prepare_observed_data, "downloadObservedData.R"))
-    downloadObservedData(dir_stations, format(strptime(as.character(Sys.Date()), "%Y-%m-%d"),"%d/%m/%Y" ), path_output_observed_data)
-   }
+  #  if (currentCountry == "COLOMBIA" || currentCountry == "ETHIOPIA") {
+  #   source(paste0(dir_prepare_observed_data, "downloadObservedData.R"))
+  #   downloadObservedData(dir_stations, format(strptime(as.character(Sys.Date()), "%Y-%m-%d"),"%d/%m/%Y" ), path_output_observed_data)
+  #  }
 
   # Prediction process
-  if (currentCountry == "COLOMBIA"|| currentCountry == "ANGOLA") {
+  if (currentCountry == "COLOMBIA" || currentCountry == "ANGOLA") {
     Sys.setenv(CPT_BIN_DIR = "/forecast/models/CPT/15.5.10/bin/")
     source(paste(dirForecast, "01_prediccion.R", sep = "", collapse = NULL))
   } else {
@@ -465,16 +481,16 @@ for (c in countries_list) {
   # Dowloading and final joining data process
   runJoinFinalData <- source(paste(dirForecast, "03_join_wth_final.R", sep = "", collapse = NULL))
 
-  ## Maize crop model process
-  setups <- list.dirs(dirModeloMaizInputs, full.names = T)
-  # Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
-  # setups <- if(no_cores > 1) setups[-1] else setups
-  runCrop("maiz", setups)
-
+  #new dssat module
   runDssatModule("maize")
 
   ## Rice crop model process
   if (currentCountry == "COLOMBIA") {
+     ## Maize crop model process
+    setups <- list.dirs(dirModeloMaizInputs, full.names = T)
+    # Deletes the first empty directory when running in parallel. This due to some errors that occur when running in parallel and not sequential
+    # setups <- if(no_cores > 1) setups[-1] else setups
+    runCrop("maiz", setups)
     setups <- list.dirs(dirModeloArrozInputs, full.names = T)
     # Preparing inputs files
     if (prepare_setups_api_oryza(setups)) {

@@ -8,8 +8,8 @@ library("remotes")
 install_github("agrdatasci/ag5Tools", build_vignettes = TRUE, build = FALSE)
 library(ag5Tools)
 
-setwd("D:/CIAT/plantingWindow")
-source("agera5.R")
+setwd(dir_prepare_observed_data)
+source("getDataFromAgera5.R")
 source("createScenarios.R")
 
 # daily_path = "D:/CIAT/plantingWindow/dailyData" 
@@ -179,4 +179,4 @@ downloadObservedData <- function(daily_path, date_now, output_path) {
 }
 
 
-downloadObservedData(daily_path,date_now,output_path)
+#downloadObservedData(daily_path,date_now,output_path)

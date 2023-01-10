@@ -45,18 +45,19 @@ options(warn = 1)
 
 ### Inputs - Arguments
 
-id = "60a1416375d3bc12d0acb5d4_6334a7e4dafa3125501ea8b3_6334a6d330243c12cc1fa8c7_3"
-path = "/forecast/workdir/dssat_API/"
+id = "5e91e1c214daf81260ebba59_60a16e2826e98d13b8dbb878_6334a6d230243c12cc1fa8c3_3"
+#path = "/forecast/workdir/dssat_API/"
 crop = "wheat"
 #cultivar = c("AW0071","Yecora_Rojo")
 #soil = "IB00000001"
 # Source dssat-aclimate functions
-setwd(path)
 walk(list.files("dssat_scripts/", pattern = ".R$", full.names = T), ~ source(.x))
 
 
-run_crop_dssat <- function(id, path, crop, ndays = 30){
+run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_dir, ndays = 30, soil=NULL, cultivar=NULL){
   
+  path = "/forecast/workdir/dssat_API/"
+  setwd(path)
   wd_p <- paste0(getwd(), "/")
   if(str_detect(wd_p, pattern = path, negate = T)) {setwd(path)}
   
@@ -89,13 +90,14 @@ run_crop_dssat <- function(id, path, crop, ndays = 30){
   
   # Folders
 #  dir_scripts <- "dssat_scripts/"
-  dir_outputs <- "outputs/" ; dir.create(dir_outputs)
-  
+  #dir_outputs <- "outputs/" ; dir.create(dir_outputs)
+  dir_outputs <- paste0(dirOutputs, "cultivos/", crop, "/", sep = "", collapse = NULL)
+
   # Set up run paths
-  dir_inputs_climate <- "inputs/climate/"
-  dir_inputs_setup <- paste0("inputs/", id, "/")
-  dir_inputs_soil <- paste0("inputs/", id, "/")
-  dir_inputs_cultivar <- paste0("inputs/", id, "/")
+  dir_inputs_climate <- current_dir_inputs_climate
+  dir_inputs_setup <- current_setup_dir
+  dir_inputs_soil <- current_setup_dir
+  dir_inputs_cultivar <- current_setup_dir
   
   # Source oryza-aclimate functions
  # walk(list.files(dir_scripts, pattern = ".R$", full.names = T), ~ source(.x))
@@ -105,8 +107,13 @@ run_crop_dssat <- function(id, path, crop, ndays = 30){
   location <- load_coordinates(dir_inputs_setup)
   
   ### For EDACaP location file contain id_soil and cultivar name
-  soil <- location$id_soil %>% str_sub(., 2,-1)
-  cultivar <- c(location$var_cul, location$cul_name)
+  if(currentCountry=="COLOMBIA"){
+    soil <- soil
+    cultivar <- cultivar
+  } else {
+    soil <- location$id_soil %>% str_sub(., 2,-1)
+    cultivar <- c(location$var_cul, location$cul_name)
+  }
   
   climate_scenaries <- load_all_climate(dir_inputs_climate)[-100]
   #santiago_reeplace_function(path_plating_window, climate_scenaries, path_resampling_observed, id_station)
@@ -134,7 +141,9 @@ run_crop_dssat <- function(id, path, crop, ndays = 30){
   elev <- as.numeric(location$elev)
   
   ## Crea las configuraciones  para simular 45 dias 
-  dir_run <- map(1:sim_number, ~make_dir_run(dir_outputs, .x))
+  current_dir_run <- paste0(dir_outputs, id, "/")
+  dir.create(current_dir_run)
+  dir_run <- map(1:sim_number, ~make_dir_run(current_dir_run, .x))
   
   # copy default inputs
   map(dir_run, ~copy_inputs(dir_inputs_setup, dir_inputs_soil, dir_inputs_cultivar, crop, .x))
@@ -229,14 +238,14 @@ if(file.exists(paste0(dir_inputs_setup, "crop_conf.csv"))){
 
   #execute_dssat(dir_run[[3]])
   
-  write_csv(bind_rows(outputs_df1, outputs_df2, outputs_df3), paste0("outputs/", id, ".csv"))
+  write_csv(bind_rows(outputs_df1, outputs_df2, outputs_df3), paste0(dir_outputs, id, ".csv"))
   message(paste0("Successful Simulation \n Crop: ", 
                  crop, " - Cultivar: ", cultivar[2], "\n Soil: ", soil, 
                  "\n Irrigation: ", planting_details$IRR, "\n Fertilization: ", planting_details$FERT ))
   
   setwd(wd_p)
 } else {
-  write_csv(bind_rows(outputs_df1, outputs_df2), paste0("outputs/", id, ".csv"))
+  write_csv(bind_rows(outputs_df1, outputs_df2), paste0(dir_outputs, id, ".csv"))
   
   #tictoc::toc()
   

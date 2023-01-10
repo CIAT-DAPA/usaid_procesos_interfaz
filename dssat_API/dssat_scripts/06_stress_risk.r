@@ -56,7 +56,7 @@ read_PlantGro = function(filep){
 stress_risk = function(folder,type,limits){
   # PlantGro_file <- "C:/DSSAT48/Wheat/PlantGro.OUT"
   #PlantGro_file <- paste0("D:/workdir/dssat_API700/outputs/1/PlantGro.OUT"
-  PlantGro_file <- paste0(folder,"/PlantGro.OUT")
+  PlantGro_file <- paste0(folder,"PlantGro.OUT")
   df_plantgro <- read_PlantGro(PlantGro_file)
 
   nstress<-matrix(NA, nrow = 1, ncol = 99)
@@ -69,14 +69,18 @@ stress_risk = function(folder,type,limits){
     
     for(i in 1:99){
       a<-subset(df_plantgro,df_plantgro$GSTD > limits[j,c("min")] & df_plantgro$GSTD < limits[j,c("max")])
+      print(a)
       df_sub<- a[a$TRT==i,]
+      print(df_sub)
       if (type == "n"){
         df_sub$NFGD[df_sub$NFGD == 0] <- NA
         b<-mean(df_sub$NFGD, na.rm=T)
       }
       else if (type == "w"){
+        print(df_sub$WFGD)
         df_sub$WFGD[df_sub$WFGD == 0] <- NA
         b<-mean(df_sub$WFGD, na.rm=T)
+        print(b)
       }
       nstress[,i]<-b
     }

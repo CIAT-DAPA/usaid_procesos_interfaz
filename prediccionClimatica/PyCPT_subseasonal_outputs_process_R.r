@@ -87,7 +87,7 @@ ru_forecast_type <- "subseasonal"
 system(paste(
     "python run_main.py", ru_forecast_type, region, spatial_predictors, spatial_predictands,
     models, obs, station, mos, predictand, predictor, mons, tgtii,
-    tgtff, tgts, tini, tend, xmodes_min, xmodes_max, ymodes_min,
+    tgtff, tini, tend, xmodes_min, xmodes_max, ymodes_min,
     ymodes_max, ccamodes_min, ccamodes_max, force_download,
     single_models, forecast_anomaly, forecast_spi, confidence_level
 ))
@@ -103,7 +103,7 @@ models <- as.character(inputsPyCPT[[1]]$models)
 MOS <- 'CCA'
 PREDICTAND <- "PRCP"
 PREDICTOR <- "PRCP"
-monf <- inputsPyCPT[[1]]$mons[[1]] # Initialization month
+monf <- paste0(month(month(Sys.Date()), label=TRUE))# Initialization month
 #monf <- "Oct"
 mon_fcst_ini <- paste0(monf,1)
 weeks = paste0("wk",c(1:3,34))

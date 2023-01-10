@@ -4218,6 +4218,7 @@ def CPTscript(model,predictand, mon,monf,fyr,tini,tend,nla1,sla1,wlo1,elo1,nla2,
 		# Opens X input file
 		f.write("1\n")
 		file='../input/'+model+'_'+fprefix+'_'+tar+'_ini'+mon+'.tsv\n'
+		#file=os.path.join(workdir,'input',model+'_'+fprefix+'_'+tar+'_ini'+mon+'.tsv')
 		f.write(file)
 		# Nothernmost latitude
 		f.write(str(nla1)+'\n')
@@ -4342,8 +4343,9 @@ def CPTscript(model,predictand, mon,monf,fyr,tini,tend,nla1,sla1,wlo1,elo1,nla2,
 
 
 		# save goodness index
-		f.write("112\n")
+		f.write("112\n")		
 		file='../output/'+model+'_'+fprefix+predictand+'_'+mpref+'_Kendallstau_'+tar+'_'+mon+'\n'
+		print("output file",file)
 		f.write(file)
 
 		# NB: Default output format is GrADS format
