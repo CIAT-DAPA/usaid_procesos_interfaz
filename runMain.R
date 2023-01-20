@@ -62,6 +62,14 @@ library(openssl)
 library(R6)
 library(sys)
 library(httr)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(purrr)
+library(readr)
+library(magrittr)
+library(data.table)
+
 
 # Function erase and make folder
 pathConstruct <- function(dirConstruct) {
@@ -156,7 +164,7 @@ prepare_setups_api_oryza <- function(setups) {
 
   # Preparing inputs for parallelization
   lapply(2:length(setups), function(i) {
-    scenarie <- str_split_fixed(setups[i], "/", n = 8) # current scenarie/setup
+    scenarie <- str_split_fixed(setups[2], "/", n = 8) # current scenarie/setup
     correction <- str_split_fixed(scenarie[8], "_", n = 2)
     station <- gsub("/", "", correction[1]) # current climatic station
 
@@ -223,14 +231,13 @@ run_oryza_by_setup <- function() {
 runDssatModule <- function(crop){
   cul_file <- ''
   if(crop == "maize"){
-    crop <- maize_name_by_country
     cul_file <- 'MZCER048'
   } else if(crop=="wheat"){
     cul_file <- 'WHCER048'
   }
 
 
-  dirCurrentCropInputs <- paste0(dirInputs, "cultivos/",crop, "/", sep = "", collapse = NULL)
+  dirCurrentCropInputs <- paste0(dirInputs, "cultivos/", if (currentCountry == "COLOMBIA" && crop == "maize") "maiz" else crop, "/", sep = "", collapse = NULL)
 
   ## Wheat setups
   setups <- list.dirs(dirCurrentCropInputs, full.names = T)
@@ -254,7 +261,7 @@ runDssatModule <- function(crop){
     }
   )
 
-  lapply(2:length(setups), function(i) {
+  mclapply(2:length(setups), function(i) {
     
     tictoc::tic()
     id <- gsub("/", "", str_split_fixed(setups[i], "/", n = 8)) # current scenarie/setup
@@ -264,21 +271,20 @@ runDssatModule <- function(crop){
 
     # Set up run paths
     current_dir_inputs_climate <- paste0(path_output, "/", station, "/")
-    #current_setup_dir <- paste0(dirCultivosInputs, if (currentCountry == "COLOMBIA") "maiz" else "maize", "/", id, "/")
     current_setup_dir <- paste0(dirCurrentCropInputs, id, "/")
     if(currentCountry=="COLOMBIA"){
 
-      # skip_cul <- read_lines(paste0(setups[i], "/", cul_file, ".CUL")) %>% str_detect("@VAR#") %>% which() +2
-      # culFile <- read_lines(paste0(setups[i], "/", cul_file, ".CUL")))[skip_cul[1]]
-      # cultivar <- strsplit(culFile, " ", fixed=T)
-      # cultivar <- c(cultivar[[1]][1], cultivar[[1]][2])
+      skip_cul <- read_lines(paste0(setups[i], "/", cul_file, ".CUL")) %>% str_detect("@VAR#") %>% which() +2
+      culFile <- read_lines(paste0(setups[i], "/", cul_file, ".CUL"))[skip_cul[1]]
+      cultivar <- strsplit(culFile, " ", fixed=T)
+      cultivar <- c(cultivar[[1]][1], cultivar[[1]][2])
       
-      # skip_soil <- read_lines(paste0(setups[i], "/SOIL.SOL")) %>% str_detect("@SITE") %>% which() -1
-      # soilFile <- read_lines(paste0(setups[i], "/SOIL.SOL"))[skip_soil[1]]
-      # soil <- strsplit(soilFile, " ", fixed=T)
-      # soil <- substring(soil[[1]][1], 2)
+      skip_soil <- read_lines(paste0(setups[i], "/SOIL.SOL")) %>% str_detect("@SITE") %>% which() -1
+      soilFile <- read_lines(paste0(setups[i], "/SOIL.SOL"))[skip_soil[1]]
+      soil <- strsplit(soilFile, " ", fixed=T)
+      soil <- substring(soil[[1]][1], 2)
 
-      # #run_crop_dssat(id, crop, current_dir_inputs_climate, current_setup_dir, soil, cultivar)
+      run_crop_dssat(id, crop, current_dir_inputs_climate, current_setup_dir, 30, soil, cultivar)
       # tictoc::toc()
 
     } else {
@@ -289,7 +295,7 @@ runDssatModule <- function(crop){
     
     
   
-  })
+  }, mc.cores = 6, mc.preschedule = F)
 
 }
 

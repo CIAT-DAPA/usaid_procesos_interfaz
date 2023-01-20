@@ -21,19 +21,6 @@
 #library(tictoc)
 
 
-##Libraries for run Crop module
-library(foreach)
-library(parallel)
-library(doParallel)
-library(dplyr)
-library(tidyr)
-library(tibble)
-library(purrr)
-library(readr)
-library(lubridate)
-library(stringr)
-library(magrittr)
-library(data.table)
 
 ##Conect geoserver
 #library(raster)
@@ -41,13 +28,11 @@ library(data.table)
 options(warn = 1)
 
 
-
-
 ### Inputs - Arguments
 
-id = "5e91e1c214daf81260ebba59_60a16e2826e98d13b8dbb878_6334a6d230243c12cc1fa8c3_3"
+#id = "5e91e1c214daf81260ebba59_60a16e2826e98d13b8dbb878_6334a6d230243c12cc1fa8c3_3"
 #path = "/forecast/workdir/dssat_API/"
-crop = "wheat"
+#crop = "wheat"
 #cultivar = c("AW0071","Yecora_Rojo")
 #soil = "IB00000001"
 # Source dssat-aclimate functions
@@ -56,7 +41,7 @@ walk(list.files("dssat_scripts/", pattern = ".R$", full.names = T), ~ source(.x)
 
 run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_dir, ndays = 30, soil=NULL, cultivar=NULL){
   
-  path = "/forecast/workdir/dssat_API/"
+  path = "/forecast/usaid_procesos_interfaz/dssat_API/"
   setwd(path)
   wd_p <- paste0(getwd(), "/")
   if(str_detect(wd_p, pattern = path, negate = T)) {setwd(path)}
@@ -91,7 +76,7 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
   # Folders
 #  dir_scripts <- "dssat_scripts/"
   #dir_outputs <- "outputs/" ; dir.create(dir_outputs)
-  dir_outputs <- paste0(dirOutputs, "cultivos/", crop, "/", sep = "", collapse = NULL)
+  dir_outputs <- paste0(dirOutputs, "cultivos/", if (currentCountry == "COLOMBIA" && crop == "maize") "maiz" else crop, "/", sep = "", collapse = NULL)
 
   # Set up run paths
   dir_inputs_climate <- current_dir_inputs_climate
@@ -116,10 +101,10 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
   }
   
   climate_scenaries <- load_all_climate(dir_inputs_climate)[-100]
-  #santiago_reeplace_function(path_plating_window, climate_scenaries, path_resampling_observed, id_station)
+  planting_details_column_name <- if (currentCountry == "COLOMBIA") "value" else crop
   
   planting_details <- read_csv(paste0(dir_inputs_setup, "planting_details.csv"), show_col_types = F) %>%
-    dplyr::select(name, all_of(crop)) %>%  pivot_wider(names_from = name, values_from = all_of(crop))
+    dplyr::select(name, all_of(planting_details_column_name)) %>%  pivot_wider(names_from = name, values_from = all_of(planting_details_column_name))
   
   # Definir fecha inicial de simulacion/  
   #En este caso la define automaticamente de la fecha inicial de los escenarios climaticos
@@ -237,7 +222,10 @@ if(file.exists(paste0(dir_inputs_setup, "crop_conf.csv"))){
     compact %>% bind_rows()
 
   #execute_dssat(dir_run[[3]])
-  
+
+  #Replacing NA values
+  outputs_df3[is.na(outputs_df3)] <- 0
+  drop_na(outputs_df3, coef_var)
   write_csv(bind_rows(outputs_df1, outputs_df2, outputs_df3), paste0(dir_outputs, id, ".csv"))
   message(paste0("Successful Simulation \n Crop: ", 
                  crop, " - Cultivar: ", cultivar[2], "\n Soil: ", soil, 

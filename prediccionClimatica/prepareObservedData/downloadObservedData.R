@@ -12,10 +12,10 @@ setwd(dir_prepare_observed_data)
 source("getDataFromAgera5.R")
 source("createScenarios.R")
 
-# daily_path = "D:/CIAT/plantingWindow/dailyData" 
-# output_path = "D:/CIAT/plantingWindow/resampling/" 
+#daily_path = "D:/CIAT/plantingWindow/dailyData" 
+#output_path = "D:/CIAT/plantingWindow/resampling/" 
 
-# date_now = "12/12/2022"
+#date_now = "12/12/2022"
 
 moveFiles <- function(path,year){
   list_of_files = list.files(path = paste(path,year,sep=""), pattern="^.*nc$", all.files=TRUE, full.names=TRUE)
@@ -104,15 +104,29 @@ downloadObservedData <- function(daily_path, date_now, output_path) {
   # END get months to download data
   
   # START Download data
-  
+  parallel:::setDefaultClusterOptions(setup_strategy = "sequential")
   count = 1
   for (year in year_to_download) {
     for (variable in variables_to_extract) {
       if(count != 1){
-        extract_data(variable,month_to_download_temp,year,output_path)
+        tryCatch(
+          {
+            extract_data(variable,month_to_download_temp,year,output_path)
+          },
+          error=function(cond) {
+            extract_data(variable,month_to_download_temp,year,output_path)
+          })
+        
       }else{
         if(!is.null(month_to_download)){
-          extract_data(variable,month_to_download,year,output_path)
+          tryCatch(
+          {
+            extract_data(variable,month_to_download,year,output_path)
+          },
+          error=function(cond) {
+            extract_data(variable,month_to_download,year,output_path)
+          })
+          
         }
         
       }
@@ -120,7 +134,7 @@ downloadObservedData <- function(daily_path, date_now, output_path) {
     }
     count = count + 1
   }
-  
+  parallel:::setDefaultClusterOptions(setup_strategy = "parallel")
   # END Download data
   
   # START Format date to get dateStart and dateEnd

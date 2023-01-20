@@ -46,9 +46,9 @@ monthsNumber <- list("Jan-Mar" = 02, "Feb-Apr" = 03, "Mar-May" = 04, "Apr-Jun" =
 for (i in 1:2) {
 
     # It divides by 100 in orden to have a 0-1 data and not a 1-100
-    dataNextGenAbove <- raster(paste0("/forecast/workdir/GUATEMALA/outputs/prediccionClimatica/rasterCategories","/","above",i, ".tiff")) / 100
-    dataNextGenBelow <- raster(paste0("/forecast/workdir/GUATEMALA/outputs/prediccionClimatica/rasterCategories","/","below",i, ".tiff")) / 100
-    dataNextGenNormal <- raster(paste0("/forecast/workdir/GUATEMALA/outputs/prediccionClimatica/rasterCategories","/","normal",i, ".tiff")) / 100
+    dataNextGenAbove <- raster(paste0("/forecast/workdir/GUATEMALA/outputs/prediccionClimatica/rasterCategories","/","above",i, ".tif")) / 100
+    dataNextGenBelow <- raster(paste0("/forecast/workdir/GUATEMALA/outputs/prediccionClimatica/rasterCategories","/","below",i, ".tif")) / 100
+    dataNextGenNormal <- raster(paste0("/forecast/workdir/GUATEMALA/outputs/prediccionClimatica/rasterCategories","/","normal",i, ".tif")) / 100
 
     # Stack structure in order to extract to create .csv files
     stacksBySeason[[i]] <- stack(dataNextGenBelow, dataNextGenNormal, dataNextGenAbove)

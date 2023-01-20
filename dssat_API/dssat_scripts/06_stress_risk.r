@@ -66,24 +66,63 @@ stress_risk = function(folder,type,limits){
   answer = lapply(1:nrow(limits), function(j) {
     
     measure = paste0("st_",limits[j,c("name")],"_",type)
-    
+    a <- ''
+    df_sub <- ''
+    b <- ''
     for(i in 1:99){
-      a<-subset(df_plantgro,df_plantgro$GSTD > limits[j,c("min")] & df_plantgro$GSTD < limits[j,c("max")])
-      print(a)
+      a<-subset(df_plantgro,df_plantgro$GSTD > as.numeric(limits[j,c("min")]) & df_plantgro$GSTD < as.numeric(limits[j,c("max")]))
       df_sub<- a[a$TRT==i,]
-      print(df_sub)
+      
       if (type == "n"){
-        df_sub$NFGD[df_sub$NFGD == 0] <- NA
-        b<-mean(df_sub$NFGD, na.rm=T)
+        ##df_sub$NFGD[df_sub$NFGD == 0] <- NA
+        tryCatch(
+        {
+           b<-mean(df_sub$NFGD, na.rm=T)
+
+        },
+        warning=function(w){
+          #print(df_sub)
+          print(df_sub$NFGD)
+          # print(df_sub)
+        }
+      )
+       
       }
       else if (type == "w"){
-        print(df_sub$WFGD)
-        df_sub$WFGD[df_sub$WFGD == 0] <- NA
+        ##if(df_sub$WFGD[df_sub$WFGD < 0.1]){
+          ##df_sub$WFGD[df_sub$WFGD < 0.1] <- NA
+        ##}
         b<-mean(df_sub$WFGD, na.rm=T)
-        print(b)
+      
       }
+
       nstress[,i]<-b
     }
+    tryCatch(
+    {
+      output = c(measure,
+                mean(nstress,na.rm=T),
+                median(nstress,na.rm=T),
+                min(nstress,na.rm=T),
+                max(nstress,na.rm=T),
+                quantile(nstress, 0.25,na.rm=T),
+                quantile(nstress, 0.50,na.rm=T),
+                quantile(nstress, 0.75,na.rm=T),
+                0,
+                0,
+                sd(nstress,na.rm=T),
+                quantile(nstress, 0.05,na.rm=T),
+                quantile(nstress, 0.95,na.rm=T),
+                sd(nstress,na.rm=T) / mean(nstress,na.rm=T) * 100) 
+      
+
+    },
+    warning=function(w){
+      #print(df_sub)
+      # print(a)
+      # print(df_sub)
+    }
+  )
     output = c(measure,
                 mean(nstress,na.rm=T),
                 median(nstress,na.rm=T),
@@ -105,7 +144,7 @@ stress_risk = function(folder,type,limits){
 #Gets stress risk for all planting dates
 stress_risk_all <- function(data_files_all, dir_inputs_setup){
   
-  crop_conf = read.csv(paste0(dir_inputs_setup,"crop_conf.csv"), header = T)
+  crop_conf = read_csv(paste0(dir_inputs_setup,"crop_conf.csv"))
   stresses_list <- list()
 
   data <- mclapply(1:length(data_files_all), function(i) {
