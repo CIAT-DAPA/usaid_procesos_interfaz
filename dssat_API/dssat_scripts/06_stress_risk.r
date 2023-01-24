@@ -66,25 +66,22 @@ stress_risk = function(folder,type,limits){
   answer = lapply(1:nrow(limits), function(j) {
     
     measure = paste0("st_",limits[j,c("name")],"_",type)
-    a <- ''
-    df_sub <- ''
-    b <- ''
+
     for(i in 1:99){
       a<-subset(df_plantgro,df_plantgro$GSTD > as.numeric(limits[j,c("min")]) & df_plantgro$GSTD < as.numeric(limits[j,c("max")]))
       df_sub<- a[a$TRT==i,]
       
       if (type == "n"){
         ##df_sub$NFGD[df_sub$NFGD == 0] <- NA
-        tryCatch(
-        {
-           b<-mean(df_sub$NFGD, na.rm=T)
-
-        },
-        warning=function(w){
-          #print(df_sub)
-          print(df_sub$NFGD)
-          # print(df_sub)
-        }
+        # wheat and maize
+        b<-mean(if (crop == "wheat") df_sub$NFGD else df_sub$NSTD, na.rm=T)
+        # tryCatch(
+        # {},
+        # warning=function(w){
+        #   #print(df_sub)
+        #   print(df_sub$NFGD)
+        #   # print(df_sub)
+        # }
       )
        
       }
@@ -92,7 +89,8 @@ stress_risk = function(folder,type,limits){
         ##if(df_sub$WFGD[df_sub$WFGD < 0.1]){
           ##df_sub$WFGD[df_sub$WFGD < 0.1] <- NA
         ##}
-        b<-mean(df_sub$WFGD, na.rm=T)
+        # wheat and maize
+        b<-mean(if (crop == "wheat") df_sub$WFGD else df_sub$WSGD, na.rm=T)
       
       }
 

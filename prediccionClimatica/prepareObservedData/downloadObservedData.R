@@ -8,9 +8,9 @@ library("remotes")
 install_github("agrdatasci/ag5Tools", build_vignettes = TRUE, build = FALSE)
 library(ag5Tools)
 
-setwd(dir_prepare_observed_data)
-source("getDataFromAgera5.R")
-source("createScenarios.R")
+#setwd("D:/CIAT/plantingWindow")
+#source("agera5.R")
+#source("createScenarios.R")
 
 #daily_path = "D:/CIAT/plantingWindow/dailyData" 
 #output_path = "D:/CIAT/plantingWindow/resampling/" 
@@ -104,7 +104,7 @@ downloadObservedData <- function(daily_path, date_now, output_path) {
   # END get months to download data
   
   # START Download data
-  parallel:::setDefaultClusterOptions(setup_strategy = "sequential")
+
   count = 1
   for (year in year_to_download) {
     for (variable in variables_to_extract) {
@@ -134,7 +134,7 @@ downloadObservedData <- function(daily_path, date_now, output_path) {
     }
     count = count + 1
   }
-  parallel:::setDefaultClusterOptions(setup_strategy = "parallel")
+
   # END Download data
   
   # START Format date to get dateStart and dateEnd
@@ -142,11 +142,28 @@ downloadObservedData <- function(daily_path, date_now, output_path) {
   dateStart = ''
   dateEnd = ''
   if(!is.null(month_to_download_temp)){
-    dateStart = paste(paste(paste(year_to_download[2],"-",sep=""),paste(month_to_download_temp[1],"-",sep=""),sep=""),"01",sep="")
-    dateEnd = paste(paste(paste(year_to_download[1],"-",sep=""),paste(month_to_download[length(month_to_download)],"-",sep=""),sep=""),"01",sep="")
+
+    dateStart = paste0(year_to_download[2],"-",month_to_download_temp[1],"-","01")
+    if(!is.null(month_to_download)){
+      if(length(year_to_download) == 2 && month_to_download[length(month_to_download)] >= 7){
+        dateEnd = paste0(year_to_download[2],"-",month_to_download[length(month_to_download)],"-","01") 
+      }else{
+        dateEnd = paste0(year_to_download[1],"-",month_to_download[length(month_to_download)],"-","01") 
+      }
+      
+    }else{
+      if(length(year_to_download) == 2 && month_to_download_temp[length(month_to_download_temp)] >= 7){
+      dateEnd = paste0(year_to_download[2],"-",month_to_download_temp[length(month_to_download_temp)],"-","01") 
+      }else{
+        dateEnd = paste0(year_to_download[1],"-",month_to_download_temp[length(month_to_download_temp)],"-","01") 
+      }
+    }
+    
+    
     dateStart = format(strptime(as.character(dateStart), "%Y-%m-%d"),"%Y-%m-%d" )
     dateEnd = format(strptime(as.character(dateEnd), "%Y-%m-%d"),"%Y-%m-%d" )
     dateEnd = as.Date(dateEnd) + months(1) - days(1)
+    
   }else{
     dateStart = paste(paste(paste(year_to_download[1],"-",sep=""),paste(month_to_download[1],"-",sep=""),sep=""),"01",sep="")
     dateEnd = paste(paste(paste(year_to_download[1],"-",sep=""),paste(month_to_download[length(month_to_download)],"-",sep=""),sep=""),"01",sep="")

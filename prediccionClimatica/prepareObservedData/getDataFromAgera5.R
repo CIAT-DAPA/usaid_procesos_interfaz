@@ -54,7 +54,6 @@ extractDataAgera5 <- function(variable, dateStart, dateEnd,output_path,data_stat
     
     test_final = t(do.call("rbind",test)) # Transpose data from rows to columns
   }
-  
   S.Rad.data.coordinates[[1]] = test_final
     
     
@@ -69,7 +68,7 @@ extractDataAgera5 <- function(variable, dateStart, dateEnd,output_path,data_stat
   
   
   ## Convert data as "data frame" format ##
-  S.Rad.data.coordinates_final = as.data.frame (S.Rad.data.coordinates_final)
+  S.Rad.data.coordinates_final = as.data.frame(S.Rad.data.coordinates_final)
   
   ## Read coordinates with station names ##
   #coordinates = read.table(paste(output_path,csv_names,sep=""), head=T, sep=",")
@@ -84,7 +83,6 @@ extractDataAgera5 <- function(variable, dateStart, dateEnd,output_path,data_stat
   names(S.Rad.data.coordinates_final)[1:nrow(coordinates)] = array
   
   ## Export Solar Radiation data as ".csv" ##
-  
   write.table(S.Rad.data.coordinates_final,paste(output_path,paste(variable,".data.observed.csv",sep=""),sep=""), row.names = TRUE, sep=",", col.names=NA)
 }
 
