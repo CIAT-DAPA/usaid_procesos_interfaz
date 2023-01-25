@@ -158,11 +158,11 @@ uploadRasterFiles <- function() {
 
       if(currentCountry == "ETHIOPIA"){
         ru_forecast_type <- "seasonal"
-        prepareRastersUpload(ru_forecast_type, nextGenFileName_prob, nextGenFileName_det, datadir)
+        prepareRastersUpload(ru_forecast_type)
         system(paste("python import.py", ru_workspace, ru_forecast_type))
 
         ru_forecast_type <- "subseasonal"
-        prepareRastersUpload(ru_forecast_type, nextGenFileName_prob_sub, nextGenFileName_det_sub, datadir)
+        prepareRastersUpload(ru_forecast_type)
         system(paste("python import.py", ru_workspace, ru_forecast_type))
 
       }

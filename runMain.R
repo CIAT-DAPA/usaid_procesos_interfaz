@@ -264,7 +264,7 @@ runDssatModule <- function(crop){
   mclapply(2:length(setups), function(i) {
     
     tictoc::tic()
-    id <- gsub("/", "", str_split_fixed(setups[i], "/", n = 8)) # current scenarie/setup
+    id <- gsub("/", "", str_split_fixed(setups[2], "/", n = 8)) # current scenarie/setup
     correction <- str_split_fixed(id[8], "_", n = 2)
     station <- gsub("/", "", correction[1]) # current climatic station
     id <- id[8]
@@ -274,13 +274,13 @@ runDssatModule <- function(crop){
     current_setup_dir <- paste0(dirCurrentCropInputs, id, "/")
     if(currentCountry=="COLOMBIA"){
 
-      skip_cul <- read_lines(paste0(setups[i], "/", cul_file, ".CUL")) %>% str_detect("@VAR#") %>% which() +2
-      culFile <- read_lines(paste0(setups[i], "/", cul_file, ".CUL"))[skip_cul[1]]
+      skip_cul <- read_lines(paste0(setups[2], "/", cul_file, ".CUL")) %>% str_detect("@VAR#") %>% which() +2
+      culFile <- read_lines(paste0(setups[2], "/", cul_file, ".CUL"))[skip_cul[1]]
       cultivar <- strsplit(culFile, " ", fixed=T)
       cultivar <- c(cultivar[[1]][1], cultivar[[1]][2])
       
-      skip_soil <- read_lines(paste0(setups[i], "/SOIL.SOL")) %>% str_detect("@SITE") %>% which() -1
-      soilFile <- read_lines(paste0(setups[i], "/SOIL.SOL"))[skip_soil[1]]
+      skip_soil <- read_lines(paste0(setups[2], "/SOIL.SOL")) %>% str_detect("@SITE") %>% which() -1
+      soilFile <- read_lines(paste0(setups[2], "/SOIL.SOL"))[skip_soil[1]]
       soil <- strsplit(soilFile, " ", fixed=T)
       soil <- substring(soil[[1]][1], 2)
 
@@ -289,13 +289,13 @@ runDssatModule <- function(crop){
 
     } else {
 
-      run_crop_dssat(id, crop, current_dir_inputs_climate, current_setup_dir)
+      run_crop_dssat(id, crop, current_dir_inputs_climate, current_setup_dir, 30)
       tictoc::toc()
     }
     
     
   
-  }, mc.cores = 6, mc.preschedule = F)
+  }, mc.cores = 2, mc.preschedule = F)
 
 }
 
@@ -488,7 +488,7 @@ for (c in countries_list) {
   runJoinFinalData <- source(paste(dirForecast, "03_join_wth_final.R", sep = "", collapse = NULL))
 
   #new dssat module
-  runDssatModule("maize")
+  runDssatModule("wheat")
 
   ## Rice crop model process
   if (currentCountry == "COLOMBIA") {

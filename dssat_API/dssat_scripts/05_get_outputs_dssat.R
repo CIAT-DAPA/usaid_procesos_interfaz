@@ -107,6 +107,28 @@ tidy_stress <- function(list_st, names_op) {
     
 }
 
+#list_st = list of values
+# tidy_land_prep <- function(data, region, soil, cultivar, start, end, ){
+  
+# #  require(lubridate)
+  
+#   data <- data %>%
+#     mutate(weather_station = region,
+#            soil = soil, 
+#            cultivar = cultivar, 
+#            start = start, 
+#            end = end) %>%
+#     dplyr::select(weather_station, 
+#                   soil, 
+#                   cultivar, 
+#                   start, 
+#                   end, 
+#                   everything())
+  
+#   return(data)
+  
+# }
+
 ## Function to arrange data to final data frame
 tidy_descriptive <- function(data, region, soil, cultivar, start, end){
   

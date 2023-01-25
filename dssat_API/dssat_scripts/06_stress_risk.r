@@ -62,6 +62,17 @@ stress_risk = function(folder,type,limits){
   nstress<-matrix(NA, nrow = 1, ncol = 99)
   # Loop for limits
   # The limits are the crop stage. It can change for each crop
+
+  conf_lower <- function(var){
+    
+    t.test(var)$conf.int[1]
+  }
+  
+  conf_upper <- function(var){
+    
+    t.test(var)$conf.int[2]
+  }
+  
   
   answer = lapply(1:nrow(limits), function(j) {
     
@@ -82,7 +93,7 @@ stress_risk = function(folder,type,limits){
         #   print(df_sub$NFGD)
         #   # print(df_sub)
         # }
-      )
+      #)
        
       }
       else if (type == "w"){
@@ -96,31 +107,6 @@ stress_risk = function(folder,type,limits){
 
       nstress[,i]<-b
     }
-    tryCatch(
-    {
-      output = c(measure,
-                mean(nstress,na.rm=T),
-                median(nstress,na.rm=T),
-                min(nstress,na.rm=T),
-                max(nstress,na.rm=T),
-                quantile(nstress, 0.25,na.rm=T),
-                quantile(nstress, 0.50,na.rm=T),
-                quantile(nstress, 0.75,na.rm=T),
-                0,
-                0,
-                sd(nstress,na.rm=T),
-                quantile(nstress, 0.05,na.rm=T),
-                quantile(nstress, 0.95,na.rm=T),
-                sd(nstress,na.rm=T) / mean(nstress,na.rm=T) * 100) 
-      
-
-    },
-    warning=function(w){
-      #print(df_sub)
-      # print(a)
-      # print(df_sub)
-    }
-  )
     output = c(measure,
                 mean(nstress,na.rm=T),
                 median(nstress,na.rm=T),
@@ -129,8 +115,8 @@ stress_risk = function(folder,type,limits){
                 quantile(nstress, 0.25,na.rm=T),
                 quantile(nstress, 0.50,na.rm=T),
                 quantile(nstress, 0.75,na.rm=T),
-                0,
-                0,
+                conf_lower = conf_lower(nstress),
+                conf_upper = conf_upper(nstress),
                 sd(nstress,na.rm=T),
                 quantile(nstress, 0.05,na.rm=T),
                 quantile(nstress, 0.95,na.rm=T),

@@ -36,10 +36,10 @@ options(warn = 1)
 #cultivar = c("AW0071","Yecora_Rojo")
 #soil = "IB00000001"
 # Source dssat-aclimate functions
-walk(list.files("dssat_scripts/", pattern = ".R$", full.names = T), ~ source(.x))
+#walk(list.files("dssat_scripts/", pattern = ".R$", full.names = T), ~ source(.x))
 
 
-run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_dir, ndays = 30, soil=NULL, cultivar=NULL){
+run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_dir, ndays = 25, soil=NULL, cultivar=NULL){
   
   path = "/forecast/usaid_procesos_interfaz/dssat_API/"
   setwd(path)
@@ -108,7 +108,7 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
   
   # Definir fecha inicial de simulacion/  
   #En este caso la define automaticamente de la fecha inicial de los escenarios climaticos
-  initial_date  <- climate_scenaries[[1]]$date[[1]] + days(15)
+  initial_date  <- climate_scenaries[[1]]$date[[1]] + days(30)
   
   input_dates <- make_sim_dates(initial_date, planting_before = 15, number_days = ndays, freq_sim = strtoi(strsplit(id, "_", fixed=T)[[1]][4]))
   sim_number <- length(input_dates$start_date)  # It depends of planting window form forecast
@@ -208,6 +208,13 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
                           tidy_descriptive(., id_station, id_soil, id_cultivar, y, y)}) %>% 
     compact %>% bind_rows()
 
+  land_preparation_data <- land_preparation_all(dir_run)
+  outputs_df4 <- map2(.x = land_preparation_data,
+                      .y = input_dates$planting_date, 
+                      function(x,y){
+                         x %>% mutate(measure='land_pre_day') %>% dplyr::select(measure, everything()) %>%
+                          tidy_descriptive(., id_station, id_soil, id_cultivar, y, y)}) %>% 
+    compact %>% bind_rows()
 
 #If crop_conf exists run stress_risk
 if(file.exists(paste0(dir_inputs_setup, "crop_conf.csv"))){
@@ -226,14 +233,14 @@ if(file.exists(paste0(dir_inputs_setup, "crop_conf.csv"))){
   #Replacing NA values
   outputs_df3[is.na(outputs_df3)] <- 0
   drop_na(outputs_df3, coef_var)
-  write_csv(bind_rows(outputs_df1, outputs_df2, outputs_df3), paste0(dir_outputs, id, ".csv"))
+  write_csv(bind_rows(outputs_df1, outputs_df2, outputs_df3, outputs_df4), paste0(dir_outputs, id, ".csv"))
   message(paste0("Successful Simulation \n Crop: ", 
                  crop, " - Cultivar: ", cultivar[2], "\n Soil: ", soil, 
                  "\n Irrigation: ", planting_details$IRR, "\n Fertilization: ", planting_details$FERT ))
   
   setwd(wd_p)
 } else {
-  write_csv(bind_rows(outputs_df1, outputs_df2), paste0(dir_outputs, id, ".csv"))
+  write_csv(bind_rows(outputs_df1, outputs_df2, outputs_df4), paste0(dir_outputs, id, ".csv"))
   
   #tictoc::toc()
   
@@ -245,6 +252,8 @@ if(file.exists(paste0(dir_inputs_setup, "crop_conf.csv"))){
 
 }
 
+#Deleting model run files
+map(current_setup_dir, ~unlink(.x, recursive=TRUE))
   
 }
 

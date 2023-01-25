@@ -174,21 +174,33 @@ land_preparation_day = function(path_Info.out, path_SoilWat.out) { # path_Info.o
 
 summary_table = function(LPT.DOY){ ## LPT.DOY is the matrix (Dimension: 99X2) containing the simulation number in the 
                                    ## first column and the land preparation day (DOY) in the second column.
-
-  avg = mean(LPT.DOY$DOY, na.rm = T)
-  median = median(LPT.DOY$DOY, na.rm = T)
-  min = min(LPT.DOY$DOY, na.rm = T)
-  max = max(LPT.DOY$DOY, na.rm = T)
-  quar_1 = quantile(LPT.DOY$DOY, 0.25, na.rm = T)
-  quar_2 = quantile(LPT.DOY$DOY, 0.50, na.rm = T)
-  quar_3 = quantile(LPT.DOY$DOY, 0.75, na.rm = T)
-  sd = sd (LPT.DOY$DOY, na.rm = T)
-  perc_5 = quantile(LPT.DOY$DOY, 0.05, na.rm = T)
-  perc_95 = quantile(LPT.DOY$DOY, 0.95, na.rm = T)
-  coef_var = (sd/avg)*100
   
-  statistics = c(avg, median, min, max, quar_1, quar_2, quar_3, sd, perc_5, perc_95, coef_var)
-  names(statistics)[1:11] = c("avg", "median", "min", "max", "quar_1", "quar_2", "quar_3", "sd", "perc_5", "perc_95", "coef_var")
+  conf_lower <- function(var){
+    
+    t.test(var)$conf.int[1]
+  }
+  
+  conf_upper <- function(var){
+    
+    t.test(var)$conf.int[2]
+  }
+  
+  avg = round(mean(LPT.DOY$DOY, na.rm = T), 0)
+  median = round(median(LPT.DOY$DOY, na.rm = T), 0)
+  min = round(min(LPT.DOY$DOY, na.rm = T), 0)
+  max = round(max(LPT.DOY$DOY, na.rm = T), 0)
+  quar_1 = round(quantile(LPT.DOY$DOY, 0.25, na.rm = T), 0)
+  quar_2 = round(quantile(LPT.DOY$DOY, 0.50, na.rm = T), 0)
+  quar_3 = round(quantile(LPT.DOY$DOY, 0.75, na.rm = T), 0)
+  conf_lower = round(conf_lower(LPT.DOY$DOY), 0)
+  conf_upper = round(conf_upper(LPT.DOY$DOY), 0)
+  sd = round(sd (LPT.DOY$DOY, na.rm = T), 0)
+  perc_5 = round(quantile(LPT.DOY$DOY, 0.05, na.rm = T), 0)
+  perc_95 = round(quantile(LPT.DOY$DOY, 0.95, na.rm = T), 0)
+  coef_var = round((sd/avg)*100, 0)
+  
+  statistics = c(avg, median, min, max, quar_1, quar_2, quar_3, conf_lower, conf_upper, sd, perc_5, perc_95, coef_var)
+  names(statistics)[1:13] = c("avg", "median", "min", "max", "quar_1", "quar_2", "quar_3", "conf_lower", "conf_upper",  "sd", "perc_5", "perc_95", "coef_var")
   return(statistics)
     
 }
@@ -199,10 +211,32 @@ summary_table = function(LPT.DOY){ ## LPT.DOY is the matrix (Dimension: 99X2) co
 
 ## Define file paths ##
 
-path_Info.out = "D:/OneDrive - CGIAR/Desktop/Land Preparetation/INFO.OUT"
-path_SoilWat.out = "D:/OneDrive - CGIAR/Desktop/Land Preparetation/SoilWat.OUT"
+#path_Info.out = "D:/OneDrive - CGIAR/Desktop/Land Preparetation/INFO.OUT"
+#path_SoilWat.out = "D:/OneDrive - CGIAR/Desktop/Land Preparetation/SoilWat.OUT"
 
 ##Run functions ##
 
-LPT.DOY = land_preparation_day (path_Info.out, path_SoilWat.out)
-Final_Result = summary_table (LPT.DOY)
+#LPT.DOY = land_preparation_day (path_Info.out, path_SoilWat.out)
+#Final_Result = summary_table (LPT.DOY)
+
+#Gets landing_preparation for all planting dates
+land_preparation_all <- function(data_files_all){
+
+  land_preparation_list <- list()
+
+  data <- mclapply(1:length(data_files_all), function(i) {
+    data_files <- paste0(data_files_all[i])
+
+    current_info <- paste0(data_files, 'INFO.OUT')
+    current_soil_wat <- paste0(data_files, 'SoilWat.OUT')
+
+    current_land_preparation <- summary_table(land_preparation_day(current_info, current_soil_wat))
+
+    land_preparation_list <- append(land_preparation_list, current_land_preparation)
+  
+  }, mc.cores = no_cores, mc.preschedule = F)
+  return(map(data, bind_rows))
+
+}
+
+

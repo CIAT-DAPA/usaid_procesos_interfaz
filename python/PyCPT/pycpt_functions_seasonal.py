@@ -3630,7 +3630,7 @@ def GetHindcasts(tini,tend,wlo1, elo1, sla1, nla1, tgti, tgtf, mon, os, tar, mod
 		#url=dic[model]
 		url=eval(dic_sea[model+'_hcst_PRCP'])
 		print("\n Hindcasts URL: \n\n "+url)
-		get_ipython().system("curl -k "+url+" > "+model+"_PRCP_"+tar+"_ini"+mon+".tsv")
+		os.system("curl -k "+url+" > "+model+"_PRCP_"+tar+"_ini"+mon+".tsv")
 
 def GetHindcasts_elr(tini,tend,wlo1, elo1, sla1, nla1, tgti, tgtf, mon, os, tar, model, force_download, dic_sea_elr):
 	if not force_download:
@@ -3646,7 +3646,7 @@ def GetHindcasts_elr(tini,tend,wlo1, elo1, sla1, nla1, tgti, tgtf, mon, os, tar,
 		#url=dic[model]
 		url=eval(dic_sea_elr[model+'_hcst_PRCP'])
 		print("\n Hindcasts URL: \n\n "+url)
-		get_ipython().system("curl -k "+url+" > "+model+"_PRCP_"+tar+"_ini"+mon+".nc")
+		os.system("curl -k "+url+" > "+model+"_PRCP_"+tar+"_ini"+mon+".nc")
 
 
 def GetHindcasts_T2M(tini,tend,wlo1, elo1, sla1, nla1, tgti, tgtf, mon, os, tar, model, force_download, dic_sea):
@@ -3673,7 +3673,7 @@ def GetHindcasts_T2M(tini,tend,wlo1, elo1, sla1, nla1, tgti, tgtf, mon, os, tar,
 		#url=dic[model]
 		url=eval(dic_sea[model+'_hcst_T2M'])
 		print("\n Hindcasts URL: \n\n "+url)
-		get_ipython().system("curl -k "+url+" > "+model+"_T2M_"+tar+"_ini"+mon+".tsv")
+		os.system("curl -k "+url+" > "+model+"_T2M_"+tar+"_ini"+mon+".tsv")
 
 def GetHindcasts_TMAX(tini,tend,wlo1, elo1, sla1, nla1, tgti, tgtf, mon, os, tar, model, force_download, dic_sea):
 	if not force_download:
@@ -3698,7 +3698,7 @@ def GetHindcasts_TMAX(tini,tend,wlo1, elo1, sla1, nla1, tgti, tgtf, mon, os, tar
 		#url=dic[model]
 		url=eval(dic_sea[model+'_hcst_TMAX'])
 		print("\n Hindcasts URL: \n\n "+url)
-		get_ipython().system("curl -k "+url+" > "+model+"_TMAX_"+tar+"_ini"+mon+".tsv")
+		os.system("curl -k "+url+" > "+model+"_TMAX_"+tar+"_ini"+mon+".tsv")
 
 def GetHindcasts_TMIN(tini,tend,wlo1, elo1, sla1, nla1, tgti, tgtf, mon, os, tar, model, force_download, dic_sea):
 	if not force_download:
@@ -3723,7 +3723,7 @@ def GetHindcasts_TMIN(tini,tend,wlo1, elo1, sla1, nla1, tgti, tgtf, mon, os, tar
 		#url=dic[model]
 		url=eval(dic_sea[model+'_hcst_TMIN'])
 		print("\n Hindcasts URL: \n\n "+url)
-		get_ipython().system("curl -k "+url+" > "+model+"_TMIN_"+tar+"_ini"+mon+".tsv")
+		os.system("curl -k "+url+" > "+model+"_TMIN_"+tar+"_ini"+mon+".tsv")
 
 def GetHindcasts_RFREQ(tini,tend,wlo1, elo1, sla1, nla1, tgti, tgtf, mon, os, wetday_threshold, tar, model, force_download, dic_sea):
 	if not force_download:
@@ -3749,7 +3749,7 @@ def GetHindcasts_RFREQ(tini,tend,wlo1, elo1, sla1, nla1, tgti, tgtf, mon, os, we
 		#url=dic[model]
 		url=eval(dic_sea[model+'_hcst_RFREQ'])
 		print("\n Hindcasts URL: \n\n "+url)
-		get_ipython().system("curl -k "+url+" > "+model+"_RFREQ_"+tar+"_ini"+mon+".tsv")
+		os.system("curl -k "+url+" > "+model+"_RFREQ_"+tar+"_ini"+mon+".tsv")
 
 def GetHindcasts_UQ(tini,tend,wlo1, elo1, sla1, nla1, tgti, tgtf, mon, os, tar, model, force_download, dic_sea, pressure):
 	if not force_download:
@@ -3768,7 +3768,7 @@ def GetHindcasts_UQ(tini,tend,wlo1, elo1, sla1, nla1, tgti, tgtf, mon, os, tar, 
 		#url=dic[model]
 		url=eval(dic_sea[model+'_hcst_UQ'])
 		print("\n Hindcasts URL: \n\n "+url)
-		get_ipython().system("curl -k "+url+" > "+model+"_UQ_"+tar+"_ini"+mon+".tsv")
+		os.system("curl -k "+url+" > "+model+"_UQ_"+tar+"_ini"+mon+".tsv")
 
 
 def GetHindcasts_VQ(tini,tend,wlo1, elo1, sla1, nla1, tgti, tgtf, mon, os, tar, model, force_download, dic_sea, pressure):
@@ -3788,7 +3788,7 @@ def GetHindcasts_VQ(tini,tend,wlo1, elo1, sla1, nla1, tgti, tgtf, mon, os, tar, 
 		# url=dic[model]
 		url=eval(dic_sea[model+'_hcst_VQ'])
 		print("\n Hindcasts URL: \n\n "+url)
-		get_ipython().system("curl -k "+url+" > "+model+"_VQ_"+tar+"_ini"+mon+".tsv")
+		os.system("curl -k "+url+" > "+model+"_VQ_"+tar+"_ini"+mon+".tsv")
 
 def GetHindcasts_UA(tini,tend,wlo1, elo1, sla1, nla1, tgti, tgtf, mon, os, tar, model, force_download, dic_sea, pressure):
 	if not force_download:
@@ -3807,7 +3807,7 @@ def GetHindcasts_UA(tini,tend,wlo1, elo1, sla1, nla1, tgti, tgtf, mon, os, tar, 
 		#url=dic[model]
 		url=eval(dic_sea[model+'_hcst_UA'])
 		print("\n Hindcasts URL: \n\n "+url)
-		get_ipython().system("curl -k "+url+" > "+model+"_UA_"+tar+"_ini"+mon+".tsv")
+		os.system("curl -k "+url+" > "+model+"_UA_"+tar+"_ini"+mon+".tsv")
 
 
 def GetHindcasts_VA(tini,tend,wlo1, elo1, sla1, nla1, tgti, tgtf, mon, os, tar, model, force_download, dic_sea, pressure):
@@ -3827,7 +3827,7 @@ def GetHindcasts_VA(tini,tend,wlo1, elo1, sla1, nla1, tgti, tgtf, mon, os, tar, 
 		#url=dic[model]
 		url=eval(dic_sea[model+'_hcst_VA'])
 		print("\n Hindcasts URL: \n\n "+url)
-		get_ipython().system("curl -k "+url+" > "+model+"_VA_"+tar+"_ini"+mon+".tsv")
+		os.system("curl -k "+url+" > "+model+"_VA_"+tar+"_ini"+mon+".tsv")
 
 def GetHindcasts_SST(tini,tend,wlo1, elo1, sla1, nla1, tgti, tgtf, mon, os, tar, model, force_download, dic_sea):
 	if not force_download:
@@ -3846,7 +3846,7 @@ def GetHindcasts_SST(tini,tend,wlo1, elo1, sla1, nla1, tgti, tgtf, mon, os, tar,
 		#url=dic[model]
 		url=eval(dic_sea[model+'_hcst_SST'])
 		print("\n Hindcasts URL: \n\n "+url)
-		get_ipython().system("curl -k "+url+" > "+model+"_SST_"+tar+"_ini"+mon+".tsv")
+		os.system("curl -k "+url+" > "+model+"_SST_"+tar+"_ini"+mon+".tsv")
 
 def GetObs(predictand, tini,tend,wlo2, elo2, sla2, nla2, tar, obs, obs_source, hdate_last, force_download,station, dic_sea):
 	if not force_download:
@@ -3868,7 +3868,7 @@ def GetObs(predictand, tini,tend,wlo2, elo2, sla2, nla2, tar, obs, obs_source, h
 			url=eval(dic_sea[obs+'_obs_'+predictand])
 
 		print("\n Obs (Rainfall) data URL: \n\n "+url)
-		get_ipython().system("curl -k '"+url+"' > obs_"+predictand+"_"+tar+".tsv")
+		os.system("curl -k '"+url+"' > obs_"+predictand+"_"+tar+".tsv")
 		if station==True:   #weirdly enough, Ingrid sends the file with nfields=0. This is my solution for now. AGM
 			replaceAll("obs_"+predictand+"_"+tar+".tsv","cpt:nfields=0","cpt:nfields=1")
 
@@ -3884,7 +3884,7 @@ def GetObs_hc_elr(predictand, tini,tend,wlo2, elo2, sla2, nla2, tar, obs, obs_so
 	if force_download:
 		url=eval(dic_sea_elr[obs+'_obs_hc_'+predictand])
 		print("\n Obs (Rainfall) data URL: \n\n "+url)
-		get_ipython().system("curl -k '"+url+"' > obs_"+predictand+"_"+tar+"_hc.nc")
+		os.system("curl -k '"+url+"' > obs_"+predictand+"_"+tar+"_hc.nc")
 
 
 def GetObs_T2M(predictand, tini,tend,wlo2, elo2, sla2, nla2, tar, obs, obs_source, hdate_last, force_download,station, dic_sea):
@@ -3901,7 +3901,7 @@ def GetObs_T2M(predictand, tini,tend,wlo2, elo2, sla2, nla2, tar, obs, obs_sourc
 #		url='https://iridl.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.CPC/.temperature/.daily/tmax/tmin/add/2/div/T/(1%20Jan%20'+str(tini)+')/(31%20Dec%20'+str(tend)+')/RANGE/T/%28'+tar+'%20'+str(tini)+'-'+str(tend)+'%29/seasonalAverage/Y/%28'+str(sla2)+'%29/%28'+str(nla2)+'%29/RANGEEDGES/X/%28'+str(wlo2)+'%29/%28'+str(elo2)+'%29/RANGEEDGES/-999/setmissing_value/%5BX/Y%5D%5BT%5Dcptv10.tsv'
 		url=eval(dic_sea[obs+'obs_T2M'])
 		print("\n Obs (Tmin) data URL: \n\n "+url)
-		get_ipython().system("curl -k '"+url+"' > obs_T2M"+"_"+tar+".tsv")
+		os.system("curl -k '"+url+"' > obs_T2M"+"_"+tar+".tsv")
 
 def GetObs_TMAX(predictand, tini,tend,wlo2, elo2, sla2, nla2, tar, obs, obs_source, hdate_last, force_download,station, dic_sea):
 	if not force_download:
@@ -3917,7 +3917,7 @@ def GetObs_TMAX(predictand, tini,tend,wlo2, elo2, sla2, nla2, tar, obs, obs_sour
 #		url='https://iridl.ldeo.columbia.edu/'+obs_source+'/T/(1%20Jan%20'+str(tini)+')/(31%20Dec%20'+str(tend)+')/RANGE/T/%28'+tar+'%20'+str(tini)+'-'+str(tend)+'%29/seasonalAverage/Y/%28'+str(sla2)+'%29/%28'+str(nla2)+'%29/RANGEEDGES/X/%28'+str(wlo2)+'%29/%28'+str(elo2)+'%29/RANGEEDGES/-999/setmissing_value/%5BX/Y%5D%5BT%5Dcptv10.tsv'
 		url=eval(dic_sea[obs+'obs_TMAX'])
 		print("\n Obs (Tmax) data URL: \n\n "+url)
-		get_ipython().system("curl -k '"+url+"' > obs_TMAX"+"_"+tar+".tsv")
+		os.system("curl -k '"+url+"' > obs_TMAX"+"_"+tar+".tsv")
 
 def GetObs_TMIN(predictand, tini,tend,wlo2, elo2, sla2, nla2, tar, obs, obs_source, hdate_last, force_download,station, dic_sea):
 	if not force_download:
@@ -3933,7 +3933,7 @@ def GetObs_TMIN(predictand, tini,tend,wlo2, elo2, sla2, nla2, tar, obs, obs_sour
 #		url='https://iridl.ldeo.columbia.edu/'+obs_source+'/T/(1%20Jan%20'+str(tini)+')/(31%20Dec%20'+str(tend)+')/RANGE/T/%28'+tar+'%20'+str(tini)+'-'+str(tend)+'%29/seasonalAverage/Y/%28'+str(sla2)+'%29/%28'+str(nla2)+'%29/RANGEEDGES/X/%28'+str(wlo2)+'%29/%28'+str(elo2)+'%29/RANGEEDGES/-999/setmissing_value/%5BX/Y%5D%5BT%5Dcptv10.tsv'
 		url=eval(dic_sea[obs+'obs_TMIN'])
 		print("\n Obs (Tmin) data URL: \n\n "+url)
-		get_ipython().system("curl -k '"+url+"' > obs_TMIN"+"_"+tar+".tsv")
+		os.system("curl -k '"+url+"' > obs_TMIN"+"_"+tar+".tsv")
 
 def GetObs_RFREQ(predictand, tini,tend,wlo2, elo2, sla2, nla2, wetday_threshold, threshold_pctle, tar, obs_source, hdate_last, force_download,station, dic_sea):
 	if not force_download:
@@ -3962,7 +3962,7 @@ def GetObs_RFREQ(predictand, tini,tend,wlo2, elo2, sla2, nla2, wetday_threshold,
 				url=eval(dic_sea['CRU_obs_'+predictand])
 
 		print("\n Obs (Freq) data URL: \n\n "+url)
-		get_ipython().system("curl -k '"+url+"' > obs_"+predictand+"_"+tar+".tsv")
+		os.system("curl -k '"+url+"' > obs_"+predictand+"_"+tar+".tsv")
 
 def GetForecast(monf, fyr, tgti, tgtf, tar, wlo1, elo1, sla1, nla1, model, force_download, dic_sea):
 	if not force_download:
@@ -3988,7 +3988,7 @@ def GetForecast(monf, fyr, tgti, tgtf, tar, wlo1, elo1, sla1, nla1, model, force
 #		url=dic[model]
 		url=eval(dic_sea[model+'_fcst_PRCP'])
 		print("\n Forecast URL: \n\n "+url)
-		get_ipython().system("curl -k "+url+" > "+model+"fcst_PRCP_"+tar+"_ini"+monf+str(fyr)+".tsv")
+		os.system("curl -k "+url+" > "+model+"fcst_PRCP_"+tar+"_ini"+monf+str(fyr)+".tsv")
 def GetForecast_T2M(monf, fyr, tgti, tgtf, tar, wlo1, elo1, sla1, nla1, model, force_download, dic_sea):
 	if not force_download:
 		try:
@@ -4013,7 +4013,7 @@ def GetForecast_T2M(monf, fyr, tgti, tgtf, tar, wlo1, elo1, sla1, nla1, model, f
 		#url=dic[model]
 		url=eval(dic_sea[model+'_fcst_T2M'])
 		print("\n Forecast URL: \n\n "+url)
-		get_ipython().system("curl -k "+url+" > "+model+"fcst_T2M_"+tar+"_ini"+monf+str(fyr)+".tsv")
+		os.system("curl -k "+url+" > "+model+"fcst_T2M_"+tar+"_ini"+monf+str(fyr)+".tsv")
 def GetForecast_TMAX(monf, fyr, tgti, tgtf, tar, wlo1, elo1, sla1, nla1, model, force_download, dic_sea):
 	if not force_download:
 		try:
@@ -4038,7 +4038,7 @@ def GetForecast_TMAX(monf, fyr, tgti, tgtf, tar, wlo1, elo1, sla1, nla1, model, 
 		#url=dic[model]
 		url=eval(dic_sea[model+'_fcst_TMAX'])
 		print("\n Forecast URL: \n\n "+url)
-		get_ipython().system("curl -k "+url+" > "+model+"fcst_TMAX_"+tar+"_ini"+monf+str(fyr)+".tsv")
+		os.system("curl -k "+url+" > "+model+"fcst_TMAX_"+tar+"_ini"+monf+str(fyr)+".tsv")
 
 def GetForecast_TMIN(monf, fyr, tgti, tgtf, tar, wlo1, elo1, sla1, nla1, model, force_download, dic_sea):
 	if not force_download:
@@ -4064,7 +4064,7 @@ def GetForecast_TMIN(monf, fyr, tgti, tgtf, tar, wlo1, elo1, sla1, nla1, model, 
 		#url=dic[model]
 		url=eval(dic_sea[model+'_fcst_TMIN'])
 		print("\n Forecast URL: \n\n "+url)
-		get_ipython().system("curl -k "+url+" > "+model+"fcst_TMIN_"+tar+"_ini"+monf+str(fyr)+".tsv")
+		os.system("curl -k "+url+" > "+model+"fcst_TMIN_"+tar+"_ini"+monf+str(fyr)+".tsv")
 
 def GetForecast_UQ(monf, fyr, tgti, tgtf, tar, wlo1, elo1, sla1, nla1, model, force_download, dic_sea, pressure):
 	if not force_download:
@@ -4083,7 +4083,7 @@ def GetForecast_UQ(monf, fyr, tgti, tgtf, tar, wlo1, elo1, sla1, nla1, model, fo
 #		url=dic[model]
 		url=eval(dic_sea[model+'_fcst_UQ'])
 		print("\n Forecast URL: \n\n "+url)
-		get_ipython().system("curl -k "+url+" > "+model+"fcst_UQ_"+tar+"_ini"+monf+str(fyr)+".tsv")
+		os.system("curl -k "+url+" > "+model+"fcst_UQ_"+tar+"_ini"+monf+str(fyr)+".tsv")
 
 def GetForecast_VQ(monf, fyr, tgti, tgtf, tar, wlo1, elo1, sla1, nla1, model, force_download, dic_sea, pressure):
 	if not force_download:
@@ -4103,7 +4103,7 @@ def GetForecast_VQ(monf, fyr, tgti, tgtf, tar, wlo1, elo1, sla1, nla1, model, fo
 		url=eval(dic_sea[model+'_fcst_VQ'])
 
 		print("\n Forecast URL: \n\n "+url)
-		get_ipython().system("curl -k "+url+" > "+model+"fcst_VQ_"+tar+"_ini"+monf+str(fyr)+".tsv")
+		os.system("curl -k "+url+" > "+model+"fcst_VQ_"+tar+"_ini"+monf+str(fyr)+".tsv")
 
 def GetForecast_UA(monf, fyr, tgti, tgtf, tar, wlo1, elo1, sla1, nla1, model, force_download, dic_sea, pressure):
 	if not force_download:
@@ -4122,7 +4122,7 @@ def GetForecast_UA(monf, fyr, tgti, tgtf, tar, wlo1, elo1, sla1, nla1, model, fo
 #		url=dic[model]
 		url=eval(dic_sea[model+'_fcst_UA'])
 		print("\n Forecast URL: \n\n "+url)
-		get_ipython().system("curl -k "+url+" > "+model+"fcst_UA_"+tar+"_ini"+monf+str(fyr)+".tsv")
+		os.system("curl -k "+url+" > "+model+"fcst_UA_"+tar+"_ini"+monf+str(fyr)+".tsv")
 
 def GetForecast_VA(monf, fyr, tgti, tgtf, tar, wlo1, elo1, sla1, nla1, model, force_download, dic_sea, pressure):
 	if not force_download:
@@ -4142,7 +4142,7 @@ def GetForecast_VA(monf, fyr, tgti, tgtf, tar, wlo1, elo1, sla1, nla1, model, fo
 		url=eval(dic_sea[model+'_fcst_VA'])
 
 		print("\n Forecast URL: \n\n "+url)
-		get_ipython().system("curl -k "+url+" > "+model+"fcst_VA_"+tar+"_ini"+monf+str(fyr)+".tsv")
+		os.system("curl -k "+url+" > "+model+"fcst_VA_"+tar+"_ini"+monf+str(fyr)+".tsv")
 
 def GetForecast_SST(monf, fyr, tgti, tgtf, tar, wlo1, elo1, sla1, nla1, model, force_download, dic_sea):
 	if not force_download:
@@ -4162,7 +4162,7 @@ def GetForecast_SST(monf, fyr, tgti, tgtf, tar, wlo1, elo1, sla1, nla1, model, f
 		url=eval(dic_sea[model+'_fcst_SST'])
 
 		print("\n Forecast URL: \n\n "+url)
-		get_ipython().system("curl -k "+url+" > "+model+"fcst_SST_"+tar+"_ini"+monf+str(fyr)+".tsv")
+		os.system("curl -k "+url+" > "+model+"fcst_SST_"+tar+"_ini"+monf+str(fyr)+".tsv")
 
 def GetForecast_RFREQ(monf, fyr, tgti, tgtf, tar, wlo1, elo1, sla1, nla1, wetday_threshold, model, force_download, dic_sea):
 	if not force_download:
@@ -4188,7 +4188,7 @@ def GetForecast_RFREQ(monf, fyr, tgti, tgtf, tar, wlo1, elo1, sla1, nla1, wetday
 #		url=dic[model]
 		url=eval(dic_sea[model+'_fcst_RFREQ'])
 		print("\n Forecast URL: \n\n "+url)
-		get_ipython().system("curl -k "+url+" > "+model+"fcst_RFREQ_"+tar+"_ini"+monf+str(fyr)+".tsv")
+		os.system("curl -k "+url+" > "+model+"fcst_RFREQ_"+tar+"_ini"+monf+str(fyr)+".tsv")
 
 def CPTscript(model,predictand, mon,monf,fyr,tini,tend,nla1,sla1,wlo1,elo1,nla2,sla2,wlo2,elo2,fprefix,mpref,tar,ntrain,MOS,station, xmodes_min, xmodes_max, ymodes_min, ymodes_max, ccamodes_min, ccamodes_max, forecast_anomaly, forecast_spi):
 		"""Function to write CPT namelist file
@@ -4218,7 +4218,6 @@ def CPTscript(model,predictand, mon,monf,fyr,tini,tend,nla1,sla1,wlo1,elo1,nla2,
 		# Opens X input file
 		f.write("1\n")
 		file='../input/'+model+'_'+fprefix+'_'+tar+'_ini'+mon+'.tsv\n'
-		#file=os.path.join(workdir,'input',model+'_'+fprefix+'_'+tar+'_ini'+mon+'.tsv')
 		f.write(file)
 		# Nothernmost latitude
 		f.write(str(nla1)+'\n')
@@ -4343,9 +4342,8 @@ def CPTscript(model,predictand, mon,monf,fyr,tini,tend,nla1,sla1,wlo1,elo1,nla2,
 
 
 		# save goodness index
-		f.write("112\n")		
+		f.write("112\n")
 		file='../output/'+model+'_'+fprefix+predictand+'_'+mpref+'_Kendallstau_'+tar+'_'+mon+'\n'
-		print("output file",file)
 		f.write(file)
 
 		# NB: Default output format is GrADS format
@@ -4738,7 +4736,7 @@ def CPTscript(model,predictand, mon,monf,fyr,tini,tend,nla1,sla1,wlo1,elo1,nla2,
 		f.write("0\n")
 		f.write("0\n")
 		f.close()
-		get_ipython().system("cp params "+model+"_"+fprefix+predictand+"_"+mpref+"_"+tar+"_"+mon+".cpt")
+		os.system("cp params "+model+"_"+fprefix+predictand+"_"+mpref+"_"+tar+"_"+mon+".cpt")
 
 def ensemblefiles(models,work):
 	"""A simple function for preparing the NextGen ensemble files for the DL
@@ -4747,14 +4745,14 @@ def ensemblefiles(models,work):
 	----------
 		models: array with selected models
 	"""
-	get_ipython().system("mkdir ../output/NextGen/")
+	os.system("mkdir ../output/NextGen/")
 	#Go to folder and delate old TXT and TGZ files in folder
-	get_ipython().system("cd ../output/NextGen/; rm -Rf *_NextGen.tgz *.txt")
+	os.system("cd ../output/NextGen/; rm -Rf *_NextGen.tgz *.txt")
 	for i in range(len(models)):
-		get_ipython().system("cp ../*"+models[i]+"*.txt .")
+		os.system("cp ../*"+models[i]+"*.txt .")
 
-	get_ipython().system("tar cvzf NextGen/"+work+"_NextGen.tgz *.txt")
-	get_ipython().system("pwd")
+	os.system("tar cvzf NextGen/"+work+"_NextGen.tgz *.txt")
+	os.system("pwd")
 	print("Compressed file "+work+"_NextGen.tgz created in output/NextGen/")
 	print("Now send that file to your contact at the IRI")
 
@@ -5182,10 +5180,10 @@ def ELR_CPTscript(model,predictand,mon,monf,fyr,tini,tend,lit,nla1,sla1,wlo1,elo
 		f.write("0\n")
 		f.close()
 		if flag ==1:
-			get_ipython().system("cp params "+model+"_"+fprefix+predictand+"_"+mpref+"_"+tar+"_"+mon+"_training.cpt")
+			os.system("cp params "+model+"_"+fprefix+predictand+"_"+mpref+"_"+tar+"_"+mon+"_training.cpt")
 		else:
-			get_ipython().system("cp params "+model+"_"+fprefix+predictand+"_"+mpref+"_"+tar+"_"+mon+"_verification.cpt")
-		#get_ipython().system('cp params '+fprefix+'_'+mpref+'_'+training_season+'_'+mon+str(fday)+'_wk'+str(wk)+'.cpt')
+			os.system("cp params "+model+"_"+fprefix+predictand+"_"+mpref+"_"+tar+"_"+mon+"_verification.cpt")
+		#os.system('cp params '+fprefix+'_'+mpref+'_'+training_season+'_'+mon+str(fday)+'_wk'+str(wk)+'.cpt')
 
 
 def elr_fit(x, y):
