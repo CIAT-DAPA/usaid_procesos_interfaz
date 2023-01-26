@@ -104,8 +104,8 @@ MOS <- 'CCA'
 PREDICTAND <- "PRCP"
 PREDICTOR <- "PRCP"
 monf <- paste0(month(month(Sys.Date()), label=TRUE))# Initialization month
-#monf <- "Oct"
-mon_fcst_ini <- paste0(monf,1)
+#mon_fcst_ini <- paste0(monf,1)
+mon_fcst_ini <- paste0(monf,3)
 weeks = paste0("wk",c(1:3,34))
 
 fyr <- year(Sys.Date()) # Forecast year

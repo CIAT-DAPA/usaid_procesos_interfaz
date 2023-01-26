@@ -2442,8 +2442,8 @@ def GetHindcasts(wlo1, elo1, sla1, nla1, day1, day2, fyr, mon, os, key, week, nl
 		#url=dic[model]
 		url=eval(dic_s2s[model+'_hcst_PRCP'])
 		print("\n Hindcasts URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > '"+model+"_precip_"+mon+"_wk"+str(week)+".tsv.gz'")
-		get_ipython().system("gunzip -f "+model+"_precip_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > '"+model+"_precip_"+mon+"_wk"+str(week)+".tsv.gz'")
+		os.system("gunzip -f "+model+"_precip_"+mon+"_wk"+str(week)+".tsv.gz")
 		#! curl -g -k -b '__dlauth_id='$key'' ''$url'' > model_precip_${mo}.tsv
 
 def GetHindcasts_elr(wlo1, elo1, sla1, nla1, day1, day2, fyr, mon, os, key, week, nlag, nday, training_season, hstep, model, hdate_last, GEPShdate1, force_download, dic_s2s_elr):
@@ -2461,7 +2461,7 @@ def GetHindcasts_elr(wlo1, elo1, sla1, nla1, day1, day2, fyr, mon, os, key, week
 		#url=dic[model]
 		url=eval(dic_s2s_elr[model+'_hcst_PRCP'])
 		print("\n Hindcasts URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > "+model+"_precip_"+mon+"_wk"+str(week)+".nc")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > "+model+"_precip_"+mon+"_wk"+str(week)+".nc")
 
 def GetHindcasts_T2M(wlo1, elo1, sla1, nla1, day1, day2, fyr, mon, os, key, week, nlag, nday, training_season, hstep, model, hdate_last, force_download, dic_s2s):
 	if not force_download:
@@ -2480,8 +2480,8 @@ def GetHindcasts_T2M(wlo1, elo1, sla1, nla1, day1, day2, fyr, mon, os, key, week
 		#url=dic[model]
 		url=eval(dic_s2s[model+'_hcst_T2M'])
 		print("\n Hindcasts URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > "+model+"_T2M_"+mon+"_wk"+str(week)+".tsv.gz")
-		get_ipython().system("gunzip -f model_T2M_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > "+model+"_T2M_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("gunzip -f model_T2M_"+mon+"_wk"+str(week)+".tsv.gz")
 		#! curl -g -k -b '__dlauth_id='$key'' ''$url'' > model_precip_${mo}.tsv
 
 def GetHindcasts_RFREQ(wlo1, elo1, sla1, nla1, day1, day2, nday, fyr, mon, os, key, week, wetday_threshold, nlag, training_season, hstep,model, force_download, dic_s2s):
@@ -2504,8 +2504,8 @@ def GetHindcasts_RFREQ(wlo1, elo1, sla1, nla1, day1, day2, nday, fyr, mon, os, k
 		#url=dic[model]
 		url=eval(dic_s2s[model+'_hcst_RFREQ'])
 		print("\n Hindcasts URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > model_RFREQ_"+mon+"_wk"+str(week)+".tsv.gz")
-		get_ipython().system("gunzip -f model_RFREQ_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > model_RFREQ_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("gunzip -f model_RFREQ_"+mon+"_wk"+str(week)+".tsv.gz")
 		#! curl -g -k -b '__dlauth_id='$key'' ''$url'' > model_precip_${mo}.tsv
 
 def GetHindcastsUser(wlo1, elo1, sla1, nla1, day1, day2, fyr, mon, os, key, week, nlag, nday, training_season, hstep, model, hdate_last, force_download, dic_s2s):
@@ -2526,8 +2526,8 @@ def GetHindcastsUser(wlo1, elo1, sla1, nla1, day1, day2, fyr, mon, os, key, week
 		#url=dic[model]
 		url=eval(dic_s2s[model+'_hcst_PRCP'])
 		print("\n Hindcasts URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > model_precip_"+mon+"_wk"+str(week)+".tsv.gz")
-		get_ipython().system("gunzip -f model_precip_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > model_precip_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("gunzip -f model_precip_"+mon+"_wk"+str(week)+".tsv.gz")
 		#! curl -g -k -b '__dlauth_id='$key'' ''$url'' > model_precip_${mo}.tsv
 
 def GetObs(day1, day2, mon, fyr, wlo2, elo2, sla2, nla2, nday, key, week, nlag, training_season, hstep, model, obs_source, obsclimo_source,obsclimo2_source, hdate_last, GEPShdate1, force_download, dic_s2s):
@@ -2552,8 +2552,8 @@ def GetObs(day1, day2, mon, fyr, wlo2, elo2, sla2, nla2, nday, key, week, nlag, 
 		#url=dic[model]
 		url=eval(dic_s2s[model+'_obs_PRCP'])
 		print("\n Obs (Rainfall) data URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > obs_precip_"+mon+"_wk"+str(week)+".tsv.gz")
-		get_ipython().system("gunzip -f obs_precip_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > obs_precip_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("gunzip -f obs_precip_"+mon+"_wk"+str(week)+".tsv.gz")
 		#curl -g -k -b '__dlauth_id='$key'' ''$url'' > obs_precip_${mo}.tsv
 
 def GetObs_hc_elr(day1, day2, mon, fyr, wlo2, elo2, sla2, nla2, nday, key, week, nlag, training_season, hstep, model, obs_source, obsclimo_source, obsclimo2_source,  hdate_last, GEPShdate1, force_download, dic_s2s_elr):
@@ -2571,7 +2571,7 @@ def GetObs_hc_elr(day1, day2, mon, fyr, wlo2, elo2, sla2, nla2, nday, key, week,
 		#url=dic[model]
 		url=eval(dic_s2s_elr[model+'_obs_hc_PRCP'])
 		print("\n Obs (Rainfall) data URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > obs_precip_"+mon+"_wk"+str(week)+"_hc.nc")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > obs_precip_"+mon+"_wk"+str(week)+"_hc.nc")
 
 def GetObs_T2M(day1, day2, mon, fyr, wlo2, elo2, sla2, nla2, nday, key, week, nlag, training_season, hstep, model, obs_source, hdate_last, force_download, dic_s2s):
 	if not force_download:
@@ -2590,8 +2590,8 @@ def GetObs_T2M(day1, day2, mon, fyr, wlo2, elo2, sla2, nla2, nday, key, week, nl
 		#url=dic[model]
 		url=eval(dic_s2s[model+'_obs_T2M'])
 		print("\n Obs (2m Temp) data URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > obs_T2M_"+mon+"_wk"+str(week)+".tsv.gz")
-		get_ipython().system("gunzip -f obs_T2M_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > obs_T2M_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("gunzip -f obs_T2M_"+mon+"_wk"+str(week)+".tsv.gz")
 		#curl -g -k -b '__dlauth_id='$key'' ''$url'' > obs_precip_${mo}.tsv
 
 def GetObs_TMAX(day1, day2, mon, fyr, wlo2, elo2, sla2, nla2, nday, key, week, nlag, training_season, hstep, model, obs_source, hdate_last, force_download, dic_s2s):
@@ -2611,8 +2611,8 @@ def GetObs_TMAX(day1, day2, mon, fyr, wlo2, elo2, sla2, nla2, nday, key, week, n
                 #url=dic[model]
 		url=eval(dic_s2s[model+'_obs_TMAX'])
 		print("\n Obs (Temp max) data URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > obs_TMAX_"+mon+"_wk"+str(week)+".tsv.gz")
-		get_ipython().system("gunzip -f obs_TMAX_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > obs_TMAX_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("gunzip -f obs_TMAX_"+mon+"_wk"+str(week)+".tsv.gz")
                 #curl -g -k -b '__dlauth_id='$key'' ''$url'' > obs_precip_${mo}.tsv
 
 def GetObs_TMIN(day1, day2, mon, fyr, wlo2, elo2, sla2, nla2, nday, key, week, nlag, training_season, hstep, model, obs_source, hdate_last, force_download, dic_s2s):
@@ -2632,8 +2632,8 @@ def GetObs_TMIN(day1, day2, mon, fyr, wlo2, elo2, sla2, nla2, nday, key, week, n
                 #url=dic[model]
 		url=eval(dic_s2s[model+'_obs_TMIN'])
 		print("\n Obs (Temp min) data URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > obs_TMIN_"+mon+"_wk"+str(week)+".tsv.gz")
-		get_ipython().system("gunzip -f obs_TMIN_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > obs_TMIN_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("gunzip -f obs_TMIN_"+mon+"_wk"+str(week)+".tsv.gz")
                 #curl -g -k -b '__dlauth_id='$key'' ''$url'' > obs_precip_${mo}.tsv
 
 def GetObs_RFREQ(day1, day2, mon, fyr, wlo2, elo2, sla2, nla2, nday, key, week, wetday_threshold, threshold_pctle, nlag, training_season, hstep, model, obs_source, force_download, dic_s2s):
@@ -2664,8 +2664,8 @@ def GetObs_RFREQ(day1, day2, mon, fyr, wlo2, elo2, sla2, nla2, nday, key, week, 
 		# calls curl to download data
 		#url=dic[model]
 		print("\n Obs (Freq) data URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > obs_RFREQ_"+mon+"_wk"+str(week)+".tsv.gz")
-		get_ipython().system("gunzip -f obs_RFREQ_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > obs_RFREQ_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("gunzip -f obs_RFREQ_"+mon+"_wk"+str(week)+".tsv.gz")
 		#curl -g -k -b '__dlauth_id='$key'' ''$url'' > obs_precip_${mo}.tsv
 
 def GetObsUser(day1, day2, mon, fyr, wlo2, elo2, sla2, nla2, nday, key, week, nlag, training_season, hstep, model, obs_source, obsclimo_source, hdate_last, force_download, dic_s2s):
@@ -2686,8 +2686,8 @@ def GetObsUser(day1, day2, mon, fyr, wlo2, elo2, sla2, nla2, nday, key, week, nl
 		#url=dic[model]
 		url=eval(dic_s2s[model+'_obs_PRCP'])
 		print("\n R0 'obs' data URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > obs_precip_"+mon+"_wk"+str(week)+".tsv.gz")
-		get_ipython().system("gunzip -f obs_precip_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > obs_precip_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("gunzip -f obs_precip_"+mon+"_wk"+str(week)+".tsv.gz")
 		#curl -g -k -b '__dlauth_id='$key'' ''$url'' > obs_precip_${mo}.tsv
 
 def GetForecastUser(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, wlo2, elo2, sla2, nla2, obs_source, key, week, nlag, model, hdate_last, threshold_pctle,training_season,wetday_threshold,force_download,mpref, dic_s2s):
@@ -2707,8 +2707,8 @@ def GetForecastUser(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, wl
 		#url=dic[model]
 		url=eval(dic_s2s[model+'_fcst_PRCP'])
 		print("\n Forecast URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > modelfcst_precip_"+mon+"_fday"+str(fday)+"_wk"+str(week)+".tsv.gz")
-		get_ipython().system("gunzip -f modelfcst_precip_"+mon+"_fday"+str(fday)+"_wk"+str(week)+".tsv.gz")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > modelfcst_precip_"+mon+"_fday"+str(fday)+"_wk"+str(week)+".tsv.gz")
+		os.system("gunzip -f modelfcst_precip_"+mon+"_fday"+str(fday)+"_wk"+str(week)+".tsv.gz")
 		#curl -g -k -b '__dlauth_id='$key'' ''$url'' > modelfcst_precip_fday${fday}.tsv
 
 def GetForecast(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, wlo2, elo2, sla2, nla2, obs_source,obsclimo_source, key, week, nlag, model, hdate_last, threshold_pctle,training_season,wetday_threshold,force_download,mpref, dic_s2s):
@@ -2731,8 +2731,8 @@ def GetForecast(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, wlo2, 
 		#url=dic[model]
 		url=eval(dic_s2s[model+'_fcst_PRCP'])
 		print("\n Forecast URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > "+model+"fcst_precip_"+mon+"_fday"+str(fday)+"_wk"+str(week)+".tsv.gz")
-		get_ipython().system("gunzip -f "+model+"fcst_precip_"+mon+"_fday"+str(fday)+"_wk"+str(week)+".tsv.gz")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > "+model+"fcst_precip_"+mon+"_fday"+str(fday)+"_wk"+str(week)+".tsv.gz")
+		os.system("gunzip -f "+model+"fcst_precip_"+mon+"_fday"+str(fday)+"_wk"+str(week)+".tsv.gz")
 		#curl -g -k -b '__dlauth_id='$key'' ''$url'' > modelfcst_precip_fday${fday}.tsv
 
 	#False force_download
@@ -2759,8 +2759,8 @@ def GetForecast(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, wlo2, 
 			#url=dic[model]
 			url=eval(dic_s2s[model+'_fcst_noMOS/modelshort_PRCP'])
 			print("\n Short hindcast file\n") #URL: \n\n "+url)
-			get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/modelshort_precip_"+mon+"_wk"+str(week)+".tsv.gz")
-			get_ipython().system("gunzip -f noMOS/modelshort_precip_"+mon+"_wk"+str(week)+".tsv.gz")
+			os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/modelshort_precip_"+mon+"_wk"+str(week)+".tsv.gz")
+			os.system("gunzip -f noMOS/modelshort_precip_"+mon+"_wk"+str(week)+".tsv.gz")
 		#Short obs period corresponding to the short hindcast period
 
 		#False force_download
@@ -2784,8 +2784,8 @@ def GetForecast(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, wlo2, 
 			#url=dic[model]
 			url=eval(dic_s2s[model+'_fcst_noMOS/obsshort_PRCP'])
 			print("\n Short obs (Rainfall) data URL: \n\n "+url)
-			get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/obsshort_precip_"+mon+"_wk"+str(week)+".tsv.gz")
-			get_ipython().system("gunzip -f noMOS/obsshort_precip_"+mon+"_wk"+str(week)+".tsv.gz")
+			os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/obsshort_precip_"+mon+"_wk"+str(week)+".tsv.gz")
+			os.system("gunzip -f noMOS/obsshort_precip_"+mon+"_wk"+str(week)+".tsv.gz")
 
 		#False force_download
 		force_download = False
@@ -2810,7 +2810,7 @@ def GetForecast(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, wlo2, 
 			#url=dic[model]
 			url=eval(dic_s2s[model+'_fcst_noMOS/modelfcst_above_PRCP'])
 			print("\n Short hindcast URL: \n\n "+url)
-			get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/modelfcst_above_PRCP_"+mon+"_wk"+str(week)+".nc")
+			os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/modelfcst_above_PRCP_"+mon+"_wk"+str(week)+".nc")
 
 		#False force_download
 		force_download = False
@@ -2834,7 +2834,7 @@ def GetForecast(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, wlo2, 
 			#url=dic[model]
 			url=eval(dic_s2s[model+'_fcst_noMOS/modelfcst_below_PRCP'])
 			print("\n Short hindcast URL: \n\n "+url)
-			get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/modelfcst_below_PRCP_"+mon+"_wk"+str(week)+".nc")
+			os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/modelfcst_below_PRCP_"+mon+"_wk"+str(week)+".nc")
 
 		#False force_download
 		force_download = False
@@ -2859,7 +2859,7 @@ def GetForecast(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, wlo2, 
 			#url=dic[model]
 			url=eval(dic_s2s[model+'_fcst_noMOS/modelfcst_mu_PRCP'])
 			print("\n Ensemble mean URL: \n\n "+url)
-			get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/modelfcst_mu_PRCP_"+mon+"_wk"+str(week)+".nc")
+			os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/modelfcst_mu_PRCP_"+mon+"_wk"+str(week)+".nc")
 
 		#False force_download
 		force_download = False
@@ -2883,7 +2883,7 @@ def GetForecast(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, wlo2, 
 			#url=dic[model]
 			url=eval(dic_s2s[model+'_fcst_noMOS/modelfcst_std_PRCP'])
 			#print("\n Ensemble std URL: \n\n "+url)
-			get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/modelfcst_std_PRCP_"+mon+"_wk"+str(week)+".nc")
+			os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/modelfcst_std_PRCP_"+mon+"_wk"+str(week)+".nc")
 
 		#Obs mean:
 		if not force_download:
@@ -2904,7 +2904,7 @@ def GetForecast(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, wlo2, 
 			#url=dic[model]
 			url=eval(dic_s2s[model+'_fcst_noMOS/obs_mu_PRCP'])
 			#print("\n Obs mean URL: \n\n "+url)
-			get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/obs_mu_PRCP_"+mon+"_wk"+str(week)+".nc")
+			os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/obs_mu_PRCP_"+mon+"_wk"+str(week)+".nc")
 
 		#False force_download
 		force_download = False
@@ -2928,7 +2928,7 @@ def GetForecast(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, wlo2, 
 			#url=dic[model]
 			url=eval(dic_s2s[model+'_fcst_noMOS/obs_std_PRCP'])
 			#print("\n Obs std URL: \n\n "+url)
-			get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/obs_std_PRCP_"+mon+"_wk"+str(week)+".nc")
+			os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/obs_std_PRCP_"+mon+"_wk"+str(week)+".nc")
 
 		#False force_download
 		force_download = False
@@ -2958,8 +2958,8 @@ def GetForecast(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, wlo2, 
  		# calls curl to download data
 		#url=dic[model]
 		print("\n Short hindcast file\n") #URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/obsshort_RFREQ_"+mon+"_wk"+str(week)+".tsv.gz")
-		get_ipython().system("gunzip -f noMOS/obsshort_RFREQ_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/obsshort_RFREQ_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("gunzip -f noMOS/obsshort_RFREQ_"+mon+"_wk"+str(week)+".tsv.gz")
 	else:
 		print("Data download of forecast individual ensemble members skipped for MOS case")
 
@@ -2980,8 +2980,8 @@ def GetForecast_RFREQ(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, 
 	# 	# calls curl to download data
 	# 	url=dic[model]
 	# 	print("\n Forecast URL: \n\n "+url)
-	# 	get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > modelfcst_RFREQ_"+mon+"_fday"+str(fday)+"_wk"+str(week)+".tsv.gz")
-	# 	get_ipython().system("gunzip -f modelfcst_RFREQ_"+mon+"_fday"+str(fday)+"_wk"+str(week)+".tsv.gz")
+	# 	os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > modelfcst_RFREQ_"+mon+"_fday"+str(fday)+"_wk"+str(week)+".tsv.gz")
+	# 	os.system("gunzip -f modelfcst_RFREQ_"+mon+"_fday"+str(fday)+"_wk"+str(week)+".tsv.gz")
 	# 	#curl -g -k -b '__dlauth_id='$key'' ''$url'' > modelfcst_precip_fday${fday}.tsv
 	#
 	# #False force_download
@@ -3007,8 +3007,8 @@ def GetForecast_RFREQ(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, 
 		#url=dic[model]
 		url=eval(dic_s2s[model+'_fcst_PRCP'])
 		print("\n Forecast URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > modelfcst_precip_"+mon+"_fday"+str(fday)+"_wk"+str(week)+".tsv.gz")
-		get_ipython().system("gunzip -f modelfcst_precip_"+mon+"_fday"+str(fday)+"_wk"+str(week)+".tsv.gz")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > modelfcst_precip_"+mon+"_fday"+str(fday)+"_wk"+str(week)+".tsv.gz")
+		os.system("gunzip -f modelfcst_precip_"+mon+"_fday"+str(fday)+"_wk"+str(week)+".tsv.gz")
 		#curl -g -k -b '__dlauth_id='$key'' ''$url'' > modelfcst_precip_fday${fday}.tsv
 
 	#False force_download
@@ -3033,8 +3033,8 @@ def GetForecast_RFREQ(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, 
 		#url=dic[model]
 		url=eval(dic_s2s[model+'_fcst_noMOS/modelshort_PRCP'])
 		print("\n Short hindcast file\n") #URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/modelshort_precip_"+mon+"_wk"+str(week)+".tsv.gz")
-		get_ipython().system("gunzip -f noMOS/modelshort_precip_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/modelshort_precip_"+mon+"_wk"+str(week)+".tsv.gz")
+		os.system("gunzip -f noMOS/modelshort_precip_"+mon+"_wk"+str(week)+".tsv.gz")
 
 	#Short obs period corresponding to the short hindcast period
 	#False force_download
@@ -3065,8 +3065,8 @@ def GetForecast_RFREQ(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, 
 	# calls curl to download data
 	#url=dic[model]
 	print("\n Short hindcast file\n") #URL: \n\n "+url)
-	get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/obsshort_precip_"+mon+"_wk"+str(week)+".tsv.gz")
-	get_ipython().system("gunzip -f noMOS/obsshort_RFREQ_"+mon+"_wk"+str(week)+".tsv.gz")
+	os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/obsshort_precip_"+mon+"_wk"+str(week)+".tsv.gz")
+	os.system("gunzip -f noMOS/obsshort_RFREQ_"+mon+"_wk"+str(week)+".tsv.gz")
 
 	#False force_download
 	force_download = False
@@ -3090,7 +3090,7 @@ def GetForecast_RFREQ(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, 
 		#url=dic[model]
 		url=eval(dic_s2s[model+'_fcst_noMOS/modelfcst_above_RFREQ'])
 		#print("\n Short hindcast URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/modelfcst_above_RFREQ_"+mon+"_wk"+str(week)+".nc")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/modelfcst_above_RFREQ_"+mon+"_wk"+str(week)+".nc")
 
 	#False force_download
 	force_download = False
@@ -3113,7 +3113,7 @@ def GetForecast_RFREQ(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, 
 		#url=dic[model]
 		url=eval(dic_s2s[model+'_fcst_noMOS/modelfcst_below_RFREQ'])
 		#print("\n Short hindcast URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/modelfcst_below_RFREQ_"+mon+"_wk"+str(week)+".nc")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/modelfcst_below_RFREQ_"+mon+"_wk"+str(week)+".nc")
 
 	#False force_download
 	force_download = False
@@ -3137,7 +3137,7 @@ def GetForecast_RFREQ(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, 
 		#url=dic[model]
 		url=eval(dic_s2s[model+'_fcst_noMOS/modelfcst_mu_PRCP'])
 		print("\n Ensemble mean URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/modelfcst_mu_PRCP_"+mon+"_wk"+str(week)+".nc")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/modelfcst_mu_PRCP_"+mon+"_wk"+str(week)+".nc")
 
 	#False force_download
 	force_download = False
@@ -3160,7 +3160,7 @@ def GetForecast_RFREQ(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, 
 		#url=dic[model]
 		url=eval(dic_s2s[model+'_fcst_noMOS/modelfcst_std_PRCP'])
 		#print("\n Ensemble std URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/modelfcst_std_PRCP_"+mon+"_wk"+str(week)+".nc")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/modelfcst_std_PRCP_"+mon+"_wk"+str(week)+".nc")
 
 	#Obs mean:
 	if not force_download:
@@ -3180,7 +3180,7 @@ def GetForecast_RFREQ(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, 
 		#url=dic[model]
 		url=eval(dic_s2s[model+'_fcst_noMOS/obs_mu_PRCP'])
 		#print("\n Obs mean URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/obs_mu_PRCP_"+mon+"_wk"+str(week)+".nc")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/obs_mu_PRCP_"+mon+"_wk"+str(week)+".nc")
 
 	#False force_download
 	force_download = False
@@ -3203,7 +3203,7 @@ def GetForecast_RFREQ(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, 
 		#url=dic[model]
 		url=eval(dic_s2s[model+'_fcst_noMOS/obs_std_PRCP'])
 		#print("\n Obs std URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/obs_std_PRCP_"+mon+"_wk"+str(week)+".nc")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > noMOS/obs_std_PRCP_"+mon+"_wk"+str(week)+".nc")
 
 def GetForecast_T2M(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, wlo2, elo2, sla2, nla2, obs_source, key, week, nlag, model, hdate_last, threshold_pctle,training_season,wetday_threshold,force_download, dic_s2s):
 	if not force_download:
@@ -3222,8 +3222,8 @@ def GetForecast_T2M(day1, day2, fday, mon, fyr, nday, wlo1, elo1, sla1, nla1, wl
 		#url=dic[model]
 		url=eval(dic_s2s[model+'_fcst_T2M'])
 		print("\n Forecast URL: \n\n "+url)
-		get_ipython().system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > modelfcst_T2M_"+mon+"_fday"+str(fday)+"_wk"+str(week)+".tsv.gz")
-		get_ipython().system("gunzip -f modelfcst_T2M_"+mon+"_fday"+str(fday)+"_wk"+str(week)+".tsv.gz")
+		os.system("curl -g -k -b '__dlauth_id="+key+"' '"+url+"' > modelfcst_T2M_"+mon+"_fday"+str(fday)+"_wk"+str(week)+".tsv.gz")
+		os.system("gunzip -f modelfcst_T2M_"+mon+"_fday"+str(fday)+"_wk"+str(week)+".tsv.gz")
 		#curl -g -k -b '__dlauth_id='$key'' ''$url'' > modelfcst_precip_fday${fday}.tsv
 
 def CPTscript(model,mon,fday,lit,liti,wk,nla1,sla1,wlo1,elo1,nla2,sla2,wlo2,elo2,fprefix,mpref,training_season,ntrain,rainfall_frequency,MOS, xmodes_min, xmodes_max, ymodes_min, ymodes_max, ccamodes_min, ccamodes_max):
@@ -3865,7 +3865,7 @@ def CPTscript(model,mon,fday,lit,liti,wk,nla1,sla1,wlo1,elo1,nla2,sla2,wlo2,elo2
 		f.write("0\n")
 
 		f.close()
-		get_ipython().system('cp params '+model+fprefix+'_'+mpref+'_'+training_season+'_'+mon+str(fday)+'_wk'+str(wk)+'.cpt')
+		os.system('cp params '+model+fprefix+'_'+mpref+'_'+training_season+'_'+mon+str(fday)+'_wk'+str(wk)+'.cpt')
 
 
 def read_forecast( fcst_type, model, fprefix,mpref,training_season,wki,fday,mon,fyr, filename='None', converting_tsv=False):
@@ -4610,10 +4610,10 @@ def ELR_CPTscript(model,mon,fday,lit,liti,wk,nla1,sla1,wlo1,elo1,nla2,sla2,wlo2,
 
 		f.close()
 		if flag ==1:
-			get_ipython().system('cp params '+fprefix+'_'+mpref+'_'+training_season+'_'+mon+str(fday)+'_wk'+str(wk)+'_training.cpt')
+			os.system('cp params '+fprefix+'_'+mpref+'_'+training_season+'_'+mon+str(fday)+'_wk'+str(wk)+'_training.cpt')
 		else:
-			get_ipython().system('cp params '+fprefix+'_'+mpref+'_'+training_season+'_'+mon+str(fday)+'_wk'+str(wk)+'_verification.cpt')
-		#get_ipython().system('cp params '+fprefix+'_'+mpref+'_'+training_season+'_'+mon+str(fday)+'_wk'+str(wk)+'.cpt')
+			os.system('cp params '+fprefix+'_'+mpref+'_'+training_season+'_'+mon+str(fday)+'_wk'+str(wk)+'_verification.cpt')
+		#os.system('cp params '+fprefix+'_'+mpref+'_'+training_season+'_'+mon+str(fday)+'_wk'+str(wk)+'.cpt')
 
 
 

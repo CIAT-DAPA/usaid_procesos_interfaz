@@ -37,7 +37,7 @@ def run_pycpt_subseasonal(region, spatial_predictors, spatial_predictands, model
     # Working directory --it should exist!!! (this is the place where the .py functions, notebooks, and .IRIDLAUTH is)
     workdir = '/forecast/PyCPT/iri-pycpt'
     # PATH to CPT root directory
-    cptdir='/forecast/models/CPT/17.7.4/bin/'
+    cptdir='/forecast/models/CPT/17.6.1/bin/'
 
     #---------------------------------------------------------------------------------
     #  Individual Models (choose between ECMWF,ECMWFrt, CFSv2, GEFS, CFSv2_SubX, GEPS6, ESRL)
@@ -75,7 +75,8 @@ def run_pycpt_subseasonal(region, spatial_predictors, spatial_predictands, model
 
     fyr=current_date.year  	# Forecast year
 
-    fday=1 	# Forecast day  (Monday and Thursday in ECMWF model; yesterday in CFSv2: real time)
+    #fday=1 
+    fday=1	# Forecast day  (Monday and Thursday in ECMWF model; yesterday in CFSv2: real time)
     #----------------------------------------------------------------------------------------------------
     #                          Traning Season (One month or Three MOnth)
     #----------------------------------------------------------------------------------------------------
