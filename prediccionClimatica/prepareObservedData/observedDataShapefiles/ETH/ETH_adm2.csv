@@ -1,0 +1,73 @@
+"OBJECTID","ID_0","ISO","NAME_0","ID_1","NAME_1","ID_2","NAME_2","TYPE_2","ENGTYPE_2","NL_NAME_2","VARNAME_2"
+1,74,"ETH","Ethiopia",1,"Addis Ababa",1,"Unknown","Astedader Akababi","Zone",NA,NA
+2,74,"ETH","Ethiopia",1,"Addis Ababa",2,"Zone 1","Astedader Akababi","Zone",NA,NA
+3,74,"ETH","Ethiopia",1,"Addis Ababa",3,"Zone 2","Astedader Akababi","Zone",NA,NA
+4,74,"ETH","Ethiopia",1,"Addis Ababa",4,"Zone 3","Astedader Akababi","Zone",NA,NA
+5,74,"ETH","Ethiopia",1,"Addis Ababa",5,"Zone 4","Astedader Akababi","Zone",NA,NA
+6,74,"ETH","Ethiopia",1,"Addis Ababa",6,"Zone 5","Astedader Akababi","Zone",NA,NA
+7,74,"ETH","Ethiopia",1,"Addis Ababa",7,"Zone 6","Astedader Akababi","Zone",NA,NA
+8,74,"ETH","Ethiopia",2,"Afar",8,"Zone 1","Astedader Akababi","Zone",NA,NA
+9,74,"ETH","Ethiopia",2,"Afar",9,"Zone 2","Astedader Akababi","Zone",NA,NA
+10,74,"ETH","Ethiopia",2,"Afar",10,"Zone 3","Astedader Akababi","Zone",NA,NA
+11,74,"ETH","Ethiopia",2,"Afar",11,"Zone 4","Astedader Akababi","Zone",NA,NA
+12,74,"ETH","Ethiopia",2,"Afar",12,"Zone 5","Astedader Akababi","Zone",NA,NA
+13,74,"ETH","Ethiopia",3,"Amhara",13,"Awi","Astedader Akababi","Zone",NA,NA
+14,74,"ETH","Ethiopia",3,"Amhara",14,"Bar Dar Sp. Zone","Astedader Akababi","Zone",NA,NA
+15,74,"ETH","Ethiopia",3,"Amhara",15,"East Gojam","Astedader Akababi","Zone",NA,NA
+16,74,"ETH","Ethiopia",3,"Amhara",16,"North Gonder","Astedader Akababi","Zone",NA,NA
+17,74,"ETH","Ethiopia",3,"Amhara",17,"North Shewa (K3)","Astedader Akababi","Zone",NA,NA
+18,74,"ETH","Ethiopia",3,"Amhara",18,"North Wollo","Astedader Akababi","Zone",NA,NA
+19,74,"ETH","Ethiopia",3,"Amhara",19,"Oromia Zone","Astedader Akababi","Zone",NA,NA
+20,74,"ETH","Ethiopia",3,"Amhara",20,"South Gonder","Astedader Akababi","Zone",NA,NA
+21,74,"ETH","Ethiopia",3,"Amhara",21,"South Wollo","Astedader Akababi","Zone",NA,NA
+22,74,"ETH","Ethiopia",3,"Amhara",22,"Wag Hemira","Astedader Akababi","Zone",NA,NA
+23,74,"ETH","Ethiopia",3,"Amhara",23,"West Gojam","Astedader Akababi","Zone",NA,NA
+24,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",24,"Asosa","Astedader Akababi","Zone",NA,NA
+25,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",25,"Kemashi","Astedader Akababi","Zone",NA,NA
+26,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",26,"Metekel","Astedader Akababi","Zone",NA,NA
+27,74,"ETH","Ethiopia",5,"Dire Dawa",27,"Dire Dawa","Astedader Akababi","Zone",NA,NA
+28,74,"ETH","Ethiopia",6,"Gambela Peoples",28,"Zone 1","Astedader Akababi","Zone",NA,NA
+29,74,"ETH","Ethiopia",6,"Gambela Peoples",29,"Zone 2","Astedader Akababi","Zone",NA,NA
+30,74,"ETH","Ethiopia",7,"Harari People",30,"Hundene","Astedader Akababi","Zone",NA,NA
+31,74,"ETH","Ethiopia",8,"Oromia",31,"Arsi","Astedader Akababi","Zone",NA,NA
+32,74,"ETH","Ethiopia",8,"Oromia",32,"Bale","Astedader Akababi","Zone",NA,NA
+33,74,"ETH","Ethiopia",8,"Oromia",33,"Borena","Astedader Akababi","Zone",NA,NA
+34,74,"ETH","Ethiopia",8,"Oromia",34,"East Harerghe","Astedader Akababi","Zone",NA,NA
+35,74,"ETH","Ethiopia",8,"Oromia",35,"East Shewa","Astedader Akababi","Zone",NA,NA
+36,74,"ETH","Ethiopia",8,"Oromia",36,"East Wellega","Astedader Akababi","Zone",NA,NA
+37,74,"ETH","Ethiopia",8,"Oromia",37,"Illubabor","Astedader Akababi","Zone",NA,NA
+38,74,"ETH","Ethiopia",8,"Oromia",38,"Jimma","Astedader Akababi","Zone",NA,"Jima"
+39,74,"ETH","Ethiopia",8,"Oromia",39,"North Shewa (K4)","Astedader Akababi","Zone",NA,NA
+40,74,"ETH","Ethiopia",8,"Oromia",40,"West Harerghe","Astedader Akababi","Zone",NA,NA
+41,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa","Astedader Akababi","Zone",NA,NA
+42,74,"ETH","Ethiopia",8,"Oromia",42,"West Wellega","Astedader Akababi","Zone",NA,NA
+43,74,"ETH","Ethiopia",9,"Somali",43,"Dege Habur","Astedader Akababi","Zone",NA,NA
+44,74,"ETH","Ethiopia",9,"Somali",44,"Jijiga","Astedader Akababi","Zone",NA,NA
+45,74,"ETH","Ethiopia",9,"Somali",45,"Liben","Astedader Akababi","Zone",NA,NA
+46,74,"ETH","Ethiopia",9,"Somali",46,"Shinile","Astedader Akababi","Zone",NA,NA
+47,74,"ETH","Ethiopia",9,"Somali",47,"Unknown","Astedader Akababi","Zone",NA,NA
+48,74,"ETH","Ethiopia",9,"Somali",48,"Welwel & Warder","Astedader Akababi","Zone",NA,NA
+49,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",49,"Amaro Special Woreda","Astedader Akababi","Zone",NA,NA
+50,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",50,"Basketo Special Woreda","Astedader Akababi","Zone",NA,NA
+51,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",51,"Benchi Maji","Astedader Akababi","Zone",NA,NA
+52,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",52,"Burji Special Woreda","Astedader Akababi","Zone",NA,NA
+53,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",53,"Dawuro","Astedader Akababi","Zone",NA,NA
+54,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",54,"Derashe Special Woreda","Astedader Akababi","Zone",NA,NA
+55,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",55,"Gamo Gofa","Astedader Akababi","Zone",NA,NA
+56,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",56,"Gedeo","Astedader Akababi","Zone",NA,NA
+57,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",57,"Guraghe","Astedader Akababi","Zone",NA,NA
+58,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",58,"Hadiya","Astedader Akababi","Zone",NA,NA
+59,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",59,"Kaffa","Astedader Akababi","Zone",NA,"Keffa"
+60,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",60,"Kembata Alaba Tembaro","Astedader Akababi","Zone",NA,NA
+61,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",61,"Konso Special Woreda","Astedader Akababi","Zone",NA,NA
+62,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",62,"Konta Special Woreda","Astedader Akababi","Zone",NA,NA
+63,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",63,"Shaka","Astedader Akababi","Zone",NA,NA
+64,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",64,"Sidama","Astedader Akababi","Zone",NA,NA
+65,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",65,"South Omo","Astedader Akababi","Zone",NA,NA
+66,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",66,"Wolayita","Astedader Akababi","Zone",NA,"Wolayta"
+67,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",67,"Yem Special Woreda","Astedader Akababi","Zone",NA,NA
+68,74,"ETH","Ethiopia",11,"Tigray",68,"Central Tigray","Astedader Akababi","Zone",NA,NA
+69,74,"ETH","Ethiopia",11,"Tigray",69,"Easetern Tigray","Astedader Akababi","Zone",NA,NA
+70,74,"ETH","Ethiopia",11,"Tigray",70,"Mekele","Astedader Akababi","Zone",NA,NA
+71,74,"ETH","Ethiopia",11,"Tigray",71,"Southern Tigray","Astedader Akababi","Zone",NA,NA
+72,74,"ETH","Ethiopia",11,"Tigray",72,"Western Tigray","Astedader Akababi","Zone",NA,NA

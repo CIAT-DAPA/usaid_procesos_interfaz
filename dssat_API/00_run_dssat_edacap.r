@@ -92,16 +92,16 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
   location <- load_coordinates(dir_inputs_setup)
   
   ### For EDACaP location file contain id_soil and cultivar name
-  if(currentCountry=="COLOMBIA"){
-    soil <- soil
-    cultivar <- cultivar
-  } else {
-    soil <- location$id_soil %>% str_sub(., 2,-1)
-    cultivar <- c(location$var_cul, location$cul_name)
-  }
+  # if(currentCountry=="COLOMBIA" || (currentCountry=="ETHIOPIA" && crop == "maize")){
+  #   soil <- soil
+  #   cultivar <- cultivar
+  # } else {
+  #   soil <- location$id_soil %>% str_sub(., 2,-1)
+  #   cultivar <- c(location$var_cul, location$cul_name)
+  # }
   
   climate_scenaries <- load_all_climate(dir_inputs_climate)[-100]
-  planting_details_column_name <- if (currentCountry == "COLOMBIA") "value" else crop
+  planting_details_column_name <- if (currentCountry=="COLOMBIA" || (currentCountry=="ETHIOPIA" && crop == "maize")) "value" else crop
   
   planting_details <- read_csv(paste0(dir_inputs_setup, "planting_details.csv"), show_col_types = F) %>%
     dplyr::select(name, all_of(planting_details_column_name)) %>%  pivot_wider(names_from = name, values_from = all_of(planting_details_column_name))
@@ -217,8 +217,9 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
     compact %>% bind_rows()
 
 #If crop_conf exists run stress_risk
-if(file.exists(paste0(dir_inputs_setup, "crop_conf.csv"))){
-  stress_risk_all_days <- stress_risk_all(dir_run, dir_inputs_setup)
+ if(file.exists(paste0(dir_inputs_setup, "crop_conf.csv"))){
+#if(FALSE){
+  stress_risk_all_days <- stress_risk_all_safe(dir_run, dir_inputs_setup)
   names_op <- names(outputs_df1)
   outputs_df3 <- map2(.x = stress_risk_all_days,
                       .y = input_dates$planting_date, 
@@ -253,7 +254,7 @@ if(file.exists(paste0(dir_inputs_setup, "crop_conf.csv"))){
 }
 
 #Deleting model run files
-map(current_setup_dir, ~unlink(.x, recursive=TRUE))
+map(current_dir_run, ~unlink(.x, recursive=TRUE))
   
 }
 

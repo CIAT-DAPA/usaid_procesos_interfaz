@@ -1,0 +1,568 @@
+"OBJECTID","ID_0","ISO","NAME_0","ID_1","NAME_1","ID_2","NAME_2","ID_3","NAME_3","TYPE_3","ENGTYPE_3","NL_NAME_3","VARNAME_3"
+1,74,"ETH","Ethiopia",1,"Addis Ababa",1,"Unknown",1,"WEREDA 01","Woreda","District",NA,NA
+2,74,"ETH","Ethiopia",1,"Addis Ababa",1,"Unknown",2,"WEREDA 02","Woreda","District",NA,NA
+3,74,"ETH","Ethiopia",1,"Addis Ababa",1,"Unknown",3,"WEREDA 03","Woreda","District",NA,NA
+4,74,"ETH","Ethiopia",1,"Addis Ababa",1,"Unknown",4,"WEREDA 04","Woreda","District",NA,NA
+5,74,"ETH","Ethiopia",1,"Addis Ababa",1,"Unknown",5,"WEREDA 07","Woreda","District",NA,NA
+6,74,"ETH","Ethiopia",1,"Addis Ababa",1,"Unknown",6,"WEREDA 09","Woreda","District",NA,NA
+7,74,"ETH","Ethiopia",1,"Addis Ababa",1,"Unknown",7,"WEREDA 13","Woreda","District",NA,NA
+8,74,"ETH","Ethiopia",1,"Addis Ababa",1,"Unknown",8,"WEREDA 14","Woreda","District",NA,NA
+9,74,"ETH","Ethiopia",1,"Addis Ababa",1,"Unknown",9,"WEREDA 18","Woreda","District",NA,NA
+10,74,"ETH","Ethiopia",1,"Addis Ababa",1,"Unknown",10,"WEREDA 22","Woreda","District",NA,NA
+11,74,"ETH","Ethiopia",1,"Addis Ababa",2,"Zone 1",11,"WEREDA 05","Woreda","District",NA,"Woreda 5"
+12,74,"ETH","Ethiopia",1,"Addis Ababa",2,"Zone 1",12,"WEREDA 06","Woreda","District",NA,"Woreda 6"
+13,74,"ETH","Ethiopia",1,"Addis Ababa",3,"Zone 2",13,"WEREDA 20","Woreda","District",NA,"Woreda 20"
+14,74,"ETH","Ethiopia",1,"Addis Ababa",3,"Zone 2",14,"WEREDA 21","Woreda","District",NA,"Woreda 21"
+15,74,"ETH","Ethiopia",1,"Addis Ababa",3,"Zone 2",15,"WEREDA 23","Woreda","District",NA,"Woreda 23"
+16,74,"ETH","Ethiopia",1,"Addis Ababa",3,"Zone 2",16,"WEREDA 24","Woreda","District",NA,"Woreda 24"
+17,74,"ETH","Ethiopia",1,"Addis Ababa",4,"Zone 3",17,"WEREDA 17","Woreda","District",NA,"Woreda 17"
+18,74,"ETH","Ethiopia",1,"Addis Ababa",4,"Zone 3",18,"WEREDA 19","Woreda","District",NA,"Woreda 19"
+19,74,"ETH","Ethiopia",1,"Addis Ababa",4,"Zone 3",19,"WEREDA 28","Woreda","District",NA,"Woreda 28"
+20,74,"ETH","Ethiopia",1,"Addis Ababa",5,"Zone 4",20,"WEREDA 11","Woreda","District",NA,"Woreda 11"
+21,74,"ETH","Ethiopia",1,"Addis Ababa",5,"Zone 4",21,"WEREDA 12","Woreda","District",NA,"Woreda 12"
+22,74,"ETH","Ethiopia",1,"Addis Ababa",5,"Zone 4",22,"WEREDA 15","Woreda","District",NA,"Woreda 15"
+23,74,"ETH","Ethiopia",1,"Addis Ababa",5,"Zone 4",23,"WEREDA 16","Woreda","District",NA,"Woreda 16"
+24,74,"ETH","Ethiopia",1,"Addis Ababa",6,"Zone 5",24,"WEREDA 08","Woreda","District",NA,"Woreda 8"
+25,74,"ETH","Ethiopia",1,"Addis Ababa",6,"Zone 5",25,"WEREDA 10","Woreda","District",NA,"Woreda 10"
+26,74,"ETH","Ethiopia",1,"Addis Ababa",6,"Zone 5",26,"WEREDA 25","Woreda","District",NA,"Woreda 25"
+27,74,"ETH","Ethiopia",1,"Addis Ababa",7,"Zone 6",27,"WEREDA 26","Woreda","District",NA,"Woreda 26"
+28,74,"ETH","Ethiopia",1,"Addis Ababa",7,"Zone 6",28,"WEREDA 27","Woreda","District",NA,"Woreda 27"
+29,74,"ETH","Ethiopia",2,"Afar",8,"Zone 1",29,"Afambo","Woreda","District",NA,NA
+30,74,"ETH","Ethiopia",2,"Afar",8,"Zone 1",30,"Aysaita","Woreda","District",NA,"Asayita"
+31,74,"ETH","Ethiopia",2,"Afar",8,"Zone 1",31,"Chifra","Woreda","District",NA,NA
+32,74,"ETH","Ethiopia",2,"Afar",8,"Zone 1",32,"Dubti","Woreda","District",NA,NA
+33,74,"ETH","Ethiopia",2,"Afar",8,"Zone 1",33,"Elidar","Woreda","District",NA,NA
+34,74,"ETH","Ethiopia",2,"Afar",8,"Zone 1",34,"Mille","Woreda","District",NA,"Mile"
+35,74,"ETH","Ethiopia",2,"Afar",9,"Zone 2",35,"Abala","Woreda","District",NA,"Ab-Ala"
+36,74,"ETH","Ethiopia",2,"Afar",9,"Zone 2",36,"Afdera","Woreda","District",NA,NA
+37,74,"ETH","Ethiopia",2,"Afar",9,"Zone 2",37,"Berahle","Woreda","District",NA,"Berahile"
+38,74,"ETH","Ethiopia",2,"Afar",9,"Zone 2",38,"Dallol","Woreda","District",NA,"Dalol"
+39,74,"ETH","Ethiopia",2,"Afar",9,"Zone 2",39,"Erebti","Woreda","District",NA,"Erabti"
+40,74,"ETH","Ethiopia",2,"Afar",9,"Zone 2",40,"Koneba","Woreda","District",NA,"Kuneba"
+41,74,"ETH","Ethiopia",2,"Afar",9,"Zone 2",41,"Megale","Woreda","District",NA,NA
+42,74,"ETH","Ethiopia",2,"Afar",10,"Zone 3",42,"Amibara","Woreda","District",NA,NA
+43,74,"ETH","Ethiopia",2,"Afar",10,"Zone 3",43,"Argoba Special","Woreda","District",NA,"Argoba Sp. Woreda"
+44,74,"ETH","Ethiopia",2,"Afar",10,"Zone 3",44,"Awash Fentale","Woreda","District",NA,NA
+45,74,"ETH","Ethiopia",2,"Afar",10,"Zone 3",45,"Bure Mudaytu","Woreda","District",NA,"Bure Mudayitu|Bure Modayito"
+46,74,"ETH","Ethiopia",2,"Afar",10,"Zone 3",46,"Dulecha","Woreda","District",NA,NA
+47,74,"ETH","Ethiopia",2,"Afar",10,"Zone 3",47,"Gewane","Woreda","District",NA,NA
+48,74,"ETH","Ethiopia",2,"Afar",11,"Zone 4",48,"Ewa","Woreda","District",NA,NA
+49,74,"ETH","Ethiopia",2,"Afar",11,"Zone 4",49,"Gulina","Woreda","District",NA,"Golina"
+50,74,"ETH","Ethiopia",2,"Afar",11,"Zone 4",50,"Habru","Woreda","District",NA,"Awura"
+51,74,"ETH","Ethiopia",2,"Afar",11,"Zone 4",51,"Teru","Woreda","District",NA,NA
+52,74,"ETH","Ethiopia",2,"Afar",11,"Zone 4",52,"Yalo","Woreda","District",NA,NA
+53,74,"ETH","Ethiopia",2,"Afar",12,"Zone 5",53,"Artuma","Woreda","District",NA,NA
+54,74,"ETH","Ethiopia",2,"Afar",12,"Zone 5",54,"Dewe","Woreda","District",NA,"Dawe"
+55,74,"ETH","Ethiopia",2,"Afar",12,"Zone 5",55,"Fursi","Woreda","District",NA,"Furisa"
+56,74,"ETH","Ethiopia",2,"Afar",12,"Zone 5",56,"Simurobi Gele'alo","Woreda","District",NA,"Semurobina Gela-alo"
+57,74,"ETH","Ethiopia",2,"Afar",12,"Zone 5",57,"Telalak","Woreda","District",NA,NA
+58,74,"ETH","Ethiopia",3,"Amhara",13,"Awi",58,"Ankesha","Woreda","District",NA,"Ankasha"
+59,74,"ETH","Ethiopia",3,"Amhara",13,"Awi",59,"Banja","Woreda","District",NA,NA
+60,74,"ETH","Ethiopia",3,"Amhara",13,"Awi",60,"Dangila","Woreda","District",NA,"Dangla"
+61,74,"ETH","Ethiopia",3,"Amhara",13,"Awi",61,"Fagta Lakoma","Woreda","District",NA,"Faggeta Lekoma"
+62,74,"ETH","Ethiopia",3,"Amhara",13,"Awi",62,"Guangua","Woreda","District",NA,NA
+63,74,"ETH","Ethiopia",3,"Amhara",14,"Bar Dar Sp. Zone",63,"Bahir Dar","Woreda","District",NA,"Bahir Dar Town SP. Zone"
+64,74,"ETH","Ethiopia",3,"Amhara",15,"East Gojam",64,"Awabel","Woreda","District",NA,NA
+65,74,"ETH","Ethiopia",3,"Amhara",15,"East Gojam",65,"Baso Liben","Woreda","District",NA,NA
+66,74,"ETH","Ethiopia",3,"Amhara",15,"East Gojam",66,"Bibugn","Woreda","District",NA,NA
+67,74,"ETH","Ethiopia",3,"Amhara",15,"East Gojam",67,"Debay Telatgen","Woreda","District",NA,"Debay Telatgin"
+68,74,"ETH","Ethiopia",3,"Amhara",15,"East Gojam",68,"Debre Marqos","Woreda","District",NA,"Debre Markos Town"
+69,74,"ETH","Ethiopia",3,"Amhara",15,"East Gojam",69,"Dejen","Woreda","District",NA,NA
+70,74,"ETH","Ethiopia",3,"Amhara",15,"East Gojam",70,"Enarj Enawga","Woreda","District",NA,NA
+71,74,"ETH","Ethiopia",3,"Amhara",15,"East Gojam",71,"Enbise Sar Midir","Woreda","District",NA,"Enebse Sar Midir"
+72,74,"ETH","Ethiopia",3,"Amhara",15,"East Gojam",72,"Enemay","Woreda","District",NA,NA
+73,74,"ETH","Ethiopia",3,"Amhara",15,"East Gojam",73,"Goncha Siso Enese","Woreda","District",NA,NA
+74,74,"ETH","Ethiopia",3,"Amhara",15,"East Gojam",74,"Guzamn","Woreda","District",NA,"Gozamin"
+75,74,"ETH","Ethiopia",3,"Amhara",15,"East Gojam",75,"Hulet Ej Enese","Woreda","District",NA,"Hulet Ej Enesie"
+76,74,"ETH","Ethiopia",3,"Amhara",15,"East Gojam",76,"Machakel","Woreda","District",NA,"Mechakel"
+77,74,"ETH","Ethiopia",3,"Amhara",15,"East Gojam",77,"Shebel Berenta","Woreda","District",NA,NA
+78,74,"ETH","Ethiopia",3,"Amhara",16,"North Gonder",78,"Addi Arkay","Woreda","District",NA,NA
+79,74,"ETH","Ethiopia",3,"Amhara",16,"North Gonder",79,"Alefa","Woreda","District",NA,NA
+80,74,"ETH","Ethiopia",3,"Amhara",16,"North Gonder",80,"Belesa","Woreda","District",NA,NA
+81,74,"ETH","Ethiopia",3,"Amhara",16,"North Gonder",81,"Beyeda","Woreda","District",NA,NA
+82,74,"ETH","Ethiopia",3,"Amhara",16,"North Gonder",82,"Chilga","Woreda","District",NA,NA
+83,74,"ETH","Ethiopia",3,"Amhara",16,"North Gonder",83,"Dabat","Woreda","District",NA,NA
+84,74,"ETH","Ethiopia",3,"Amhara",16,"North Gonder",84,"Debarq","Woreda","District",NA,"Debark"
+85,74,"ETH","Ethiopia",3,"Amhara",16,"North Gonder",85,"Dembia","Woreda","District",NA,"Dembiya"
+86,74,"ETH","Ethiopia",3,"Amhara",16,"North Gonder",86,"Gonder Zuria","Woreda","District",NA,"Gonder Zuriya"
+87,74,"ETH","Ethiopia",3,"Amhara",16,"North Gonder",87,"Gonder","Woreda","District",NA,"Gonder Town"
+88,74,"ETH","Ethiopia",3,"Amhara",16,"North Gonder",88,"Janamora","Woreda","District",NA,NA
+89,74,"ETH","Ethiopia",3,"Amhara",16,"North Gonder",89,"Lay Armacheho","Woreda","District",NA,"Lay Armachiho"
+90,74,"ETH","Ethiopia",3,"Amhara",16,"North Gonder",90,"Metema","Woreda","District",NA,NA
+91,74,"ETH","Ethiopia",3,"Amhara",16,"North Gonder",91,"Quara","Woreda","District",NA,NA
+92,74,"ETH","Ethiopia",3,"Amhara",16,"North Gonder",92,"Sanja","Woreda","District",NA,NA
+93,74,"ETH","Ethiopia",3,"Amhara",16,"North Gonder",93,"Wegera","Woreda","District",NA,NA
+94,74,"ETH","Ethiopia",3,"Amhara",17,"North Shewa (K3)",94,"Angolela Tera","Woreda","District",NA,"Angolala Tera"
+95,74,"ETH","Ethiopia",3,"Amhara",17,"North Shewa (K3)",95,"Ankober","Woreda","District",NA,NA
+96,74,"ETH","Ethiopia",3,"Amhara",17,"North Shewa (K3)",96,"Antsokia Gemza","Woreda","District",NA,"Antsokiyana Gemza"
+97,74,"ETH","Ethiopia",3,"Amhara",17,"North Shewa (K3)",97,"Asagirt","Woreda","District",NA,NA
+98,74,"ETH","Ethiopia",3,"Amhara",17,"North Shewa (K3)",98,"Berehet","Woreda","District",NA,NA
+99,74,"ETH","Ethiopia",3,"Amhara",17,"North Shewa (K3)",99,"Debre Berhan Zuria","Woreda","District",NA,"Basona Worana|Baso & Werana"
+100,74,"ETH","Ethiopia",3,"Amhara",17,"North Shewa (K3)",100,"Debre Berhan","Woreda","District",NA,"Debre Berhan Town"
+101,74,"ETH","Ethiopia",3,"Amhara",17,"North Shewa (K3)",101,"Efratana Gidim","Woreda","District",NA,NA
+102,74,"ETH","Ethiopia",3,"Amhara",17,"North Shewa (K3)",102,"Gera Midirna Keya Gabriel","Woreda","District",NA,"Gera Keya"
+103,74,"ETH","Ethiopia",3,"Amhara",17,"North Shewa (K3)",103,"Gishe Rabel","Woreda","District",NA,"Gishie|Gishe"
+104,74,"ETH","Ethiopia",3,"Amhara",17,"North Shewa (K3)",104,"Hagere Mariamna Kesem","Woreda","District",NA,"Hagere Mariam"
+105,74,"ETH","Ethiopia",3,"Amhara",17,"North Shewa (K3)",105,"Kewet","Woreda","District",NA,NA
+106,74,"ETH","Ethiopia",3,"Amhara",17,"North Shewa (K3)",106,"Lay Betna Tach Bet","Woreda","District",NA,"Merhabete"
+107,74,"ETH","Ethiopia",3,"Amhara",17,"North Shewa (K3)",107,"Mama Midirna Lalo","Woreda","District",NA,"Lalo Midir|Mama Midir"
+108,74,"ETH","Ethiopia",3,"Amhara",17,"North Shewa (K3)",108,"Minjarna Shenkora","Woreda","District",NA,NA
+109,74,"ETH","Ethiopia",3,"Amhara",17,"North Shewa (K3)",109,"Mojana Wadera","Woreda","District",NA,NA
+110,74,"ETH","Ethiopia",3,"Amhara",17,"North Shewa (K3)",110,"Moretna Jiru","Woreda","District",NA,"Moret & Jiru"
+111,74,"ETH","Ethiopia",3,"Amhara",17,"North Shewa (K3)",111,"Siya Debirna Wayu & Ensaro","Woreda","District",NA,"Insarona Wayu"
+112,74,"ETH","Ethiopia",3,"Amhara",17,"North Shewa (K3)",112,"Tarmaber","Woreda","District",NA,"Tarma Ber"
+113,74,"ETH","Ethiopia",3,"Amhara",17,"North Shewa (K3)",113,"Weremo Wajetuna Mida","Woreda","District",NA,"Midana weramo"
+114,74,"ETH","Ethiopia",3,"Amhara",18,"North Wollo",114,"Bugna","Woreda","District",NA,"Bugina|Buguna"
+115,74,"ETH","Ethiopia",3,"Amhara",18,"North Wollo",115,"Dawunt Delanta","Woreda","District",NA,"Dawntna Delanta"
+116,74,"ETH","Ethiopia",3,"Amhara",18,"North Wollo",116,"Gidan","Woreda","District",NA,NA
+117,74,"ETH","Ethiopia",3,"Amhara",18,"North Wollo",117,"Guba Lafto","Woreda","District",NA,NA
+118,74,"ETH","Ethiopia",3,"Amhara",18,"North Wollo",118,"Kobo","Woreda","District",NA,NA
+119,74,"ETH","Ethiopia",3,"Amhara",18,"North Wollo",119,"Meket","Woreda","District",NA,"Mekit"
+120,74,"ETH","Ethiopia",3,"Amhara",18,"North Wollo",120,"Tehuledere","Woreda","District",NA,"Habru"
+121,74,"ETH","Ethiopia",3,"Amhara",18,"North Wollo",121,"Wadla","Woreda","District",NA,NA
+122,74,"ETH","Ethiopia",3,"Amhara",18,"North Wollo",122,"Weldiya","Woreda","District",NA,"Woldiya Town"
+123,74,"ETH","Ethiopia",3,"Amhara",19,"Oromia Zone",123,"Artuma Fursina","Woreda","District",NA,"Artuma Fursi"
+124,74,"ETH","Ethiopia",3,"Amhara",19,"Oromia Zone",124,"Bati","Woreda","District",NA,NA
+125,74,"ETH","Ethiopia",3,"Amhara",19,"Oromia Zone",125,"Dawa Chefa","Woreda","District",NA,"Chefegolana Dawerahmedo"
+126,74,"ETH","Ethiopia",3,"Amhara",19,"Oromia Zone",126,"Jile Timuga","Woreda","District",NA,NA
+127,74,"ETH","Ethiopia",3,"Amhara",20,"South Gonder",127,"Debre Tabor","Woreda","District",NA,"Debre Tabor Town"
+128,74,"ETH","Ethiopia",3,"Amhara",20,"South Gonder",128,"Dera","Woreda","District",NA,NA
+129,74,"ETH","Ethiopia",3,"Amhara",20,"South Gonder",129,"Ebenat","Woreda","District",NA,"Ebinat"
+130,74,"ETH","Ethiopia",3,"Amhara",20,"South Gonder",130,"Esite","Woreda","District",NA,"Estie"
+131,74,"ETH","Ethiopia",3,"Amhara",20,"South Gonder",131,"Farta","Woreda","District",NA,NA
+132,74,"ETH","Ethiopia",3,"Amhara",20,"South Gonder",132,"Fogera","Woreda","District",NA,NA
+133,74,"ETH","Ethiopia",3,"Amhara",20,"South Gonder",133,"Kemekem","Woreda","District",NA,"Kemkem"
+134,74,"ETH","Ethiopia",3,"Amhara",20,"South Gonder",134,"Lay Gayint","Woreda","District",NA,NA
+135,74,"ETH","Ethiopia",3,"Amhara",20,"South Gonder",135,"Simada","Woreda","District",NA,NA
+136,74,"ETH","Ethiopia",3,"Amhara",20,"South Gonder",136,"Tach Gayint","Woreda","District",NA,NA
+137,74,"ETH","Ethiopia",3,"Amhara",21,"South Wollo",137,"Amba Sel","Woreda","District",NA,"Ambasel"
+138,74,"ETH","Ethiopia",3,"Amhara",21,"South Wollo",138,"Debre Sina","Woreda","District",NA,NA
+139,74,"ETH","Ethiopia",3,"Amhara",21,"South Wollo",139,"Dessie Zuria","Woreda","District",NA,"Desie Zuriya"
+140,74,"ETH","Ethiopia",3,"Amhara",21,"South Wollo",140,"Dessie","Woreda","District",NA,"Dessie Town"
+141,74,"ETH","Ethiopia",3,"Amhara",21,"South Wollo",141,"Jama","Woreda","District",NA,NA
+142,74,"ETH","Ethiopia",3,"Amhara",21,"South Wollo",142,"Kalu","Woreda","District",NA,NA
+143,74,"ETH","Ethiopia",3,"Amhara",21,"South Wollo",143,"Kelela","Woreda","District",NA,"Kelala"
+144,74,"ETH","Ethiopia",3,"Amhara",21,"South Wollo",144,"Kombolcha","Woreda","District",NA,"Kombolcha Town"
+145,74,"ETH","Ethiopia",3,"Amhara",21,"South Wollo",145,"Kutaber","Woreda","District",NA,"Kuta Ber"
+146,74,"ETH","Ethiopia",3,"Amhara",21,"South Wollo",146,"Legambo","Woreda","District",NA,NA
+147,74,"ETH","Ethiopia",3,"Amhara",21,"South Wollo",147,"Mekdela","Woreda","District",NA,NA
+148,74,"ETH","Ethiopia",3,"Amhara",21,"South Wollo",148,"Sayint","Woreda","District",NA,NA
+149,74,"ETH","Ethiopia",3,"Amhara",21,"South Wollo",149,"Tehuledere","Woreda","District",NA,"Tehuladare"
+150,74,"ETH","Ethiopia",3,"Amhara",21,"South Wollo",150,"Tenta","Woreda","District",NA,NA
+151,74,"ETH","Ethiopia",3,"Amhara",21,"South Wollo",151,"Wegde","Woreda","District",NA,NA
+152,74,"ETH","Ethiopia",3,"Amhara",21,"South Wollo",152,"Were Ilu","Woreda","District",NA,"Wara Ilu"
+153,74,"ETH","Ethiopia",3,"Amhara",21,"South Wollo",153,"Werebabu","Woreda","District",NA,"Wara Babo|Were Babo"
+154,74,"ETH","Ethiopia",3,"Amhara",22,"Wag Hemira",154,"Dehana","Woreda","District",NA,"Dihana"
+155,74,"ETH","Ethiopia",3,"Amhara",22,"Wag Hemira",155,"Sekota","Woreda","District",NA,NA
+156,74,"ETH","Ethiopia",3,"Amhara",22,"Wag Hemira",156,"Zikuala","Woreda","District",NA,NA
+157,74,"ETH","Ethiopia",3,"Amhara",23,"West Gojam",157,"Achefer","Woreda","District",NA,NA
+158,74,"ETH","Ethiopia",3,"Amhara",23,"West Gojam",158,"Adet","Woreda","District",NA,"Yilmana Densa"
+159,74,"ETH","Ethiopia",3,"Amhara",23,"West Gojam",159,"Bahir Dar Zuria","Woreda","District",NA,NA
+160,74,"ETH","Ethiopia",3,"Amhara",23,"West Gojam",160,"Bure Wemberma","Woreda","District",NA,NA
+161,74,"ETH","Ethiopia",3,"Amhara",23,"West Gojam",161,"Dega Damot","Woreda","District",NA,NA
+162,74,"ETH","Ethiopia",3,"Amhara",23,"West Gojam",162,"Dembecha","Woreda","District",NA,"Denbecha"
+163,74,"ETH","Ethiopia",3,"Amhara",23,"West Gojam",163,"Jabi Tehnan","Woreda","District",NA,"Jab Tahinan|Jabitehinan"
+164,74,"ETH","Ethiopia",3,"Amhara",23,"West Gojam",164,"Merawi","Woreda","District",NA,NA
+165,74,"ETH","Ethiopia",3,"Amhara",23,"West Gojam",165,"Quarit","Woreda","District",NA,NA
+166,74,"ETH","Ethiopia",3,"Amhara",23,"West Gojam",166,"Sekela","Woreda","District",NA,NA
+167,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",24,"Asosa",167,"Asosa","Woreda","District",NA,NA
+168,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",24,"Asosa",168,"Bambasi","Woreda","District",NA,NA
+169,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",24,"Asosa",169,"Komesha","Woreda","District",NA,NA
+170,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",24,"Asosa",170,"Kurmuk","Woreda","District",NA,NA
+171,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",24,"Asosa",171,"Menge","Woreda","District",NA,NA
+172,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",24,"Asosa",172,"Oda Godere","Woreda","District",NA,"Oda Godare"
+173,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",24,"Asosa",173,"Sherkole","Woreda","District",NA,NA
+174,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",24,"Asosa",174,"Tongo Sp. Wereda","Woreda","District",NA,"Mao Kom"
+175,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",25,"Kemashi",175,"Agelo Meti","Woreda","District",NA,"Agalo Meti"
+176,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",25,"Kemashi",176,"Belo Jegonfoy","Woreda","District",NA,"Belo Jengefo"
+177,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",25,"Kemashi",177,"Kamashi","Woreda","District",NA,"Kemashi"
+178,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",25,"Kemashi",178,"Sirba Abay","Woreda","District",NA,NA
+179,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",25,"Kemashi",179,"Yaso","Woreda","District",NA,NA
+180,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",26,"Metekel",180,"Bulen","Woreda","District",NA,NA
+181,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",26,"Metekel",181,"Dangur","Woreda","District",NA,NA
+182,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",26,"Metekel",182,"Dibate","Woreda","District",NA,"Dibati"
+183,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",26,"Metekel",183,"Guba","Woreda","District",NA,NA
+184,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",26,"Metekel",184,"Mandura","Woreda","District",NA,"Madura"
+185,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",26,"Metekel",185,"Pawe","Woreda","District",NA,NA
+186,74,"ETH","Ethiopia",4,"Benshangul-Gumaz",26,"Metekel",186,"Wembera","Woreda","District",NA,NA
+187,74,"ETH","Ethiopia",5,"Dire Dawa",27,"Dire Dawa",187,"Dire Dawa","Woreda","District",NA,NA
+188,74,"ETH","Ethiopia",6,"Gambela Peoples",28,"Zone 1",188,"Akobo","Woreda","District",NA,NA
+189,74,"ETH","Ethiopia",6,"Gambela Peoples",28,"Zone 1",189,"Gambela","Woreda","District",NA,"Gambella"
+190,74,"ETH","Ethiopia",6,"Gambela Peoples",28,"Zone 1",190,"Itang","Woreda","District",NA,NA
+191,74,"ETH","Ethiopia",6,"Gambela Peoples",28,"Zone 1",191,"Jikawo","Woreda","District",NA,NA
+192,74,"ETH","Ethiopia",6,"Gambela Peoples",29,"Zone 2",192,"Abobo","Woreda","District",NA,NA
+193,74,"ETH","Ethiopia",6,"Gambela Peoples",29,"Zone 2",193,"Dima","Woreda","District",NA,NA
+194,74,"ETH","Ethiopia",6,"Gambela Peoples",29,"Zone 2",194,"Godere","Woreda","District",NA,"Godare"
+195,74,"ETH","Ethiopia",6,"Gambela Peoples",29,"Zone 2",195,"Gog","Woreda","District",NA,NA
+196,74,"ETH","Ethiopia",6,"Gambela Peoples",29,"Zone 2",196,"Jor","Woreda","District",NA,NA
+197,74,"ETH","Ethiopia",7,"Harari People",30,"Hundene",197,"Harar/Hundene","Woreda","District",NA,"Hundene"
+198,74,"ETH","Ethiopia",8,"Oromia",31,"Arsi",198,"Amigna","Woreda","District",NA,NA
+199,74,"ETH","Ethiopia",8,"Oromia",31,"Arsi",199,"Aseko","Woreda","District",NA,NA
+200,74,"ETH","Ethiopia",8,"Oromia",31,"Arsi",200,"Bekoji","Woreda","District",NA,"Bokoji (Limu na Bilbilo)"
+201,74,"ETH","Ethiopia",8,"Oromia",31,"Arsi",201,"Chole","Woreda","District",NA,NA
+202,74,"ETH","Ethiopia",8,"Oromia",31,"Arsi",202,"Degeluna Tijo","Woreda","District",NA,"Digelu na Tijo"
+203,74,"ETH","Ethiopia",8,"Oromia",31,"Arsi",203,"Dodotana Sire","Woreda","District",NA,"Dodota Sire"
+204,74,"ETH","Ethiopia",8,"Oromia",31,"Arsi",204,"Gedeb","Woreda","District",NA,NA
+205,74,"ETH","Ethiopia",8,"Oromia",31,"Arsi",205,"Gololcha","Woreda","District",NA,NA
+206,74,"ETH","Ethiopia",8,"Oromia",31,"Arsi",206,"Hitosa","Woreda","District",NA,NA
+207,74,"ETH","Ethiopia",8,"Oromia",31,"Arsi",207,"Jeju","Woreda","District",NA,NA
+208,74,"ETH","Ethiopia",8,"Oromia",31,"Arsi",208,"Kofele","Woreda","District",NA,NA
+209,74,"ETH","Ethiopia",8,"Oromia",31,"Arsi",209,"Merti","Woreda","District",NA,NA
+210,74,"ETH","Ethiopia",8,"Oromia",31,"Arsi",210,"Munessa","Woreda","District",NA,"Munesa"
+211,74,"ETH","Ethiopia",8,"Oromia",31,"Arsi",211,"Robe","Woreda","District",NA,NA
+212,74,"ETH","Ethiopia",8,"Oromia",31,"Arsi",212,"Seru","Woreda","District",NA,NA
+213,74,"ETH","Ethiopia",8,"Oromia",31,"Arsi",213,"Shirka","Woreda","District",NA,NA
+214,74,"ETH","Ethiopia",8,"Oromia",31,"Arsi",214,"Sude","Woreda","District",NA,NA
+215,74,"ETH","Ethiopia",8,"Oromia",31,"Arsi",215,"Tena","Woreda","District",NA,NA
+216,74,"ETH","Ethiopia",8,"Oromia",31,"Arsi",216,"Tiyo","Woreda","District",NA,NA
+217,74,"ETH","Ethiopia",8,"Oromia",31,"Arsi",217,"Ziway Gugda","Woreda","District",NA,"Ziway Dugda|Ziway & Dugda"
+218,74,"ETH","Ethiopia",8,"Oromia",32,"Bale",218,"Adaba","Woreda","District",NA,NA
+219,74,"ETH","Ethiopia",8,"Oromia",32,"Bale",219,"Agarfa","Woreda","District",NA,NA
+220,74,"ETH","Ethiopia",8,"Oromia",32,"Bale",220,"Berbere","Woreda","District",NA,NA
+221,74,"ETH","Ethiopia",8,"Oromia",32,"Bale",221,"Dodola","Woreda","District",NA,NA
+222,74,"ETH","Ethiopia",8,"Oromia",32,"Bale",222,"Gasera","Woreda","District",NA,NA
+223,74,"ETH","Ethiopia",8,"Oromia",32,"Bale",223,"Ginir","Woreda","District",NA,NA
+224,74,"ETH","Ethiopia",8,"Oromia",32,"Bale",224,"Goba","Woreda","District",NA,NA
+225,74,"ETH","Ethiopia",8,"Oromia",32,"Bale",225,"Gololcha","Woreda","District",NA,NA
+226,74,"ETH","Ethiopia",8,"Oromia",32,"Bale",226,"Goro","Woreda","District",NA,NA
+227,74,"ETH","Ethiopia",8,"Oromia",32,"Bale",227,"Guradamole","Woreda","District",NA,"Gura Damole"
+228,74,"ETH","Ethiopia",8,"Oromia",32,"Bale",228,"Kokosa","Woreda","District",NA,NA
+229,74,"ETH","Ethiopia",8,"Oromia",32,"Bale",229,"Legehida","Woreda","District",NA,"Lega Hida"
+230,74,"ETH","Ethiopia",8,"Oromia",32,"Bale",230,"Meda Welabu","Woreda","District",NA,"Meda Wolabu"
+231,74,"ETH","Ethiopia",8,"Oromia",32,"Bale",231,"Mennana Arena Buluk","Woreda","District",NA,"Mena Angetu"
+232,74,"ETH","Ethiopia",8,"Oromia",32,"Bale",232,"Nenesebo","Woreda","District",NA,"Nensebo"
+233,74,"ETH","Ethiopia",8,"Oromia",32,"Bale",233,"Rayitu","Woreda","District",NA,NA
+234,74,"ETH","Ethiopia",8,"Oromia",32,"Bale",234,"Seweyna","Woreda","District",NA,NA
+235,74,"ETH","Ethiopia",8,"Oromia",32,"Bale",235,"Sinanana Dinsho","Woreda","District",NA,"Sinana Dinsho"
+236,74,"ETH","Ethiopia",8,"Oromia",33,"Borena",236,"Adolana Wadera","Woreda","District",NA,"Adola Wadera"
+237,74,"ETH","Ethiopia",8,"Oromia",33,"Borena",237,"Arero","Woreda","District",NA,NA
+238,74,"ETH","Ethiopia",8,"Oromia",33,"Borena",238,"Bore","Woreda","District",NA,NA
+239,74,"ETH","Ethiopia",8,"Oromia",33,"Borena",239,"Dire","Woreda","District",NA,NA
+240,74,"ETH","Ethiopia",8,"Oromia",33,"Borena",240,"Gelana Abaya","Woreda","District",NA,"Gelena Abaya"
+241,74,"ETH","Ethiopia",8,"Oromia",33,"Borena",241,"Hagere Mariam","Woreda","District",NA,NA
+242,74,"ETH","Ethiopia",8,"Oromia",33,"Borena",242,"Liben","Woreda","District",NA,NA
+243,74,"ETH","Ethiopia",8,"Oromia",33,"Borena",243,"Moyale","Woreda","District",NA,NA
+244,74,"ETH","Ethiopia",8,"Oromia",33,"Borena",244,"Odo Shakiso","Woreda","District",NA,NA
+245,74,"ETH","Ethiopia",8,"Oromia",33,"Borena",245,"Teltele","Woreda","District",NA,"Teletele"
+246,74,"ETH","Ethiopia",8,"Oromia",33,"Borena",246,"Uraga","Woreda","District",NA,NA
+247,74,"ETH","Ethiopia",8,"Oromia",33,"Borena",247,"Yabelo","Woreda","District",NA,NA
+248,74,"ETH","Ethiopia",8,"Oromia",34,"East Harerghe",248,"Babile","Woreda","District",NA,NA
+249,74,"ETH","Ethiopia",8,"Oromia",34,"East Harerghe",249,"Bedeno","Woreda","District",NA,NA
+250,74,"ETH","Ethiopia",8,"Oromia",34,"East Harerghe",250,"Deder","Woreda","District",NA,NA
+251,74,"ETH","Ethiopia",8,"Oromia",34,"East Harerghe",251,"Fedis","Woreda","District",NA,NA
+252,74,"ETH","Ethiopia",8,"Oromia",34,"East Harerghe",252,"Girawa","Woreda","District",NA,NA
+253,74,"ETH","Ethiopia",8,"Oromia",34,"East Harerghe",253,"Golo Odo","Woreda","District",NA,NA
+254,74,"ETH","Ethiopia",8,"Oromia",34,"East Harerghe",254,"Goro Gutu","Woreda","District",NA,NA
+255,74,"ETH","Ethiopia",8,"Oromia",34,"East Harerghe",255,"Gursum","Woreda","District",NA,NA
+256,74,"ETH","Ethiopia",8,"Oromia",34,"East Harerghe",256,"Haro Maya","Woreda","District",NA,NA
+257,74,"ETH","Ethiopia",8,"Oromia",34,"East Harerghe",257,"Jarso","Woreda","District",NA,NA
+258,74,"ETH","Ethiopia",8,"Oromia",34,"East Harerghe",258,"Kersa","Woreda","District",NA,NA
+259,74,"ETH","Ethiopia",8,"Oromia",34,"East Harerghe",259,"Kombolcha","Woreda","District",NA,NA
+260,74,"ETH","Ethiopia",8,"Oromia",34,"East Harerghe",260,"Kurfa Chele","Woreda","District",NA,"Kurfachele"
+261,74,"ETH","Ethiopia",8,"Oromia",34,"East Harerghe",261,"Malka Balo","Woreda","District",NA,"Melka Balo"
+262,74,"ETH","Ethiopia",8,"Oromia",34,"East Harerghe",262,"Meta","Woreda","District",NA,NA
+263,74,"ETH","Ethiopia",8,"Oromia",34,"East Harerghe",263,"Meyu","Woreda","District",NA,"Meyu Muluke"
+264,74,"ETH","Ethiopia",8,"Oromia",35,"East Shewa",264,"Ada'a Chukala","Woreda","District",NA,"Ada'a Liben"
+265,74,"ETH","Ethiopia",8,"Oromia",35,"East Shewa",265,"Adama","Woreda","District",NA,NA
+266,74,"ETH","Ethiopia",8,"Oromia",35,"East Shewa",266,"Adami Tulu  Jido Kombolcha","Woreda","District",NA,"Adami Tullu Jido"
+267,74,"ETH","Ethiopia",8,"Oromia",35,"East Shewa",267,"Akaki","Woreda","District",NA,NA
+268,74,"ETH","Ethiopia",8,"Oromia",35,"East Shewa",268,"Arsi Negele","Woreda","District",NA,"Arsi Negelle|Arsi Negle"
+269,74,"ETH","Ethiopia",8,"Oromia",35,"East Shewa",269,"Boset","Woreda","District",NA,NA
+270,74,"ETH","Ethiopia",8,"Oromia",35,"East Shewa",270,"Dugda Bora","Woreda","District",NA,NA
+271,74,"ETH","Ethiopia",8,"Oromia",35,"East Shewa",271,"Fentale","Woreda","District",NA,NA
+272,74,"ETH","Ethiopia",8,"Oromia",35,"East Shewa",272,"Gimbichu","Woreda","District",NA,NA
+273,74,"ETH","Ethiopia",8,"Oromia",35,"East Shewa",273,"Lome","Woreda","District",NA,"Lume"
+274,74,"ETH","Ethiopia",8,"Oromia",35,"East Shewa",274,"Shashemene","Woreda","District",NA,NA
+275,74,"ETH","Ethiopia",8,"Oromia",35,"East Shewa",275,"Siraro","Woreda","District",NA,NA
+276,74,"ETH","Ethiopia",8,"Oromia",36,"East Wellega",276,"Abay Chomen","Woreda","District",NA,NA
+277,74,"ETH","Ethiopia",8,"Oromia",36,"East Wellega",277,"Abe Dongoro","Woreda","District",NA,"Abe Dengoro"
+278,74,"ETH","Ethiopia",8,"Oromia",36,"East Wellega",278,"Amuru","Woreda","District",NA,NA
+279,74,"ETH","Ethiopia",8,"Oromia",36,"East Wellega",279,"Bila Seyo","Woreda","District",NA,"Bila Sayo"
+280,74,"ETH","Ethiopia",8,"Oromia",36,"East Wellega",280,"Diga","Woreda","District",NA,NA
+281,74,"ETH","Ethiopia",8,"Oromia",36,"East Wellega",281,"Gida Kiremu","Woreda","District",NA,NA
+282,74,"ETH","Ethiopia",8,"Oromia",36,"East Wellega",282,"Guduru","Woreda","District",NA,NA
+283,74,"ETH","Ethiopia",8,"Oromia",36,"East Wellega",283,"Guto Wayu","Woreda","District",NA,"Guto Gida"
+284,74,"ETH","Ethiopia",8,"Oromia",36,"East Wellega",284,"Ibantu","Woreda","District",NA,"Ebantu"
+285,74,"ETH","Ethiopia",8,"Oromia",36,"East Wellega",285,"Jarti","Woreda","District",NA,NA
+286,74,"ETH","Ethiopia",8,"Oromia",36,"East Wellega",286,"Jimma Arjo","Woreda","District",NA,"Juma Arjo"
+287,74,"ETH","Ethiopia",8,"Oromia",36,"East Wellega",287,"Jimma Horo","Woreda","District",NA,NA
+288,74,"ETH","Ethiopia",8,"Oromia",36,"East Wellega",288,"Jimma Rare","Woreda","District",NA,NA
+289,74,"ETH","Ethiopia",8,"Oromia",36,"East Wellega",289,"Leka Dulcha","Woreda","District",NA,NA
+290,74,"ETH","Ethiopia",8,"Oromia",36,"East Wellega",290,"Limu","Woreda","District",NA,NA
+291,74,"ETH","Ethiopia",8,"Oromia",36,"East Wellega",291,"Nunu Kumba","Woreda","District",NA,NA
+292,74,"ETH","Ethiopia",8,"Oromia",36,"East Wellega",292,"Sasiga","Woreda","District",NA,NA
+293,74,"ETH","Ethiopia",8,"Oromia",36,"East Wellega",293,"Sibu Sire","Woreda","District",NA,NA
+294,74,"ETH","Ethiopia",8,"Oromia",36,"East Wellega",294,"Wama Bonaya","Woreda","District",NA,"Wama Boneya"
+295,74,"ETH","Ethiopia",8,"Oromia",37,"Illubabor",295,"Ale","Woreda","District",NA,NA
+296,74,"ETH","Ethiopia",8,"Oromia",37,"Illubabor",296,"Bedele","Woreda","District",NA,NA
+297,74,"ETH","Ethiopia",8,"Oromia",37,"Illubabor",297,"Borecha","Woreda","District",NA,NA
+298,74,"ETH","Ethiopia",8,"Oromia",37,"Illubabor",298,"Bure","Woreda","District",NA,NA
+299,74,"ETH","Ethiopia",8,"Oromia",37,"Illubabor",299,"Chora","Woreda","District",NA,NA
+300,74,"ETH","Ethiopia",8,"Oromia",37,"Illubabor",300,"Darimu","Woreda","District",NA,NA
+301,74,"ETH","Ethiopia",8,"Oromia",37,"Illubabor",301,"Dedesa","Woreda","District",NA,"Didesa"
+302,74,"ETH","Ethiopia",8,"Oromia",37,"Illubabor",302,"Dega","Woreda","District",NA,NA
+303,74,"ETH","Ethiopia",8,"Oromia",37,"Illubabor",303,"Gechi","Woreda","District",NA,NA
+304,74,"ETH","Ethiopia",8,"Oromia",37,"Illubabor",304,"Metu","Woreda","District",NA,NA
+305,74,"ETH","Ethiopia",8,"Oromia",37,"Illubabor",305,"Nono","Woreda","District",NA,NA
+306,74,"ETH","Ethiopia",8,"Oromia",37,"Illubabor",306,"Supena Sodo","Woreda","District",NA,"Supe na Sodo (Alge na Sachi)"
+307,74,"ETH","Ethiopia",8,"Oromia",37,"Illubabor",307,"Yayu","Woreda","District",NA,NA
+308,74,"ETH","Ethiopia",8,"Oromia",38,"Jimma",308,"Dedo","Woreda","District",NA,NA
+309,74,"ETH","Ethiopia",8,"Oromia",38,"Jimma",309,"Gera","Woreda","District",NA,NA
+310,74,"ETH","Ethiopia",8,"Oromia",38,"Jimma",310,"Goma","Woreda","District",NA,"Gomma"
+311,74,"ETH","Ethiopia",8,"Oromia",38,"Jimma",311,"Kersa","Woreda","District",NA,NA
+312,74,"ETH","Ethiopia",8,"Oromia",38,"Jimma",312,"Limu Kosa","Woreda","District",NA,NA
+313,74,"ETH","Ethiopia",8,"Oromia",38,"Jimma",313,"Limu Seka","Woreda","District",NA,NA
+314,74,"ETH","Ethiopia",8,"Oromia",38,"Jimma",314,"Mana","Woreda","District",NA,NA
+315,74,"ETH","Ethiopia",8,"Oromia",38,"Jimma",315,"Omonada","Woreda","District",NA,"Omo Nada"
+316,74,"ETH","Ethiopia",8,"Oromia",38,"Jimma",316,"Seka Chekorsa","Woreda","District",NA,NA
+317,74,"ETH","Ethiopia",8,"Oromia",38,"Jimma",317,"Sekoru","Woreda","District",NA,"Sokoru"
+318,74,"ETH","Ethiopia",8,"Oromia",38,"Jimma",318,"Setema","Woreda","District",NA,NA
+319,74,"ETH","Ethiopia",8,"Oromia",38,"Jimma",319,"Sigmo","Woreda","District",NA,"Sigimo"
+320,74,"ETH","Ethiopia",8,"Oromia",38,"Jimma",320,"Tiro Afeta","Woreda","District",NA,NA
+321,74,"ETH","Ethiopia",8,"Oromia",39,"North Shewa (K4)",321,"Abichuna Gne'a","Woreda","District",NA,"Abichu na Gna'a"
+322,74,"ETH","Ethiopia",8,"Oromia",39,"North Shewa (K4)",322,"Berehna Aleltu","Woreda","District",NA,"Bereh Aleltu"
+323,74,"ETH","Ethiopia",8,"Oromia",39,"North Shewa (K4)",323,"Degem","Woreda","District",NA,NA
+324,74,"ETH","Ethiopia",8,"Oromia",39,"North Shewa (K4)",324,"Dera","Woreda","District",NA,NA
+325,74,"ETH","Ethiopia",8,"Oromia",39,"North Shewa (K4)",325,"Gerar Jarso","Woreda","District",NA,"Girar Jarso"
+326,74,"ETH","Ethiopia",8,"Oromia",39,"North Shewa (K4)",326,"Hidabu Abote","Woreda","District",NA,NA
+327,74,"ETH","Ethiopia",8,"Oromia",39,"North Shewa (K4)",327,"Kembibit","Woreda","District",NA,"Kimbibit"
+328,74,"ETH","Ethiopia",8,"Oromia",39,"North Shewa (K4)",328,"Kuyu","Woreda","District",NA,NA
+329,74,"ETH","Ethiopia",8,"Oromia",39,"North Shewa (K4)",329,"Mulona Sululta","Woreda","District",NA,"Sululta Mulo"
+330,74,"ETH","Ethiopia",8,"Oromia",39,"North Shewa (K4)",330,"Wara Jarso","Woreda","District",NA,"Were Jarso"
+331,74,"ETH","Ethiopia",8,"Oromia",39,"North Shewa (K4)",331,"Wuchalena Jido","Woreda","District",NA,"Wuchale Jido|Wuchale"
+332,74,"ETH","Ethiopia",8,"Oromia",39,"North Shewa (K4)",332,"Yaya Gulelena Debre Libanos","Woreda","District",NA,"Yaya Gulale"
+333,74,"ETH","Ethiopia",8,"Oromia",40,"West Harerghe",333,"Anchar","Woreda","District",NA,NA
+334,74,"ETH","Ethiopia",8,"Oromia",40,"West Harerghe",334,"Boke","Woreda","District",NA,NA
+335,74,"ETH","Ethiopia",8,"Oromia",40,"West Harerghe",335,"Chiro","Woreda","District",NA,NA
+336,74,"ETH","Ethiopia",8,"Oromia",40,"West Harerghe",336,"Darolebu","Woreda","District",NA,"Daro Lebu"
+337,74,"ETH","Ethiopia",8,"Oromia",40,"West Harerghe",337,"Doba","Woreda","District",NA,NA
+338,74,"ETH","Ethiopia",8,"Oromia",40,"West Harerghe",338,"Goba Koricha","Woreda","District",NA,"Guba Koricha"
+339,74,"ETH","Ethiopia",8,"Oromia",40,"West Harerghe",339,"Habro","Woreda","District",NA,NA
+340,74,"ETH","Ethiopia",8,"Oromia",40,"West Harerghe",340,"Kuni","Woreda","District",NA,NA
+341,74,"ETH","Ethiopia",8,"Oromia",40,"West Harerghe",341,"Mesela","Woreda","District",NA,NA
+342,74,"ETH","Ethiopia",8,"Oromia",40,"West Harerghe",342,"Mieso","Woreda","District",NA,NA
+343,74,"ETH","Ethiopia",8,"Oromia",40,"West Harerghe",343,"Tulo","Woreda","District",NA,NA
+344,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",344,"Adda Berga","Woreda","District",NA,"Ada'a Berga|Adaberga"
+345,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",345,"Alem Gena","Woreda","District",NA,NA
+346,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",346,"Ambo","Woreda","District",NA,"Ambo Akabani"
+347,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",347,"Ameya","Woreda","District",NA,"Amaya"
+348,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",348,"Bako Tibe","Woreda","District",NA,NA
+349,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",349,"Becho","Woreda","District",NA,NA
+350,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",350,"Cheliya","Woreda","District",NA,NA
+351,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",351,"Dano","Woreda","District",NA,NA
+352,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",352,"Dawo","Woreda","District",NA,NA
+353,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",353,"Dendi","Woreda","District",NA,"Dandi"
+354,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",354,"Ejere (Addis Alem)","Woreda","District",NA,"Ejerie"
+355,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",355,"Ginde Beret","Woreda","District",NA,NA
+356,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",356,"Ilu","Woreda","District",NA,"Elu"
+357,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",357,"Jeldu","Woreda","District",NA,NA
+358,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",358,"Kersana Kondaltiti","Woreda","District",NA,"Kersa & Kondaltiti"
+359,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",359,"Kokir","Woreda","District",NA,"Kokir Gedebano"
+360,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",360,"Meta Robi","Woreda","District",NA,NA
+361,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",361,"Nono","Woreda","District",NA,NA
+362,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",362,"Tikur","Woreda","District",NA,"Tikur Inchini"
+363,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",363,"Tole","Woreda","District",NA,NA
+364,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",364,"Walisona Goro","Woreda","District",NA,"Woliso|Weliso"
+365,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",365,"Walmara","Woreda","District",NA,"Wolmera"
+366,74,"ETH","Ethiopia",8,"Oromia",41,"West Shewa",366,"Wenchi","Woreda","District",NA,"Wonchi"
+367,74,"ETH","Ethiopia",8,"Oromia",42,"West Wellega",367,"Anfilo","Woreda","District",NA,NA
+368,74,"ETH","Ethiopia",8,"Oromia",42,"West Wellega",368,"Ayra Guliso","Woreda","District",NA,"Ayira Guliso"
+369,74,"ETH","Ethiopia",8,"Oromia",42,"West Wellega",369,"Begi","Woreda","District",NA,NA
+370,74,"ETH","Ethiopia",8,"Oromia",42,"West Wellega",370,"Boji","Woreda","District",NA,NA
+371,74,"ETH","Ethiopia",8,"Oromia",42,"West Wellega",371,"Dale Sadi","Woreda","District",NA,NA
+372,74,"ETH","Ethiopia",8,"Oromia",42,"West Wellega",372,"Ganji","Woreda","District",NA,NA
+373,74,"ETH","Ethiopia",8,"Oromia",42,"West Wellega",373,"Gawo Dale","Woreda","District",NA,NA
+374,74,"ETH","Ethiopia",8,"Oromia",42,"West Wellega",374,"Gidami","Woreda","District",NA,"Gidame"
+375,74,"ETH","Ethiopia",8,"Oromia",42,"West Wellega",375,"Gimbi","Woreda","District",NA,NA
+376,74,"ETH","Ethiopia",8,"Oromia",42,"West Wellega",376,"Haru","Woreda","District",NA,NA
+377,74,"ETH","Ethiopia",8,"Oromia",42,"West Wellega",377,"Hawa Welele","Woreda","District",NA,"Hawa Welel"
+378,74,"ETH","Ethiopia",8,"Oromia",42,"West Wellega",378,"Jarso","Woreda","District",NA,NA
+379,74,"ETH","Ethiopia",8,"Oromia",42,"West Wellega",379,"JimmaHoro","Woreda","District",NA,NA
+380,74,"ETH","Ethiopia",8,"Oromia",42,"West Wellega",380,"Lalo Asabi","Woreda","District",NA,NA
+381,74,"ETH","Ethiopia",8,"Oromia",42,"West Wellega",381,"LaloKillie","Woreda","District",NA,NA
+382,74,"ETH","Ethiopia",8,"Oromia",42,"West Wellega",382,"Mana Sibu","Woreda","District",NA,"Menesibu"
+383,74,"ETH","Ethiopia",8,"Oromia",42,"West Wellega",383,"Nejo","Woreda","District",NA,NA
+384,74,"ETH","Ethiopia",8,"Oromia",42,"West Wellega",384,"Nole Kaba","Woreda","District",NA,NA
+385,74,"ETH","Ethiopia",8,"Oromia",42,"West Wellega",385,"Sayo","Woreda","District",NA,"Seyo"
+386,74,"ETH","Ethiopia",8,"Oromia",42,"West Wellega",386,"Yobdo","Woreda","District",NA,"Yubdo"
+387,74,"ETH","Ethiopia",9,"Somali",43,"Dege Habur",387,"Aware","Woreda","District",NA,NA
+388,74,"ETH","Ethiopia",9,"Somali",43,"Dege Habur",388,"Degehabur","Woreda","District",NA,NA
+389,74,"ETH","Ethiopia",9,"Somali",43,"Dege Habur",389,"Degehamedo","Woreda","District",NA,"Degahamedo"
+390,74,"ETH","Ethiopia",9,"Somali",43,"Dege Habur",390,"Misrak Gashamo","Woreda","District",NA,NA
+391,74,"ETH","Ethiopia",9,"Somali",44,"Jijiga",391,"Babile","Woreda","District",NA,NA
+392,74,"ETH","Ethiopia",9,"Somali",44,"Jijiga",392,"Gursum","Woreda","District",NA,NA
+393,74,"ETH","Ethiopia",9,"Somali",44,"Jijiga",393,"Hareshen","Woreda","District",NA,"Harshin"
+394,74,"ETH","Ethiopia",9,"Somali",44,"Jijiga",394,"Jijiga","Woreda","District",NA,NA
+395,74,"ETH","Ethiopia",9,"Somali",44,"Jijiga",395,"Kebribeyah","Woreda","District",NA,"Kebri Beyah"
+396,74,"ETH","Ethiopia",9,"Somali",44,"Jijiga",396,"Teferi  Ber","Woreda","District",NA,"Awbare"
+397,74,"ETH","Ethiopia",9,"Somali",45,"Liben",397,"Dolo Odo","Woreda","District",NA,NA
+398,74,"ETH","Ethiopia",9,"Somali",45,"Liben",398,"Filtu","Woreda","District",NA,NA
+399,74,"ETH","Ethiopia",9,"Somali",45,"Liben",399,"Moyale","Woreda","District",NA,NA
+400,74,"ETH","Ethiopia",9,"Somali",46,"Shinile",400,"Afdem","Woreda","District",NA,NA
+401,74,"ETH","Ethiopia",9,"Somali",46,"Shinile",401,"Ayisha","Woreda","District",NA,NA
+402,74,"ETH","Ethiopia",9,"Somali",46,"Shinile",402,"Dembel","Woreda","District",NA,NA
+403,74,"ETH","Ethiopia",9,"Somali",46,"Shinile",403,"Erer","Woreda","District",NA,NA
+404,74,"ETH","Ethiopia",9,"Somali",46,"Shinile",404,"Miesso","Woreda","District",NA,NA
+405,74,"ETH","Ethiopia",9,"Somali",46,"Shinile",405,"Shinile","Woreda","District",NA,NA
+406,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",406,"Adadle","Woreda","District",NA,"Adadile"
+407,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",407,"Afder","Woreda","District",NA,NA
+408,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",408,"Bare","Woreda","District",NA,NA
+409,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",409,"Chereti","Woreda","District",NA,NA
+410,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",410,"Debeweyin","Woreda","District",NA,"Debewein"
+411,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",411,"Denan","Woreda","District",NA,NA
+412,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",412,"Dihun","Woreda","District",NA,NA
+413,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",413,"Dolobay","Woreda","District",NA,NA
+414,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",414,"East Imi","Woreda","District",NA,"Imi"
+415,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",415,"Elkere","Woreda","District",NA,NA
+416,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",416,"Ferfer","Woreda","District",NA,NA
+417,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",417,"Fik","Woreda","District",NA,NA
+418,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",418,"Gerbo","Woreda","District",NA,NA
+419,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",419,"Gode","Woreda","District",NA,NA
+420,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",420,"Goro Baqaqsa","Woreda","District",NA,NA
+421,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",421,"Gudis","Woreda","District",NA,NA
+422,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",422,"Guradamole","Woreda","District",NA,NA
+423,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",423,"Hamero","Woreda","District",NA,NA
+424,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",424,"Kebridehar","Woreda","District",NA,"Kebri Dehar"
+425,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",425,"Kelafo","Woreda","District",NA,NA
+426,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",426,"Lagahida","Woreda","District",NA,NA
+427,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",427,"Meyumuluka","Woreda","District",NA,NA
+428,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",428,"Mustahil","Woreda","District",NA,NA
+429,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",429,"Segeg","Woreda","District",NA,"Segag"
+430,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",430,"Selahad","Woreda","District",NA,NA
+431,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",431,"Shekosh","Woreda","District",NA,NA
+432,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",432,"Shilabo","Woreda","District",NA,NA
+433,74,"ETH","Ethiopia",9,"Somali",47,"Unknown",433,"West Imi","Woreda","District",NA,NA
+434,74,"ETH","Ethiopia",9,"Somali",48,"Welwel & Warder",434,"Boh","Woreda","District",NA,NA
+435,74,"ETH","Ethiopia",9,"Somali",48,"Welwel & Warder",435,"Danot","Woreda","District",NA,NA
+436,74,"ETH","Ethiopia",9,"Somali",48,"Welwel & Warder",436,"Geladin","Woreda","District",NA,NA
+437,74,"ETH","Ethiopia",9,"Somali",48,"Welwel & Warder",437,"Warder","Woreda","District",NA,NA
+438,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",49,"Amaro Special Woreda",438,"Amaro","Woreda","District",NA,"Amaro Special Wereda"
+439,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",50,"Basketo Special Woreda",439,"Basketo","Woreda","District",NA,"Basketo Special Wereda"
+440,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",51,"Benchi Maji",440,"Bench","Woreda","District",NA,NA
+441,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",51,"Benchi Maji",441,"Bero","Woreda","District",NA,"Biro"
+442,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",51,"Benchi Maji",442,"Maji","Woreda","District",NA,NA
+443,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",51,"Benchi Maji",443,"Meanit Goldiiya","Woreda","District",NA,"Menit Goldiya"
+444,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",51,"Benchi Maji",444,"Menit Shasha","Woreda","District",NA,"Shasha"
+445,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",51,"Benchi Maji",445,"Sheka","Woreda","District",NA,"Sheko"
+446,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",51,"Benchi Maji",446,"Shewa Bench","Woreda","District",NA,NA
+447,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",51,"Benchi Maji",447,"Surma","Woreda","District",NA,NA
+448,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",52,"Burji Special Woreda",448,"Burji","Woreda","District",NA,"Burji Special Wereda"
+449,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",53,"Dawuro",449,"Gena Bosa","Woreda","District",NA,NA
+450,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",53,"Dawuro",450,"Isara","Woreda","District",NA,NA
+451,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",53,"Dawuro",451,"Loma Bosa","Woreda","District",NA,"Loma"
+452,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",53,"Dawuro",452,"Mareka Gena","Woreda","District",NA,"Mareka"
+453,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",53,"Dawuro",453,"Tocha","Woreda","District",NA,NA
+454,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",54,"Derashe Special Woreda",454,"Dirashe","Woreda","District",NA,"Derashe Special Wereda"
+455,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",55,"Gamo Gofa",455,"Arba Minch Zuria","Woreda","District",NA,"Arbaminch Zuriya"
+456,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",55,"Gamo Gofa",456,"Bonke","Woreda","District",NA,"Bonkie"
+457,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",55,"Gamo Gofa",457,"Boreda","Woreda","District",NA,NA
+458,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",55,"Gamo Gofa",458,"Chencha","Woreda","District",NA,NA
+459,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",55,"Gamo Gofa",459,"Daramalo","Woreda","District",NA,"Dera Malo"
+460,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",55,"Gamo Gofa",460,"Dita","Woreda","District",NA,NA
+461,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",55,"Gamo Gofa",461,"Gofa Zuria","Woreda","District",NA,"Gofa Zuriya"
+462,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",55,"Gamo Gofa",462,"Kemba","Woreda","District",NA,NA
+463,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",55,"Gamo Gofa",463,"Kucha","Woreda","District",NA,NA
+464,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",55,"Gamo Gofa",464,"Melekoza","Woreda","District",NA,"Melakoza"
+465,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",55,"Gamo Gofa",465,"MirabAbaya","Woreda","District",NA,NA
+466,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",55,"Gamo Gofa",466,"Ubadebretsehay","Woreda","District",NA,"Uba Deber Tsehay"
+467,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",55,"Gamo Gofa",467,"Zala","Woreda","District",NA,NA
+468,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",56,"Gedeo",468,"Bule","Woreda","District",NA,NA
+469,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",56,"Gedeo",469,"Kochere","Woreda","District",NA,NA
+470,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",56,"Gedeo",470,"Wenago","Woreda","District",NA,NA
+471,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",56,"Gedeo",471,"Yirgachefe","Woreda","District",NA,"Yirga Chefe"
+472,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",57,"Guraghe",472,"Akililna Mohr","Woreda","District",NA,"Aklilna Mohor"
+473,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",57,"Guraghe",473,"Alicho Woriro","Woreda","District",NA,"Alicho Wurero"
+474,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",57,"Guraghe",474,"Cheha","Woreda","District",NA,NA
+475,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",57,"Guraghe",475,"Dalocha","Woreda","District",NA,NA
+476,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",57,"Guraghe",476,"Endagagn","Woreda","District",NA,"Endegagn"
+477,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",57,"Guraghe",477,"Enemorina Eaner","Woreda","District",NA,"Enemorna Eaner|Enemor & Ener"
+478,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",57,"Guraghe",478,"Ezha","Woreda","District",NA,"Eza & Welene"
+479,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",57,"Guraghe",479,"Goro","Woreda","District",NA,"Gore"
+480,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",57,"Guraghe",480,"Gumer","Woreda","District",NA,NA
+481,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",57,"Guraghe",481,"Kokir Gedbano Gutazer","Woreda","District",NA,"Kokir Gedabano Gutazer"
+482,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",57,"Guraghe",482,"Lanfero","Woreda","District",NA,"Lanfuro"
+483,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",57,"Guraghe",483,"Meskanena Mareko","Woreda","District",NA,"Mesekan na Mareko|Meskan & Mareko"
+484,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",57,"Guraghe",484,"Selti","Woreda","District",NA,"Silte"
+485,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",57,"Guraghe",485,"Sodo","Woreda","District",NA,NA
+486,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",58,"Hadiya",486,"Badawacho","Woreda","District",NA,NA
+487,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",58,"Hadiya",487,"Limu","Woreda","District",NA,"Lemo"
+488,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",58,"Hadiya",488,"Misha","Woreda","District",NA,NA
+489,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",58,"Hadiya",489,"Soro","Woreda","District",NA,NA
+490,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",59,"Kaffa",490,"Bita","Woreda","District",NA,NA
+491,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",59,"Kaffa",491,"Chena","Woreda","District",NA,NA
+492,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",59,"Kaffa",492,"Cheta","Woreda","District",NA,NA
+493,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",59,"Kaffa",493,"Decha","Woreda","District",NA,NA
+494,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",59,"Kaffa",494,"Gesha Daka","Woreda","District",NA,"GeshaDaka"
+495,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",59,"Kaffa",495,"Gewata","Woreda","District",NA,NA
+496,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",59,"Kaffa",496,"Gimbo","Woreda","District",NA,NA
+497,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",59,"Kaffa",497,"Menjiwo","Woreda","District",NA,"Mengiwo"
+498,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",59,"Kaffa",498,"Sylem","Woreda","District",NA,"GeshaDaka"
+499,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",59,"Kaffa",499,"Telo","Woreda","District",NA,NA
+500,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",60,"Kembata Alaba Tembaro",500,"Alaba","Woreda","District",NA,NA
+501,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",60,"Kembata Alaba Tembaro",501,"Angacha","Woreda","District",NA,NA
+502,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",60,"Kembata Alaba Tembaro",502,"Kacha Bira","Woreda","District",NA,NA
+503,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",60,"Kembata Alaba Tembaro",503,"Kedida Gamela","Woreda","District",NA,NA
+504,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",60,"Kembata Alaba Tembaro",504,"Omo Sheleko","Woreda","District",NA,NA
+505,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",61,"Konso Special Woreda",505,"Konso","Woreda","District",NA,"Konso Special Wereda"
+506,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",62,"Konta Special Woreda",506,"Ela (Konta)","Woreda","District",NA,"Konta Special Wereda"
+507,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",63,"Shaka",507,"Anderacha","Woreda","District",NA,NA
+508,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",63,"Shaka",508,"Masha","Woreda","District",NA,NA
+509,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",63,"Shaka",509,"Yeki","Woreda","District",NA,NA
+510,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",64,"Sidama",510,"Aleta Wendo","Woreda","District",NA,"Aleta Wando|Aleta Wondo (N)"
+511,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",64,"Sidama",511,"Arbe Gona","Woreda","District",NA,"Arbegona"
+512,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",64,"Sidama",512,"Aroresa","Woreda","District",NA,NA
+513,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",64,"Sidama",513,"Awasa","Woreda","District",NA,"Awasa Zuriya"
+514,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",64,"Sidama",514,"Bensa","Woreda","District",NA,NA
+515,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",64,"Sidama",515,"Dale","Woreda","District",NA,NA
+516,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",64,"Sidama",516,"Dara","Woreda","District",NA,NA
+517,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",64,"Sidama",517,"Hulla","Woreda","District",NA,"Hula"
+518,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",64,"Sidama",518,"Shebedino","Woreda","District",NA,NA
+519,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",65,"South Omo",519,"Bako Gazer","Woreda","District",NA,NA
+520,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",65,"South Omo",520,"Bena","Woreda","District",NA,"Bena Tsemay"
+521,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",65,"South Omo",521,"Gelila","Woreda","District",NA,NA
+522,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",65,"South Omo",522,"Hamer","Woreda","District",NA,NA
+523,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",65,"South Omo",523,"Kuraz","Woreda","District",NA,NA
+524,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",65,"South Omo",524,"Selamgo","Woreda","District",NA,"Selamago"
+525,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",66,"Wolayita",525,"Boloso Sore","Woreda","District",NA,NA
+526,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",66,"Wolayita",526,"Damot Gale","Woreda","District",NA,NA
+527,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",66,"Wolayita",527,"Damot Weyde","Woreda","District",NA,"Damot Woyde|Damot Weyide"
+528,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",66,"Wolayita",528,"Humbo","Woreda","District",NA,NA
+529,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",66,"Wolayita",529,"Kindo Koysha","Woreda","District",NA,NA
+530,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",66,"Wolayita",530,"Ofa","Woreda","District",NA,"Offa"
+531,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",66,"Wolayita",531,"Sodo Zuria","Woreda","District",NA,"Sodo Zuriya"
+532,74,"ETH","Ethiopia",10,"Southern Nations, Nationalities and Peoples",67,"Yem Special Woreda",532,"Yem","Woreda","District",NA,"Yem Special Wereda"
+533,74,"ETH","Ethiopia",11,"Tigray",68,"Central Tigray",533,"Adwa","Woreda","District",NA,NA
+534,74,"ETH","Ethiopia",11,"Tigray",68,"Central Tigray",534,"Ahferom","Woreda","District",NA,"Ahiferom|Enticho"
+535,74,"ETH","Ethiopia",11,"Tigray",68,"Central Tigray",535,"Degua Temben","Woreda","District",NA,"Dega Temben"
+536,74,"ETH","Ethiopia",11,"Tigray",68,"Central Tigray",536,"Kola Temben","Woreda","District",NA,NA
+537,74,"ETH","Ethiopia",11,"Tigray",68,"Central Tigray",537,"Laelay Maychew","Woreda","District",NA,"Lay Mayichew"
+538,74,"ETH","Ethiopia",11,"Tigray",68,"Central Tigray",538,"Mereb Lehe","Woreda","District",NA,NA
+539,74,"ETH","Ethiopia",11,"Tigray",68,"Central Tigray",539,"Naeder Adet","Woreda","District",NA,"Nader"
+540,74,"ETH","Ethiopia",11,"Tigray",68,"Central Tigray",540,"Tahtay Maychew","Woreda","District",NA,NA
+541,74,"ETH","Ethiopia",11,"Tigray",68,"Central Tigray",541,"Tanku Abergele","Woreda","District",NA,"Tanqua Abergele|Abergele"
+542,74,"ETH","Ethiopia",11,"Tigray",68,"Central Tigray",542,"Werie Lehe","Woreda","District",NA,"Were Lehe"
+543,74,"ETH","Ethiopia",11,"Tigray",69,"Easetern Tigray",543,"Atsbi Wenberta","Woreda","District",NA,NA
+544,74,"ETH","Ethiopia",11,"Tigray",69,"Easetern Tigray",544,"Erob","Woreda","District",NA,NA
+545,74,"ETH","Ethiopia",11,"Tigray",69,"Easetern Tigray",545,"Ganta Afeshum","Woreda","District",NA,NA
+546,74,"ETH","Ethiopia",11,"Tigray",69,"Easetern Tigray",546,"Gulomahda","Woreda","District",NA,"Gulo Mehada"
+547,74,"ETH","Ethiopia",11,"Tigray",69,"Easetern Tigray",547,"Hawzen","Woreda","District",NA,NA
+548,74,"ETH","Ethiopia",11,"Tigray",69,"Easetern Tigray",548,"Saesi Tsaedaemba","Woreda","District",NA,"Seasi Tsada Amba"
+549,74,"ETH","Ethiopia",11,"Tigray",69,"Easetern Tigray",549,"Wukro","Woreda","District",NA,NA
+550,74,"ETH","Ethiopia",11,"Tigray",70,"Mekele",550,"Mekele","Woreda","District",NA,NA
+551,74,"ETH","Ethiopia",11,"Tigray",71,"Southern Tigray",551,"Alamata","Woreda","District",NA,"Alamanta"
+552,74,"ETH","Ethiopia",11,"Tigray",71,"Southern Tigray",552,"Ambalaje","Woreda","District",NA,"Ambalaghe|Ambalage"
+553,74,"ETH","Ethiopia",11,"Tigray",71,"Southern Tigray",553,"Endamehoni","Woreda","District",NA,NA
+554,74,"ETH","Ethiopia",11,"Tigray",71,"Southern Tigray",554,"Enderta","Woreda","District",NA,NA
+555,74,"ETH","Ethiopia",11,"Tigray",71,"Southern Tigray",555,"Hintalo Wajirat","Woreda","District",NA,NA
+556,74,"ETH","Ethiopia",11,"Tigray",71,"Southern Tigray",556,"Ofla","Woreda","District",NA,"Wofla (Ofla)"
+557,74,"ETH","Ethiopia",11,"Tigray",71,"Southern Tigray",557,"Raya Azebo","Woreda","District",NA,NA
+558,74,"ETH","Ethiopia",11,"Tigray",71,"Southern Tigray",558,"Samre","Woreda","District",NA,"Seharti Samire"
+559,74,"ETH","Ethiopia",11,"Tigray",72,"Western Tigray",559,"Asegede Tsimbela","Woreda","District",NA,"Asegede Tsimbila|Asgedi"
+560,74,"ETH","Ethiopia",11,"Tigray",72,"Western Tigray",560,"Kafta Humera","Woreda","District",NA,NA
+561,74,"ETH","Ethiopia",11,"Tigray",72,"Western Tigray",561,"Laelay Adiyabo","Woreda","District",NA,"Lay Adinabo"
+562,74,"ETH","Ethiopia",11,"Tigray",72,"Western Tigray",562,"Medebay Zana","Woreda","District",NA,NA
+563,74,"ETH","Ethiopia",11,"Tigray",72,"Western Tigray",563,"Tahtay Adiyabo","Woreda","District",NA,NA
+564,74,"ETH","Ethiopia",11,"Tigray",72,"Western Tigray",564,"Tahtay Koraro","Woreda","District",NA,"Tach Koraro"
+565,74,"ETH","Ethiopia",11,"Tigray",72,"Western Tigray",565,"Tsegede","Woreda","District",NA,"Tegede"
+566,74,"ETH","Ethiopia",11,"Tigray",72,"Western Tigray",566,"Tsilemti","Woreda","District",NA,"Tselemti"
+567,74,"ETH","Ethiopia",11,"Tigray",72,"Western Tigray",567,"Welkait","Woreda","District",NA,"Welkayit"

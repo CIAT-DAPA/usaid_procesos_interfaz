@@ -164,7 +164,7 @@ prepare_setups_api_oryza <- function(setups) {
 
   # Preparing inputs for parallelization
   lapply(2:length(setups), function(i) {
-    scenarie <- str_split_fixed(setups[2], "/", n = 8) # current scenarie/setup
+    scenarie <- str_split_fixed(setups[i], "/", n = 8) # current scenarie/setup
     correction <- str_split_fixed(scenarie[8], "_", n = 2)
     station <- gsub("/", "", correction[1]) # current climatic station
 
@@ -183,7 +183,7 @@ prepare_setups_api_oryza <- function(setups) {
     unlink(paste0(dir_oryza_api_inputs_climate, station), recursive = TRUE)
     unlink(paste0(dir_oryza_api_inputs_setup, scenarie[8]), recursive = TRUE)
     unlink(paste0(dir_oryza_api_inputs, "inputs.zip"), recursive = TRUE)
-  }) # , mc.cores = no_cores, mc.preschedule = F)
+  })# , mc.cores = no_cores, mc.preschedule = F)
 
   # This return TRUE indicates that the process is done
   return(TRUE)
@@ -254,6 +254,7 @@ runDssatModule <- function(crop){
       source("dssat_scripts/04_run_dssat_model.R")
       source("dssat_scripts/05_get_outputs_dssat.R")
       source("dssat_scripts/06_stress_risk.R")
+      source("dssat_scripts/07_land_preparation.R")
 
     },
     error = function(e) {
@@ -263,8 +264,8 @@ runDssatModule <- function(crop){
 
   mclapply(2:length(setups), function(i) {
     
-    tictoc::tic()
-    id <- gsub("/", "", str_split_fixed(setups[2], "/", n = 8)) # current scenarie/setup
+    #tictoc::tic()
+    id <- gsub("/", "", str_split_fixed(setups[15], "/", n = 8)) # current scenarie/setup
     correction <- str_split_fixed(id[8], "_", n = 2)
     station <- gsub("/", "", correction[1]) # current climatic station
     id <- id[8]
@@ -272,30 +273,30 @@ runDssatModule <- function(crop){
     # Set up run paths
     current_dir_inputs_climate <- paste0(path_output, "/", station, "/")
     current_setup_dir <- paste0(dirCurrentCropInputs, id, "/")
-    if(currentCountry=="COLOMBIA"){
+    #if(currentCountry=="COLOMBIA" || (currentCountry=="ETHIOPIA" && crop == "maize")){
 
-      skip_cul <- read_lines(paste0(setups[2], "/", cul_file, ".CUL")) %>% str_detect("@VAR#") %>% which() +2
-      culFile <- read_lines(paste0(setups[2], "/", cul_file, ".CUL"))[skip_cul[1]]
+      skip_cul <- read_lines(paste0(setups[15], "/", cul_file, ".CUL")) %>% str_detect("@VAR#") %>% which() +4
+      culFile <- read_lines(paste0(setups[15], "/", cul_file, ".CUL"))[skip_cul[1]]
       cultivar <- strsplit(culFile, " ", fixed=T)
       cultivar <- c(cultivar[[1]][1], cultivar[[1]][2])
       
-      skip_soil <- read_lines(paste0(setups[2], "/SOIL.SOL")) %>% str_detect("@SITE") %>% which() -1
-      soilFile <- read_lines(paste0(setups[2], "/SOIL.SOL"))[skip_soil[1]]
+      skip_soil <- read_lines(paste0(setups[15], "/SOIL.SOL")) %>% str_detect("@SITE") %>% which() -1
+      soilFile <- read_lines(paste0(setups[15], "/SOIL.SOL"))[skip_soil[1]]
       soil <- strsplit(soilFile, " ", fixed=T)
       soil <- substring(soil[[1]][1], 2)
 
-      run_crop_dssat(id, crop, current_dir_inputs_climate, current_setup_dir, 30, soil, cultivar)
+      run_crop_dssat(id, crop, current_dir_inputs_climate, current_setup_dir, 25, soil, cultivar)
       # tictoc::toc()
 
-    } else {
+    #} else {
 
-      run_crop_dssat(id, crop, current_dir_inputs_climate, current_setup_dir, 30)
-      tictoc::toc()
-    }
+      #run_crop_dssat(id, crop, current_dir_inputs_climate, current_setup_dir, 25)
+      #tictoc::toc()
+    #}
     
     
   
-  }, mc.cores = 2, mc.preschedule = F)
+  }, mc.cores = 5, mc.preschedule = F)
 
 }
 
@@ -466,10 +467,10 @@ for (c in countries_list) {
   try(system(dotnet_cmd[8], intern = TRUE, ignore.stderr = TRUE))
 
   #Downloading observed data for prepare climate scenaries in crops setups
-  #  if (currentCountry == "COLOMBIA" || currentCountry == "ETHIOPIA") {
-  #   source(paste0(dir_prepare_observed_data, "downloadObservedData.R"))
-  #   downloadObservedData(dir_stations, format(strptime(as.character(Sys.Date()), "%Y-%m-%d"),"%d/%m/%Y" ), path_output_observed_data)
-  #  }
+   if (currentCountry == "COLOMBIA" || currentCountry == "ETHIOPIA") {
+    source(paste0(dir_prepare_observed_data, "downloadObservedData.R"))
+    downloadObservedData(dir_stations, format(strptime(as.character(Sys.Date()), "%Y-%m-%d"),"%d/%m/%Y" ), path_output_observed_data, currentCountry)
+   }
 
   # Prediction process
   if (currentCountry == "COLOMBIA" || currentCountry == "ANGOLA") {
@@ -488,7 +489,13 @@ for (c in countries_list) {
   runJoinFinalData <- source(paste(dirForecast, "03_join_wth_final.R", sep = "", collapse = NULL))
 
   #new dssat module
-  runDssatModule("wheat")
+  if (currentCountry == "ETHIOPIA") {
+    tictoc::tic()
+    runDssatModule("wheat")
+    tictoc::toc()
+    runDssatModule("maize")
+
+  }
 
   ## Rice crop model process
   if (currentCountry == "COLOMBIA") {
@@ -529,7 +536,7 @@ write_csv(bind_rows(probabilities_list), paste0(probForecastUnifiedDir, "probabi
 # Upload proccess results to interface database
 setwd(paste0(scriptsDir, "forecast_app"))
 CMDdirOutputs <- paste0(dirUnifiedOutputs, "outputs/") # paste0(gsub("/","\\\\",dirOutputs), "\\\"")
-try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\""), intern = TRUE, ignore.stderr = TRUE))
+try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\"", " -frid \"", "63b9c071368fee5585f307ed", "\""), intern = TRUE, ignore.stderr = TRUE))
 
 # Import rasters to Geoserver
 source("/forecast/usaid_procesos_interfaz/prediccionCLimatica/raster_upload.r")

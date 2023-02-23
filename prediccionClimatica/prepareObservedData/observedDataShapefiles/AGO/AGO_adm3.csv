@@ -1,0 +1,528 @@
+"OBJECTID","ID_0","ISO","NAME_0","ID_1","NAME_1","ID_2","NAME_2","ID_3","NAME_3","TYPE_3","ENGTYPE_3","NL_NAME_3","VARNAME_3"
+1,8,"AGO","Angola",1,"Bengo",1,"Ambriz",1,"Ambriz","Commune","Commune",NA,NA
+2,8,"AGO","Angola",1,"Bengo",1,"Ambriz",2,"Bela Vista","Commune","Commune",NA,NA
+3,8,"AGO","Angola",1,"Bengo",1,"Ambriz",3,"Tabi","Commune","Commune",NA,NA
+4,8,"AGO","Angola",1,"Bengo",2,"Dande",4,"Barra do Dande","Commune","Commune",NA,NA
+5,8,"AGO","Angola",1,"Bengo",2,"Dande",5,"Caxito","Commune","Commune",NA,NA
+6,8,"AGO","Angola",1,"Bengo",2,"Dande",6,"Kikabo","Commune","Commune",NA,NA
+7,8,"AGO","Angola",1,"Bengo",2,"Dande",7,"Mabubas","Commune","Commune",NA,NA
+8,8,"AGO","Angola",1,"Bengo",2,"Dande",8,"Ucua","Commune","Commune",NA,NA
+9,8,"AGO","Angola",1,"Bengo",3,"Icolo e Bengo",9,"Bom Jesus","Commune","Commune",NA,NA
+10,8,"AGO","Angola",1,"Bengo",3,"Icolo e Bengo",10,"Calomboloca","Commune","Commune",NA,NA
+11,8,"AGO","Angola",1,"Bengo",3,"Icolo e Bengo",11,"Catete","Commune","Commune",NA,NA
+12,8,"AGO","Angola",1,"Bengo",3,"Icolo e Bengo",12,"Kabiri","Commune","Commune",NA,NA
+13,8,"AGO","Angola",1,"Bengo",4,"Muxima",13,"Dembo Chio","Commune","Commune",NA,NA
+14,8,"AGO","Angola",1,"Bengo",4,"Muxima",14,"Kixinje","Commune","Commune",NA,NA
+15,8,"AGO","Angola",1,"Bengo",4,"Muxima",15,"Mumbondo","Commune","Commune",NA,NA
+16,8,"AGO","Angola",1,"Bengo",4,"Muxima",16,"Muxima","Commune","Commune",NA,NA
+17,8,"AGO","Angola",1,"Bengo",5,"Nambuangongo",17,"Gombe","Commune","Commune",NA,NA
+18,8,"AGO","Angola",1,"Bengo",5,"Nambuangongo",18,"Kage","Commune","Commune",NA,NA
+19,8,"AGO","Angola",1,"Bengo",5,"Nambuangongo",19,"Kanacassala","Commune","Commune",NA,NA
+20,8,"AGO","Angola",1,"Bengo",5,"Nambuangongo",20,"Kicunzo","Commune","Commune",NA,NA
+21,8,"AGO","Angola",1,"Bengo",5,"Nambuangongo",21,"Kixico","Commune","Commune",NA,NA
+22,8,"AGO","Angola",1,"Bengo",5,"Nambuangongo",22,"Muxiluando","Commune","Commune",NA,NA
+23,8,"AGO","Angola",1,"Bengo",5,"Nambuangongo",23,"Zala","Commune","Commune",NA,NA
+24,8,"AGO","Angola",2,"Benguela",6,"Baía Farta",24,"Baia Farta","Commune","Commune",NA,NA
+25,8,"AGO","Angola",2,"Benguela",6,"Baía Farta",25,"Dombe Grande","Commune","Commune",NA,NA
+26,8,"AGO","Angola",2,"Benguela",6,"Baía Farta",26,"Ekimina","Commune","Commune",NA,NA
+27,8,"AGO","Angola",2,"Benguela",6,"Baía Farta",27,"Kalahanga","Commune","Commune",NA,NA
+28,8,"AGO","Angola",2,"Benguela",7,"Balombo",28,"Balombo","Commune","Commune",NA,NA
+29,8,"AGO","Angola",2,"Benguela",7,"Balombo",29,"Chindumbo","Commune","Commune",NA,NA
+30,8,"AGO","Angola",2,"Benguela",7,"Balombo",30,"Chingongo","Commune","Commune",NA,NA
+31,8,"AGO","Angola",2,"Benguela",8,"Benguela",31,"Benguela","Commune","Commune",NA,NA
+32,8,"AGO","Angola",2,"Benguela",9,"Bocoio",32,"Bocoio","Commune","Commune",NA,NA
+33,8,"AGO","Angola",2,"Benguela",9,"Bocoio",33,"Cavimbe","Commune","Commune",NA,NA
+34,8,"AGO","Angola",2,"Benguela",9,"Bocoio",34,"Chila","Commune","Commune",NA,NA
+35,8,"AGO","Angola",2,"Benguela",9,"Bocoio",35,"Monte Belo","Commune","Commune",NA,NA
+36,8,"AGO","Angola",2,"Benguela",9,"Bocoio",36,"Passe","Commune","Commune",NA,NA
+37,8,"AGO","Angola",2,"Benguela",10,"Caiambambo",37,"Cayavi","Commune","Commune",NA,NA
+38,8,"AGO","Angola",2,"Benguela",10,"Caiambambo",38,"Kaimbambo","Commune","Commune",NA,NA
+39,8,"AGO","Angola",2,"Benguela",10,"Caiambambo",39,"Kanhamela","Commune","Commune",NA,NA
+40,8,"AGO","Angola",2,"Benguela",10,"Caiambambo",40,"Katengue","Commune","Commune",NA,NA
+41,8,"AGO","Angola",2,"Benguela",10,"Caiambambo",41,"Wyiagombe","Commune","Commune",NA,NA
+42,8,"AGO","Angola",2,"Benguela",11,"Chongoroi",42,"Bolonguela","Commune","Commune",NA,NA
+43,8,"AGO","Angola",2,"Benguela",11,"Chongoroi",43,"Chongoroi","Commune","Commune",NA,NA
+44,8,"AGO","Angola",2,"Benguela",12,"Cubal",44,"Cubal","Commune","Commune",NA,NA
+45,8,"AGO","Angola",2,"Benguela",12,"Cubal",45,"Kapupa","Commune","Commune",NA,NA
+46,8,"AGO","Angola",2,"Benguela",12,"Cubal",46,"Lambala","Commune","Commune",NA,NA
+47,8,"AGO","Angola",2,"Benguela",12,"Cubal",47,"Quendo","Commune","Commune",NA,NA
+48,8,"AGO","Angola",2,"Benguela",13,"Ganda",48,"Babaera","Commune","Commune",NA,NA
+49,8,"AGO","Angola",2,"Benguela",13,"Ganda",49,"Chikuma","Commune","Commune",NA,NA
+50,8,"AGO","Angola",2,"Benguela",13,"Ganda",50,"Ebanga","Commune","Commune",NA,NA
+51,8,"AGO","Angola",2,"Benguela",13,"Ganda",51,"Ganda","Commune","Commune",NA,NA
+52,8,"AGO","Angola",2,"Benguela",13,"Ganda",52,"Kaseke","Commune","Commune",NA,NA
+53,8,"AGO","Angola",2,"Benguela",14,"Lobito",53,"Biopio","Commune","Commune",NA,NA
+54,8,"AGO","Angola",2,"Benguela",14,"Lobito",54,"Egito-Praia","Commune","Commune",NA,NA
+55,8,"AGO","Angola",2,"Benguela",14,"Lobito",55,"Kanjala","Commune","Commune",NA,NA
+56,8,"AGO","Angola",2,"Benguela",14,"Lobito",56,"Katumbela","Commune","Commune",NA,NA
+57,8,"AGO","Angola",2,"Benguela",14,"Lobito",57,"Lobito","Commune","Commune",NA,NA
+58,8,"AGO","Angola",3,"Bié",15,"Andulo",58,"Andulo","Commune","Commune",NA,NA
+59,8,"AGO","Angola",3,"Bié",15,"Andulo",59,"Chivaulo","Commune","Commune",NA,NA
+60,8,"AGO","Angola",3,"Bié",15,"Andulo",60,"Kalucinga","Commune","Commune",NA,NA
+61,8,"AGO","Angola",3,"Bié",15,"Andulo",61,"Kassumbe","Commune","Commune",NA,NA
+62,8,"AGO","Angola",3,"Bié",16,"Camacupa",62,"Kamakupa","Commune","Commune",NA,NA
+63,8,"AGO","Angola",3,"Bié",16,"Camacupa",63,"Kwanza","Commune","Commune",NA,NA
+64,8,"AGO","Angola",3,"Bié",16,"Camacupa",64,"Ringoma","Commune","Commune",NA,NA
+65,8,"AGO","Angola",3,"Bié",16,"Camacupa",65,"ST. Antonio da Muinha","Commune","Commune",NA,NA
+66,8,"AGO","Angola",3,"Bié",16,"Camacupa",66,"Umpulo","Commune","Commune",NA,NA
+67,8,"AGO","Angola",3,"Bié",17,"Catabola",67,"Chipeta","Commune","Commune",NA,NA
+68,8,"AGO","Angola",3,"Bié",17,"Catabola",68,"Chiuca","Commune","Commune",NA,NA
+69,8,"AGO","Angola",3,"Bié",17,"Catabola",69,"Kaiuera","Commune","Commune",NA,NA
+70,8,"AGO","Angola",3,"Bié",17,"Catabola",70,"Katabola","Commune","Commune",NA,NA
+71,8,"AGO","Angola",3,"Bié",18,"Chinguar",71,"Chinguar","Commune","Commune",NA,NA
+72,8,"AGO","Angola",3,"Bié",18,"Chinguar",72,"Kangote","Commune","Commune",NA,NA
+73,8,"AGO","Angola",3,"Bié",18,"Chinguar",73,"Kutato","Commune","Commune",NA,NA
+74,8,"AGO","Angola",3,"Bié",19,"Chitembo",74,"Cachingues","Commune","Commune",NA,NA
+75,8,"AGO","Angola",3,"Bié",19,"Chitembo",75,"Chitembo","Commune","Commune",NA,NA
+76,8,"AGO","Angola",3,"Bié",19,"Chitembo",76,"Malengue","Commune","Commune",NA,NA
+77,8,"AGO","Angola",3,"Bié",19,"Chitembo",77,"Mumbue","Commune","Commune",NA,NA
+78,8,"AGO","Angola",3,"Bié",19,"Chitembo",78,"Mutumbo","Commune","Commune",NA,NA
+79,8,"AGO","Angola",3,"Bié",19,"Chitembo",79,"Soma Kwanza","Commune","Commune",NA,NA
+80,8,"AGO","Angola",3,"Bié",20,"Cuemba",80,"Kuemba","Commune","Commune",NA,NA
+81,8,"AGO","Angola",3,"Bié",20,"Cuemba",81,"Luando","Commune","Commune",NA,NA
+82,8,"AGO","Angola",3,"Bié",20,"Cuemba",82,"Munhango","Commune","Commune",NA,NA
+83,8,"AGO","Angola",3,"Bié",20,"Cuemba",83,"Sachinemuna","Commune","Commune",NA,NA
+84,8,"AGO","Angola",3,"Bié",21,"Cunhinga",84,"Kunhinga","Commune","Commune",NA,NA
+85,8,"AGO","Angola",3,"Bié",22,"Kuito",85,"Cambandua","Commune","Commune",NA,NA
+86,8,"AGO","Angola",3,"Bié",22,"Kuito",86,"Chicala","Commune","Commune",NA,NA
+87,8,"AGO","Angola",3,"Bié",22,"Kuito",87,"Kuito","Commune","Commune",NA,NA
+88,8,"AGO","Angola",3,"Bié",22,"Kuito",88,"Trumba","Commune","Commune",NA,NA
+89,8,"AGO","Angola",3,"Bié",23,"Nharea",89,"Dando","Commune","Commune",NA,NA
+90,8,"AGO","Angola",3,"Bié",23,"Nharea",90,"Gamba","Commune","Commune",NA,NA
+91,8,"AGO","Angola",3,"Bié",23,"Nharea",91,"Kaiei","Commune","Commune",NA,NA
+92,8,"AGO","Angola",3,"Bié",23,"Nharea",92,"Lubia","Commune","Commune",NA,NA
+93,8,"AGO","Angola",3,"Bié",23,"Nharea",93,"Nharea","Commune","Commune",NA,NA
+94,8,"AGO","Angola",4,"Cabinda",24,"Belize",94,"Belize","Commune","Commune",NA,NA
+95,8,"AGO","Angola",4,"Cabinda",24,"Belize",95,"Luali","Commune","Commune",NA,NA
+96,8,"AGO","Angola",4,"Cabinda",24,"Belize",96,"Mikonje","Commune","Commune",NA,NA
+97,8,"AGO","Angola",4,"Cabinda",25,"Buco Zau",97,"Buco Zau","Commune","Commune",NA,NA
+98,8,"AGO","Angola",4,"Cabinda",25,"Buco Zau",98,"Nekuto","Commune","Commune",NA,NA
+99,8,"AGO","Angola",4,"Cabinda",25,"Buco Zau",99,"Nhuca","Commune","Commune",NA,NA
+100,8,"AGO","Angola",4,"Cabinda",26,"Cabinda",100,"Cabinda","Commune","Commune",NA,NA
+101,8,"AGO","Angola",4,"Cabinda",26,"Cabinda",101,"Malembo","Commune","Commune",NA,NA
+102,8,"AGO","Angola",4,"Cabinda",26,"Cabinda",102,"Tando Zinze","Commune","Commune",NA,NA
+103,8,"AGO","Angola",4,"Cabinda",27,"Landana",103,"Dinge","Commune","Commune",NA,NA
+104,8,"AGO","Angola",4,"Cabinda",27,"Landana",104,"Kakongo","Commune","Commune",NA,NA
+105,8,"AGO","Angola",4,"Cabinda",27,"Landana",105,"Massabi","Commune","Commune",NA,NA
+106,8,"AGO","Angola",5,"Cuando Cubango",28,"Calai",106,"kalai","Commune","Commune",NA,NA
+107,8,"AGO","Angola",5,"Cuando Cubango",28,"Calai",107,"Maue","Commune","Commune",NA,NA
+108,8,"AGO","Angola",5,"Cuando Cubango",29,"Cuangar",108,"Bondo","Commune","Commune",NA,NA
+109,8,"AGO","Angola",5,"Cuando Cubango",29,"Cuangar",109,"Cuangar","Commune","Commune",NA,NA
+110,8,"AGO","Angola",5,"Cuando Cubango",29,"Cuangar",110,"Savate","Commune","Commune",NA,NA
+111,8,"AGO","Angola",5,"Cuando Cubango",30,"Cuchi",111,"Chinguanja","Commune","Commune",NA,NA
+112,8,"AGO","Angola",5,"Cuando Cubango",30,"Cuchi",112,"Kuchi","Commune","Commune",NA,NA
+113,8,"AGO","Angola",5,"Cuando Cubango",30,"Cuchi",113,"Kutato","Commune","Commune",NA,NA
+114,8,"AGO","Angola",5,"Cuando Cubango",31,"Cuito Cuanavale",114,"Baixo Longa","Commune","Commune",NA,NA
+115,8,"AGO","Angola",5,"Cuando Cubango",31,"Cuito Cuanavale",115,"Kuito Kuanavale","Commune","Commune",NA,NA
+116,8,"AGO","Angola",5,"Cuando Cubango",31,"Cuito Cuanavale",116,"Longa","Commune","Commune",NA,NA
+117,8,"AGO","Angola",5,"Cuando Cubango",31,"Cuito Cuanavale",117,"Lupire","Commune","Commune",NA,NA
+118,8,"AGO","Angola",5,"Cuando Cubango",32,"Dirico",118,"Dirico","Commune","Commune",NA,NA
+119,8,"AGO","Angola",5,"Cuando Cubango",32,"Dirico",119,"Mucusso","Commune","Commune",NA,NA
+120,8,"AGO","Angola",5,"Cuando Cubango",32,"Dirico",120,"Xa-mavera","Commune","Commune",NA,NA
+121,8,"AGO","Angola",5,"Cuando Cubango",33,"Mavinga",121,"Kunjamba","Commune","Commune",NA,NA
+122,8,"AGO","Angola",5,"Cuando Cubango",33,"Mavinga",122,"Kutuile","Commune","Commune",NA,NA
+123,8,"AGO","Angola",5,"Cuando Cubango",33,"Mavinga",123,"Luengue","Commune","Commune",NA,NA
+124,8,"AGO","Angola",5,"Cuando Cubango",33,"Mavinga",124,"Mavinga","Commune","Commune",NA,NA
+125,8,"AGO","Angola",5,"Cuando Cubango",34,"Menongue",125,"Kaiundo","Commune","Commune",NA,NA
+126,8,"AGO","Angola",5,"Cuando Cubango",34,"Menongue",126,"Kueio","Commune","Commune",NA,NA
+127,8,"AGO","Angola",5,"Cuando Cubango",34,"Menongue",127,"Menongue","Commune","Commune",NA,NA
+128,8,"AGO","Angola",5,"Cuando Cubango",35,"Nancova",128,"Nancova","Commune","Commune",NA,NA
+129,8,"AGO","Angola",5,"Cuando Cubango",35,"Nancova",129,"Rito","Commune","Commune",NA,NA
+130,8,"AGO","Angola",5,"Cuando Cubango",36,"Rivungo",130,"Luiana","Commune","Commune",NA,NA
+131,8,"AGO","Angola",5,"Cuando Cubango",36,"Rivungo",131,"Neriquinha","Commune","Commune",NA,NA
+132,8,"AGO","Angola",5,"Cuando Cubango",36,"Rivungo",132,"Rivungo","Commune","Commune",NA,NA
+133,8,"AGO","Angola",6,"Cuanza Norte",37,"Ambaca",133,"Bindo","Commune","Commune",NA,NA
+134,8,"AGO","Angola",6,"Cuanza Norte",37,"Ambaca",134,"Kamabatela","Commune","Commune",NA,NA
+135,8,"AGO","Angola",6,"Cuanza Norte",37,"Ambaca",135,"Luinga","Commune","Commune",NA,NA
+136,8,"AGO","Angola",6,"Cuanza Norte",37,"Ambaca",136,"Maua","Commune","Commune",NA,NA
+137,8,"AGO","Angola",6,"Cuanza Norte",37,"Ambaca",137,"Tango","Commune","Commune",NA,NA
+138,8,"AGO","Angola",6,"Cuanza Norte",38,"Banga",138,"Aldeia Nova","Commune","Commune",NA,NA
+139,8,"AGO","Angola",6,"Cuanza Norte",38,"Banga",139,"Banga","Commune","Commune",NA,NA
+140,8,"AGO","Angola",6,"Cuanza Norte",38,"Banga",140,"Kaculo Kabassa","Commune","Commune",NA,NA
+141,8,"AGO","Angola",6,"Cuanza Norte",38,"Banga",141,"Kariamba","Commune","Commune",NA,NA
+142,8,"AGO","Angola",6,"Cuanza Norte",39,"Bolongongo",142,"Bolongongo","Commune","Commune",NA,NA
+143,8,"AGO","Angola",6,"Cuanza Norte",39,"Bolongongo",143,"Kikiemba","Commune","Commune",NA,NA
+144,8,"AGO","Angola",6,"Cuanza Norte",39,"Bolongongo",144,"Terreiro","Commune","Commune",NA,NA
+145,8,"AGO","Angola",6,"Cuanza Norte",40,"Bula Atumba",145,"Bula-Atumba","Commune","Commune",NA,NA
+146,8,"AGO","Angola",6,"Cuanza Norte",40,"Bula Atumba",146,"Kiaje","Commune","Commune",NA,NA
+147,8,"AGO","Angola",6,"Cuanza Norte",41,"Cambambe",147,"Danje ia Menha","Commune","Commune",NA,NA
+148,8,"AGO","Angola",6,"Cuanza Norte",41,"Cambambe",148,"Dondo","Commune","Commune",NA,NA
+149,8,"AGO","Angola",6,"Cuanza Norte",41,"Cambambe",149,"S. Pedro da Kilemba","Commune","Commune",NA,NA
+150,8,"AGO","Angola",6,"Cuanza Norte",41,"Cambambe",150,"Zenza do Itombe","Commune","Commune",NA,NA
+151,8,"AGO","Angola",6,"Cuanza Norte",42,"Cazengo",151,"Kanhoca","Commune","Commune",NA,NA
+152,8,"AGO","Angola",6,"Cuanza Norte",42,"Cazengo",152,"Ndalatando","Commune","Commune",NA,NA
+153,8,"AGO","Angola",6,"Cuanza Norte",43,"Dembos",153,"Kibaxe","Commune","Commune",NA,NA
+154,8,"AGO","Angola",6,"Cuanza Norte",43,"Dembos",154,"Paredes","Commune","Commune",NA,NA
+155,8,"AGO","Angola",6,"Cuanza Norte",43,"Dembos",155,"Piri","Commune","Commune",NA,NA
+156,8,"AGO","Angola",6,"Cuanza Norte",43,"Dembos",156,"S. Jose das Matas","Commune","Commune",NA,NA
+157,8,"AGO","Angola",6,"Cuanza Norte",44,"Golungo Alto",157,"Cerca","Commune","Commune",NA,NA
+158,8,"AGO","Angola",6,"Cuanza Norte",44,"Golungo Alto",158,"Golungo Alto","Commune","Commune",NA,NA
+159,8,"AGO","Angola",6,"Cuanza Norte",44,"Golungo Alto",159,"Kanbomdo","Commune","Commune",NA,NA
+160,8,"AGO","Angola",6,"Cuanza Norte",44,"Golungo Alto",160,"Kiluanje","Commune","Commune",NA,NA
+161,8,"AGO","Angola",6,"Cuanza Norte",45,"Lucala",161,"Kiangombe","Commune","Commune",NA,NA
+162,8,"AGO","Angola",6,"Cuanza Norte",45,"Lucala",162,"Lukala","Commune","Commune",NA,NA
+163,8,"AGO","Angola",6,"Cuanza Norte",46,"Ngonguembo",163,"Camame","Commune","Commune",NA,NA
+164,8,"AGO","Angola",6,"Cuanza Norte",46,"Ngonguembo",164,"Kilombo dos Dembos","Commune","Commune",NA,NA
+165,8,"AGO","Angola",6,"Cuanza Norte",47,"Pango Aluquém",165,"Kazua","Commune","Commune",NA,NA
+166,8,"AGO","Angola",6,"Cuanza Norte",47,"Pango Aluquém",166,"Pango-Aluquem","Commune","Commune",NA,NA
+167,8,"AGO","Angola",6,"Cuanza Norte",48,"Quiculungo",167,"Kiculungo","Commune","Commune",NA,NA
+168,8,"AGO","Angola",6,"Cuanza Norte",49,"Samba Cajú",168,"Samba Caju","Commune","Commune",NA,NA
+169,8,"AGO","Angola",6,"Cuanza Norte",49,"Samba Cajú",169,"Samba Lukala","Commune","Commune",NA,NA
+170,8,"AGO","Angola",7,"Cuanza Sul",50,"Amboim",170,"Assango","Commune","Commune",NA,NA
+171,8,"AGO","Angola",7,"Cuanza Sul",50,"Amboim",171,"Gabela","Commune","Commune",NA,NA
+172,8,"AGO","Angola",7,"Cuanza Sul",51,"Cassongue",172,"Atome","Commune","Commune",NA,NA
+173,8,"AGO","Angola",7,"Cuanza Sul",51,"Cassongue",173,"Dumbi","Commune","Commune",NA,NA
+174,8,"AGO","Angola",7,"Cuanza Sul",51,"Cassongue",174,"Kassongue","Commune","Commune",NA,NA
+175,8,"AGO","Angola",7,"Cuanza Sul",51,"Cassongue",175,"Pambangala","Commune","Commune",NA,NA
+176,8,"AGO","Angola",7,"Cuanza Sul",52,"Conda",176,"Konda","Commune","Commune",NA,NA
+177,8,"AGO","Angola",7,"Cuanza Sul",52,"Conda",177,"Kunju","Commune","Commune",NA,NA
+178,8,"AGO","Angola",7,"Cuanza Sul",53,"Ebo",178,"Conde","Commune","Commune",NA,NA
+179,8,"AGO","Angola",7,"Cuanza Sul",53,"Ebo",179,"Ebo","Commune","Commune",NA,NA
+180,8,"AGO","Angola",7,"Cuanza Sul",53,"Ebo",180,"Kassanje","Commune","Commune",NA,NA
+181,8,"AGO","Angola",7,"Cuanza Sul",54,"Libolo",181,"Kabuta","Commune","Commune",NA,NA
+182,8,"AGO","Angola",7,"Cuanza Sul",54,"Libolo",182,"Kalulo","Commune","Commune",NA,NA
+183,8,"AGO","Angola",7,"Cuanza Sul",54,"Libolo",183,"Kissongo","Commune","Commune",NA,NA
+184,8,"AGO","Angola",7,"Cuanza Sul",54,"Libolo",184,"Munenga","Commune","Commune",NA,NA
+185,8,"AGO","Angola",7,"Cuanza Sul",55,"Mussende",185,"Kienha","Commune","Commune",NA,NA
+186,8,"AGO","Angola",7,"Cuanza Sul",55,"Mussende",186,"Mussende","Commune","Commune",NA,NA
+187,8,"AGO","Angola",7,"Cuanza Sul",55,"Mussende",187,"Sao Lucas","Commune","Commune",NA,NA
+188,8,"AGO","Angola",7,"Cuanza Sul",56,"Porto Amboim",188,"Kapolo","Commune","Commune",NA,NA
+189,8,"AGO","Angola",7,"Cuanza Sul",56,"Porto Amboim",189,"Porto Amboim","Commune","Commune",NA,NA
+190,8,"AGO","Angola",7,"Cuanza Sul",57,"Quibala",190,"Kariango","Commune","Commune",NA,NA
+191,8,"AGO","Angola",7,"Cuanza Sul",57,"Quibala",191,"Kibala","Commune","Commune",NA,NA
+192,8,"AGO","Angola",7,"Cuanza Sul",57,"Quibala",192,"Lonhe","Commune","Commune",NA,NA
+193,8,"AGO","Angola",7,"Cuanza Sul",57,"Quibala",193,"Ndala Kachimbo","Commune","Commune",NA,NA
+194,8,"AGO","Angola",7,"Cuanza Sul",58,"Quilenda",194,"Kilenda","Commune","Commune",NA,NA
+195,8,"AGO","Angola",7,"Cuanza Sul",58,"Quilenda",195,"Kirimbo","Commune","Commune",NA,NA
+196,8,"AGO","Angola",7,"Cuanza Sul",59,"Seles",196,"Amboiva","Commune","Commune",NA,NA
+197,8,"AGO","Angola",7,"Cuanza Sul",59,"Seles",197,"Botera","Commune","Commune",NA,NA
+198,8,"AGO","Angola",7,"Cuanza Sul",59,"Seles",198,"Ucu-Seles","Commune","Commune",NA,NA
+199,8,"AGO","Angola",7,"Cuanza Sul",60,"Sumbe",199,"Gangula","Commune","Commune",NA,NA
+200,8,"AGO","Angola",7,"Cuanza Sul",60,"Sumbe",200,"Gungo","Commune","Commune",NA,NA
+201,8,"AGO","Angola",7,"Cuanza Sul",60,"Sumbe",201,"Kikombo","Commune","Commune",NA,NA
+202,8,"AGO","Angola",7,"Cuanza Sul",60,"Sumbe",202,"Sumbe","Commune","Commune",NA,NA
+203,8,"AGO","Angola",7,"Cuanza Sul",61,"Waku Kungo",203,"Kissanga Kungo","Commune","Commune",NA,NA
+204,8,"AGO","Angola",7,"Cuanza Sul",61,"Waku Kungo",204,"Sanga","Commune","Commune",NA,NA
+205,8,"AGO","Angola",7,"Cuanza Sul",61,"Waku Kungo",205,"Waco Kungo","Commune","Commune",NA,NA
+206,8,"AGO","Angola",8,"Cunene",62,"Cahama",206,"Kahama","Commune","Commune",NA,NA
+207,8,"AGO","Angola",8,"Cunene",62,"Cahama",207,"Otchinjau","Commune","Commune",NA,NA
+208,8,"AGO","Angola",8,"Cunene",63,"Cuanhama",208,"Evale","Commune","Commune",NA,NA
+209,8,"AGO","Angola",8,"Cunene",63,"Cuanhama",209,"Kafima","Commune","Commune",NA,NA
+210,8,"AGO","Angola",8,"Cunene",63,"Cuanhama",210,"Mongua","Commune","Commune",NA,NA
+211,8,"AGO","Angola",8,"Cunene",63,"Cuanhama",211,"Onjiva","Commune","Commune",NA,NA
+212,8,"AGO","Angola",8,"Cunene",63,"Cuanhama",212,"Oximolo","Commune","Commune",NA,NA
+213,8,"AGO","Angola",8,"Cunene",64,"Curoca",213,"Chitado","Commune","Commune",NA,NA
+214,8,"AGO","Angola",8,"Cunene",64,"Curoca",214,"Onkokwa","Commune","Commune",NA,NA
+215,8,"AGO","Angola",8,"Cunene",65,"Cuvelai",215,"Kalonga","Commune","Commune",NA,NA
+216,8,"AGO","Angola",8,"Cunene",65,"Cuvelai",216,"Kuvati","Commune","Commune",NA,NA
+217,8,"AGO","Angola",8,"Cunene",65,"Cuvelai",217,"Kuvelai","Commune","Commune",NA,NA
+218,8,"AGO","Angola",8,"Cunene",65,"Cuvelai",218,"Mupa","Commune","Commune",NA,NA
+219,8,"AGO","Angola",8,"Cunene",66,"Namakunde",219,"Namakunde","Commune","Commune",NA,NA
+220,8,"AGO","Angola",8,"Cunene",66,"Namakunde",220,"Shiede","Commune","Commune",NA,NA
+221,8,"AGO","Angola",8,"Cunene",67,"Ombadja",221,"Humbe","Commune","Commune",NA,NA
+222,8,"AGO","Angola",8,"Cunene",67,"Ombadja",222,"Mukope","Commune","Commune",NA,NA
+223,8,"AGO","Angola",8,"Cunene",67,"Ombadja",223,"Naulila","Commune","Commune",NA,NA
+224,8,"AGO","Angola",8,"Cunene",67,"Ombadja",224,"Ombala yo Mungu","Commune","Commune",NA,NA
+225,8,"AGO","Angola",8,"Cunene",67,"Ombadja",225,"Xangongo","Commune","Commune",NA,NA
+226,8,"AGO","Angola",9,"Huíla",68,"Caconda",226,"Gungue","Commune","Commune",NA,NA
+227,8,"AGO","Angola",9,"Huíla",68,"Caconda",227,"Kakonda","Commune","Commune",NA,NA
+228,8,"AGO","Angola",9,"Huíla",68,"Caconda",228,"Kusse","Commune","Commune",NA,NA
+229,8,"AGO","Angola",9,"Huíla",68,"Caconda",229,"Uaba","Commune","Commune",NA,NA
+230,8,"AGO","Angola",9,"Huíla",69,"Caluquembe",230,"Kalepi","Commune","Commune",NA,NA
+231,8,"AGO","Angola",9,"Huíla",69,"Caluquembe",231,"Kalukembe","Commune","Commune",NA,NA
+232,8,"AGO","Angola",9,"Huíla",69,"Caluquembe",232,"Ngola","Commune","Commune",NA,NA
+233,8,"AGO","Angola",9,"Huíla",70,"Chibia",233,"Chibia","Commune","Commune",NA,NA
+234,8,"AGO","Angola",9,"Huíla",70,"Chibia",234,"Jau","Commune","Commune",NA,NA
+235,8,"AGO","Angola",9,"Huíla",70,"Chibia",235,"Kapunda Kavilongo","Commune","Commune",NA,NA
+236,8,"AGO","Angola",9,"Huíla",70,"Chibia",236,"Kihita","Commune","Commune",NA,NA
+237,8,"AGO","Angola",9,"Huíla",71,"Chicomba",237,"Chicomba","Commune","Commune",NA,NA
+238,8,"AGO","Angola",9,"Huíla",71,"Chicomba",238,"Cutenda","Commune","Commune",NA,NA
+239,8,"AGO","Angola",9,"Huíla",72,"Chipindo",239,"Bambi","Commune","Commune",NA,NA
+240,8,"AGO","Angola",9,"Huíla",72,"Chipindo",240,"Chipindo","Commune","Commune",NA,NA
+241,8,"AGO","Angola",9,"Huíla",73,"Gambos",241,"Chiange","Commune","Commune",NA,NA
+242,8,"AGO","Angola",9,"Huíla",73,"Gambos",242,"Chimbemba","Commune","Commune",NA,NA
+243,8,"AGO","Angola",9,"Huíla",74,"Humpata",243,"Humpata","Commune","Commune",NA,NA
+244,8,"AGO","Angola",9,"Huíla",75,"Jamba",244,"Dongo","Commune","Commune",NA,NA
+245,8,"AGO","Angola",9,"Huíla",75,"Jamba",245,"Jamba","Commune","Commune",NA,NA
+246,8,"AGO","Angola",9,"Huíla",75,"Jamba",246,"Kassinga","Commune","Commune",NA,NA
+247,8,"AGO","Angola",9,"Huíla",76,"Kuvango",247,"Galangue","Commune","Commune",NA,NA
+248,8,"AGO","Angola",9,"Huíla",76,"Kuvango",248,"Kuvango","Commune","Commune",NA,NA
+249,8,"AGO","Angola",9,"Huíla",76,"Kuvango",249,"Vikungo","Commune","Commune",NA,NA
+250,8,"AGO","Angola",9,"Huíla",77,"Lubango",250,"Cacula","Commune","Commune",NA,NA
+251,8,"AGO","Angola",9,"Huíla",77,"Lubango",251,"Hoque","Commune","Commune",NA,NA
+252,8,"AGO","Angola",9,"Huíla",77,"Lubango",252,"Huila","Commune","Commune",NA,NA
+253,8,"AGO","Angola",9,"Huíla",77,"Lubango",253,"Lubango","Commune","Commune",NA,NA
+254,8,"AGO","Angola",9,"Huíla",78,"Matala",254,"Kapelongo","Commune","Commune",NA,NA
+255,8,"AGO","Angola",9,"Huíla",78,"Matala",255,"Matala","Commune","Commune",NA,NA
+256,8,"AGO","Angola",9,"Huíla",78,"Matala",256,"Mulondo","Commune","Commune",NA,NA
+257,8,"AGO","Angola",9,"Huíla",79,"Quilengues",257,"Dinde","Commune","Commune",NA,NA
+258,8,"AGO","Angola",9,"Huíla",79,"Quilengues",258,"Impulo","Commune","Commune",NA,NA
+259,8,"AGO","Angola",9,"Huíla",79,"Quilengues",259,"Kilengue","Commune","Commune",NA,NA
+260,8,"AGO","Angola",9,"Huíla",80,"Tchipungo",260,"Tchipungo","Commune","Commune",NA,NA
+261,8,"AGO","Angola",10,"Huambo",81,"Bailundo",261,"Bailundo","Commune","Commune",NA,NA
+262,8,"AGO","Angola",10,"Huambo",81,"Bailundo",262,"Bimbe","Commune","Commune",NA,NA
+263,8,"AGO","Angola",10,"Huambo",81,"Bailundo",263,"Hengue","Commune","Commune",NA,NA
+264,8,"AGO","Angola",10,"Huambo",81,"Bailundo",264,"Lunge","Commune","Commune",NA,NA
+265,8,"AGO","Angola",10,"Huambo",81,"Bailundo",265,"Luvemba","Commune","Commune",NA,NA
+266,8,"AGO","Angola",10,"Huambo",82,"Caála",266,"Kaala","Commune","Commune",NA,NA
+267,8,"AGO","Angola",10,"Huambo",82,"Caála",267,"Kalenga","Commune","Commune",NA,NA
+268,8,"AGO","Angola",10,"Huambo",82,"Caála",268,"Kalima","Commune","Commune",NA,NA
+269,8,"AGO","Angola",10,"Huambo",82,"Caála",269,"Katata","Commune","Commune",NA,NA
+270,8,"AGO","Angola",10,"Huambo",83,"Catchiungo",270,"Chinhama","Commune","Commune",NA,NA
+271,8,"AGO","Angola",10,"Huambo",83,"Catchiungo",271,"Chiumbo","Commune","Commune",NA,NA
+272,8,"AGO","Angola",10,"Huambo",83,"Catchiungo",272,"Kachiungo","Commune","Commune",NA,NA
+273,8,"AGO","Angola",10,"Huambo",84,"Ekunha",273,"Ekunha","Commune","Commune",NA,NA
+274,8,"AGO","Angola",10,"Huambo",84,"Ekunha",274,"Tchipeio","Commune","Commune",NA,NA
+275,8,"AGO","Angola",10,"Huambo",85,"Huambo",275,"Chipipa","Commune","Commune",NA,NA
+276,8,"AGO","Angola",10,"Huambo",85,"Huambo",276,"Huambo","Commune","Commune",NA,NA
+277,8,"AGO","Angola",10,"Huambo",85,"Huambo",277,"Kalima","Commune","Commune",NA,NA
+278,8,"AGO","Angola",10,"Huambo",86,"Londuimbale",278,"Alto Uama","Commune","Commune",NA,NA
+279,8,"AGO","Angola",10,"Huambo",86,"Londuimbale",279,"Galanga","Commune","Commune",NA,NA
+280,8,"AGO","Angola",10,"Huambo",86,"Londuimbale",280,"Kumbila","Commune","Commune",NA,NA
+281,8,"AGO","Angola",10,"Huambo",86,"Londuimbale",281,"Londuimbali","Commune","Commune",NA,NA
+282,8,"AGO","Angola",10,"Huambo",86,"Londuimbale",282,"Ussoke","Commune","Commune",NA,NA
+283,8,"AGO","Angola",10,"Huambo",87,"Longonjo",283,"Chilata","Commune","Commune",NA,NA
+284,8,"AGO","Angola",10,"Huambo",87,"Longonjo",284,"Katabola","Commune","Commune",NA,NA
+285,8,"AGO","Angola",10,"Huambo",87,"Longonjo",285,"Lepi","Commune","Commune",NA,NA
+286,8,"AGO","Angola",10,"Huambo",87,"Longonjo",286,"Longonjo","Commune","Commune",NA,NA
+287,8,"AGO","Angola",10,"Huambo",88,"Mungo",287,"Kambuengo","Commune","Commune",NA,NA
+288,8,"AGO","Angola",10,"Huambo",88,"Mungo",288,"Mungo","Commune","Commune",NA,NA
+289,8,"AGO","Angola",10,"Huambo",89,"Tchicala-Tcholoanga",289,"Hungulo","Commune","Commune",NA,NA
+290,8,"AGO","Angola",10,"Huambo",89,"Tchicala-Tcholoanga",290,"Mbave","Commune","Commune",NA,NA
+291,8,"AGO","Angola",10,"Huambo",89,"Tchicala-Tcholoanga",291,"Sambo","Commune","Commune",NA,NA
+292,8,"AGO","Angola",10,"Huambo",89,"Tchicala-Tcholoanga",292,"Thicala-Thilohanga","Commune","Commune",NA,NA
+293,8,"AGO","Angola",10,"Huambo",90,"Tchindjenje",293,"Chiaca","Commune","Commune",NA,NA
+294,8,"AGO","Angola",10,"Huambo",90,"Tchindjenje",294,"Chinjenje","Commune","Commune",NA,NA
+295,8,"AGO","Angola",10,"Huambo",91,"Ukuma",295,"Kakoma","Commune","Commune",NA,NA
+296,8,"AGO","Angola",10,"Huambo",91,"Ukuma",296,"Mundundo","Commune","Commune",NA,NA
+297,8,"AGO","Angola",10,"Huambo",91,"Ukuma",297,"Ukuma","Commune","Commune",NA,NA
+298,8,"AGO","Angola",11,"Luanda",92,"Cacuaco",298,"Cacuaco","Commune","Commune",NA,NA
+299,8,"AGO","Angola",11,"Luanda",92,"Cacuaco",299,"Funda","Commune","Commune",NA,NA
+300,8,"AGO","Angola",11,"Luanda",92,"Cacuaco",300,"Kikolo","Commune","Commune",NA,NA
+301,8,"AGO","Angola",11,"Luanda",93,"Cazenga",301,"Cazenga","Commune","Commune",NA,NA
+302,8,"AGO","Angola",11,"Luanda",93,"Cazenga",302,"Hoji Ya Henda","Commune","Commune",NA,NA
+303,8,"AGO","Angola",11,"Luanda",93,"Cazenga",303,"Tala Hadi","Commune","Commune",NA,NA
+304,8,"AGO","Angola",11,"Luanda",94,"Ingombota",304,"Ilha do Cabo","Commune","Commune",NA,NA
+305,8,"AGO","Angola",11,"Luanda",94,"Ingombota",305,"Ingombota","Commune","Commune",NA,NA
+306,8,"AGO","Angola",11,"Luanda",94,"Ingombota",306,"Kinanga","Commune","Commune",NA,NA
+307,8,"AGO","Angola",11,"Luanda",94,"Ingombota",307,"Maculusso","Commune","Commune",NA,NA
+308,8,"AGO","Angola",11,"Luanda",94,"Ingombota",308,"Patrice Lumumba","Commune","Commune",NA,NA
+309,8,"AGO","Angola",11,"Luanda",95,"Kilamba Kiaxi",309,"Kilamba Kiaxi","Commune","Commune",NA,NA
+310,8,"AGO","Angola",11,"Luanda",96,"Maianga",310,"Cassequel","Commune","Commune",NA,NA
+311,8,"AGO","Angola",11,"Luanda",96,"Maianga",311,"Maianga","Commune","Commune",NA,NA
+312,8,"AGO","Angola",11,"Luanda",96,"Maianga",312,"Prenda","Commune","Commune",NA,NA
+313,8,"AGO","Angola",11,"Luanda",97,"Rangel",313,"Marcal","Commune","Commune",NA,NA
+314,8,"AGO","Angola",11,"Luanda",97,"Rangel",314,"Rangel","Commune","Commune",NA,NA
+315,8,"AGO","Angola",11,"Luanda",97,"Rangel",315,"Terra Nova","Commune","Commune",NA,NA
+316,8,"AGO","Angola",11,"Luanda",98,"Samba",316,"Benfica","Commune","Commune",NA,NA
+317,8,"AGO","Angola",11,"Luanda",98,"Samba",317,"Futungo de Belas","Commune","Commune",NA,NA
+318,8,"AGO","Angola",11,"Luanda",98,"Samba",318,"Mussulo","Commune","Commune",NA,NA
+319,8,"AGO","Angola",11,"Luanda",98,"Samba",319,"Samba","Commune","Commune",NA,NA
+320,8,"AGO","Angola",11,"Luanda",99,"Sambizanga",320,"N'gola Kilwanji","Commune","Commune",NA,NA
+321,8,"AGO","Angola",11,"Luanda",99,"Sambizanga",321,"Sambizanga","Commune","Commune",NA,NA
+322,8,"AGO","Angola",11,"Luanda",100,"Viana",322,"Calumbo","Commune","Commune",NA,NA
+323,8,"AGO","Angola",11,"Luanda",100,"Viana",323,"Viana Sede","Commune","Commune",NA,NA
+324,8,"AGO","Angola",11,"Luanda",100,"Viana",324,"Viana","Commune","Commune",NA,NA
+325,8,"AGO","Angola",12,"Lunda Norte",101,"Cambulo",325,"Kachimo","Commune","Commune",NA,NA
+326,8,"AGO","Angola",12,"Lunda Norte",101,"Cambulo",326,"Kambulo","Commune","Commune",NA,NA
+327,8,"AGO","Angola",12,"Lunda Norte",101,"Cambulo",327,"Kanzar","Commune","Commune",NA,NA
+328,8,"AGO","Angola",12,"Lunda Norte",101,"Cambulo",328,"Luia","Commune","Commune",NA,NA
+329,8,"AGO","Angola",12,"Lunda Norte",102,"Capenda",329,"Kapenda Kamulemba","Commune","Commune",NA,NA
+330,8,"AGO","Angola",12,"Lunda Norte",102,"Capenda",330,"Xinge","Commune","Commune",NA,NA
+331,8,"AGO","Angola",12,"Lunda Norte",103,"Caungula",331,"Camaxilo","Commune","Commune",NA,NA
+332,8,"AGO","Angola",12,"Lunda Norte",103,"Caungula",332,"Kaungula","Commune","Commune",NA,NA
+333,8,"AGO","Angola",12,"Lunda Norte",104,"Chitato",333,"Chitato","Commune","Commune",NA,NA
+334,8,"AGO","Angola",12,"Lunda Norte",104,"Chitato",334,"Lovua","Commune","Commune",NA,NA
+335,8,"AGO","Angola",12,"Lunda Norte",104,"Chitato",335,"Luachimo","Commune","Commune",NA,NA
+336,8,"AGO","Angola",12,"Lunda Norte",105,"Cuango",336,"Cuango","Commune","Commune",NA,NA
+337,8,"AGO","Angola",12,"Lunda Norte",105,"Cuango",337,"Luremo","Commune","Commune",NA,NA
+338,8,"AGO","Angola",12,"Lunda Norte",106,"Cuilo",338,"Caluango","Commune","Commune",NA,NA
+339,8,"AGO","Angola",12,"Lunda Norte",106,"Cuilo",339,"Cuilo","Commune","Commune",NA,NA
+340,8,"AGO","Angola",12,"Lunda Norte",107,"Lubalo",340,"Luangue","Commune","Commune",NA,NA
+341,8,"AGO","Angola",12,"Lunda Norte",107,"Lubalo",341,"Lubalo","Commune","Commune",NA,NA
+342,8,"AGO","Angola",12,"Lunda Norte",107,"Lubalo",342,"Muvulage","Commune","Commune",NA,NA
+343,8,"AGO","Angola",12,"Lunda Norte",108,"Lucapa",343,"Camissombo","Commune","Commune",NA,NA
+344,8,"AGO","Angola",12,"Lunda Norte",108,"Lucapa",344,"Capaia","Commune","Commune",NA,NA
+345,8,"AGO","Angola",12,"Lunda Norte",108,"Lucapa",345,"Lucapa","Commune","Commune",NA,NA
+346,8,"AGO","Angola",12,"Lunda Norte",108,"Lucapa",346,"Xa-Cassau","Commune","Commune",NA,NA
+347,8,"AGO","Angola",12,"Lunda Norte",109,"Xá Muteba",347,"Cassange","Commune","Commune",NA,NA
+348,8,"AGO","Angola",12,"Lunda Norte",109,"Xá Muteba",348,"Iongo","Commune","Commune",NA,NA
+349,8,"AGO","Angola",12,"Lunda Norte",109,"Xá Muteba",349,"Quitapa","Commune","Commune",NA,NA
+350,8,"AGO","Angola",12,"Lunda Norte",109,"Xá Muteba",350,"XaMuteba","Commune","Commune",NA,NA
+351,8,"AGO","Angola",13,"Lunda Sul",110,"Cacolo",351,"Alto-Chicapa","Commune","Commune",NA,NA
+352,8,"AGO","Angola",13,"Lunda Sul",110,"Cacolo",352,"Cacolo","Commune","Commune",NA,NA
+353,8,"AGO","Angola",13,"Lunda Sul",110,"Cacolo",353,"Cucumbi","Commune","Commune",NA,NA
+354,8,"AGO","Angola",13,"Lunda Sul",110,"Cacolo",354,"Xassengue","Commune","Commune",NA,NA
+355,8,"AGO","Angola",13,"Lunda Sul",111,"Dala",355,"Cazage","Commune","Commune",NA,NA
+356,8,"AGO","Angola",13,"Lunda Sul",111,"Dala",356,"Dala","Commune","Commune",NA,NA
+357,8,"AGO","Angola",13,"Lunda Sul",111,"Dala",357,"Luma Cassai","Commune","Commune",NA,NA
+358,8,"AGO","Angola",13,"Lunda Sul",112,"Muconda",358,"Cassai","Commune","Commune",NA,NA
+359,8,"AGO","Angola",13,"Lunda Sul",112,"Muconda",359,"Chiluange","Commune","Commune",NA,NA
+360,8,"AGO","Angola",13,"Lunda Sul",112,"Muconda",360,"Muconda","Commune","Commune",NA,NA
+361,8,"AGO","Angola",13,"Lunda Sul",112,"Muconda",361,"Muriege","Commune","Commune",NA,NA
+362,8,"AGO","Angola",13,"Lunda Sul",113,"Saurimo",362,"Mona Quimbundo","Commune","Commune",NA,NA
+363,8,"AGO","Angola",13,"Lunda Sul",113,"Saurimo",363,"Saurimo","Commune","Commune",NA,NA
+364,8,"AGO","Angola",13,"Lunda Sul",113,"Saurimo",364,"Sombo","Commune","Commune",NA,NA
+365,8,"AGO","Angola",14,"Malanje",114,"Cacuzo",365,"Cacuso","Commune","Commune",NA,NA
+366,8,"AGO","Angola",14,"Malanje",114,"Cacuzo",366,"Kizenga","Commune","Commune",NA,NA
+367,8,"AGO","Angola",14,"Malanje",114,"Cacuzo",367,"Lombe","Commune","Commune",NA,NA
+368,8,"AGO","Angola",14,"Malanje",114,"Cacuzo",368,"Pungo-Andongo","Commune","Commune",NA,NA
+369,8,"AGO","Angola",14,"Malanje",115,"Calandula",369,"Calandula","Commune","Commune",NA,NA
+370,8,"AGO","Angola",14,"Malanje",115,"Calandula",370,"Kateco-Kangola","Commune","Commune",NA,NA
+371,8,"AGO","Angola",14,"Malanje",115,"Calandula",371,"Kinge","Commune","Commune",NA,NA
+372,8,"AGO","Angola",14,"Malanje",115,"Calandula",372,"Kota","Commune","Commune",NA,NA
+373,8,"AGO","Angola",14,"Malanje",115,"Calandula",373,"Kuale","Commune","Commune",NA,NA
+374,8,"AGO","Angola",14,"Malanje",116,"Cambundi-Catembo",374,"Dumba Kabango","Commune","Commune",NA,NA
+375,8,"AGO","Angola",14,"Malanje",116,"Cambundi-Catembo",375,"Kambundi-Katembo","Commune","Commune",NA,NA
+376,8,"AGO","Angola",14,"Malanje",116,"Cambundi-Catembo",376,"Tala-Mungongo","Commune","Commune",NA,NA
+377,8,"AGO","Angola",14,"Malanje",117,"Cangandala",377,"Cangandala","Commune","Commune",NA,NA
+378,8,"AGO","Angola",14,"Malanje",117,"Cangandala",378,"Caribo","Commune","Commune",NA,NA
+379,8,"AGO","Angola",14,"Malanje",117,"Cangandala",379,"Kulamagia","Commune","Commune",NA,NA
+380,8,"AGO","Angola",14,"Malanje",117,"Cangandala",380,"Mbembo","Commune","Commune",NA,NA
+381,8,"AGO","Angola",14,"Malanje",118,"Caombo",381,"Bange-Angola","Commune","Commune",NA,NA
+382,8,"AGO","Angola",14,"Malanje",118,"Caombo",382,"Kahombo","Commune","Commune",NA,NA
+383,8,"AGO","Angola",14,"Malanje",118,"Caombo",383,"Kambo","Commune","Commune",NA,NA
+384,8,"AGO","Angola",14,"Malanje",118,"Caombo",384,"Mikanda","Commune","Commune",NA,NA
+385,8,"AGO","Angola",14,"Malanje",119,"Cuaba Nzogo",385,"Kiwaba-Ngozi","Commune","Commune",NA,NA
+386,8,"AGO","Angola",14,"Malanje",119,"Cuaba Nzogo",386,"Mufuma","Commune","Commune",NA,NA
+387,8,"AGO","Angola",14,"Malanje",120,"Cunda-dia-Baza",387,"Kunda-Dia-Baze","Commune","Commune",NA,NA
+388,8,"AGO","Angola",14,"Malanje",120,"Cunda-dia-Baza",388,"Lemba","Commune","Commune",NA,NA
+389,8,"AGO","Angola",14,"Malanje",120,"Cunda-dia-Baza",389,"Milando","Commune","Commune",NA,NA
+390,8,"AGO","Angola",14,"Malanje",121,"Luquembo",390,"Dombo","Commune","Commune",NA,NA
+391,8,"AGO","Angola",14,"Malanje",121,"Luquembo",391,"Kapunda","Commune","Commune",NA,NA
+392,8,"AGO","Angola",14,"Malanje",121,"Luquembo",392,"Kimbango","Commune","Commune",NA,NA
+393,8,"AGO","Angola",14,"Malanje",121,"Luquembo",393,"Luquembo","Commune","Commune",NA,NA
+394,8,"AGO","Angola",14,"Malanje",122,"Malanje",394,"Cambaxe","Commune","Commune",NA,NA
+395,8,"AGO","Angola",14,"Malanje",122,"Malanje",395,"Cambondo","Commune","Commune",NA,NA
+396,8,"AGO","Angola",14,"Malanje",122,"Malanje",396,"Kangando","Commune","Commune",NA,NA
+397,8,"AGO","Angola",14,"Malanje",122,"Malanje",397,"Kimbamba","Commune","Commune",NA,NA
+398,8,"AGO","Angola",14,"Malanje",122,"Malanje",398,"Malanje","Commune","Commune",NA,NA
+399,8,"AGO","Angola",14,"Malanje",122,"Malanje",399,"Ngola-Luige","Commune","Commune",NA,NA
+400,8,"AGO","Angola",14,"Malanje",123,"Marimba",400,"Kabombo","Commune","Commune",NA,NA
+401,8,"AGO","Angola",14,"Malanje",123,"Marimba",401,"Marimba","Commune","Commune",NA,NA
+402,8,"AGO","Angola",14,"Malanje",123,"Marimba",402,"Tembo-Aluma","Commune","Commune",NA,NA
+403,8,"AGO","Angola",14,"Malanje",124,"Massango",403,"Kihuhu","Commune","Commune",NA,NA
+404,8,"AGO","Angola",14,"Malanje",124,"Massango",404,"Kinguengue","Commune","Commune",NA,NA
+405,8,"AGO","Angola",14,"Malanje",124,"Massango",405,"Massango","Commune","Commune",NA,NA
+406,8,"AGO","Angola",14,"Malanje",125,"Mucari",406,"Catala","Commune","Commune",NA,NA
+407,8,"AGO","Angola",14,"Malanje",125,"Mucari",407,"Caxinga","Commune","Commune",NA,NA
+408,8,"AGO","Angola",14,"Malanje",125,"Mucari",408,"Mucari","Commune","Commune",NA,NA
+409,8,"AGO","Angola",14,"Malanje",125,"Mucari",409,"Muquixi","Commune","Commune",NA,NA
+410,8,"AGO","Angola",14,"Malanje",126,"Quela",410,"Moma","Commune","Commune",NA,NA
+411,8,"AGO","Angola",14,"Malanje",126,"Quela",411,"Quela","Commune","Commune",NA,NA
+412,8,"AGO","Angola",14,"Malanje",126,"Quela",412,"Xandele","Commune","Commune",NA,NA
+413,8,"AGO","Angola",14,"Malanje",127,"Quirima",413,"Quirima","Commune","Commune",NA,NA
+414,8,"AGO","Angola",14,"Malanje",127,"Quirima",414,"Sautari","Commune","Commune",NA,NA
+415,8,"AGO","Angola",15,"Moxico",128,"Alto Zambeze",415,"Alto Zambeze","Commune","Commune",NA,NA
+416,8,"AGO","Angola",15,"Moxico",128,"Alto Zambeze",416,"Caianda","Commune","Commune",NA,NA
+417,8,"AGO","Angola",15,"Moxico",128,"Alto Zambeze",417,"Calunda","Commune","Commune",NA,NA
+418,8,"AGO","Angola",15,"Moxico",128,"Alto Zambeze",418,"Kaquengue","Commune","Commune",NA,NA
+419,8,"AGO","Angola",15,"Moxico",128,"Alto Zambeze",419,"Kavungo","Commune","Commune",NA,NA
+420,8,"AGO","Angola",15,"Moxico",128,"Alto Zambeze",420,"Lovua","Commune","Commune",NA,NA
+421,8,"AGO","Angola",15,"Moxico",128,"Alto Zambeze",421,"Lumbala","Commune","Commune",NA,NA
+422,8,"AGO","Angola",15,"Moxico",128,"Alto Zambeze",422,"Mucondo","Commune","Commune",NA,NA
+423,8,"AGO","Angola",15,"Moxico",129,"Camanongue",423,"Camanongue","Commune","Commune",NA,NA
+424,8,"AGO","Angola",15,"Moxico",130,"Cameia",424,"Kameia","Commune","Commune",NA,NA
+425,8,"AGO","Angola",15,"Moxico",131,"Léua",425,"Leua","Commune","Commune",NA,NA
+426,8,"AGO","Angola",15,"Moxico",131,"Léua",426,"Liangongo","Commune","Commune",NA,NA
+427,8,"AGO","Angola",15,"Moxico",132,"Luau",427,"Luau","Commune","Commune",NA,NA
+428,8,"AGO","Angola",15,"Moxico",133,"Lucano",428,"Lago-Dilolo","Commune","Commune",NA,NA
+429,8,"AGO","Angola",15,"Moxico",133,"Lucano",429,"Luacano","Commune","Commune",NA,NA
+430,8,"AGO","Angola",15,"Moxico",134,"Luchazes",430,"Cangombe","Commune","Commune",NA,NA
+431,8,"AGO","Angola",15,"Moxico",134,"Luchazes",431,"Cassamba","Commune","Commune",NA,NA
+432,8,"AGO","Angola",15,"Moxico",134,"Luchazes",432,"Luchazes","Commune","Commune",NA,NA
+433,8,"AGO","Angola",15,"Moxico",134,"Luchazes",433,"Muie","Commune","Commune",NA,NA
+434,8,"AGO","Angola",15,"Moxico",134,"Luchazes",434,"Tempue","Commune","Commune",NA,NA
+435,8,"AGO","Angola",15,"Moxico",135,"Lumbala-Nguimbo",435,"Chiume","Commune","Commune",NA,NA
+436,8,"AGO","Angola",15,"Moxico",135,"Lumbala-Nguimbo",436,"Lumbala-Nguimbo","Commune","Commune",NA,NA
+437,8,"AGO","Angola",15,"Moxico",135,"Lumbala-Nguimbo",437,"Lutembo","Commune","Commune",NA,NA
+438,8,"AGO","Angola",15,"Moxico",135,"Lumbala-Nguimbo",438,"Luvuei","Commune","Commune",NA,NA
+439,8,"AGO","Angola",15,"Moxico",135,"Lumbala-Nguimbo",439,"Mussuma","Commune","Commune",NA,NA
+440,8,"AGO","Angola",15,"Moxico",135,"Lumbala-Nguimbo",440,"Ninda","Commune","Commune",NA,NA
+441,8,"AGO","Angola",15,"Moxico",135,"Lumbala-Nguimbo",441,"Sessa","Commune","Commune",NA,NA
+442,8,"AGO","Angola",15,"Moxico",136,"Moxico",442,"Kangumbe","Commune","Commune",NA,NA
+443,8,"AGO","Angola",15,"Moxico",136,"Moxico",443,"Lucusse","Commune","Commune",NA,NA
+444,8,"AGO","Angola",15,"Moxico",136,"Moxico",444,"Luena","Commune","Commune",NA,NA
+445,8,"AGO","Angola",15,"Moxico",136,"Moxico",445,"Lutuai","Commune","Commune",NA,NA
+446,8,"AGO","Angola",16,"Namibe",137,"Bibala",446,"Bibala","Commune","Commune",NA,NA
+447,8,"AGO","Angola",16,"Namibe",137,"Bibala",447,"Caitou","Commune","Commune",NA,NA
+448,8,"AGO","Angola",16,"Namibe",137,"Bibala",448,"Lola","Commune","Commune",NA,NA
+449,8,"AGO","Angola",16,"Namibe",137,"Bibala",449,"Munhino","Commune","Commune",NA,NA
+450,8,"AGO","Angola",16,"Namibe",138,"Camacuio",450,"Camacuio","Commune","Commune",NA,NA
+451,8,"AGO","Angola",16,"Namibe",138,"Camacuio",451,"Chingo","Commune","Commune",NA,NA
+452,8,"AGO","Angola",16,"Namibe",138,"Camacuio",452,"Chinquite","Commune","Commune",NA,NA
+453,8,"AGO","Angola",16,"Namibe",139,"Namibe",453,"Bentiaba","Commune","Commune",NA,NA
+454,8,"AGO","Angola",16,"Namibe",139,"Namibe",454,"Lucira","Commune","Commune",NA,NA
+455,8,"AGO","Angola",16,"Namibe",139,"Namibe",455,"Namibe","Commune","Commune",NA,NA
+456,8,"AGO","Angola",16,"Namibe",140,"Tombwa",456,"Baia dos Tigres","Commune","Commune",NA,NA
+457,8,"AGO","Angola",16,"Namibe",140,"Tombwa",457,"Tombua","Commune","Commune",NA,NA
+458,8,"AGO","Angola",16,"Namibe",141,"Virei",458,"Cahinde","Commune","Commune",NA,NA
+459,8,"AGO","Angola",16,"Namibe",141,"Virei",459,"Virei","Commune","Commune",NA,NA
+460,8,"AGO","Angola",17,"Uíge",142,"Alto Cauale",460,"Bengo","Commune","Commune",NA,NA
+461,8,"AGO","Angola",17,"Uíge",142,"Alto Cauale",461,"Caiongo","Commune","Commune",NA,NA
+462,8,"AGO","Angola",17,"Uíge",142,"Alto Cauale",462,"Kangola","Commune","Commune",NA,NA
+463,8,"AGO","Angola",17,"Uíge",143,"Ambuila",463,"Kimpetelu","Commune","Commune",NA,NA
+464,8,"AGO","Angola",17,"Uíge",143,"Ambuila",464,"Sede Mantoyo","Commune","Commune",NA,NA
+465,8,"AGO","Angola",17,"Uíge",144,"Bembe",465,"Bembe","Commune","Commune",NA,NA
+466,8,"AGO","Angola",17,"Uíge",144,"Bembe",466,"Lucunga","Commune","Commune",NA,NA
+467,8,"AGO","Angola",17,"Uíge",144,"Bembe",467,"Mabaia","Commune","Commune",NA,NA
+468,8,"AGO","Angola",17,"Uíge",145,"Buengas",468,"Buengas","Commune","Commune",NA,NA
+469,8,"AGO","Angola",17,"Uíge",145,"Buengas",469,"Camboso","Commune","Commune",NA,NA
+470,8,"AGO","Angola",17,"Uíge",145,"Buengas",470,"Quimbianda","Commune","Commune",NA,NA
+471,8,"AGO","Angola",17,"Uíge",146,"Bungo",471,"Bungo","Commune","Commune",NA,NA
+472,8,"AGO","Angola",17,"Uíge",147,"Damba",472,"Damba","Commune","Commune",NA,NA
+473,8,"AGO","Angola",17,"Uíge",147,"Damba",473,"Lemboa","Commune","Commune",NA,NA
+474,8,"AGO","Angola",17,"Uíge",147,"Damba",474,"N'soso","Commune","Commune",NA,NA
+475,8,"AGO","Angola",17,"Uíge",147,"Damba",475,"Nkama-Ntambu","Commune","Commune",NA,NA
+476,8,"AGO","Angola",17,"Uíge",147,"Damba",476,"Nkuso","Commune","Commune",NA,NA
+477,8,"AGO","Angola",17,"Uíge",148,"Maquela do Zombo",477,"Beu","Commune","Commune",NA,NA
+478,8,"AGO","Angola",17,"Uíge",148,"Maquela do Zombo",478,"Kibocolu","Commune","Commune",NA,NA
+479,8,"AGO","Angola",17,"Uíge",148,"Maquela do Zombo",479,"Kuilu Futa","Commune","Commune",NA,NA
+480,8,"AGO","Angola",17,"Uíge",148,"Maquela do Zombo",480,"Maquela do Zombo","Commune","Commune",NA,NA
+481,8,"AGO","Angola",17,"Uíge",148,"Maquela do Zombo",481,"Sakandika","Commune","Commune",NA,NA
+482,8,"AGO","Angola",17,"Uíge",149,"Milunga",482,"Macocola","Commune","Commune",NA,NA
+483,8,"AGO","Angola",17,"Uíge",149,"Milunga",483,"Macolo","Commune","Commune",NA,NA
+484,8,"AGO","Angola",17,"Uíge",149,"Milunga",484,"Massau","Commune","Commune",NA,NA
+485,8,"AGO","Angola",17,"Uíge",149,"Milunga",485,"Milunga","Commune","Commune",NA,NA
+486,8,"AGO","Angola",17,"Uíge",150,"Mucaba",486,"Quinzala","Commune","Commune",NA,NA
+487,8,"AGO","Angola",17,"Uíge",150,"Mucaba",487,"Uando","Commune","Commune",NA,NA
+488,8,"AGO","Angola",17,"Uíge",151,"Negage",488,"Dimuca","Commune","Commune",NA,NA
+489,8,"AGO","Angola",17,"Uíge",151,"Negage",489,"Kisseke","Commune","Commune",NA,NA
+490,8,"AGO","Angola",17,"Uíge",151,"Negage",490,"Negage","Commune","Commune",NA,NA
+491,8,"AGO","Angola",17,"Uíge",152,"Puri",491,"Puri","Commune","Commune",NA,NA
+492,8,"AGO","Angola",17,"Uíge",153,"Quimbele",492,"Alto-Zaza","Commune","Commune",NA,NA
+493,8,"AGO","Angola",17,"Uíge",153,"Quimbele",493,"Cuango","Commune","Commune",NA,NA
+494,8,"AGO","Angola",17,"Uíge",153,"Quimbele",494,"Icoca","Commune","Commune",NA,NA
+495,8,"AGO","Angola",17,"Uíge",153,"Quimbele",495,"Quimbele","Commune","Commune",NA,NA
+496,8,"AGO","Angola",17,"Uíge",154,"Quitexe",496,"Cambambe","Commune","Commune",NA,NA
+497,8,"AGO","Angola",17,"Uíge",154,"Quitexe",497,"Quifuafua","Commune","Commune",NA,NA
+498,8,"AGO","Angola",17,"Uíge",154,"Quitexe",498,"Quitende","Commune","Commune",NA,NA
+499,8,"AGO","Angola",17,"Uíge",154,"Quitexe",499,"Quitexe","Commune","Commune",NA,NA
+500,8,"AGO","Angola",17,"Uíge",155,"Sanza Pombo",500,"Alfandega","Commune","Commune",NA,NA
+501,8,"AGO","Angola",17,"Uíge",155,"Sanza Pombo",501,"Cuilo Pombo","Commune","Commune",NA,NA
+502,8,"AGO","Angola",17,"Uíge",155,"Sanza Pombo",502,"Sanza Pombo","Commune","Commune",NA,NA
+503,8,"AGO","Angola",17,"Uíge",155,"Sanza Pombo",503,"Uamba","Commune","Commune",NA,NA
+504,8,"AGO","Angola",17,"Uíge",156,"Songo",504,"Kinvuenga","Commune","Commune",NA,NA
+505,8,"AGO","Angola",17,"Uíge",156,"Songo",505,"Songo","Commune","Commune",NA,NA
+506,8,"AGO","Angola",17,"Uíge",157,"Uíge",506,"Uige","Commune","Commune",NA,NA
+507,8,"AGO","Angola",18,"Zaire",158,"Cuimba",507,"Buela","Commune","Commune",NA,NA
+508,8,"AGO","Angola",18,"Zaire",158,"Cuimba",508,"Serra da Kanda","Commune","Commune",NA,NA
+509,8,"AGO","Angola",18,"Zaire",159,"M'Banza Congo",509,"Kiende","Commune","Commune",NA,NA
+510,8,"AGO","Angola",18,"Zaire",159,"M'Banza Congo",510,"Luvo","Commune","Commune",NA,NA
+511,8,"AGO","Angola",18,"Zaire",159,"M'Banza Congo",511,"Madimba","Commune","Commune",NA,NA
+512,8,"AGO","Angola",18,"Zaire",159,"M'Banza Congo",512,"Mbanza Congo","Commune","Commune",NA,NA
+513,8,"AGO","Angola",18,"Zaire",160,"N'Zeto",513,"Kindege","Commune","Commune",NA,NA
+514,8,"AGO","Angola",18,"Zaire",160,"N'Zeto",514,"Musserra","Commune","Commune",NA,NA
+515,8,"AGO","Angola",18,"Zaire",160,"N'Zeto",515,"Nzeto","Commune","Commune",NA,NA
+516,8,"AGO","Angola",18,"Zaire",160,"N'Zeto",516,"Quibala Norte","Commune","Commune",NA,NA
+517,8,"AGO","Angola",18,"Zaire",161,"Noqui",517,"Lufico","Commune","Commune",NA,NA
+518,8,"AGO","Angola",18,"Zaire",161,"Noqui",518,"Lulendo","Commune","Commune",NA,NA
+519,8,"AGO","Angola",18,"Zaire",161,"Noqui",519,"Noqui","Commune","Commune",NA,NA
+520,8,"AGO","Angola",18,"Zaire",162,"Soyo",520,"Kelo","Commune","Commune",NA,NA
+521,8,"AGO","Angola",18,"Zaire",162,"Soyo",521,"Pedra do Feitico","Commune","Commune",NA,NA
+522,8,"AGO","Angola",18,"Zaire",162,"Soyo",522,"Soyo","Commune","Commune",NA,NA
+523,8,"AGO","Angola",18,"Zaire",162,"Soyo",523,"Sumba","Commune","Commune",NA,NA
+524,8,"AGO","Angola",18,"Zaire",163,"Tomboco",524,"Kingombe","Commune","Commune",NA,NA
+525,8,"AGO","Angola",18,"Zaire",163,"Tomboco",525,"Kinzau","Commune","Commune",NA,NA
+526,8,"AGO","Angola",18,"Zaire",163,"Tomboco",526,"Quiximba","Commune","Commune",NA,NA
+527,8,"AGO","Angola",18,"Zaire",163,"Tomboco",527,"Tomboco","Commune","Commune",NA,NA

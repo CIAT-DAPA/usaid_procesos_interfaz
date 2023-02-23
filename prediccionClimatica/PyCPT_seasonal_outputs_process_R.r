@@ -104,9 +104,9 @@ system(paste(
 ))
 
 # Where outputs files of Pycpt are
-datadir <- dir_outputs_nextgen_seasonal
-setwd(datadir)
-dir.create(file.path(datadir, "nc_files"))
+dir_outputs_nextgen_seasonal <- dir_outputs_nextgen_seasonal
+setwd(dir_outputs_nextgen_seasonal)
+dir.create(file.path(dir_outputs_nextgen_seasonal, "nc_files"))
 
 models <- as.character(inputsPyCPT[[1]]$models)
 MOS <- mos
@@ -123,19 +123,19 @@ for (j in 1:length(tgts))
     #### translate all  output data to netcdf
     for (i in 1:length(models)) {
         # probablistics forecast
-        ctl_input <- paste0(datadir, models[i], "_", PREDICTAND, PREDICTOR, "_CCAFCST_P_", tgts[j], "_", monf, fyr, ".ctl")
-        nc_output <- paste0(datadir, "nc_files/", models[i], "_", PREDICTAND, PREDICTOR, "_CCAFCST_P_", tgts[j], "_", monf, years[j], ".nc")
+        ctl_input <- paste0(dir_outputs_nextgen_seasonal, models[i], "_", PREDICTAND, PREDICTOR, "_CCAFCST_P_", tgts[j], "_", monf, fyr, ".ctl")
+        nc_output <- paste0(dir_outputs_nextgen_seasonal, "nc_files/", models[i], "_", PREDICTAND, PREDICTOR, "_CCAFCST_P_", tgts[j], "_", monf, years[j], ".nc")
         system(paste0("cdo -f nc import_binary ", ctl_input, " ", nc_output))
         # Deterministic forecast
-        ctl_input2 <- paste0(datadir, models[i], "_", PREDICTAND, PREDICTOR, "_CCAFCST_mu_", tgts[j], "_", monf, fyr, ".ctl")
-        nc_output2 <- paste0(datadir, "nc_files/", models[i], "_", PREDICTAND, PREDICTOR, "_CCAFCST_mu_", tgts[j], "_", monf, years[j], ".nc")
+        ctl_input2 <- paste0(dir_outputs_nextgen_seasonal, models[i], "_", PREDICTAND, PREDICTOR, "_CCAFCST_mu_", tgts[j], "_", monf, fyr, ".ctl")
+        nc_output2 <- paste0(dir_outputs_nextgen_seasonal, "nc_files/", models[i], "_", PREDICTAND, PREDICTOR, "_CCAFCST_mu_", tgts[j], "_", monf, years[j], ".nc")
         system(paste0("cdo -f nc import_binary ", ctl_input2, " ", nc_output2))
     }
 
     system(paste0("cdo --no_history -ensmean  nc_files/*_CCAFCST_P_*.nc NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_P_", tgts[j], "_", monf, years[j], ".nc"))
     system(paste0("ncrename -v a,Below_Normal -v b,Normal -v c,Above_Normal  NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_P_", tgts[j], "_", monf, years[j], ".nc"))
     system(paste0("cdo --no_history -ensmean  nc_files/*_CCAFCST_mu_*.nc NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_mu_", tgts[j], "_", monf, years[j], ".nc"))
-    system(paste0("rm -rf ", datadir, "nc_files/*.nc"))
+    system(paste0("rm -rf ", dir_outputs_nextgen_seasonal, "nc_files/*.nc"))
 }
 
 nextGenFileName_prob <- paste0("NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_P_", tgts, "_", monf, years, ".nc")
@@ -148,9 +148,9 @@ trimesters <- list("Jan-Mar" = "jfm", "Feb-Apr" = "fma", "Mar-May" = "mam", "Apr
 # Writting probabilistic raster files (to upload to geoserver) and stacking (to create .csv files)
 for (i in 1:length(nextGenFileName_prob)) {
     # It divides by 100 in orden to have a 0-1 data and not a 1-100
-    dataNextGenAbove <- raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname = "Above_Normal") / 100
-    dataNextGenBelow <- raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname = "Below_Normal") / 100
-    dataNextGenNormal <- raster(paste0(datadir, "/", nextGenFileName_prob[i]), varname = "Normal") / 100
+    dataNextGenAbove <- raster(paste0(dir_outputs_nextgen_seasonal, "/", nextGenFileName_prob[i]), varname = "Above_Normal") / 100
+    dataNextGenBelow <- raster(paste0(dir_outputs_nextgen_seasonal, "/", nextGenFileName_prob[i]), varname = "Below_Normal") / 100
+    dataNextGenNormal <- raster(paste0(dir_outputs_nextgen_seasonal, "/", nextGenFileName_prob[i]), varname = "Normal") / 100
 
     # Stack structure in order to extract to create .csv files
     stacksBySeason[[i]] <- stack(dataNextGenBelow, dataNextGenNormal, dataNextGenAbove)

@@ -22,8 +22,8 @@ get_season_years <- function(month, year){
 
 download_insivumeh_probabilities_scenaries <- function(month, scenarie, file_name){
 
-  #http://dl.insivumeh.gob.gt/SOURCES/.NextGen/.CPT/.Estacional/.CHIRPS/.Guatemala/.REALTIME/.NextGen/.Forecast/.Probabilities-Categories/C/(Sobre)/VALUE/S/755.0/VALUE/X/-92.41666/-88.11666/RANGEEDGES/Y/13.57528/17.87528/RANGEEDGES/%5BX/Y/%5D/data.tiff?filename=dataSobre20221201T0000.tiff
-  urls <- paste0("http://dl.insivumeh.gob.gt/SOURCES/.NextGen/.CPT/.Estacional/.CHIRPS/.Guatemala/.REALTIME/.NextGen/.Forecast/.Probabilities-Categories/C/(",scenarie,")/VALUE/S/755.0/VALUE/X/-92.41666/-88.11666/RANGEEDGES/Y/13.57528/17.87528/RANGEEDGES/%5BX/Y/%5D/data.tiff?filename=", file_name, ".tiff")
+  #http://dl.insivumeh.gob.gt/SOURCES/.NextGen/.CPT/.Estacional/.CHIRPS/.Guatemala/.REALTIME/.NextGen/.Forecast/Probabilities-Categories/C/(Bajo)/VALUE/S/757.0/VALUE/X/-119.95/-69.95/RANGEEDGES/Y/-4.95/39.95/RANGEEDGES/%5BX/Y/%5D/data.tiff?filename=dataBajo20230201T0000.tiff
+  urls <- paste0("http://dl.insivumeh.gob.gt/SOURCES/.NextGen/.CPT/.Estacional/.CHIRPS/.Guatemala/.REALTIME/.NextGen/.Forecast/.Probabilities-Categories/C/(",scenarie,")/VALUE/S/757.0/VALUE/X/-92.41666/-88.11666/RANGEEDGES/Y/13.57528/17.87528/RANGEEDGES/%5BX/Y/%5D/data.tiff?filename=", file_name, ".tiff")
   file <- basename(urls)
   path_guatemala_rasters_files <- paste0("/forecast/workdir/GUATEMALA/outputs/prediccionClimatica/rasterCategories","/",file_name, ".tif")
     download.file(urls, path_guatemala_rasters_files, mode = "w")
@@ -46,9 +46,9 @@ monthsNumber <- list("Jan-Mar" = 02, "Feb-Apr" = 03, "Mar-May" = 04, "Apr-Jun" =
 for (i in 1:2) {
 
     # It divides by 100 in orden to have a 0-1 data and not a 1-100
-    dataNextGenAbove <- raster(paste0("/forecast/workdir/GUATEMALA/outputs/prediccionClimatica/rasterCategories","/","above",i, ".tif")) / 100
-    dataNextGenBelow <- raster(paste0("/forecast/workdir/GUATEMALA/outputs/prediccionClimatica/rasterCategories","/","below",i, ".tif")) / 100
-    dataNextGenNormal <- raster(paste0("/forecast/workdir/GUATEMALA/outputs/prediccionClimatica/rasterCategories","/","normal",i, ".tif")) / 100
+    dataNextGenAbove <- raster(paste0("/forecast/workdir/GUATEMALA/outputs/prediccionClimatica/rasterCategories","/","above",i, ".tiff")) / 100
+    dataNextGenBelow <- raster(paste0("/forecast/workdir/GUATEMALA/outputs/prediccionClimatica/rasterCategories","/","below",i, ".tiff")) / 100
+    dataNextGenNormal <- raster(paste0("/forecast/workdir/GUATEMALA/outputs/prediccionClimatica/rasterCategories","/","normal",i, ".tiff")) / 100
 
     # Stack structure in order to extract to create .csv files
     stacksBySeason[[i]] <- stack(dataNextGenBelow, dataNextGenNormal, dataNextGenAbove)

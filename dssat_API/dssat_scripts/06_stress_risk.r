@@ -31,14 +31,16 @@ read_PlantGro = function(filep){
                                 replacement = '',fOUT_clean[i]),
                     what = character()))
   })
+  
   pos <- c(trtHeaders,length(fOUT_clean)+1)
   tmpA = lapply(seq(1,length(pos)-1), function(w) {
     res<-read.table(text = fOUT_clean[seq(from=pos[w], length.out = pos[w+1]-pos[w])],
                     skip = 1, 
                     col.names = varN[[w]],
-                    na.strings = c('-99', '-99.0', '-99.'))
+                    na.strings = c('-99', '-99.0', '-99.'),
+                    fill=TRUE)
     if(length(unique(lengths(varN)))>1)
-      res <- res %>% dplyr::select(YEAR, DOY, DAS, DAP, GSTD, LAID, LWAD, SWAD, GWAD, RWAD, CWAD, HIAD, SLAD, RDPD, WSGD, NSTD)
+      res <- res %>% dplyr::select(YEAR, DOY, DAS, DAP, GSTD, LAID, LWAD, SWAD, GWAD, RWAD, CWAD, HIAD, SLAD, RDPD, WSGD, WFGD, NSTD)
     res$TRT <- treatments[w]
     res
   })
@@ -125,6 +127,7 @@ stress_risk = function(folder,type,limits){
   })
   return(answer)
 }
+
 #Gets stress risk for all planting dates
 stress_risk_all <- function(data_files_all, dir_inputs_setup){
   
@@ -132,7 +135,7 @@ stress_risk_all <- function(data_files_all, dir_inputs_setup){
   stresses_list <- list()
 
   data <- mclapply(1:length(data_files_all), function(i) {
-    data_files <- paste0(data_files_all[i])
+    data_files <- paste0(data_files_all[1])
 
     values_w <- stress_risk(data_files,"w",crop_conf)
     values_n <- stress_risk(data_files,"n",crop_conf)
@@ -143,5 +146,7 @@ stress_risk_all <- function(data_files_all, dir_inputs_setup){
   return(data)
 
 }
+
+stress_risk_all_safe <- purrr::possibly(stress_risk_all, NULL)
 
 

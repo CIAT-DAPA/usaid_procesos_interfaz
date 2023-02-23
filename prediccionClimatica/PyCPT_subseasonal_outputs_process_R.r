@@ -93,9 +93,9 @@ system(paste(
 ))
 
 # Where outputs files of Pycpt are
-datadir <- dir_outputs_nextgen_subseasonal
-setwd(datadir)
-dir.create(file.path(datadir, "nc_files"))
+dir_outputs_nextgen_subseasonal
+setwd(dir_outputs_nextgen_subseasonal)
+dir.create(file.path(dir_outputs_nextgen_subseasonal, "nc_files"))
 
 models <- as.character(inputsPyCPT[[1]]$models)
 #models <- c('ECMWF','CFSv2_SubX')
@@ -104,8 +104,8 @@ MOS <- 'CCA'
 PREDICTAND <- "PRCP"
 PREDICTOR <- "PRCP"
 monf <- paste0(month(month(Sys.Date()), label=TRUE))# Initialization month
-#mon_fcst_ini <- paste0(monf,1)
-mon_fcst_ini <- paste0(monf,3)
+mon_fcst_ini <- paste0(monf,1)
+#mon_fcst_ini <- paste0(monf,3)
 weeks = paste0("wk",c(1:3,34))
 
 fyr <- year(Sys.Date()) # Forecast year
@@ -115,19 +115,19 @@ for (wks in weeks)
     #### translate all  output data to netcdf
     for (i in 1:length(models)) {
         # probablistics forecast
-        ctl_input <- paste0(datadir, models[i], PREDICTAND,"_CCAFCST_P_",monf,"_",mon_fcst_ini,"_",wks,".ctl")
-        nc_output <- paste0(datadir, "nc_files/",  models[i], PREDICTAND,"_CCAFCST_P_",monf,"_",mon_fcst_ini,"_",wks,".nc")
+        ctl_input <- paste0(dir_outputs_nextgen_subseasonal, models[i], PREDICTAND,"_CCAFCST_P_",monf,"_",mon_fcst_ini,"_",wks,".ctl")
+        nc_output <- paste0(dir_outputs_nextgen_subseasonal, "nc_files/",  models[i], PREDICTAND,"_CCAFCST_P_",monf,"_",mon_fcst_ini,"_",wks,".nc")
         system(paste0("cdo -f nc import_binary ", ctl_input, " ", nc_output))
         # Deterministic forecast
-        ctl_input2 <- paste0(datadir, models[i], PREDICTAND,"_CCAFCST_mu_",monf,"_",mon_fcst_ini,"_",wks,".ctl")
-        nc_output2 <- paste0(datadir, "nc_files/", models[i], PREDICTAND,"_CCAFCST_mu_",monf,"_",mon_fcst_ini,"_",wks, ".nc")
+        ctl_input2 <- paste0(dir_outputs_nextgen_subseasonal, models[i], PREDICTAND,"_CCAFCST_mu_",monf,"_",mon_fcst_ini,"_",wks,".ctl")
+        nc_output2 <- paste0(dir_outputs_nextgen_subseasonal, "nc_files/", models[i], PREDICTAND,"_CCAFCST_mu_",monf,"_",mon_fcst_ini,"_",wks, ".nc")
         system(paste0("cdo -f nc import_binary ", ctl_input2, " ", nc_output2))
     }
 
     system(paste0("cdo --no_history -ensmean  nc_files/*_CCAFCST_P_*",wks,".nc NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_P_", monf,"_",mon_fcst_ini,"_",wks,".nc"))
     system(paste0("ncrename -v a,Below_Normal -v b,Normal -v c,Above_Normal  NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_P_", monf,"_",mon_fcst_ini,"_",wks,".nc"))
     system(paste0("cdo --no_history -ensmean  nc_files/*_CCAFCST_mu_*",wks,".nc NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_mu_", monf,"_",mon_fcst_ini,"_",wks,".nc"))
-    system(paste0("rm -rf ", datadir, "nc_files/*.nc"))
+    system(paste0("rm -rf ", dir_outputs_nextgen_subseasonal, "nc_files/*.nc"))
 }
 
 nextGenFileName_prob_sub <- paste0("NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_P_", monf,"_",mon_fcst_ini,"_",weeks,".nc")
@@ -140,9 +140,9 @@ trimesters <- list("Jan-Mar" = "jfm", "Feb-Apr" = "fma", "Mar-May" = "mam", "Apr
 # Writting probabilistic raster files (to upload to geoserver) and stacking (to create .csv files)
 for (i in 1:length(nextGenFileName_prob_sub)) {
     # It divides by 100 in orden to have a 0-1 data and not a 1-100
-    dataNextGenAbove <- raster(paste0(datadir, "/", nextGenFileName_prob_sub[i]), varname = "Above_Normal") / 100
-    dataNextGenBelow <- raster(paste0(datadir, "/", nextGenFileName_prob_sub[i]), varname = "Below_Normal") / 100
-    dataNextGenNormal <- raster(paste0(datadir, "/", nextGenFileName_prob_sub[i]), varname = "Normal") / 100
+    dataNextGenAbove <- raster(paste0(dir_outputs_nextgen_subseasonal, "/", nextGenFileName_prob_sub[i]), varname = "Above_Normal") / 100
+    dataNextGenBelow <- raster(paste0(dir_outputs_nextgen_subseasonal, "/", nextGenFileName_prob_sub[i]), varname = "Below_Normal") / 100
+    dataNextGenNormal <- raster(paste0(dir_outputs_nextgen_subseasonal, "/", nextGenFileName_prob_sub[i]), varname = "Normal") / 100
 
     # Stack structure in order to extract to create .csv files
     stacksBySeason[[i]] <- stack(dataNextGenBelow, dataNextGenNormal, dataNextGenAbove)
@@ -193,12 +193,12 @@ for (skill in skilmetrics) {
         for (wks in weeks) {
             #ctl_input <- paste0(datadir, models[i], PREDICTAND,"_CCAFCST_P_",monf,"_",mon_fcst_ini,"_",wks,".ctl")
             #CFSv2_SubXPRCP_CCA_Spearman_Sep_wk3.ctl
-            ctlinput <- paste0(datadir, m, PREDICTAND, "_", MOS, "_", skill, "_", monf, "_", wks, ".ctl")
-            ncout <- paste0(datadir, "NextGen_", m, "_", MOS, "_", skill, "_", monf, "_", wks, ".nc")
+            ctlinput <- paste0(dir_outputs_nextgen_subseasonal, m, PREDICTAND, "_", MOS, "_", skill, "_", monf, "_", wks, ".ctl")
+            ncout <- paste0(dir_outputs_nextgen_subseasonal, "NextGen_", m, "_", MOS, "_", skill, "_", monf, "_", wks, ".nc")
 
             #system(paste0("cdo -f nc import_binary ", ctl_input, " ", nc_output))
             system(paste0("cdo -f nc import_binary ", ctlinput, " ", ncout))
-            ncMetricsFiles <- append(ncMetricsFiles, paste0(datadir, "NextGen_", m, "_",  MOS, "_", skill, "_", monf, "_", wks, ".nc"))
+            ncMetricsFiles <- append(ncMetricsFiles, paste0(dir_outputs_nextgen_subseasonal, "NextGen_", m, "_",  MOS, "_", skill, "_", monf, "_", wks, ".nc"))
         }
     }
 }

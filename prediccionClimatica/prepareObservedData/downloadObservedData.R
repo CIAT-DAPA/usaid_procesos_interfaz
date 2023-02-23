@@ -8,14 +8,14 @@ library("remotes")
 install_github("agrdatasci/ag5Tools", build_vignettes = TRUE, build = FALSE)
 library(ag5Tools)
 
-#setwd("D:/CIAT/plantingWindow")
-#source("agera5.R")
-#source("createScenarios.R")
+setwd(dir_prepare_observed_data)
+source("getDataFromAgera5.R")
+source("createScenarios.R")
 
 #daily_path = "D:/CIAT/plantingWindow/dailyData" 
 #output_path = "D:/CIAT/plantingWindow/resampling/" 
-
-#date_now = "12/12/2022"
+#country_name = "COLOMBIA"
+#date_now = "12/01/2022"
 
 moveFiles <- function(path,year){
   list_of_files = list.files(path = paste(path,year,sep=""), pattern="^.*nc$", all.files=TRUE, full.names=TRUE)
@@ -57,7 +57,7 @@ extract_data  <- function(variable, month, year, output_path) {
 
 
 
-downloadObservedData <- function(daily_path, date_now, output_path) {
+downloadObservedData <- function(daily_path, date_now, output_path, country_name) {
   
   # START Extract Coordinates and station Ids
   
@@ -177,12 +177,13 @@ downloadObservedData <- function(daily_path, date_now, output_path) {
   # START Extract data from nc files
   
   for (variable in variables_to_extract) {
+    database_path = paste0(output_path,replaceName(variable))
     tryCatch(
       {
-        extractDataAgera5(variable, dateStart, dateEnd,output_path,data_stations,paste(output_path,replaceName(variable),sep=""))
+        extractDataFromAgera5(variable, dateStart, dateEnd, output_path, data_stations, database_path, country_name)
       },
       error=function(cond) {
-        extractDataAgera5(variable, dateStart, dateEnd,output_path,data_stations,paste(output_path,replaceName(variable),sep=""))
+        extractDataFromAgera5(variable, dateStart, dateEnd, output_path, data_stations, database_path, country_name)
       }
     )
     

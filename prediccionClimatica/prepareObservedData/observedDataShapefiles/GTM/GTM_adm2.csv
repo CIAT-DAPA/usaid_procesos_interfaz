@@ -1,0 +1,355 @@
+"OBJECTID","ID_0","ISO","NAME_0","ID_1","NAME_1","ID_2","NAME_2","TYPE_2","ENGTYPE_2","NL_NAME_2","VARNAME_2"
+1,94,"GTM","Guatemala",1,"Alta Verapaz",1,"Chahal","Municipio","Municipality",NA,NA
+2,94,"GTM","Guatemala",1,"Alta Verapaz",2,"Chisec","Municipio","Municipality",NA,NA
+3,94,"GTM","Guatemala",1,"Alta Verapaz",3,"Cobán","Municipio","Municipality",NA,NA
+4,94,"GTM","Guatemala",1,"Alta Verapaz",4,"Fray Bartolomé de las Casas","Municipio","Municipality",NA,NA
+5,94,"GTM","Guatemala",1,"Alta Verapaz",5,"Lanquín","Municipio","Municipality",NA,NA
+6,94,"GTM","Guatemala",1,"Alta Verapaz",6,"Panzós","Municipio","Municipality",NA,NA
+7,94,"GTM","Guatemala",1,"Alta Verapaz",7,"San Cristóbal Verapaz","Municipio","Municipality",NA,NA
+8,94,"GTM","Guatemala",1,"Alta Verapaz",8,"San Juan Chamelco","Municipio","Municipality",NA,NA
+9,94,"GTM","Guatemala",1,"Alta Verapaz",9,"San Pedro Carchá","Municipio","Municipality",NA,NA
+10,94,"GTM","Guatemala",1,"Alta Verapaz",10,"Santa Cruz Verapaz","Municipio","Municipality",NA,NA
+11,94,"GTM","Guatemala",1,"Alta Verapaz",11,"Santa María Cahabón","Municipio","Municipality",NA,NA
+12,94,"GTM","Guatemala",1,"Alta Verapaz",12,"Senahú","Municipio","Municipality",NA,NA
+13,94,"GTM","Guatemala",1,"Alta Verapaz",13,"Tactic","Municipio","Municipality",NA,NA
+14,94,"GTM","Guatemala",1,"Alta Verapaz",14,"Tamahú","Municipio","Municipality",NA,NA
+15,94,"GTM","Guatemala",1,"Alta Verapaz",15,"Tucurú","Municipio","Municipality",NA,NA
+16,94,"GTM","Guatemala",2,"Baja Verapaz",16,"Cubulco","Municipio","Municipality",NA,NA
+17,94,"GTM","Guatemala",2,"Baja Verapaz",17,"Granados","Municipio","Municipality",NA,NA
+18,94,"GTM","Guatemala",2,"Baja Verapaz",18,"Purulhá","Municipio","Municipality",NA,NA
+19,94,"GTM","Guatemala",2,"Baja Verapaz",19,"Rabinal","Municipio","Municipality",NA,NA
+20,94,"GTM","Guatemala",2,"Baja Verapaz",20,"Salamá","Municipio","Municipality",NA,NA
+21,94,"GTM","Guatemala",2,"Baja Verapaz",21,"San Jerónimo","Municipio","Municipality",NA,NA
+22,94,"GTM","Guatemala",2,"Baja Verapaz",22,"San Miguel Chicaj","Municipio","Municipality",NA,NA
+23,94,"GTM","Guatemala",2,"Baja Verapaz",23,"Santa Cruz El Chol","Municipio","Municipality",NA,NA
+24,94,"GTM","Guatemala",3,"Chimaltenango",24,"Acatenango","Municipio","Municipality",NA,NA
+25,94,"GTM","Guatemala",3,"Chimaltenango",25,"Chimaltenango","Municipio","Municipality",NA,NA
+26,94,"GTM","Guatemala",3,"Chimaltenango",26,"Comalapa","Municipio","Municipality",NA,NA
+27,94,"GTM","Guatemala",3,"Chimaltenango",27,"El Tejar","Municipio","Municipality",NA,NA
+28,94,"GTM","Guatemala",3,"Chimaltenango",28,"Parramos","Municipio","Municipality",NA,NA
+29,94,"GTM","Guatemala",3,"Chimaltenango",29,"Patzún","Municipio","Municipality",NA,NA
+30,94,"GTM","Guatemala",3,"Chimaltenango",30,"Patzicía","Municipio","Municipality",NA,NA
+31,94,"GTM","Guatemala",3,"Chimaltenango",31,"Pochuta","Municipio","Municipality",NA,NA
+32,94,"GTM","Guatemala",3,"Chimaltenango",32,"San Andrés Itzapa","Municipio","Municipality",NA,NA
+33,94,"GTM","Guatemala",3,"Chimaltenango",33,"San José Poaquil","Municipio","Municipality",NA,NA
+34,94,"GTM","Guatemala",3,"Chimaltenango",34,"San Martín Jilotepeque","Municipio","Municipality",NA,NA
+35,94,"GTM","Guatemala",3,"Chimaltenango",35,"Santa Apolonia","Municipio","Municipality",NA,NA
+36,94,"GTM","Guatemala",3,"Chimaltenango",36,"Santa Cruz Balanyá","Municipio","Municipality",NA,NA
+37,94,"GTM","Guatemala",3,"Chimaltenango",37,"Tecpán Guatemala","Municipio","Municipality",NA,NA
+38,94,"GTM","Guatemala",3,"Chimaltenango",38,"Yepocapa","Municipio","Municipality",NA,NA
+39,94,"GTM","Guatemala",3,"Chimaltenango",39,"Zaragoza","Municipio","Municipality",NA,NA
+40,94,"GTM","Guatemala",4,"Chiquimula",40,"Camotán","Municipio","Municipality",NA,NA
+41,94,"GTM","Guatemala",4,"Chiquimula",41,"Chiquimula","Municipio","Municipality",NA,NA
+42,94,"GTM","Guatemala",4,"Chiquimula",42,"Concepción Las Minas","Municipio","Municipality",NA,NA
+43,94,"GTM","Guatemala",4,"Chiquimula",43,"Esquipulas","Municipio","Municipality",NA,NA
+44,94,"GTM","Guatemala",4,"Chiquimula",44,"Ipala","Municipio","Municipality",NA,NA
+45,94,"GTM","Guatemala",4,"Chiquimula",45,"Jocotán","Municipio","Municipality",NA,NA
+46,94,"GTM","Guatemala",4,"Chiquimula",46,"Olopa","Municipio","Municipality",NA,NA
+47,94,"GTM","Guatemala",4,"Chiquimula",47,"Quezaltepeque","Municipio","Municipality",NA,NA
+48,94,"GTM","Guatemala",4,"Chiquimula",48,"San Jacinto","Municipio","Municipality",NA,NA
+49,94,"GTM","Guatemala",4,"Chiquimula",49,"San José La Arada","Municipio","Municipality",NA,NA
+50,94,"GTM","Guatemala",4,"Chiquimula",50,"San Juan Ermita","Municipio","Municipality",NA,NA
+51,94,"GTM","Guatemala",5,"El Progreso",51,"El Jícaro","Municipio","Municipality",NA,NA
+52,94,"GTM","Guatemala",5,"El Progreso",52,"Guastatoya","Municipio","Municipality",NA,NA
+53,94,"GTM","Guatemala",5,"El Progreso",53,"Morazán","Municipio","Municipality",NA,NA
+54,94,"GTM","Guatemala",5,"El Progreso",54,"San Agustín Acasaguastlán","Municipio","Municipality",NA,NA
+55,94,"GTM","Guatemala",5,"El Progreso",55,"San Antonio La Paz","Municipio","Municipality",NA,NA
+56,94,"GTM","Guatemala",5,"El Progreso",56,"San Cristóbal Acasaguastlán","Municipio","Municipality",NA,NA
+57,94,"GTM","Guatemala",5,"El Progreso",57,"Sanarate","Municipio","Municipality",NA,NA
+58,94,"GTM","Guatemala",5,"El Progreso",58,"Sansare","Municipio","Municipality",NA,NA
+59,94,"GTM","Guatemala",6,"Escuintla",59,"Escuintla","Municipio","Municipality",NA,NA
+60,94,"GTM","Guatemala",6,"Escuintla",60,"Guanagazapa","Municipio","Municipality",NA,NA
+61,94,"GTM","Guatemala",6,"Escuintla",61,"Iztapa","Municipio","Municipality",NA,NA
+62,94,"GTM","Guatemala",6,"Escuintla",62,"La Democracia","Municipio","Municipality",NA,NA
+63,94,"GTM","Guatemala",6,"Escuintla",63,"La Gomera","Municipio","Municipality",NA,NA
+64,94,"GTM","Guatemala",6,"Escuintla",64,"Masagua","Municipio","Municipality",NA,NA
+65,94,"GTM","Guatemala",6,"Escuintla",65,"Nueva Concepción","Municipio","Municipality",NA,NA
+66,94,"GTM","Guatemala",6,"Escuintla",66,"Palín","Municipio","Municipality",NA,NA
+67,94,"GTM","Guatemala",6,"Escuintla",67,"San José","Municipio","Municipality",NA,NA
+68,94,"GTM","Guatemala",6,"Escuintla",68,"San Vicente Pacaya","Municipio","Municipality",NA,NA
+69,94,"GTM","Guatemala",6,"Escuintla",69,"Santa Lucía Cotzumalguapa","Municipio","Municipality",NA,NA
+70,94,"GTM","Guatemala",6,"Escuintla",70,"Siquinalá","Municipio","Municipality",NA,NA
+71,94,"GTM","Guatemala",6,"Escuintla",71,"Tiquisate","Municipio","Municipality",NA,NA
+72,94,"GTM","Guatemala",7,"Guatemala",72,"Amatitlán","Municipio","Municipality",NA,NA
+73,94,"GTM","Guatemala",7,"Guatemala",73,"Chinautla","Municipio","Municipality",NA,NA
+74,94,"GTM","Guatemala",7,"Guatemala",74,"Chuarrancho","Municipio","Municipality",NA,NA
+75,94,"GTM","Guatemala",7,"Guatemala",75,"Fraijanes","Municipio","Municipality",NA,NA
+76,94,"GTM","Guatemala",7,"Guatemala",76,"Mixco","Municipio","Municipality",NA,NA
+77,94,"GTM","Guatemala",7,"Guatemala",77,"Palencia","Municipio","Municipality",NA,NA
+78,94,"GTM","Guatemala",7,"Guatemala",78,"Petapa","Municipio","Municipality",NA,NA
+79,94,"GTM","Guatemala",7,"Guatemala",79,"San José del Golfo","Municipio","Municipality",NA,NA
+80,94,"GTM","Guatemala",7,"Guatemala",80,"San José Pinula","Municipio","Municipality",NA,NA
+81,94,"GTM","Guatemala",7,"Guatemala",81,"San Juan Sacatepéquez","Municipio","Municipality",NA,NA
+82,94,"GTM","Guatemala",7,"Guatemala",82,"San Pedro Ayampuc","Municipio","Municipality",NA,NA
+83,94,"GTM","Guatemala",7,"Guatemala",83,"San Pedro Sacatepéquez","Municipio","Municipality",NA,NA
+84,94,"GTM","Guatemala",7,"Guatemala",84,"San Raymundo","Municipio","Municipality",NA,NA
+85,94,"GTM","Guatemala",7,"Guatemala",85,"Santa Catarina Pinula","Municipio","Municipality",NA,NA
+86,94,"GTM","Guatemala",7,"Guatemala",86,"Villa Canales","Municipio","Municipality",NA,NA
+87,94,"GTM","Guatemala",7,"Guatemala",87,"Villa Nueva","Municipio","Municipality",NA,NA
+88,94,"GTM","Guatemala",7,"Guatemala",88,"ZONA 10","Municipio","Municipality",NA,NA
+89,94,"GTM","Guatemala",7,"Guatemala",89,"ZONA 11","Municipio","Municipality",NA,NA
+90,94,"GTM","Guatemala",7,"Guatemala",90,"ZONA 12","Municipio","Municipality",NA,NA
+91,94,"GTM","Guatemala",7,"Guatemala",91,"ZONA 13","Municipio","Municipality",NA,NA
+92,94,"GTM","Guatemala",7,"Guatemala",92,"ZONA 14","Municipio","Municipality",NA,NA
+93,94,"GTM","Guatemala",7,"Guatemala",93,"ZONA 15","Municipio","Municipality",NA,NA
+94,94,"GTM","Guatemala",7,"Guatemala",94,"ZONA 16","Municipio","Municipality",NA,NA
+95,94,"GTM","Guatemala",7,"Guatemala",95,"ZONA 17","Municipio","Municipality",NA,NA
+96,94,"GTM","Guatemala",7,"Guatemala",96,"ZONA 18","Municipio","Municipality",NA,NA
+97,94,"GTM","Guatemala",7,"Guatemala",97,"ZONA 19","Municipio","Municipality",NA,NA
+98,94,"GTM","Guatemala",7,"Guatemala",98,"ZONA 1","Municipio","Municipality",NA,NA
+99,94,"GTM","Guatemala",7,"Guatemala",99,"ZONA 22","Municipio","Municipality",NA,NA
+100,94,"GTM","Guatemala",7,"Guatemala",100,"ZONA 24","Municipio","Municipality",NA,NA
+101,94,"GTM","Guatemala",7,"Guatemala",101,"ZONA 25","Municipio","Municipality",NA,NA
+102,94,"GTM","Guatemala",7,"Guatemala",102,"ZONA 2","Municipio","Municipality",NA,NA
+103,94,"GTM","Guatemala",7,"Guatemala",103,"ZONA 3","Municipio","Municipality",NA,NA
+104,94,"GTM","Guatemala",7,"Guatemala",104,"ZONA 4","Municipio","Municipality",NA,NA
+105,94,"GTM","Guatemala",7,"Guatemala",105,"ZONA 5","Municipio","Municipality",NA,NA
+106,94,"GTM","Guatemala",7,"Guatemala",106,"ZONA 6","Municipio","Municipality",NA,NA
+107,94,"GTM","Guatemala",7,"Guatemala",107,"ZONA 7","Municipio","Municipality",NA,NA
+108,94,"GTM","Guatemala",7,"Guatemala",108,"ZONA 8","Municipio","Municipality",NA,NA
+109,94,"GTM","Guatemala",7,"Guatemala",109,"ZONA 9","Municipio","Municipality",NA,NA
+110,94,"GTM","Guatemala",8,"Huehuetenango",110,"Aguacatán","Municipio","Municipality",NA,NA
+111,94,"GTM","Guatemala",8,"Huehuetenango",111,"Chiantla","Municipio","Municipality",NA,NA
+112,94,"GTM","Guatemala",8,"Huehuetenango",112,"Colotenango","Municipio","Municipality",NA,NA
+113,94,"GTM","Guatemala",8,"Huehuetenango",113,"Concepción Huista","Municipio","Municipality",NA,NA
+114,94,"GTM","Guatemala",8,"Huehuetenango",114,"Cuilco","Municipio","Municipality",NA,NA
+115,94,"GTM","Guatemala",8,"Huehuetenango",115,"Huehuetenango","Municipio","Municipality",NA,NA
+116,94,"GTM","Guatemala",8,"Huehuetenango",116,"Jacaltenango","Municipio","Municipality",NA,NA
+117,94,"GTM","Guatemala",8,"Huehuetenango",117,"La Democracia","Municipio","Municipality",NA,NA
+118,94,"GTM","Guatemala",8,"Huehuetenango",118,"La Libertad","Municipio","Municipality",NA,NA
+119,94,"GTM","Guatemala",8,"Huehuetenango",119,"Malacatancito","Municipio","Municipality",NA,NA
+120,94,"GTM","Guatemala",8,"Huehuetenango",120,"Nentón","Municipio","Municipality",NA,NA
+121,94,"GTM","Guatemala",8,"Huehuetenango",121,"San Antonio Huista","Municipio","Municipality",NA,NA
+122,94,"GTM","Guatemala",8,"Huehuetenango",122,"San Gaspar Ixchil","Municipio","Municipality",NA,NA
+123,94,"GTM","Guatemala",8,"Huehuetenango",123,"San Ildefonso Ixtahuacán","Municipio","Municipality",NA,NA
+124,94,"GTM","Guatemala",8,"Huehuetenango",124,"San Juan Atitán","Municipio","Municipality",NA,NA
+125,94,"GTM","Guatemala",8,"Huehuetenango",125,"San Juan Ixcoy","Municipio","Municipality",NA,NA
+126,94,"GTM","Guatemala",8,"Huehuetenango",126,"San Mateo Ixtatán","Municipio","Municipality",NA,NA
+127,94,"GTM","Guatemala",8,"Huehuetenango",127,"San Miguel Acatán","Municipio","Municipality",NA,NA
+128,94,"GTM","Guatemala",8,"Huehuetenango",128,"San Pedro Necta","Municipio","Municipality",NA,NA
+129,94,"GTM","Guatemala",8,"Huehuetenango",129,"San Rafael La Independencia","Municipio","Municipality",NA,NA
+130,94,"GTM","Guatemala",8,"Huehuetenango",130,"San Rafael Petzal","Municipio","Municipality",NA,NA
+131,94,"GTM","Guatemala",8,"Huehuetenango",131,"San Sebastián Coatán","Municipio","Municipality",NA,NA
+132,94,"GTM","Guatemala",8,"Huehuetenango",132,"San Sebastián Huehuetenango","Municipio","Municipality",NA,NA
+133,94,"GTM","Guatemala",8,"Huehuetenango",133,"Santa Ana Huista","Municipio","Municipality",NA,NA
+134,94,"GTM","Guatemala",8,"Huehuetenango",134,"Santa Bárbara","Municipio","Municipality",NA,NA
+135,94,"GTM","Guatemala",8,"Huehuetenango",135,"Santa Cruz Barillas","Municipio","Municipality",NA,NA
+136,94,"GTM","Guatemala",8,"Huehuetenango",136,"Santa Eulalia","Municipio","Municipality",NA,NA
+137,94,"GTM","Guatemala",8,"Huehuetenango",137,"Santiago Chimaltenango","Municipio","Municipality",NA,NA
+138,94,"GTM","Guatemala",8,"Huehuetenango",138,"Soloma","Municipio","Municipality",NA,NA
+139,94,"GTM","Guatemala",8,"Huehuetenango",139,"Tectitán","Municipio","Municipality",NA,NA
+140,94,"GTM","Guatemala",8,"Huehuetenango",140,"Todos Santos Cuchumatán","Municipio","Municipality",NA,NA
+141,94,"GTM","Guatemala",9,"Izabal",141,"El Estor","Municipio","Municipality",NA,NA
+142,94,"GTM","Guatemala",9,"Izabal",142,"Livingston","Municipio","Municipality",NA,NA
+143,94,"GTM","Guatemala",9,"Izabal",143,"Los Amates","Municipio","Municipality",NA,NA
+144,94,"GTM","Guatemala",9,"Izabal",144,"Morales","Municipio","Municipality",NA,NA
+145,94,"GTM","Guatemala",9,"Izabal",145,"NA","Water body","Water body",NA,NA
+146,94,"GTM","Guatemala",9,"Izabal",146,"Puerto Barrios","Municipio","Municipality",NA,NA
+147,94,"GTM","Guatemala",9,"Izabal",147,"San Luis","Municipio","Municipality",NA,NA
+148,94,"GTM","Guatemala",10,"Jalapa",148,"Jalapa","Municipio","Municipality",NA,NA
+149,94,"GTM","Guatemala",10,"Jalapa",149,"Mataquescuintla","Municipio","Municipality",NA,NA
+150,94,"GTM","Guatemala",10,"Jalapa",150,"Monjas","Municipio","Municipality",NA,NA
+151,94,"GTM","Guatemala",10,"Jalapa",151,"San Carlos Alzatate","Municipio","Municipality",NA,NA
+152,94,"GTM","Guatemala",10,"Jalapa",152,"San Luis Jilotepeque","Municipio","Municipality",NA,NA
+153,94,"GTM","Guatemala",10,"Jalapa",153,"San Manuel Chaparrón","Municipio","Municipality",NA,NA
+154,94,"GTM","Guatemala",10,"Jalapa",154,"San Pedro Pinula","Municipio","Municipality",NA,NA
+155,94,"GTM","Guatemala",11,"Jutiapa",155,"Agua Blanca","Municipio","Municipality",NA,NA
+156,94,"GTM","Guatemala",11,"Jutiapa",156,"Asunción Mita","Municipio","Municipality",NA,NA
+157,94,"GTM","Guatemala",11,"Jutiapa",157,"Atescatempa","Municipio","Municipality",NA,NA
+158,94,"GTM","Guatemala",11,"Jutiapa",158,"Comapa","Municipio","Municipality",NA,NA
+159,94,"GTM","Guatemala",11,"Jutiapa",159,"Conguaco","Municipio","Municipality",NA,NA
+160,94,"GTM","Guatemala",11,"Jutiapa",160,"El Adelanto","Municipio","Municipality",NA,NA
+161,94,"GTM","Guatemala",11,"Jutiapa",161,"El Progreso","Municipio","Municipality",NA,NA
+162,94,"GTM","Guatemala",11,"Jutiapa",162,"Jalpatagua","Municipio","Municipality",NA,NA
+163,94,"GTM","Guatemala",11,"Jutiapa",163,"Jerez","Municipio","Municipality",NA,NA
+164,94,"GTM","Guatemala",11,"Jutiapa",164,"Jutiapa","Municipio","Municipality",NA,NA
+165,94,"GTM","Guatemala",11,"Jutiapa",165,"Moyuta","Municipio","Municipality",NA,NA
+166,94,"GTM","Guatemala",11,"Jutiapa",166,"Pasaco","Municipio","Municipality",NA,NA
+167,94,"GTM","Guatemala",11,"Jutiapa",167,"Quezada","Municipio","Municipality",NA,NA
+168,94,"GTM","Guatemala",11,"Jutiapa",168,"San José Acatempa","Municipio","Municipality",NA,NA
+169,94,"GTM","Guatemala",11,"Jutiapa",169,"Santa Catarina Mita","Municipio","Municipality",NA,NA
+170,94,"GTM","Guatemala",11,"Jutiapa",170,"Yupiltepeque","Municipio","Municipality",NA,NA
+171,94,"GTM","Guatemala",11,"Jutiapa",171,"Zapotitlán","Municipio","Municipality",NA,NA
+172,94,"GTM","Guatemala",12,"Petén",172,"Dolores","Municipio","Municipality",NA,NA
+173,94,"GTM","Guatemala",12,"Petén",173,"Flores","Municipio","Municipality",NA,NA
+174,94,"GTM","Guatemala",12,"Petén",174,"La Libertad","Municipio","Municipality",NA,NA
+175,94,"GTM","Guatemala",12,"Petén",175,"Melchor de Mencos","Municipio","Municipality",NA,NA
+176,94,"GTM","Guatemala",12,"Petén",176,"Poptún","Municipio","Municipality",NA,NA
+177,94,"GTM","Guatemala",12,"Petén",177,"San Andrés","Municipio","Municipality",NA,NA
+178,94,"GTM","Guatemala",12,"Petén",178,"San Benito","Municipio","Municipality",NA,NA
+179,94,"GTM","Guatemala",12,"Petén",179,"San Francisco","Municipio","Municipality",NA,NA
+180,94,"GTM","Guatemala",12,"Petén",180,"San José","Municipio","Municipality",NA,NA
+181,94,"GTM","Guatemala",12,"Petén",181,"San Luis","Municipio","Municipality",NA,NA
+182,94,"GTM","Guatemala",12,"Petén",182,"Santa Ana","Municipio","Municipality",NA,NA
+183,94,"GTM","Guatemala",12,"Petén",183,"Sayaxché","Municipio","Municipality",NA,NA
+184,94,"GTM","Guatemala",13,"Quezaltenango",184,"Almolonga","Municipio","Municipality",NA,NA
+185,94,"GTM","Guatemala",13,"Quezaltenango",185,"Cabricán","Municipio","Municipality",NA,NA
+186,94,"GTM","Guatemala",13,"Quezaltenango",186,"Cajolá","Municipio","Municipality",NA,NA
+187,94,"GTM","Guatemala",13,"Quezaltenango",187,"Cantel","Municipio","Municipality",NA,NA
+188,94,"GTM","Guatemala",13,"Quezaltenango",188,"Coatepeque","Municipio","Municipality",NA,NA
+189,94,"GTM","Guatemala",13,"Quezaltenango",189,"Colomba","Municipio","Municipality",NA,NA
+190,94,"GTM","Guatemala",13,"Quezaltenango",190,"Concepción Chiquirichapa","Municipio","Municipality",NA,NA
+191,94,"GTM","Guatemala",13,"Quezaltenango",191,"El Palmar","Municipio","Municipality",NA,NA
+192,94,"GTM","Guatemala",13,"Quezaltenango",192,"Flores Costa Cuca","Municipio","Municipality",NA,NA
+193,94,"GTM","Guatemala",13,"Quezaltenango",193,"Génova","Municipio","Municipality",NA,NA
+194,94,"GTM","Guatemala",13,"Quezaltenango",194,"Huitán","Municipio","Municipality",NA,NA
+195,94,"GTM","Guatemala",13,"Quezaltenango",195,"La Esperanza","Municipio","Municipality",NA,NA
+196,94,"GTM","Guatemala",13,"Quezaltenango",196,"Olintepeque","Municipio","Municipality",NA,NA
+197,94,"GTM","Guatemala",13,"Quezaltenango",197,"Ostuncalco","Municipio","Municipality",NA,NA
+198,94,"GTM","Guatemala",13,"Quezaltenango",198,"Palestina de Los Altos","Municipio","Municipality",NA,NA
+199,94,"GTM","Guatemala",13,"Quezaltenango",199,"Quetzaltenango","Municipio","Municipality",NA,NA
+200,94,"GTM","Guatemala",13,"Quezaltenango",200,"Salcajá","Municipio","Municipality",NA,NA
+201,94,"GTM","Guatemala",13,"Quezaltenango",201,"San Carlos Sija","Municipio","Municipality",NA,NA
+202,94,"GTM","Guatemala",13,"Quezaltenango",202,"San Francisco La Unión","Municipio","Municipality",NA,NA
+203,94,"GTM","Guatemala",13,"Quezaltenango",203,"San Martín Sacatepéquez","Municipio","Municipality",NA,NA
+204,94,"GTM","Guatemala",13,"Quezaltenango",204,"San Mateo","Municipio","Municipality",NA,NA
+205,94,"GTM","Guatemala",13,"Quezaltenango",205,"San Miguel Sigüilá","Municipio","Municipality",NA,NA
+206,94,"GTM","Guatemala",13,"Quezaltenango",206,"Sibilia","Municipio","Municipality",NA,NA
+207,94,"GTM","Guatemala",13,"Quezaltenango",207,"Zunil","Municipio","Municipality",NA,NA
+208,94,"GTM","Guatemala",14,"Quiché",208,"Canillá","Municipio","Municipality",NA,NA
+209,94,"GTM","Guatemala",14,"Quiché",209,"Chajul","Municipio","Municipality",NA,NA
+210,94,"GTM","Guatemala",14,"Quiché",210,"Chicaman","Municipio","Municipality",NA,NA
+211,94,"GTM","Guatemala",14,"Quiché",211,"Chiché","Municipio","Municipality",NA,NA
+212,94,"GTM","Guatemala",14,"Quiché",212,"Chichicastenango","Municipio","Municipality",NA,NA
+213,94,"GTM","Guatemala",14,"Quiché",213,"Chinique","Municipio","Municipality",NA,NA
+214,94,"GTM","Guatemala",14,"Quiché",214,"Cunén","Municipio","Municipality",NA,NA
+215,94,"GTM","Guatemala",14,"Quiché",215,"Ixcán","Municipio","Municipality",NA,NA
+216,94,"GTM","Guatemala",14,"Quiché",216,"Joyabaj","Municipio","Municipality",NA,NA
+217,94,"GTM","Guatemala",14,"Quiché",217,"Nebaj","Municipio","Municipality",NA,NA
+218,94,"GTM","Guatemala",14,"Quiché",218,"Pachalúm","Municipio","Municipality",NA,NA
+219,94,"GTM","Guatemala",14,"Quiché",219,"Patzité","Municipio","Municipality",NA,NA
+220,94,"GTM","Guatemala",14,"Quiché",220,"Sacapulas","Municipio","Municipality",NA,NA
+221,94,"GTM","Guatemala",14,"Quiché",221,"San Andrés Sajcabajá","Municipio","Municipality",NA,NA
+222,94,"GTM","Guatemala",14,"Quiché",222,"San Antonio Ilotenango","Municipio","Municipality",NA,NA
+223,94,"GTM","Guatemala",14,"Quiché",223,"San Bartolomé Jocotenango","Municipio","Municipality",NA,NA
+224,94,"GTM","Guatemala",14,"Quiché",224,"San Juan Cotzal","Municipio","Municipality",NA,NA
+225,94,"GTM","Guatemala",14,"Quiché",225,"San Pedro Jocopilas","Municipio","Municipality",NA,NA
+226,94,"GTM","Guatemala",14,"Quiché",226,"Santa Cruz del Quiché","Municipio","Municipality",NA,NA
+227,94,"GTM","Guatemala",14,"Quiché",227,"Uspantán","Municipio","Municipality",NA,NA
+228,94,"GTM","Guatemala",14,"Quiché",228,"Zacualpa","Municipio","Municipality",NA,NA
+229,94,"GTM","Guatemala",15,"Retalhuleu",229,"Champerico","Municipio","Municipality",NA,NA
+230,94,"GTM","Guatemala",15,"Retalhuleu",230,"El Asintal","Municipio","Municipality",NA,NA
+231,94,"GTM","Guatemala",15,"Retalhuleu",231,"Nuevo San Carlos","Municipio","Municipality",NA,NA
+232,94,"GTM","Guatemala",15,"Retalhuleu",232,"Retalhuleu","Municipio","Municipality",NA,NA
+233,94,"GTM","Guatemala",15,"Retalhuleu",233,"San Andrés Villa Seca","Municipio","Municipality",NA,NA
+234,94,"GTM","Guatemala",15,"Retalhuleu",234,"San Felipe","Municipio","Municipality",NA,NA
+235,94,"GTM","Guatemala",15,"Retalhuleu",235,"San Martín Zapotitlán","Municipio","Municipality",NA,NA
+236,94,"GTM","Guatemala",15,"Retalhuleu",236,"San Sebastián","Municipio","Municipality",NA,NA
+237,94,"GTM","Guatemala",15,"Retalhuleu",237,"Santa Cruz Muluá","Municipio","Municipality",NA,NA
+238,94,"GTM","Guatemala",16,"Sacatepéquez",238,"Alotenango","Municipio","Municipality",NA,NA
+239,94,"GTM","Guatemala",16,"Sacatepéquez",239,"Antigua Guatemala","Municipio","Municipality",NA,NA
+240,94,"GTM","Guatemala",16,"Sacatepéquez",240,"Ciudad Vieja","Municipio","Municipality",NA,NA
+241,94,"GTM","Guatemala",16,"Sacatepéquez",241,"Jocotenango","Municipio","Municipality",NA,NA
+242,94,"GTM","Guatemala",16,"Sacatepéquez",242,"Magdalena Milpas Altas","Municipio","Municipality",NA,NA
+243,94,"GTM","Guatemala",16,"Sacatepéquez",243,"Pastores","Municipio","Municipality",NA,NA
+244,94,"GTM","Guatemala",16,"Sacatepéquez",244,"San Antonio Aguas Calientes","Municipio","Municipality",NA,NA
+245,94,"GTM","Guatemala",16,"Sacatepéquez",245,"San Bartolomé Milpas Altas","Municipio","Municipality",NA,NA
+246,94,"GTM","Guatemala",16,"Sacatepéquez",246,"San Lucas Sacatepéquez","Municipio","Municipality",NA,NA
+247,94,"GTM","Guatemala",16,"Sacatepéquez",247,"San Miguel Dueñas","Municipio","Municipality",NA,NA
+248,94,"GTM","Guatemala",16,"Sacatepéquez",248,"Santa Catarina Barahona","Municipio","Municipality",NA,NA
+249,94,"GTM","Guatemala",16,"Sacatepéquez",249,"Santa Lucía Milpas Altas","Municipio","Municipality",NA,NA
+250,94,"GTM","Guatemala",16,"Sacatepéquez",250,"Santa María de Jesús","Municipio","Municipality",NA,NA
+251,94,"GTM","Guatemala",16,"Sacatepéquez",251,"Santiago Sacatepéquez","Municipio","Municipality",NA,NA
+252,94,"GTM","Guatemala",16,"Sacatepéquez",252,"Santo Domingo Xenacoj","Municipio","Municipality",NA,NA
+253,94,"GTM","Guatemala",16,"Sacatepéquez",253,"Sumpango","Municipio","Municipality",NA,NA
+254,94,"GTM","Guatemala",17,"San Marcos",254,"Ayutla","Municipio","Municipality",NA,NA
+255,94,"GTM","Guatemala",17,"San Marcos",255,"Catarina","Municipio","Municipality",NA,NA
+256,94,"GTM","Guatemala",17,"San Marcos",256,"Comitancillo","Municipio","Municipality",NA,NA
+257,94,"GTM","Guatemala",17,"San Marcos",257,"Concepción Tutuapa","Municipio","Municipality",NA,NA
+258,94,"GTM","Guatemala",17,"San Marcos",258,"El Quetzal","Municipio","Municipality",NA,NA
+259,94,"GTM","Guatemala",17,"San Marcos",259,"El Rodeo","Municipio","Municipality",NA,NA
+260,94,"GTM","Guatemala",17,"San Marcos",260,"El Tumbador","Municipio","Municipality",NA,NA
+261,94,"GTM","Guatemala",17,"San Marcos",261,"Esquipulas Palo Gordo","Municipio","Municipality",NA,NA
+262,94,"GTM","Guatemala",17,"San Marcos",262,"Ixchiguan","Municipio","Municipality",NA,NA
+263,94,"GTM","Guatemala",17,"San Marcos",263,"La Reforma","Municipio","Municipality",NA,NA
+264,94,"GTM","Guatemala",17,"San Marcos",264,"Malacatán","Municipio","Municipality",NA,NA
+265,94,"GTM","Guatemala",17,"San Marcos",265,"Nuevo Progreso","Municipio","Municipality",NA,NA
+266,94,"GTM","Guatemala",17,"San Marcos",266,"Ocos","Municipio","Municipality",NA,NA
+267,94,"GTM","Guatemala",17,"San Marcos",267,"Pajapita","Municipio","Municipality",NA,NA
+268,94,"GTM","Guatemala",17,"San Marcos",268,"Río Blanco","Municipio","Municipality",NA,NA
+269,94,"GTM","Guatemala",17,"San Marcos",269,"San Antonio Sacatepéquez","Municipio","Municipality",NA,NA
+270,94,"GTM","Guatemala",17,"San Marcos",270,"San Cristobal Cucho","Municipio","Municipality",NA,NA
+271,94,"GTM","Guatemala",17,"San Marcos",271,"San José Ojetenam","Municipio","Municipality",NA,NA
+272,94,"GTM","Guatemala",17,"San Marcos",272,"San Lorenzo","Municipio","Municipality",NA,NA
+273,94,"GTM","Guatemala",17,"San Marcos",273,"San Marcos","Municipio","Municipality",NA,NA
+274,94,"GTM","Guatemala",17,"San Marcos",274,"San Miguel Ixtahuacán","Municipio","Municipality",NA,NA
+275,94,"GTM","Guatemala",17,"San Marcos",275,"San Pablo","Municipio","Municipality",NA,NA
+276,94,"GTM","Guatemala",17,"San Marcos",276,"San Pedro Sacatepéquez","Municipio","Municipality",NA,NA
+277,94,"GTM","Guatemala",17,"San Marcos",277,"San Rafaél Pie de la Cuesta","Municipio","Municipality",NA,NA
+278,94,"GTM","Guatemala",17,"San Marcos",278,"San Sibinal","Municipio","Municipality",NA,NA
+279,94,"GTM","Guatemala",17,"San Marcos",279,"Sipacapa","Municipio","Municipality",NA,NA
+280,94,"GTM","Guatemala",17,"San Marcos",280,"Tacaná","Municipio","Municipality",NA,NA
+281,94,"GTM","Guatemala",17,"San Marcos",281,"Tajumulco","Municipio","Municipality",NA,NA
+282,94,"GTM","Guatemala",17,"San Marcos",282,"Tejutla","Municipio","Municipality",NA,NA
+283,94,"GTM","Guatemala",18,"Santa Rosa",283,"Barberena","Municipio","Municipality",NA,NA
+284,94,"GTM","Guatemala",18,"Santa Rosa",284,"Casillas","Municipio","Municipality",NA,NA
+285,94,"GTM","Guatemala",18,"Santa Rosa",285,"Chiquimulilla","Municipio","Municipality",NA,NA
+286,94,"GTM","Guatemala",18,"Santa Rosa",286,"Cuilapa","Municipio","Municipality",NA,NA
+287,94,"GTM","Guatemala",18,"Santa Rosa",287,"Guazacapán","Municipio","Municipality",NA,NA
+288,94,"GTM","Guatemala",18,"Santa Rosa",288,"Nueva Santa Rosa","Municipio","Municipality",NA,NA
+289,94,"GTM","Guatemala",18,"Santa Rosa",289,"Oratorio","Municipio","Municipality",NA,NA
+290,94,"GTM","Guatemala",18,"Santa Rosa",290,"Pueblo Nuevo Viñas","Municipio","Municipality",NA,NA
+291,94,"GTM","Guatemala",18,"Santa Rosa",291,"San Juan Tecuaco","Municipio","Municipality",NA,NA
+292,94,"GTM","Guatemala",18,"Santa Rosa",292,"San Rafaél Las Flores","Municipio","Municipality",NA,NA
+293,94,"GTM","Guatemala",18,"Santa Rosa",293,"Santa Cruz Naranjo","Municipio","Municipality",NA,NA
+294,94,"GTM","Guatemala",18,"Santa Rosa",294,"Santa María Ixhuatán","Municipio","Municipality",NA,NA
+295,94,"GTM","Guatemala",18,"Santa Rosa",295,"Santa Rosa de Lima","Municipio","Municipality",NA,NA
+296,94,"GTM","Guatemala",18,"Santa Rosa",296,"Taxisco","Municipio","Municipality",NA,NA
+297,94,"GTM","Guatemala",19,"Sololá",297,"Concepción","Municipio","Municipality",NA,NA
+298,94,"GTM","Guatemala",19,"Sololá",298,"Nahualá","Municipio","Municipality",NA,NA
+299,94,"GTM","Guatemala",19,"Sololá",299,"NA","Water body","Water body",NA,NA
+300,94,"GTM","Guatemala",19,"Sololá",300,"Panajachel","Municipio","Municipality",NA,NA
+301,94,"GTM","Guatemala",19,"Sololá",301,"San Andrés Semetabaj","Municipio","Municipality",NA,NA
+302,94,"GTM","Guatemala",19,"Sololá",302,"San Antonio Palopó","Municipio","Municipality",NA,NA
+303,94,"GTM","Guatemala",19,"Sololá",303,"San José Chacayá","Municipio","Municipality",NA,NA
+304,94,"GTM","Guatemala",19,"Sololá",304,"San Juan La Laguna","Municipio","Municipality",NA,NA
+305,94,"GTM","Guatemala",19,"Sololá",305,"San Lucas Tolimán","Municipio","Municipality",NA,NA
+306,94,"GTM","Guatemala",19,"Sololá",306,"San Marcos La Laguna","Municipio","Municipality",NA,NA
+307,94,"GTM","Guatemala",19,"Sololá",307,"San Pablo La Laguna","Municipio","Municipality",NA,NA
+308,94,"GTM","Guatemala",19,"Sololá",308,"San Pedro La Laguna","Municipio","Municipality",NA,NA
+309,94,"GTM","Guatemala",19,"Sololá",309,"Santa Catarina Ixtahuacan","Municipio","Municipality",NA,NA
+310,94,"GTM","Guatemala",19,"Sololá",310,"Santa Catarina Palopó","Municipio","Municipality",NA,NA
+311,94,"GTM","Guatemala",19,"Sololá",311,"Santa Clara La Laguna","Municipio","Municipality",NA,NA
+312,94,"GTM","Guatemala",19,"Sololá",312,"Santa Cruz La Laguna","Municipio","Municipality",NA,NA
+313,94,"GTM","Guatemala",19,"Sololá",313,"Santa Lucía Utatlán","Municipio","Municipality",NA,NA
+314,94,"GTM","Guatemala",19,"Sololá",314,"Santa María Visitación","Municipio","Municipality",NA,NA
+315,94,"GTM","Guatemala",19,"Sololá",315,"Santiago Atitlán","Municipio","Municipality",NA,NA
+316,94,"GTM","Guatemala",19,"Sololá",316,"Sololá","Municipio","Municipality",NA,NA
+317,94,"GTM","Guatemala",20,"Suchitepéquez",317,"Chicacao","Municipio","Municipality",NA,NA
+318,94,"GTM","Guatemala",20,"Suchitepéquez",318,"Cuyotenango","Municipio","Municipality",NA,NA
+319,94,"GTM","Guatemala",20,"Suchitepéquez",319,"Mazatenango","Municipio","Municipality",NA,NA
+320,94,"GTM","Guatemala",20,"Suchitepéquez",320,"Patulul","Municipio","Municipality",NA,NA
+321,94,"GTM","Guatemala",20,"Suchitepéquez",321,"Pueblo Nuevo","Municipio","Municipality",NA,NA
+322,94,"GTM","Guatemala",20,"Suchitepéquez",322,"Río Bravo","Municipio","Municipality",NA,NA
+323,94,"GTM","Guatemala",20,"Suchitepéquez",323,"Samayac","Municipio","Municipality",NA,NA
+324,94,"GTM","Guatemala",20,"Suchitepéquez",324,"San Antonio Suchitepéquez","Municipio","Municipality",NA,NA
+325,94,"GTM","Guatemala",20,"Suchitepéquez",325,"San Bernardino","Municipio","Municipality",NA,NA
+326,94,"GTM","Guatemala",20,"Suchitepéquez",326,"San Francisco Zapotitlán","Municipio","Municipality",NA,NA
+327,94,"GTM","Guatemala",20,"Suchitepéquez",327,"San Gabriel","Municipio","Municipality",NA,NA
+328,94,"GTM","Guatemala",20,"Suchitepéquez",328,"San José El Idolo","Municipio","Municipality",NA,NA
+329,94,"GTM","Guatemala",20,"Suchitepéquez",329,"San Juan Bautista","Municipio","Municipality",NA,NA
+330,94,"GTM","Guatemala",20,"Suchitepéquez",330,"San Lorenzo","Municipio","Municipality",NA,NA
+331,94,"GTM","Guatemala",20,"Suchitepéquez",331,"San Miguel Panán","Municipio","Municipality",NA,NA
+332,94,"GTM","Guatemala",20,"Suchitepéquez",332,"San Pablo Jocopilas","Municipio","Municipality",NA,NA
+333,94,"GTM","Guatemala",20,"Suchitepéquez",333,"Santa Bárbara","Municipio","Municipality",NA,NA
+334,94,"GTM","Guatemala",20,"Suchitepéquez",334,"Santo Domingo Suchitepequez","Municipio","Municipality",NA,NA
+335,94,"GTM","Guatemala",20,"Suchitepéquez",335,"Santo Tomás La Unión","Municipio","Municipality",NA,NA
+336,94,"GTM","Guatemala",20,"Suchitepéquez",336,"Zunilito","Municipio","Municipality",NA,NA
+337,94,"GTM","Guatemala",21,"Totonicapán",337,"Momostenango","Municipio","Municipality",NA,NA
+338,94,"GTM","Guatemala",21,"Totonicapán",338,"San Andrés Xecul","Municipio","Municipality",NA,NA
+339,94,"GTM","Guatemala",21,"Totonicapán",339,"San Bartolo","Municipio","Municipality",NA,NA
+340,94,"GTM","Guatemala",21,"Totonicapán",340,"San Cristóbal Totonicapán","Municipio","Municipality",NA,NA
+341,94,"GTM","Guatemala",21,"Totonicapán",341,"San Francisco El Alto","Municipio","Municipality",NA,NA
+342,94,"GTM","Guatemala",21,"Totonicapán",342,"Santa Lucía La Reforma","Municipio","Municipality",NA,NA
+343,94,"GTM","Guatemala",21,"Totonicapán",343,"Santa María Chiquimula","Municipio","Municipality",NA,NA
+344,94,"GTM","Guatemala",21,"Totonicapán",344,"Totonicapán","Municipio","Municipality",NA,NA
+345,94,"GTM","Guatemala",22,"Zacapa",345,"Cabañas","Municipio","Municipality",NA,NA
+346,94,"GTM","Guatemala",22,"Zacapa",346,"Estanzuela","Municipio","Municipality",NA,NA
+347,94,"GTM","Guatemala",22,"Zacapa",347,"Gualán","Municipio","Municipality",NA,NA
+348,94,"GTM","Guatemala",22,"Zacapa",348,"Huité","Municipio","Municipality",NA,NA
+349,94,"GTM","Guatemala",22,"Zacapa",349,"La Unión","Municipio","Municipality",NA,NA
+350,94,"GTM","Guatemala",22,"Zacapa",350,"Río Hondo","Municipio","Municipality",NA,NA
+351,94,"GTM","Guatemala",22,"Zacapa",351,"San Diego","Municipio","Municipality",NA,NA
+352,94,"GTM","Guatemala",22,"Zacapa",352,"Teculután","Municipio","Municipality",NA,NA
+353,94,"GTM","Guatemala",22,"Zacapa",353,"Usumatlán","Municipio","Municipality",NA,NA
+354,94,"GTM","Guatemala",22,"Zacapa",354,"Zacapa","Municipio","Municipality",NA,NA

@@ -249,8 +249,9 @@ wth_escenaries <-  Resam %>%
 
 
 
-purrr::map2(.x = wth_escenaries$id, .y = wth_escenaries$wth_final, .f = function_to_save, path_out = path_output)
+#purrr::map2(.x = wth_escenaries$id, .y = wth_escenaries$wth_final, .f = function_to_save, path_out = path_output)
 
+Map(function_to_save, wth_escenaries$id,  wth_escenaries$wth_final, path_output)
 
 # This remove chirp files.
 file.remove(list.files(path_output,pattern = ".tif",full.names=T))
