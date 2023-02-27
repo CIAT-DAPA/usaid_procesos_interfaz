@@ -262,10 +262,12 @@ runDssatModule <- function(crop){
     }
   )
 
+  tictoc::tic()
   mclapply(2:length(setups), function(i) {
     
     #tictoc::tic()
-    id <- gsub("/", "", str_split_fixed(setups[15], "/", n = 8)) # current scenarie/setup
+    current_conf <- setups[i]
+    id <- gsub("/", "", str_split_fixed(current_conf, "/", n = 8)) # current scenarie/setup
     correction <- str_split_fixed(id[8], "_", n = 2)
     station <- gsub("/", "", correction[1]) # current climatic station
     id <- id[8]
@@ -275,13 +277,13 @@ runDssatModule <- function(crop){
     current_setup_dir <- paste0(dirCurrentCropInputs, id, "/")
     #if(currentCountry=="COLOMBIA" || (currentCountry=="ETHIOPIA" && crop == "maize")){
 
-      skip_cul <- read_lines(paste0(setups[15], "/", cul_file, ".CUL")) %>% str_detect("@VAR#") %>% which() +4
-      culFile <- read_lines(paste0(setups[15], "/", cul_file, ".CUL"))[skip_cul[1]]
+      skip_cul <- read_lines(paste0(current_conf, "/", cul_file, ".CUL")) %>% str_detect("@VAR#") %>% which() +4
+      culFile <- read_lines(paste0(current_conf, "/", cul_file, ".CUL"))[skip_cul[1]]
       cultivar <- strsplit(culFile, " ", fixed=T)
       cultivar <- c(cultivar[[1]][1], cultivar[[1]][2])
       
-      skip_soil <- read_lines(paste0(setups[15], "/SOIL.SOL")) %>% str_detect("@SITE") %>% which() -1
-      soilFile <- read_lines(paste0(setups[15], "/SOIL.SOL"))[skip_soil[1]]
+      skip_soil <- read_lines(paste0(current_conf, "/SOIL.SOL")) %>% str_detect("@SITE") %>% which() -1
+      soilFile <- read_lines(paste0(current_conf, "/SOIL.SOL"))[skip_soil[1]]
       soil <- strsplit(soilFile, " ", fixed=T)
       soil <- substring(soil[[1]][1], 2)
 
@@ -296,7 +298,8 @@ runDssatModule <- function(crop){
     
     
   
-  }, mc.cores = 5, mc.preschedule = F)
+  }, mc.cores = no_cores, mc.preschedule = F)
+  tictoc::toc()
 
 }
 
@@ -536,7 +539,7 @@ write_csv(bind_rows(probabilities_list), paste0(probForecastUnifiedDir, "probabi
 # Upload proccess results to interface database
 setwd(paste0(scriptsDir, "forecast_app"))
 CMDdirOutputs <- paste0(dirUnifiedOutputs, "outputs/") # paste0(gsub("/","\\\\",dirOutputs), "\\\"")
-try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\"", " -frid \"", "63b9c071368fee5585f307ed", "\""), intern = TRUE, ignore.stderr = TRUE))
+try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\"", " -frid \"", "63ee56f60d9469092b20b842", "\""), intern = TRUE, ignore.stderr = TRUE))
 
 # Import rasters to Geoserver
 source("/forecast/usaid_procesos_interfaz/prediccionCLimatica/raster_upload.r")

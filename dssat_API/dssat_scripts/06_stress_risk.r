@@ -60,6 +60,9 @@ stress_risk = function(folder,type,limits){
   #PlantGro_file <- paste0("D:/workdir/dssat_API700/outputs/1/PlantGro.OUT"
   PlantGro_file <- paste0(folder,"PlantGro.OUT")
   df_plantgro <- read_PlantGro(PlantGro_file)
+  #df_plantgro$DATE<-as.Date(df_plantgro$DAP, format, tryFormats = c("%Y-%m-%d", "%Y/%m/%d"),origin=as.Date(paste0(year(initial_date),"-01-01")))
+  df_plantgro$DATE <- initial_date + days(df_plantgro$DAP)
+  print(df_plantgro$DATE)
 
   nstress<-matrix(NA, nrow = 1, ncol = 99)
   # Loop for limits
@@ -67,12 +70,33 @@ stress_risk = function(folder,type,limits){
 
   conf_lower <- function(var){
     
-    t.test(var)$conf.int[1]
+  
+    #t.test(var)$conf.int[1]
+
+    tryCatch(
+        {t.test(var)$conf.int[1]},
+        error=function(w){
+          #print(df_sub)
+          return(NA)
+          # print(df_sub)
+        }
+      )
+    
+    #t.test(var, y = NULL, mu = 0, paired = FALSE, var.equal = FALSE)$conf.int[1]
   }
   
   conf_upper <- function(var){
+
+    tryCatch(
+        {t.test(var)$conf.int[2]},
+        error=function(w){
+          #print(df_sub)
+          return(NA)
+          # print(df_sub)
+        }
+      )
     
-    t.test(var)$conf.int[2]
+    #t.test(var, y = NULL, mu = 0, paired = FALSE, var.equal = FALSE)$conf.int[2]
   }
   
   
@@ -84,10 +108,13 @@ stress_risk = function(folder,type,limits){
       a<-subset(df_plantgro,df_plantgro$GSTD > as.numeric(limits[j,c("min")]) & df_plantgro$GSTD < as.numeric(limits[j,c("max")]))
       df_sub<- a[a$TRT==i,]
       
+      #max(df_plantgro$DATE)
+      #min(df_plantgro$DATE)
       if (type == "n"){
         ##df_sub$NFGD[df_sub$NFGD == 0] <- NA
         # wheat and maize
         b<-mean(if (crop == "wheat") df_sub$NFGD else df_sub$NSTD, na.rm=T)
+        
         # tryCatch(
         # {},
         # warning=function(w){
@@ -135,7 +162,7 @@ stress_risk_all <- function(data_files_all, dir_inputs_setup){
   stresses_list <- list()
 
   data <- mclapply(1:length(data_files_all), function(i) {
-    data_files <- paste0(data_files_all[1])
+    data_files <- paste0(data_files_all[i])
 
     values_w <- stress_risk(data_files,"w",crop_conf)
     values_n <- stress_risk(data_files,"n",crop_conf)

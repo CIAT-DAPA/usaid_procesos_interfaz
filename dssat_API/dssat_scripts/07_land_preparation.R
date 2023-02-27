@@ -61,7 +61,8 @@ land_preparation_day = function(path_Info.out, path_SoilWat.out) { # path_Info.o
     Mean_AW = Mean_DUL - Mean_LL
 
     ### Define the depletion rate for wheat ###
-    DR = 0.40
+    #DR = 0.40
+    DR = 0.30
 
     ### Soil water content from which land preparation can begin ###
     soil.water.limit = Mean_DUL - (Mean_AW * DR)
@@ -192,8 +193,8 @@ summary_table = function(LPT.DOY){ ## LPT.DOY is the matrix (Dimension: 99X2) co
   quar_1 = round(quantile(LPT.DOY$DOY, 0.25, na.rm = T), 0)
   quar_2 = round(quantile(LPT.DOY$DOY, 0.50, na.rm = T), 0)
   quar_3 = round(quantile(LPT.DOY$DOY, 0.75, na.rm = T), 0)
-  conf_lower = round(conf_lower(LPT.DOY$DOY), 0)
-  conf_upper = round(conf_upper(LPT.DOY$DOY), 0)
+  conf_lower = 0#round(conf_lower(LPT.DOY$DOY), 0)
+  conf_upper = 0#round(conf_upper(LPT.DOY$DOY), 0)
   sd = round(sd (LPT.DOY$DOY, na.rm = T), 0)
   perc_5 = round(quantile(LPT.DOY$DOY, 0.05, na.rm = T), 0)
   perc_95 = round(quantile(LPT.DOY$DOY, 0.95, na.rm = T), 0)
@@ -225,13 +226,16 @@ land_preparation_all <- function(data_files_all){
   land_preparation_list <- list()
 
   data <- mclapply(1:length(data_files_all), function(i) {
-    data_files <- paste0(data_files_all[i])
+    data_files <- paste0(data_files_all[1])
 
     current_info <- paste0(data_files, 'INFO.OUT')
     current_soil_wat <- paste0(data_files, 'SoilWat.OUT')
 
     current_land_preparation <- summary_table(land_preparation_day(current_info, current_soil_wat))
 
+    ## -1 means that the soil has a lot of moisture and land preparation cannot be done
+    if(is.na(current_land_preparation[1])) current_land_preparation[1:13] = -1
+    
     land_preparation_list <- append(land_preparation_list, current_land_preparation)
   
   }, mc.cores = no_cores, mc.preschedule = F)
