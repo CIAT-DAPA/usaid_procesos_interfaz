@@ -251,7 +251,27 @@ wth_escenaries <-  Resam %>%
 
 #purrr::map2(.x = wth_escenaries$id, .y = wth_escenaries$wth_final, .f = function_to_save, path_out = path_output)
 
-Map(function_to_save, wth_escenaries$id,  wth_escenaries$wth_final, path_output)
+##Saving wth_escenaries in case the process get interrupted 
+saveRDS(wth_escenaries, file = paste0("/forecast/workdir/", currentCountry, "_wth_scenaries", ".Rds"))
+
+# Recorrer la lista de 100 en 100
+write_scenaries <- function(current_index=NULL){
+  ##In case i needs to be diferent than one
+  current_index <- if(is.null(current_index)) 1 else current_index
+  ##In case process run out of memory and wth_escenaries needs to be loaded
+  wth_escenaries <- if(exists("wth_escenaries")) wth_escenaries else readRDS(file =  paste0("/forecast/workdir/", currentCountry, "_wth_scenaries", ".Rds"))
+
+  length_wth <- nrow(wth_escenaries)
+  for (current_index in seq(current_index, length_wth, 100)) {
+    
+    Map(function_to_save, wth_escenaries$id[current_index:min(current_index+99, length_wth)],  wth_escenaries$wth_final[current_index:min(current_index+99, length_wth)], path_output)
+    print(paste0(current_index, "-", min(current_index+99, length_wth), " scenaries written"))
+
+  }
+
+}
+
+write_scenaries()
 
 # This remove chirp files.
 file.remove(list.files(path_output,pattern = ".tif",full.names=T))

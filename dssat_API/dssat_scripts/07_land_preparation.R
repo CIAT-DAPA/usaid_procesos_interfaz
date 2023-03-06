@@ -226,7 +226,7 @@ land_preparation_all <- function(data_files_all){
   land_preparation_list <- list()
 
   data <- mclapply(1:length(data_files_all), function(i) {
-    data_files <- paste0(data_files_all[1])
+    data_files <- paste0(data_files_all[i])
 
     current_info <- paste0(data_files, 'INFO.OUT')
     current_soil_wat <- paste0(data_files, 'SoilWat.OUT')
@@ -234,7 +234,7 @@ land_preparation_all <- function(data_files_all){
     current_land_preparation <- summary_table(land_preparation_day(current_info, current_soil_wat))
 
     ## -1 means that the soil has a lot of moisture and land preparation cannot be done
-    if(is.na(current_land_preparation[1])) current_land_preparation[1:13] = -1
+    if(is.na(current_land_preparation[i])) current_land_preparation[1:13] = -1
     
     land_preparation_list <- append(land_preparation_list, current_land_preparation)
   
