@@ -267,6 +267,7 @@ runDssatModule <- function(crop){
       source("dssat_scripts/05_get_outputs_dssat.R")
       source("dssat_scripts/06_stress_risk.R")
       source("dssat_scripts/07_land_preparation.R")
+      source("dssat_scripts/08_phenological_phases.R")
 
     },
     error = function(e) {
@@ -278,7 +279,7 @@ runDssatModule <- function(crop){
   mclapply(2:length(setups), function(i) {
     
     #tictoc::tic()
-    current_conf <- setups[i]
+    current_conf <- setups[4]
     id <- gsub("/", "", str_split_fixed(current_conf, "/", n = 8)) # current scenarie/setup
     correction <- str_split_fixed(id[8], "_", n = 2)
     station <- gsub("/", "", correction[1]) # current climatic station
@@ -514,6 +515,13 @@ runRemuestreo <- source(paste(dirForecast, "02_remuestreo.R", sep = "", collapse
 # Dowloading and final joining data process
 runJoinFinalData <- source(paste(dirForecast, "03_join_wth_final.R", sep = "", collapse = NULL))
 
+if (currentCountry == "GUATEMALA" || currentCountry == "ETHIOPIA") {
+  # Import rasters to Geoserver
+  source(paste0(dirForecast, "raster_upload.r"))
+  uploadRasterFiles()
+
+}
+
 #new dssat module
 if (currentCountry == "ETHIOPIA") {
 
@@ -546,10 +554,6 @@ if(import_data_to_db){
   CMDdirOutputs <- paste0(dirUnifiedOutputs, "outputs/") # paste0(gsub("/","\\\\",dirOutputs), "\\\"")
   try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\""), intern = TRUE, ignore.stderr = TRUE))
   #try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\"", " -frid \"", "63ee56f60d9469092b20b842", "\""), intern = TRUE, ignore.stderr = TRUE))
-
-  # Import rasters to Geoserver
-  source("/forecast/usaid_procesos_interfaz/prediccionCLimatica/raster_upload.r")
-  uploadRasterFiles()
 
 }
 
