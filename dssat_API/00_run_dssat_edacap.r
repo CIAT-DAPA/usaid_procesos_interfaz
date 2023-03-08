@@ -217,12 +217,12 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
     compact %>% bind_rows()
 
 # This part extract phenological phase dates per each setup
-crop_conf = read_csv(paste0(dir_inputs_setup,"crop_conf.csv"))  
-for(i in 1:length(dir_run)){
-  data_files <- paste0(dir_run[i]) 
-  phenological_phase_dates = getPhenologicalPhaseDates(data_files,crop_conf,initial_date,final_date,id_station,id_cultivar,id_soil)
-  write_csv(phenological_phase_dates, paste0(dir_outputs, id, "_phenological-phases.csv"))
-  }
+# crop_conf = read_csv(paste0(dir_inputs_setup,"crop_conf.csv"))  
+# for(i in 1:length(dir_run)){
+#   data_files <- paste0(dir_run[i]) 
+#   phenological_phase_dates = getPhenologicalPhaseDates(data_files,crop_conf,initial_date,final_date,id_station,id_cultivar,id_soil)
+#   write_csv(phenological_phase_dates, paste0(dir_outputs, id, "_phenological-phases.csv"))
+#   }
 
 #If crop_conf exists run stress_risk
  if(file.exists(paste0(dir_inputs_setup, "crop_conf.csv"))){

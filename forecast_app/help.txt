@@ -1,0 +1,135 @@
+﻿ForecastApp
+It is a tool to export and import data about forecast platform.
+You can share parameters in the same context, you can combine
+parameters exporting or importing data, not in the same time.
+-----------------------------------------------------------------
+Test connection
+
+-test			Mandatory parameter. It indicates to the app that
+				is necessary test the connection with the 
+				database
+-----------------------------------------------------------------
+Export Data
+
+-out			Mandatory parameter. It indicates to the app the
+				action export.
+
+-p	"value"		Mandatory parameter. It is the absolute path
+				where the data will be exported.
+
+-s	"value"		Export the climate historical data of all states.
+				Every state is exported in a file with its name.
+				You should add the parameter "-start" and "-end".
+
+-start "value"	This parameter indicates the start year to export
+				data. It is integer value.
+
+-end "value"	This parameter indicates the end year to export
+				data. It is integer value.
+
+-wf				Export the configuration file of the weather 
+				stations. You should add the parameter "-name".
+
+-name "value"	This parameter is the filter of the of the file
+				name to export.
+
+-fs				Export the setup of every crop for the forecast
+				process. It creates a folder by every crop,
+				inside, the app will create a folder called
+				by idweatherstation_idcultivar_idsoil
+
+-co				Create a file by every weather station with their
+				coordinates.
+
+-cpt			Export the configuration for cpt. It includes the
+				theorical regions and cpt modes.
+
+-usr			Export the enable users in the webadmin.
+
+-c	"value"		Mandatory parameter. It is the ObjectId of Country
+				to export data for only country indicated in the parameter.
+
+-m	"value"		Mandatory parameter. It is the Month number that you want
+				to export. It just works for PyCPT export file
+
+-st	"value"		Optional parameter. It is the ObjectId of State
+				to export coordinates of weather stations by State.
+
+-py				Export json file from pycpt configuration for seasonal by country or 
+				by state depends of indicator.
+
+-pyco			Create a only file of weather station with their
+				coordinates by country or state.
+
+-sub			Export json file from pycpt configuration for subseasonal a country.
+
+
+-----------------------------------------------------------------
+Import Data
+
+-in				Mandatory parameter. It indicates to the app the
+				action import
+
+-p	"value"		Mandatory parameter. It is the absolute path
+				where the data will be located to import.
+
+-fs				Import forecast data. You should add the 
+				parameter -cf
+
+-cf "value"		This parameter indicates the confidence value for
+				the intervals confidence. It is a float value.
+
+-hs				Import historical data. You should add the 
+				parameter -s and -type
+
+-s	"value"		Import the climate historical data of weather stations.
+				Value can be prec, sol_rad, t_max, t_min
+
+-type value		Set the kind of search of the weather station.
+				Value can be either 1 for Extern Id or 2 for name
+
+-wr				Imports the ranges in the weather stations of the selected csv file.
+
+-sli			Imports the soil info in the db of the selected csv file.
+
+-fcfg			Imports the configuration daily info in the db of the selected csv files.
+
+-typd value		Set the kind of search of the weather station.
+				Value can be either 1 for Id or 2 for Extern Id  
+
+-wd "value"		This parameter indicates if the config has planting window or not
+
+-stm "value"	This parameter indicates the month in which the planting window starts
+
+-edm "value"	This parameter indicatesthe month in which the planting window ends
+
+-sd "value"		This parameter indicates the sowing days
+
+-----------------------------------------------------------------
+Examples
+
+#Export prec data of the states
+-out -s "prec" -p "C:\export\\" -start 1981 -end 2013
+
+#Export configuration files from weather stations
+-out -wf -p "C:\export\\" -name "daily"
+
+#Export coords from weather stations
+-out -co -p "C:\export\\"
+
+#Export forecast setup
+-out -fs -p "C:\export\\"
+
+#Import forecast
+-in -fs -p "C:\import\\" -cf 0.5
+
+# Normal calls
+
+-out -py -p "D:\\CIAT\\Aclimate\\" -c "61e59d829d5d2486e18d2ea9" -m "4"
+-out -s "prec" -p "D:\\CIAT\\Aclimate\\" -start 1982 -end 2013 -c "61e59d829d5d2486e18d2ea9"
+-out -wf -p "D:\\CIAT\\Aclimate\\" -name "daily" -c "61e59d829d5d2486e18d2ea9"
+-out -co -p "D:\\CIAT\\Aclimate\\" -c "61e59d829d5d2486e18d2ea9"
+-out -fs -p "D:\\CIAT\\Aclimate\\" -c "61e59d829d5d2486e18d2ea9"
+-out -py -p "D:\\CIAT\\Aclimate\\" -c "61e59d829d5d2486e18d2ea9" -m "5"
+-out -pyco -p "D:\\CIAT\\Aclimate\\" -c "61e59d829d5d2486e18d2ea9"
+
