@@ -367,7 +367,7 @@ resampling <-  function(data, CPT_prob, year_forecast){
   
   Escenaries <-  data_to_esc %>%
     mutate(year = year_forecast) %>% 
-    mutate(year = ifelse(cond_change == TRUE & month < 6, year + 1, year))  %>%
+    mutate(year = year_f_leap)  %>%
     # mutate(year = ifelse(Season %in% c('NDJ', 'DJF') & month == 1, year + 1, ifelse(Season == 'DJF' & month == 2, year + 1, year))) %>%
     dplyr::select(-Season) %>% 
     nest(-id) 

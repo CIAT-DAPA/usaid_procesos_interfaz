@@ -39,7 +39,7 @@ options(warn = 1)
 #walk(list.files("dssat_scripts/", pattern = ".R$", full.names = T), ~ source(.x))
 
 
-run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_dir, ndays = 25, soil=NULL, cultivar=NULL){
+run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_dir, ndays = 45, soil=NULL, cultivar=NULL){
   
   path = "/forecast/usaid_procesos_interfaz/dssat_API/"
   setwd(path)

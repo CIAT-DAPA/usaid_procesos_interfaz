@@ -62,7 +62,6 @@ stress_risk = function(folder,type,limits){
   df_plantgro <- read_PlantGro(PlantGro_file)
   #df_plantgro$DATE<-as.Date(df_plantgro$DAP, format, tryFormats = c("%Y-%m-%d", "%Y/%m/%d"),origin=as.Date(paste0(year(initial_date),"-01-01")))
   df_plantgro$DATE <- initial_date + days(df_plantgro$DAP)
-  print(df_plantgro$DATE)
 
   nstress<-matrix(NA, nrow = 1, ncol = 99)
   # Loop for limits

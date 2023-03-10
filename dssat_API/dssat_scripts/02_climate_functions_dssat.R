@@ -21,10 +21,11 @@ climate_files <- list.files(dir_climate, full.names = T)
 #  if(file.exists(dir_current_setup_planting_window)){
 #   data_list <- addObsDataToPlanting(path_output_observed_data,id_station,data_list,dir_current_setup_planting_window)
 #  }
-    
+
+ #Add filter to delete NANA row due to february climatology   
  data_wth <- data_list %>% 
    map(~.x %>% mutate(date = make_date(year, month, day),
-                      date_dssat = date_for_dssat(date)) %>% dplyr::arrange(date))
+                      date_dssat = date_for_dssat(date)) %>% dplyr::arrange(date) %>% filter(str_detect(date_dssat, "NANA", negate=TRUE)))
     
 }
 

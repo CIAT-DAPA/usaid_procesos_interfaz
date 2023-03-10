@@ -236,7 +236,12 @@ run_oryza_by_setup <- function() {
   }
   setwd(dirModeloArrozOutputs)
   # no_cores = 3 in server
-  results <- lapply(inputsList, make_request_oryza)#, mc.cores = 3, mc.preschedule = F)
+  #results <- mclapply(inputsList, make_request_oryza, mc.cores = 3, mc.preschedule = F)
+  results <- mclapply(1:length(inputsList), function(i) {
+    make_request_oryza(inputsList[i])
+    Sys.sleep(2)
+
+  }, mc.cores = 3, mc.preschedule = F)
 }
 
 ################################### Working on wheat (this is not the final version of this function)
@@ -279,7 +284,7 @@ runDssatModule <- function(crop){
   mclapply(2:length(setups), function(i) {
     
     #tictoc::tic()
-    current_conf <- setups[4]
+    current_conf <- setups[i]
     id <- gsub("/", "", str_split_fixed(current_conf, "/", n = 8)) # current scenarie/setup
     correction <- str_split_fixed(id[8], "_", n = 2)
     station <- gsub("/", "", correction[1]) # current climatic station
@@ -290,7 +295,8 @@ runDssatModule <- function(crop){
     current_setup_dir <- paste0(dirCurrentCropInputs, id, "/")
     #if(currentCountry=="COLOMBIA" || (currentCountry=="ETHIOPIA" && crop == "maize")){
 
-      skip_cul <- read_lines(paste0(current_conf, "/", cul_file, ".CUL")) %>% str_detect("@VAR#") %>% which() +4
+      skip_lines <- if (currentCountry == "COLOMBIA") 2 else 4
+      skip_cul <- read_lines(paste0(current_conf, "/", cul_file, ".CUL")) %>% str_detect("@VAR#") %>% which() +skip_lines
       culFile <- read_lines(paste0(current_conf, "/", cul_file, ".CUL"))[skip_cul[1]]
       cultivar <- strsplit(culFile, " ", fixed=T)
       cultivar <- c(cultivar[[1]][1], cultivar[[1]][2])
@@ -300,7 +306,8 @@ runDssatModule <- function(crop){
       soil <- strsplit(soilFile, " ", fixed=T)
       soil <- substring(soil[[1]][1], 2)
 
-      run_crop_dssat(id, crop, current_dir_inputs_climate, current_setup_dir, 25, soil, cultivar)
+      #COLOMBIA
+      run_crop_dssat(id, crop, current_dir_inputs_climate, current_setup_dir, 45, soil, cultivar)
       # tictoc::toc()
 
     #} else {
@@ -322,12 +329,16 @@ prepared_metrics_and_probabilities_csv <- function(){
   metrics_list <- list()
   probabilities_list <- list()
 
+  ##
   for (c in seq(1:length(countries_ids))) {
     ## saving .csv probForecast for merging
     if(names(countries_ids)[c]!="GUATEMALA"){
       metrics_list[[length(metrics_list) + 1]] <- read_csv(paste0("/forecast/workdir/", names(countries_ids)[c], "/outputs/prediccionClimatica/probForecast", "/metrics.csv"))
     }
     probabilities_list[[length(probabilities_list) + 1]] <- read_csv(paste0("/forecast/workdir/", names(countries_ids)[c], "/outputs/prediccionClimatica/probForecast", "/probabilities.csv"))
+    ## Copying outputs in common directory for importation into db process
+    ## This copy must be done when a country has all its outputs finished
+    file.copy(paste0("/forecast/workdir/", names(countries_ids)[c], "/outputs/"), dirUnifiedOutputs, recursive = TRUE)
 
   }
 
@@ -413,6 +424,8 @@ dirOutputs <- paste0(dirCurrent, "outputs/", sep = "", collapse = NULL)
 # Output variables Forecast module
 dirPrediccionOutputs <- paste0(dirOutputs, "prediccionClimatica/", sep = "", collapse = NULL)
 dirNextGen <- paste0(dirOutputs, "NextGen/", sep = "", collapse = NULL)
+#Guatemala ETL rasters dir
+dir_rasters_categories_guate <- paste0(dirPrediccionOutputs, "rasterCategories/", sep = "", collapse = NULL)
 path_save <- paste0(dirPrediccionOutputs, "probForecast", sep = "", collapse = NULL)
 path_rasters <- paste0(dirPrediccionOutputs, "raster", sep = "", collapse = NULL)
 path_output <- paste0(dirPrediccionOutputs, "resampling", sep = "", collapse = NULL)
@@ -448,6 +461,7 @@ pathConstruct(dir_oryza_api_inputs_setup) # ./workdir/oryzaApiInputs/inputs/setu
 pathConstruct(dirUnifiedOutputs) # /unified_outputs/
 pathConstruct(dirOutputs) # ./outputs/
 pathConstruct(dirPrediccionOutputs) # ./outputs/prediccionClimatica/
+pathConstruct(dir_rasters_categories_guate) # ./outputs/rasterCategpries/
 pathConstruct(dirNextGen) # ./outputs/NextGen/
 pathConstruct(path_save) # ./outputs/prediccionClimatica/probForecas
 pathConstruct(path_rasters) # ./outputs/prediccionClimatica/raster
@@ -510,6 +524,7 @@ if (currentCountry == "COLOMBIA" || currentCountry == "ANGOLA") {
   source(paste(dirForecast, "PyCPT_seasonal_outputs_process_R.r", sep = "", collapse = NULL))
   source(paste(dirForecast, "PyCPT_subseasonal_outputs_process_R.r", sep = "", collapse = NULL))
 }
+
 # Resampling process
 runRemuestreo <- source(paste(dirForecast, "02_remuestreo.R", sep = "", collapse = NULL))
 # Dowloading and final joining data process
@@ -540,10 +555,6 @@ if (currentCountry == "COLOMBIA") {
     run_oryza_by_setup()
   }
 }
-
-## Copying outputs in common directory for importation into db process
-## This copy must be done when a country has all its outputs finished
-file.copy(dirOutputs, dirUnifiedOutputs, recursive = TRUE)
 
 #Importation into db process
 if(import_data_to_db){
