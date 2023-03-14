@@ -250,6 +250,7 @@ for (i in 1:length(totalMonths)) {
 }
 finalMetricsCsv <- as.data.frame(do.call(rbind, monthAuxList))
 # Writting metrics csv
+finalMetricsCsv <- na.omit(finalMetricsCsv)
 write.table(finalMetricsCsv, paste0(path_save, "/metrics.csv"), row.names = FALSE, sep = ",")
 
 ################### end of writting metrics.csv ##########################

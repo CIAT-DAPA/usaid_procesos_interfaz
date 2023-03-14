@@ -215,6 +215,8 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
                          x %>% mutate(measure='land_pre_day') %>% dplyr::select(measure, everything()) %>%
                           tidy_descriptive(., id_station, id_soil, id_cultivar, y, y)}) %>% 
     compact %>% bind_rows()
+  #Deleting NA rows
+  outputs_df4 <- na.omit(outputs_df4)
 
 # This part extract phenological phase dates per each setup
 # crop_conf = read_csv(paste0(dir_inputs_setup,"crop_conf.csv"))  

@@ -237,9 +237,9 @@ run_oryza_by_setup <- function() {
   setwd(dirModeloArrozOutputs)
   # no_cores = 3 in server
   #results <- mclapply(inputsList, make_request_oryza, mc.cores = 3, mc.preschedule = F)
-  results <- mclapply(1:length(inputsList), function(i) {
+  results <- mclapply(1:length(inputsList[1:3]), function(i) {
     make_request_oryza(inputsList[i])
-    Sys.sleep(2)
+    #Sys.sleep(2)
 
   }, mc.cores = 3, mc.preschedule = F)
 }
@@ -525,17 +525,18 @@ if (currentCountry == "COLOMBIA" || currentCountry == "ANGOLA") {
   source(paste(dirForecast, "PyCPT_subseasonal_outputs_process_R.r", sep = "", collapse = NULL))
 }
 
-# Resampling process
-runRemuestreo <- source(paste(dirForecast, "02_remuestreo.R", sep = "", collapse = NULL))
-# Dowloading and final joining data process
-runJoinFinalData <- source(paste(dirForecast, "03_join_wth_final.R", sep = "", collapse = NULL))
-
+#Rasters upload
 if (currentCountry == "GUATEMALA" || currentCountry == "ETHIOPIA") {
   # Import rasters to Geoserver
   source(paste0(dirForecast, "raster_upload.r"))
   uploadRasterFiles()
 
 }
+
+# Resampling process
+runRemuestreo <- source(paste(dirForecast, "02_remuestreo.R", sep = "", collapse = NULL))
+# Dowloading and final joining data process
+runJoinFinalData <- source(paste(dirForecast, "03_join_wth_final.R", sep = "", collapse = NULL))
 
 #new dssat module
 if (currentCountry == "ETHIOPIA") {
