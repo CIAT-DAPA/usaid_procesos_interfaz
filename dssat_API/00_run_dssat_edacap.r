@@ -217,15 +217,18 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
     compact %>% bind_rows()
 
 # This part extract phenological phase dates per each setup
-# crop_conf = read_csv(paste0(dir_inputs_setup,"crop_conf.csv"))  
-# for(i in 1:length(dir_run)){
-#   data_files <- paste0(dir_run[i]) 
-#   phenological_phase_dates = getPhenologicalPhaseDates(data_files,crop_conf,initial_date,final_date,id_station,id_cultivar,id_soil)
-#   write_csv(phenological_phase_dates, paste0(dir_outputs, id, "_phenological-phases.csv"))
-#   }
+  
 
 #If crop_conf exists run stress_risk
  if(file.exists(paste0(dir_inputs_setup, "crop_conf.csv"))){
+
+  crop_conf = read_csv(paste0(dir_inputs_setup,"crop_conf.csv"))
+  for(i in 1:length(dir_run)){
+    data_files <- paste0(dir_run[i])
+    phenological_phase_dates = getPhenologicalPhaseDates(data_files,crop_conf,initial_date,initial_date,id_station,id_cultivar,id_soil)
+    write_csv(phenological_phase_dates, paste0(dir_outputs, id, "_phenological-phases.csv"))
+  }
+
 #if(FALSE){
   stress_risk_all_days <- stress_risk_all_safe(dir_run, dir_inputs_setup)
   names_op <- names(outputs_df1)
@@ -248,21 +251,21 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
                  "\n Irrigation: ", planting_details$IRR, "\n Fertilization: ", planting_details$FERT ))
   
   setwd(wd_p)
-} else {
-  write_csv(bind_rows(outputs_df1, outputs_df2, outputs_df4), paste0(dir_outputs, id, ".csv"))
-  
-  #tictoc::toc()
-  
-  message(paste0("Successful Simulation \n Crop: ", 
-                 crop, " - Cultivar: ", cultivar[2], "\n Soil: ", soil, 
-                 "\n Irrigation: ", planting_details$IRR, "\n Fertilization: ", planting_details$FERT ))
-  
-  setwd(wd_p)
+  } else {
+    write_csv(bind_rows(outputs_df1, outputs_df2, outputs_df4), paste0(dir_outputs, id, ".csv"))
+    
+    #tictoc::toc()
+    
+    message(paste0("Successful Simulation \n Crop: ", 
+                  crop, " - Cultivar: ", cultivar[2], "\n Soil: ", soil, 
+                  "\n Irrigation: ", planting_details$IRR, "\n Fertilization: ", planting_details$FERT ))
+    
+    setwd(wd_p)
 
-}
+  }
 
 #Deleting model run files
-map(current_dir_run, ~unlink(.x, recursive=TRUE))
+  map(current_dir_run, ~unlink(.x, recursive=TRUE))
   
 }
 

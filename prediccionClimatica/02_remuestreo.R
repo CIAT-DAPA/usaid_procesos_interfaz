@@ -286,6 +286,9 @@ resampling <-  function(data, CPT_prob, year_forecast){
   # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   # 1. Fix february: depends if leap year it's true or false.
   # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  tryCatch(
+      {
+        count_epa = count_epa + 1
   season1 <- CPT_prob %>% dplyr::select(Season) %>% unique() %>% filter(row_number() == 1) %>% .$Season
   
   year_f_leap <- ifelse(season1 %in% c('ASO', 'SON', 'OND', 'NDJ', 'DJF'), year_forecast + 1, year_forecast)
@@ -299,7 +302,7 @@ resampling <-  function(data, CPT_prob, year_forecast){
     dplyr::select(data) %>% 
     unnest %>% 
     arrange(year)
-  
+  print("Pase create new data")
   # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= 
   # =-=-=-=-=  Do years (start year and end year)...
   
@@ -325,7 +328,7 @@ resampling <-  function(data, CPT_prob, year_forecast){
     mutate(month_data = purrr::map2(.x = Season, .y = xi, 
                                     .f = do_organize_data, data = data, 
                                     Intial_year = Intial_year, last_year = last_year))
-  
+  print("Pase Times")
   # This function do the 100 category samples.   
   Times <- Times %>% mutate(cat = purrr::map(.x = xi,.f = sample_category))
   
@@ -344,7 +347,7 @@ resampling <-  function(data, CPT_prob, year_forecast){
     unnest %>% 
     set_names(paste0(letters[1:2], '.',  Times$Season)) %>% 
     cbind(id = 1:100, .)
-  
+  print("Pase Base years")
   # This function extract daily data using sample year.  
   daily_data <- Times %>% 
     mutate(daily_data = purrr::map2(.x = Season, .y = cat, .f = day_sample, 
@@ -364,14 +367,15 @@ resampling <-  function(data, CPT_prob, year_forecast){
   # add extra
   months <- data_to_esc %>% dplyr::select(month) %>% unique()
   cond_change <- isTRUE(sum(months > 7) > 0 & sum(months < 6) > 0) == TRUE
-  
+  print("Antes de escenaries")
+  print(data_to_esc)
   Escenaries <-  data_to_esc %>%
     mutate(year = year_forecast) %>% 
     mutate(year = year_f_leap)  %>%
     # mutate(year = ifelse(Season %in% c('NDJ', 'DJF') & month == 1, year + 1, ifelse(Season == 'DJF' & month == 2, year + 1, year))) %>%
     dplyr::select(-Season) %>% 
     nest(-id) 
-  
+  print("Pase Escenaries")
   # Here was Find_Summary function
   # In this part we create sceneries with min and max years 
   # (building from aggregate precipitation).
@@ -386,15 +390,21 @@ resampling <-  function(data, CPT_prob, year_forecast){
     mutate(year = ifelse(cond_change == TRUE & month < 6, year + 1, year)) %>% 
     dplyr::select(-Season) %>% 
     nest(-Type)
-  
+  print("Pase Esc_Type")
   # This object is the mix with 3 data set (sceneries, sample years and sceneries types).
   All_data <- bind_cols( Escenaries %>% mutate(Row = 'a') %>% nest(-Row),
                          Base_years %>% mutate(Row1 = 'a') %>% nest(-Row1) %>% rename(Base_years = data)) %>% 
     bind_cols(Esc_Type %>% mutate(Row2 = 'a') %>% nest(-Row2) %>% rename(Esc_Type = data) ) %>% 
     dplyr::select(-Row1, -Row2)
   # dplyr::select(-Row)
-  
-  return(All_data)}
+  print("Acabe")
+  return(All_data)
+      },
+      error = function(e) {
+        cat(paste("Daily: ", count_epa, "ERROR :"), conditionMessage(e), "\n")
+      }
+    )
+  }
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

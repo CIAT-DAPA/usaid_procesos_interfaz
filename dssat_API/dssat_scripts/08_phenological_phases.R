@@ -9,7 +9,7 @@ getPhenologicalPhaseDates = function(folder,limits,initial_date,final_date,stati
   
   for(j in 1:nrow(limits)){
     measure = paste0(limits[j,c("name")])
-    phase_treatments = data.frame(matrix(ncol = 6, nrow = 99))
+    phase_treatments = data.frame(matrix(ncol = 9, nrow = 99))
     colnames(phase_treatments) <- c("measure", "start_phase_date", "end_phase_date", "diference", "initial_date", "end_date","w_station","cultivar","soil")
     for(i in 1:99){
       a<-subset(df_plantgro,df_plantgro$GSTD > as.numeric(limits[j,c("min")]) & df_plantgro$GSTD < as.numeric(limits[j,c("max")]))
