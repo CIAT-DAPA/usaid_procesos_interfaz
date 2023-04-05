@@ -181,6 +181,7 @@ for (i in 2:length(list_Prob_Forec)) {
     list_Prob_Forec_new <- rbind(list_Prob_Forec_new, as.data.frame(list_Prob_Forec[[i]]))
 }
 # Writting probabilities csv
+list_Prob_Forec_new <- na.omit(list_Prob_Forec_new)
 write.table(list_Prob_Forec_new, paste0(path_save, "/probabilities.csv"), row.names = FALSE, sep = ",")
 
 

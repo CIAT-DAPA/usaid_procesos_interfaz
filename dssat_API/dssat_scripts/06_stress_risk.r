@@ -55,7 +55,7 @@ read_PlantGro = function(filep){
 
 
 
-stress_risk = function(folder,type,limits){
+stress_risk = function(folder,type,limits, initial_date){
   # PlantGro_file <- "C:/DSSAT48/Wheat/PlantGro.OUT"
   #PlantGro_file <- paste0("D:/workdir/dssat_API700/outputs/1/PlantGro.OUT"
   PlantGro_file <- paste0(folder,"PlantGro.OUT")
@@ -155,7 +155,7 @@ stress_risk = function(folder,type,limits){
 }
 
 #Gets stress risk for all planting dates
-stress_risk_all <- function(data_files_all, dir_inputs_setup){
+stress_risk_all <- function(data_files_all, dir_inputs_setup, initial_date){
   
   crop_conf = read_csv(paste0(dir_inputs_setup,"crop_conf.csv"))
   stresses_list <- list()
@@ -163,8 +163,8 @@ stress_risk_all <- function(data_files_all, dir_inputs_setup){
   data <- mclapply(1:length(data_files_all), function(i) {
     data_files <- paste0(data_files_all[i])
 
-    values_w <- stress_risk(data_files,"w",crop_conf)
-    values_n <- stress_risk(data_files,"n",crop_conf)
+    values_w <- stress_risk(data_files,"w",crop_conf, initial_date)
+    values_n <- stress_risk(data_files,"n",crop_conf, initial_date)
 
     stresses_list <- append(stresses_list, c(values_w, values_n))
   

@@ -2,7 +2,9 @@
 # Cores to use when the crop models run in parallel. Change this parameter to use more cores.
 no_cores <- as.numeric(Sys.getenv("N_CORES"))
 #countries_list <- list("COLOMBIA", "ETHIOPIA", "ANGOLA")
-countries_ids <- list("COLOMBIA" = "61e59d829d5d2486e18d2ea8", "ETHIOPIA" = "61e59d829d5d2486e18d2ea9", "ANGOLA" = "62a739250dd05810f0e2938d", "GUATEMALA"="636c0813e57f2e6ac61394e6")
+
+countries_ids <- list("COLOMBIA" = "61e59d829d5d2486e18d2ea8", "ETHIOPIA" = "61e59d829d5d2486e18d2ea9", "ANGOLA" = "62a739250dd05810f0e2938d", "GUATEMALA"="636c0813e57f2e6ac61394e6"
+"MALAWI"="641c820e4fb2a6438cc670e7", "TANZANIA"="641c82214fb2a6438cc670eb", "ZAMBIA"="641c82304fb2a6438cc670ee")
 
 #Taking arguments from cmd
 args <- commandArgs(trailingOnly = TRUE)
@@ -237,7 +239,7 @@ run_oryza_by_setup <- function() {
   setwd(dirModeloArrozOutputs)
   # no_cores = 3 in server
   #results <- mclapply(inputsList, make_request_oryza, mc.cores = 3, mc.preschedule = F)
-  results <- mclapply(1:length(inputsList[1:3]), function(i) {
+  results <- mclapply(1:length(inputsList), function(i) {
     make_request_oryza(inputsList[i])
     #Sys.sleep(2)
 
@@ -293,11 +295,17 @@ runDssatModule <- function(crop){
     # Set up run paths
     current_dir_inputs_climate <- paste0(path_output, "/", station, "/")
     current_setup_dir <- paste0(dirCurrentCropInputs, id, "/")
-    #if(currentCountry=="COLOMBIA" || (currentCountry=="ETHIOPIA" && crop == "maize")){
+    # if(currentCountry=="COLOMBIA" || (currentCountry=="ETHIOPIA" && crop == "wheat")){
 
-      skip_lines <- if (currentCountry == "COLOMBIA") 2 else 4
-      skip_cul <- read_lines(paste0(current_conf, "/", cul_file, ".CUL")) %>% str_detect("@VAR#") %>% which() +skip_lines
-      culFile <- read_lines(paste0(current_conf, "/", cul_file, ".CUL"))[skip_cul[1]]
+      # skip_lines <- ifelse(currentCountry == "COLOMBIA", 2, ifelse(crop=="maize", 5, 4))
+      # skip_cul <- read_lines(paste0(current_conf, "/", cul_file, ".CUL")) %>% str_detect("@VAR#") %>% which() +skip_lines
+      # culFile <- read_lines(paste0(current_conf, "/", cul_file, ".CUL"))[skip_cul[1]]
+      # cultivar <- strsplit(culFile, " ", fixed=T)
+      # cultivar <- c(cultivar[[1]][1], cultivar[[1]][2])
+
+      skip_cul <- readLines(paste0(current_conf, "/", cul_file, ".CUL"), warn=FALSE)
+      excluded_characters <- c("^!", "^@", "^\\*")
+      culFile <- skip_cul[!grepl(paste(excluded_characters, collapse = "|"), skip_cul)]
       cultivar <- strsplit(culFile, " ", fixed=T)
       cultivar <- c(cultivar[[1]][1], cultivar[[1]][2])
       
@@ -306,15 +314,14 @@ runDssatModule <- function(crop){
       soil <- strsplit(soilFile, " ", fixed=T)
       soil <- substring(soil[[1]][1], 2)
 
-      #COLOMBIA
       run_crop_dssat(id, crop, current_dir_inputs_climate, current_setup_dir, 45, soil, cultivar)
       # tictoc::toc()
 
-    #} else {
+    # } else {
 
-      #run_crop_dssat(id, crop, current_dir_inputs_climate, current_setup_dir, 25)
-      #tictoc::toc()
-    #}
+    #   run_crop_dssat(id, crop, current_dir_inputs_climate, current_setup_dir, 45)
+    #   #tictoc::toc()
+    # }
     
     
   
@@ -511,15 +518,15 @@ if(extract_input_data){
 }
 
 #Downloading observed data for prepare climate scenaries in crops setups
- if (currentCountry == "COLOMBIA" || currentCountry == "ETHIOPIA") {
-  source(paste0(dir_prepare_observed_data, "downloadObservedData.R"))
-  downloadObservedData(dir_stations, format(strptime(as.character(Sys.Date()), "%Y-%m-%d"),"%d/%m/%Y" ), path_output_observed_data, currentCountry)
- }
+# if (currentCountry == "COLOMBIA" || currentCountry == "ETHIOPIA") {
+#   source(paste0(dir_prepare_observed_data, "downloadObservedData.R"))
+#   downloadObservedData(dir_stations, format(strptime(as.character(Sys.Date()), "%Y-%m-%d"),"%d/%m/%Y" ), path_output_observed_data, currentCountry)
+# }
 # Prediction process
-if (currentCountry == "COLOMBIA" || currentCountry == "ANGOLA") {
+if (currentCountry == "COLOMBIA" || currentCountry == "ANGOLA" || currentCountry == "MALAWI" || currentCountry == "ZAMBIA" || currentCountry == "TANZANIA") {
   Sys.setenv(CPT_BIN_DIR = "/forecast/models/CPT/15.5.10/bin/")
   source(paste(dirForecast, "01_prediccion.R", sep = "", collapse = NULL))
-} else {
+  } else if (currentCountry == "ETHIOPIA"){
   Sys.setenv(CPT_BIN_DIR = "/forecast/models/CPT/17.6.1/bin/")
   source(paste(dirForecast, "PyCPT_seasonal_outputs_process_R.r", sep = "", collapse = NULL))
   source(paste(dirForecast, "PyCPT_subseasonal_outputs_process_R.r", sep = "", collapse = NULL))
@@ -540,13 +547,16 @@ runJoinFinalData <- source(paste(dirForecast, "03_join_wth_final.R", sep = "", c
 
 #new dssat module
 if (currentCountry == "ETHIOPIA") {
-
-  runDssatModule("wheat")
-  runDssatModule("maize")
+  crop <- "wheat"
+  runDssatModule(crop)
+  crop <- "maize"
+  runDssatModule(crop)
 }
+
 ## Rice crop model process
 if (currentCountry == "COLOMBIA") {
   ## Maize crop model process
+  crop <- "maize"
   runDssatModule("maize")
 
   setups <- list.dirs(dirModeloArrozInputs, full.names = T)

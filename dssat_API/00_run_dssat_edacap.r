@@ -92,7 +92,7 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
   location <- load_coordinates(dir_inputs_setup)
   
   ### For EDACaP location file contain id_soil and cultivar name
-  # if(currentCountry=="COLOMBIA" || (currentCountry=="ETHIOPIA" && crop == "maize")){
+  # if(currentCountry=="COLOMBIA" || (currentCountry=="ETHIOPIA" && crop == "wheat")){
   #   soil <- soil
   #   cultivar <- cultivar
   # } else {
@@ -101,7 +101,7 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
   # }
   
   climate_scenaries <- load_all_climate(dir_inputs_climate)[-100]
-  planting_details_column_name <- if (currentCountry=="COLOMBIA" || (currentCountry=="ETHIOPIA" && crop == "maize")) "value" else crop
+  planting_details_column_name <- if (currentCountry=="COLOMBIA") "value" else crop
   
   planting_details <- read_csv(paste0(dir_inputs_setup, "planting_details.csv"), show_col_types = F) %>%
     dplyr::select(name, all_of(planting_details_column_name)) %>%  pivot_wider(names_from = name, values_from = all_of(planting_details_column_name))
@@ -189,7 +189,7 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
   
   #tictoc::toc()
   
-  
+
   outputs_df1 <- map2(.x = map(sim_data, "summary"),
                       .y = input_dates$planting_date, 
                       function(x,y){
@@ -218,18 +218,12 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
   #Deleting NA rows
   outputs_df4 <- na.omit(outputs_df4)
 
-# This part extract phenological phase dates per each setup
-# crop_conf = read_csv(paste0(dir_inputs_setup,"crop_conf.csv"))  
-# for(i in 1:length(dir_run)){
-#   data_files <- paste0(dir_run[i]) 
-#   phenological_phase_dates = getPhenologicalPhaseDates(data_files,crop_conf,initial_date,final_date,id_station,id_cultivar,id_soil)
-#   write_csv(phenological_phase_dates, paste0(dir_outputs, id, "_phenological-phases.csv"))
-#   }
+
 
 #If crop_conf exists run stress_risk
  if(file.exists(paste0(dir_inputs_setup, "crop_conf.csv"))){
 #if(FALSE){
-  stress_risk_all_days <- stress_risk_all_safe(dir_run, dir_inputs_setup)
+  stress_risk_all_days <- stress_risk_all_safe(dir_run, dir_inputs_setup, initial_date)
   names_op <- names(outputs_df1)
   outputs_df3 <- map2(.x = stress_risk_all_days,
                       .y = input_dates$planting_date, 
@@ -239,19 +233,33 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
                           tidy_descriptive(., id_station, id_soil, id_cultivar, y, y)}) %>% 
     compact %>% bind_rows()
 
-  #execute_dssat(dir_run[[3]])
-
   #Replacing NA values
   outputs_df3[is.na(outputs_df3)] <- 0
   drop_na(outputs_df3, coef_var)
-  write_csv(bind_rows(outputs_df1, outputs_df2, outputs_df3, outputs_df4), paste0(dir_outputs, id, ".csv"))
+  #Fixing end date column. start + sim_freq
+  final_csv <- bind_rows(outputs_df1, outputs_df2, outputs_df3, outputs_df4)
+  final_csv$end <- as.Date(final_csv$end) + (sim_freq - 1)
+  final_csv <- na.omit(final_csv)
+  write_csv(final_csv, paste0(dir_outputs, id, ".csv"))
   message(paste0("Successful Simulation \n Crop: ", 
                  crop, " - Cultivar: ", cultivar[2], "\n Soil: ", soil, 
                  "\n Irrigation: ", planting_details$IRR, "\n Fertilization: ", planting_details$FERT ))
   
+  # This part extract phenological phase dates per each setup
+  crop_conf = read_csv(paste0(dir_inputs_setup,"crop_conf.csv"))
+  for(i in 1:length(dir_run)){
+    data_files <- paste0(dir_run[i])
+    phenological_phase_dates = getPhenologicalPhaseDates(data_files,crop_conf,initial_date,id_station,id_cultivar,id_soil)
+    write_csv(phenological_phase_dates, paste0(dir_outputs, id, "_phenological-phases.csv"))
+  }
+  
   setwd(wd_p)
 } else {
-  write_csv(bind_rows(outputs_df1, outputs_df2, outputs_df4), paste0(dir_outputs, id, ".csv"))
+  #Fixing end date column. start + sim_freq
+  final_csv <- bind_rows(outputs_df1, outputs_df2, outputs_df4)
+  final_csv$end <- as.Date(final_csv$end) + (sim_freq - 1)
+  write_csv(final_csv, paste0(dir_outputs, id, ".csv"))
+
   
   #tictoc::toc()
   
