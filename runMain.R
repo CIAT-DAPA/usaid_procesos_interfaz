@@ -3,7 +3,7 @@
 no_cores <- as.numeric(Sys.getenv("N_CORES"))
 #countries_list <- list("COLOMBIA", "ETHIOPIA", "ANGOLA")
 
-countries_ids <- list("COLOMBIA" = "61e59d829d5d2486e18d2ea8", "ETHIOPIA" = "61e59d829d5d2486e18d2ea9", "ANGOLA" = "62a739250dd05810f0e2938d", "GUATEMALA"="636c0813e57f2e6ac61394e6"
+countries_ids <- list("COLOMBIA" = "61e59d829d5d2486e18d2ea8", "ETHIOPIA" = "61e59d829d5d2486e18d2ea9", "ANGOLA" = "62a739250dd05810f0e2938d", "GUATEMALA"="636c0813e57f2e6ac61394e6", 
 "MALAWI"="641c820e4fb2a6438cc670e7", "TANZANIA"="641c82214fb2a6438cc670eb", "ZAMBIA"="641c82304fb2a6438cc670ee")
 
 #Taking arguments from cmd
