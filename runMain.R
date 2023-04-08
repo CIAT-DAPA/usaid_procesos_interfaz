@@ -540,8 +540,12 @@ if (currentCountry == "GUATEMALA" || currentCountry == "ETHIOPIA") {
 #new dssat module
 if (currentCountry == "ETHIOPIA") {
 
-  runDssatModule("wheat")
-  runDssatModule("maize")
+
+    crop <- "wheat"
+    runDssatModule("wheat")
+    crop <- "maize"
+    runDssatModule("maize")
+    
 }
 ## Rice crop model process
 if (currentCountry == "COLOMBIA") {

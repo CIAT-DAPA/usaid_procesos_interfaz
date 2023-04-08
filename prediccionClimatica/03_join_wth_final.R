@@ -264,7 +264,7 @@ write_scenaries <- function(current_index=NULL){
   length_wth <- nrow(wth_escenaries)
   for (current_index in seq(current_index, length_wth, 100)) {
     
-    Map(function_to_save, wth_escenaries$id[current_index:min(current_index+99, length_wth)],  wth_escenaries$wth_final[current_index:min(current_index+99, length_wth)], path_output)
+    Map(function_to_save_safe, wth_escenaries$id[current_index:min(current_index+99, length_wth)],  wth_escenaries$wth_final[current_index:min(current_index+99, length_wth)], path_output)
     print(paste0(current_index, "-", min(current_index+99, length_wth), " scenaries written"))
 
   }
