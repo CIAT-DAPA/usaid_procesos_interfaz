@@ -218,7 +218,7 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
   #Deleting NA rows
   outputs_df4 <- na.omit(outputs_df4)
 
-
+  
 
 #If crop_conf exists run stress_risk
  if(file.exists(paste0(dir_inputs_setup, "crop_conf.csv"))){
@@ -236,8 +236,24 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
   #Replacing NA values
   outputs_df3[is.na(outputs_df3)] <- 0
   drop_na(outputs_df3, coef_var)
+
+  hazard_indicators_count_days <- hazard_count_days_all(dir_run)
+  outputs_df5 <- map2(.x = hazard_indicators_count_days,
+                      .y = input_dates$planting_date, 
+                      function(x,y){
+                         x %>% tidy_descriptive(., id_station, id_soil, id_cultivar, y, y)}) %>% 
+    compact %>% bind_rows()
+
+  hazard_indicators_water <- hazard_water_all(dir_run)
+  outputs_df6 <- map2(.x = hazard_indicators_water,
+                      .y = input_dates$planting_date, 
+                      function(x,y){
+                         x %>% tidy_descriptive(., id_station, id_soil, id_cultivar, y, y)}) %>% 
+    compact %>% bind_rows()
+
+
   #Fixing end date column. start + sim_freq
-  final_csv <- bind_rows(outputs_df1, outputs_df2, outputs_df3, outputs_df4)
+  final_csv <- bind_rows(outputs_df1, outputs_df2, outputs_df3, outputs_df4, outputs_df5, outputs_df6)
   final_csv$end <- as.Date(final_csv$end) + (sim_freq - 1)
   final_csv <- na.omit(final_csv)
   write_csv(final_csv, paste0(dir_outputs, id, ".csv"))

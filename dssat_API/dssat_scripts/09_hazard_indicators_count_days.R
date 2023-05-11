@@ -1,24 +1,21 @@
-g=gc();rm(list=ls())
-require(pacman)
+#g=gc();rm(list=ls())
+
 p_load(lubridate, tidyverse,readr,stringr,tidyr,data.table)
 
-root <- "D:/OneDrive - CGIAR/Desktop/aclimate_ETH/DSSAT_outputs/"
-PlantGro_r <-  paste0(root, "test/PlantGro.OUT")
-Weather_r  <-  paste0(root, "test/Weather.OUT")
-crop_conf_r  <-  paste0(root, "test/crop_conf.csv")
 ##################
 ##### ACRONYMS  ##
 ##################
-# hs_ndr10_t
-# hs_ndr40_t
-# hs_ndr5_h_m
-# hs_ndr40_bh_m
-# hs_cdr5_h_f
-# hs_cdr5_f_m
-# hs_ndt2_b_f
-# hs_ndt28_b_f
+# ndr10_t
+# ndr40_t
+# ndr5_h_m
+# ndr40_bh_m
+# cdr5_h_f
+# cdr5_f_m
+# ndt2_b_f
+# ndt28_b_f
+# acronym <- "ndr40_t"
 
-hazards <- function(root, PlantGro_r , Weather_r, crop_conf_r,acronym ){
+hazards_count_days <- function(root, PlantGro_r , Weather_r, crop_conf_r,acronym ){
  
   #####################
   # Procesar PlantGro #
@@ -115,9 +112,10 @@ hazards <- function(root, PlantGro_r , Weather_r, crop_conf_r,acronym ){
   
   # Calcular indicadores 
   
-  crop_conf_inf <- read.csv(crop_conf_r)
-  
-  if(acronym == "hs_ndr10_t"){
+  crop_conf_inf <- read.csv(crop_conf_r,row.names = NULL)
+  #colnames(crop_conf_inf) <- colnames(crop_conf_inf[,2:5]) 
+  #crop_conf_inf <- crop_conf_inf[,1:4]
+  if(acronym == "ndr10_t"){
   
     con <- dplyr::filter(crop_conf_inf, name ==  acronym)   
     start <- con$min
@@ -144,9 +142,9 @@ hazards <- function(root, PlantGro_r , Weather_r, crop_conf_r,acronym ){
     NDR10_T <- do.call(rbind,NDR10_T)
     return(NDR10_T)
   } else {}
-  if(acronym == "hs_ndr40_t"){
+  if(acronym == "ndr40_t"){
     
-    con <- dplyr::filter(crop_conf_inf, name ==  acronym)   
+    con <- dplyr::filter(crop_conf_inf, name ==  acronym)  
     start <- con$min
     end   <- con$max
     # list_weather_condition = list()
@@ -171,7 +169,7 @@ hazards <- function(root, PlantGro_r , Weather_r, crop_conf_r,acronym ){
     NDR40_T <- do.call(rbind,NDR40_T)
     return(NDR40_T)
   } else {}
-  if(acronym == "hs_ndr5_h_m"){
+  if(acronym == "ndr5_h_m"){
     
     con <- dplyr::filter(crop_conf_inf, name ==  acronym)   
     start <- con$min
@@ -198,7 +196,7 @@ hazards <- function(root, PlantGro_r , Weather_r, crop_conf_r,acronym ){
     NDR5_H_M <- do.call(rbind,NDR5_H_M)
     return(NDR5_H_M)
   } else {}
-  if(acronym == "hs_ndr40_bh_m"){
+  if(acronym == "ndr40_bh_m"){
     
     con <- dplyr::filter(crop_conf_inf, name ==  acronym)   
     start <- con$min
@@ -225,7 +223,7 @@ hazards <- function(root, PlantGro_r , Weather_r, crop_conf_r,acronym ){
     NDR40_BH_M <- do.call(rbind,NDR40_BH_M)
     return(NDR40_BH_M)
   } else {}
-  if(acronym == "hs_cdr5_h_f"){
+  if(acronym == "cdr5_h_f"){
     
     con <- dplyr::filter(crop_conf_inf, name ==  acronym)   
     start <- con$min
@@ -261,7 +259,7 @@ hazards <- function(root, PlantGro_r , Weather_r, crop_conf_r,acronym ){
     CDR5_H_F$value[which(CDR5_H_F$value == "-Inf")] <- 0
     return(CDR5_H_F)
     } else {}
-  if(acronym == "hs_cdr5_f_m"){
+  if(acronym == "cdr5_f_m"){
     
     con <- dplyr::filter(crop_conf_inf, name ==  acronym)   
     start <- con$min
@@ -297,7 +295,7 @@ hazards <- function(root, PlantGro_r , Weather_r, crop_conf_r,acronym ){
     CDR5_F_M$value[which(CDR5_F_M$value == "-Inf")] <- 0
     return(CDR5_F_M)
   } else {}
-  if(acronym == "hs_ndt2_b_f"){
+  if(acronym == "ndt2_b_f"){
     
     con <- dplyr::filter(crop_conf_inf, name ==  acronym)   
     start <- con$min
@@ -324,7 +322,7 @@ hazards <- function(root, PlantGro_r , Weather_r, crop_conf_r,acronym ){
     NDT2_B_F <- do.call(rbind,NDT2_B_F)
     return(NDT2_B_F)
   } else {}
-  if(acronym == "hs_ndt28_b_f"){
+  if(acronym == "ndt28_b_f"){
     
     con <- dplyr::filter(crop_conf_inf, name ==  acronym)   
     start <- con$min
@@ -354,62 +352,80 @@ hazards <- function(root, PlantGro_r , Weather_r, crop_conf_r,acronym ){
   
   
 }
-ind <- c("hs_ndr10_t","hs_ndr40_t","hs_ndr5_h_m","hs_ndr40_bh_m","hs_cdr5_h_f","hs_cdr5_f_m","hs_ndt2_b_f","hs_ndt28_b_f" )
-indicadores <- lapply(1:length(ind) , function(i){
+
+#Gets indicators for all planting dates
+hazard_count_days_all <- function(data_files_all){
+
   
- df <-  hazards(root = root,
-          PlantGro= PlantGro_r ,
-          Weather= Weather_r,
-          crop_conf_r=crop_conf_r,
-          acronym= ind[i])
- return(df) 
-  
-})
-resumen <- lapply(1:length(indicadores), function(i){
-  
-  df <- indicadores[[i]]
-  data <- df 
-  
-  conf_upper <- function(var){
-    t.test(var)$conf.int[2]
-  }
-  conf_lower <- function(var){
+  hazards_list <- list()
+  ind <- c("ndr10_t","ndr40_t","ndr5_h_m","ndr40_bh_m","cdr5_h_f","cdr5_f_m","ndt2_b_f","ndt28_b_f")
+
+  data <- mclapply(1:length(data_files_all), function(i) {
+    data_files <- paste0(data_files_all[i])
+    PlantGro_r <-  paste0(data_files, "PlantGro.OUT")
+    Weather_r  <-  paste0(data_files, "Weather.OUT")
+    crop_conf_r  <-  paste0(data_files, "crop_conf.csv")
     
-    t.test(var)$conf.int[1]
-  } 
-  CV <- function(var){
-    
-    (sd(var)/mean(var))*100
-    
-  }
-  result <- data.frame(measure = unique(df$Acronym),
-                       avg = mean(df$value),
-                       median = median(df$value),
-                       min = min(df$value),
-                       max = max(df$value),
-                       quar_1 = quantile(df$value, 0.25),
-                       quar_2 = quantile(df$value, 0.50),
-                       quar_3 = quantile(df$value, 0.75),
-                       conf_lower <- conf_lower(df$value),
-                       conf_upper <- conf_upper(df$value),
-                       sd = sd(df$value), 
-                       perc_5 = quantile(df$value, 0.05),
-                       perc_95 = quantile(df$value, 0.95), 
-                       coef_var = CV(df$value))
-                       
-    colnames(result) <- c("measure","avg",
-                          "median","min","max","quar_1","quar_2","quar_3","conf_lower","conf_upper",
-                          "sd","perc_5","perc_95","coef_var")                   
+    indicadores <- lapply(1:length(ind) , function(j){
+  
+      df <-  hazards_count_days(root = data_files,
+            PlantGro= PlantGro_r ,
+            Weather= Weather_r,
+            crop_conf_r=crop_conf_r,
+            acronym= ind[j])
+      return(df) 
+  
+    })
+
+    resumen <- lapply(1:length(indicadores), function(k){
+  
+      df <- indicadores[[k]]
+      data <- df 
+      
+      conf_upper <- function(var){
+        t.test(var)$conf.int[2]
+      }
+      conf_lower <- function(var){
+        
+        t.test(var)$conf.int[1]
+      } 
+      CV <- function(var){
+        
+        (sd(var)/mean(var))*100
+        
+      }
+      result <- data.frame(measure = unique(df$Acronym),
+                          avg = mean(df$value),
+                          median = median(df$value),
+                          min = min(df$value),
+                          max = max(df$value),
+                          quar_1 = quantile(df$value, 0.25),
+                          quar_2 = quantile(df$value, 0.50),
+                          quar_3 = quantile(df$value, 0.75),
+                          conf_lower <- conf_lower(df$value),
+                          conf_upper <- conf_upper(df$value),
+                          sd = sd(df$value), 
+                          perc_5 = quantile(df$value, 0.05),
+                          perc_95 = quantile(df$value, 0.95), 
+                          coef_var = CV(df$value))
+                          
+        colnames(result) <- c("measure","avg",
+                              "median","min","max","quar_1","quar_2","quar_3","conf_lower","conf_upper",
+                              "sd","perc_5","perc_95","coef_var")                   
     return(result)                  
   
   
-})
-final <- do.call(rbind,resumen)
-row.names(final) <- 1:nrow(final)
+  })
+    final <- do.call(rbind,resumen)
+    row.names(final) <- 1:nrow(final)
+    final <- na.omit(final)
 
-final <- na.omit(final)
+    hazards_list <- append(hazards_list, final)
 
- 
+  }, mc.cores = no_cores, mc.preschedule = F)
+  return(map(data, bind_rows))
+
+}
 
 
 

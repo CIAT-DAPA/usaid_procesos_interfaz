@@ -27,27 +27,32 @@ geoclient = GeoserverClient(geo_url, geo_user, geo_pwd)
 
 # uploading above, below, normal and deterministic
 for current_store in stores_aclimate:
+    
+    try:
+        current_layer = current_store.split("_")[-1]
+        current_rasters_folder = os.path.join(folder_layers, current_layer)
+        rasters_files = os.listdir(current_rasters_folder)
 
-    current_layer = current_store.split("_")[-1]
-    current_rasters_folder = os.path.join(folder_layers, current_layer)
-    rasters_files = os.listdir(current_rasters_folder)
+        store_name = current_store
+        print("Importing")
+        geoclient.connect()
+        geoclient.get_workspace(workspace_name)
 
-    store_name = current_store
-    print("Importing")
-    geoclient.connect()
-    geoclient.get_workspace(workspace_name)
+        for r in rasters_files:
+            store = geoclient.get_store(store_name)
+            layer = os.path.join(current_rasters_folder, r)
+            if not store:
+                print("Creating mosaic")
+                geoclient.create_mosaic(
+                    store_name, layer, folder_properties, folder_tmp)
+            else:
+                print("Updating mosaic")
+                geoclient.update_mosaic(
+                    store, layer, folder_properties, folder_tmp)
+    except Exception as e:
+        print(str(e))
+        continue
 
-    for r in rasters_files:
-        store = geoclient.get_store(store_name)
-        layer = os.path.join(current_rasters_folder, r)
-        if not store:
-            print("Creating mosaic")
-            geoclient.create_mosaic(
-                store_name, layer, folder_properties, folder_tmp)
-        else:
-            print("Updating mosaic")
-            geoclient.update_mosaic(
-                store, layer, folder_properties, folder_tmp)
 
 # uploading dominants
 for current_store in stores_aclimate_dominant:

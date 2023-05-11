@@ -275,6 +275,8 @@ runDssatModule <- function(crop){
       source("dssat_scripts/06_stress_risk.R")
       source("dssat_scripts/07_land_preparation.R")
       source("dssat_scripts/08_phenological_phases.R")
+      source("dssat_scripts/09_hazard_indicators_count_days.R")
+      source("dssat_scripts/10_hazards_indicators_water_balance.R")
 
     },
     error = function(e) {
