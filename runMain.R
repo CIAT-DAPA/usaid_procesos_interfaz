@@ -255,7 +255,6 @@ runDssatModule <- function(crop){
     cul_file <- 'WHCER048'
   }
 
-
   dirCurrentCropInputs <- paste0(dirInputs, "cultivos/", if (currentCountry == "COLOMBIA" && crop == "maize") "maiz" else crop, "/", sep = "", collapse = NULL)
 
   ## Wheat setups
@@ -316,7 +315,17 @@ runDssatModule <- function(crop){
       soil <- strsplit(soilFile, " ", fixed=T)
       soil <- substring(soil[[1]][1], 2)
 
-      run_crop_dssat(id, crop, current_dir_inputs_climate, current_setup_dir, 45, soil, cultivar)
+      tryCatch({
+        #tictoc::tic()
+        run_crop_dssat(id, crop, current_dir_inputs_climate, current_setup_dir, 45, soil, cultivar)
+        #tictoc::toc()
+
+      }, error = function(e) {
+        dir_outputs <- paste0(dirOutputs, "cultivos/", if (currentCountry == "COLOMBIA" && crop == "maize") "maiz" else crop, "/", sep = "", collapse = NULL)
+        cat(conditionMessage(e))
+        system(paste0("rm -R ",dir_outputs, id,"/*"))
+      })
+      
       # tictoc::toc()
 
     # } else {
@@ -327,7 +336,7 @@ runDssatModule <- function(crop){
     
     
   
-  }, mc.cores = no_cores, mc.preschedule = F)
+  }, mc.cores = 5, mc.preschedule = F)
   tictoc::toc()
 
 }
@@ -341,10 +350,15 @@ prepared_metrics_and_probabilities_csv <- function(){
   ##
   for (c in seq(1:length(countries_ids))) {
     ## saving .csv probForecast for merging
-    if(names(countries_ids)[c]!="GUATEMALA"){
+    
+    if(file.exists(paste0("/forecast/workdir/", names(countries_ids)[c], "/outputs/prediccionClimatica/probForecast", "/metrics.csv"))){
       metrics_list[[length(metrics_list) + 1]] <- read_csv(paste0("/forecast/workdir/", names(countries_ids)[c], "/outputs/prediccionClimatica/probForecast", "/metrics.csv"))
     }
-    probabilities_list[[length(probabilities_list) + 1]] <- read_csv(paste0("/forecast/workdir/", names(countries_ids)[c], "/outputs/prediccionClimatica/probForecast", "/probabilities.csv"))
+    
+    if(file.exists(paste0("/forecast/workdir/", names(countries_ids)[c], "/outputs/prediccionClimatica/probForecast", "/probabilities.csv"))){
+      probabilities_list[[length(probabilities_list) + 1]] <- read_csv(paste0("/forecast/workdir/", names(countries_ids)[c], "/outputs/prediccionClimatica/probForecast", "/probabilities.csv"))
+    }
+    
     ## Copying outputs in common directory for importation into db process
     ## This copy must be done when a country has all its outputs finished
     file.copy(paste0("/forecast/workdir/", names(countries_ids)[c], "/outputs/"), dirUnifiedOutputs, recursive = TRUE)
@@ -414,7 +428,7 @@ dir_save <- paste0(dirPrediccionInputs, "descarga", sep = "", collapse = NULL)
 dir_runCPT <- paste0(dirPrediccionInputs, "run_CPT", sep = "", collapse = NULL)
 dir_response <- paste0(dirPrediccionInputs, "estacionesMensuales", sep = "", collapse = NULL)
 dir_stations <- paste0(dirPrediccionInputs, "dailyData", sep = "", collapse = NULL)
-dir_inputs_nextgen <- paste0(dirPrediccionInputs, "NextGen/", sep = "", collapse = NULL)
+dir_inputs_nextgen <- paste0(dirInputs, "NextGen/", sep = "", collapse = NULL)
 dirCultivosInputs <- paste0(dirInputs, "cultivos/", sep = "", collapse = NULL)
 # Input variables Maize model module
 dirModeloMaizInputs <- paste0(dirInputs, "cultivos/", maize_name_by_country, "/", sep = "", collapse = NULL)
@@ -553,6 +567,7 @@ if (currentCountry == "ETHIOPIA") {
   runDssatModule(crop)
   crop <- "maize"
   runDssatModule(crop)
+  
 }
 
 ## Rice crop model process
@@ -576,8 +591,8 @@ if(import_data_to_db){
   # Upload proccess results to interface database
   setwd(paste0(scriptsDir, "forecast_app"))
   CMDdirOutputs <- paste0(dirUnifiedOutputs, "outputs/") # paste0(gsub("/","\\\\",dirOutputs), "\\\"")
-  try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\""), intern = TRUE, ignore.stderr = TRUE))
-  #try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\"", " -frid \"", "63ee56f60d9469092b20b842", "\""), intern = TRUE, ignore.stderr = TRUE))
+  #try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\""), intern = TRUE, ignore.stderr = TRUE))
+  try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\"", " -frid \"", "648202f6a0488e3540a59e4e", "\""), intern = TRUE, ignore.stderr = TRUE))
 
 }
 

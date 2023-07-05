@@ -66,7 +66,7 @@ load_coordinates <- function(dir_inputs_run){
   }
   
   
-  print(paste0("dir_inputs_run: ", dir_inputs_run))
+  #print(paste0("dir_inputs_run: ", dir_inputs_run))
 #  require(readr)
   coordenadas <- read_csv(paste0(dir_inputs_run,'coordenadas.csv'), show_col_types = F) %>%
     as.data.frame() %>%

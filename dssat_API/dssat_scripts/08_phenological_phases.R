@@ -52,3 +52,25 @@ getPhenologicalPhaseDates = function(folder,limits,initial_date,station,cultivar
   colnames(phenologic_phases) <- columns_names
   return(phenologic_phases)
 }
+
+#Gets stress risk for all planting dates
+getPhenologicalPhaseDatesAll <- function(dir_run,crop_conf,initial_date,id_station,id_cultivar,id_soil){
+  phenological_list <- list()
+
+  data = mclapply(1:length(dir_run), function(i) {
+    data_files <- paste0(dir_run[i])
+   
+    phenological_list <- c(phenological_list, getPhenologicalPhaseDates(data_files,crop_conf,initial_date,id_station,id_cultivar,id_soil))
+
+  }, mc.cores = no_cores, mc.preschedule = F)
+  
+  pheno_data_frame = NULL
+  pheno_data_frame <- bind_rows(data)
+  final_pheno <- pheno_data_frame %>% group_by(phase, w_station, cultivar, soil) %>% summarise(start_phase_date = min(start_phase_date),
+  end_phase_date = max(end_phase_date),
+  initial_date = min(initial_date),
+  end_date = max(end_date))
+  columns_names = c("phase", "start_phase_date", "end_phase_date", "initial_date", "end_date","w_station","cultivar","soil")
+  final_pheno <- final_pheno[, columns_names]
+  return(final_pheno)
+}

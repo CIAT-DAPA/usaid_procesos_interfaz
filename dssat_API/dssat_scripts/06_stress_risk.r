@@ -5,7 +5,7 @@ read_PlantGro = function(filep){
     print("Forcing return from read_file...") 
     return(NULL)
   }
-  print(paste0("Loading file: ",filep))
+  #print(paste0("Loading file: ",filep))
   suppressMessages({fOUT = readLines(filep)})
   nottrashLines = grep(pattern = '[^ ]', fOUT)[!(grep(pattern = '[^ ]', fOUT) %in% 
                                                     c(grep(pattern = '^\\$', fOUT), 
@@ -149,6 +149,9 @@ stress_risk = function(folder,type,limits, initial_date){
                 quantile(nstress, 0.05,na.rm=T),
                 quantile(nstress, 0.95,na.rm=T),
                 sd(nstress,na.rm=T) / mean(nstress,na.rm=T) * 100) 
+                
+    output[output == "-Inf" | is.na(output)] <- NA
+    output[output == "Inf" | is.na(output)] <- NA
     return(output)
   })
   return(answer)
@@ -158,6 +161,8 @@ stress_risk = function(folder,type,limits, initial_date){
 stress_risk_all <- function(data_files_all, dir_inputs_setup, initial_date){
   
   crop_conf = read_csv(paste0(dir_inputs_setup,"crop_conf.csv"))
+  #Getting only the stress indicators
+  crop_conf <- filter(crop_conf, tag == "st,")
   stresses_list <- list()
 
   data <- mclapply(1:length(data_files_all), function(i) {

@@ -17,17 +17,50 @@ library(furrr)
 path_script <- getwd()
 setwd(path_script)
 
-crop <- "maize"
+crop <- "wheat"
 crop_area <- raster("base_data/harvested_area_maize_ethiopia.asc")     ### if not --> crop_area <-  NULL
 base_data <- read_csv("base_data/setups/base_weather_soil.csv")
-DEM_ETH <- getData('alt', country = 'ETH')
+DEM_ETH <- getData('alt', country = 'ETH') ##Ver opciones en Terra. Proximo a depreciarse
 soil_file <- "base_data/soil/SOIL.SOL"
 id_cultivar <- read_csv("base_data/setups/id_cutivars.csv") %>% dplyr::filter(crop == all_of(crop)) 
 freq_sim <- 3
 out_path <- "output/"
 
 
+delete_files <- function(){
+  directorio_principal <- "D:/OneDrive - CGIAR/Documents/GitHub/usaid_procesos_interfaz/dssat_API/crop_setups/output"
+  
+  # obtener una lista de todos los subdirectorios
+  subdirectorios <- list.dirs(directorio_principal, recursive = TRUE)
+  
+  # recorrer cada subdirectorio y eliminar los archivos con las extensiones .CUL y .csv
+  for (subdirectorio in subdirectorios) {
+    archivos <- list.files(subdirectorio)
+    archivos_a_eliminar <- archivos[grep("\\coordenadas.csv$", archivos)]
+    file.remove(file.path(subdirectorio, archivos_a_eliminar))
+  }
+}
 
+copy_cultivars <- function(){
+  directorio_principal <- "D:/OneDrive - CGIAR/Documents/GitHub/usaid_procesos_interfaz/dssat_API/crop_setups/output"
+  
+  # obtener una lista de todos los subdirectorios
+  subdirectorios <- list.dirs(directorio_principal, recursive = TRUE)
+  subdirectorios <- subdirectorios[-1]
+  
+  # recorrer cada subdirectorio y eliminar los archivos con las extensiones .CUL y .csv
+  for (subdirectorio in subdirectorios) {
+    ultima_parte <- basename(subdirectorio)
+    # Dividir la cadena en partes usando el guion bajo como separador
+    partes <- strsplit(ultima_parte, "_")[[1]]
+    # Obtener la segunda parte de la cadena (índice 2)
+    segunda_parte <- partes[2]
+    file.copy(paste0("base_data/crop/", segunda_parte, "/WHCER048.CUL"), paste0(subdirectorio, "/"))
+    
+  }
+  
+
+}
 create_setups_aclimate <- function(crop, base_data, crop_area = NULL, DEM_ETH, soil_file, id_cultivar, freq_sim = 3, out_path = "output/", ncores = 4){
   
   

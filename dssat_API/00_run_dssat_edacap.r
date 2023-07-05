@@ -114,7 +114,7 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
   sim_number <- length(input_dates$start_date)  # It depends of planting window form forecast
   
   ## Parallel computing 
-  ncores <- detectCores()-2
+  ncores <- no_cores
   if(ncores > sim_number){ncores <- sim_number}
   #plan(multisession, workers = ncores)
   
@@ -170,10 +170,7 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
   
   pmap(X_param, write_exp_dssat)
   
-  
-  #tictoc::tic()
-  
-  
+  #Paralelizado
   registerDoParallel(ncores)
   sim_data  <- foreach(
     i = dir_run, 
@@ -184,10 +181,14 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
       list(summary = read_summary(i) , weather = read_wth_out(i))
       
     }
-  
   closeAllConnections()
-  
-  #tictoc::toc()
+
+  #Secuencial
+  # sim_data <- lapply(dir_run, function(i) {
+  # map2(climate_scenaries, wth_station, ~write_wth_file(.x, i, .y, lat, long))
+  # execute_dssat(i, crop) 
+  # list(summary = read_summary(i), weather = read_wth_out(i))
+  # })
   
 
   outputs_df1 <- map2(.x = map(sim_data, "summary"),
@@ -236,38 +237,38 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
   #Replacing NA values
   outputs_df3[is.na(outputs_df3)] <- 0
   drop_na(outputs_df3, coef_var)
+  outputs_df3 <- outputs_df3 %>% filter(!grepl("Error", measure))
 
-  hazard_indicators_count_days <- hazard_count_days_all(dir_run)
-  outputs_df5 <- map2(.x = hazard_indicators_count_days,
-                      .y = input_dates$planting_date, 
-                      function(x,y){
-                         x %>% tidy_descriptive(., id_station, id_soil, id_cultivar, y, y)}) %>% 
-    compact %>% bind_rows()
+  
+    hazard_indicators_count_days <- hazard_count_days_all(dir_run)
+    outputs_df5 <- map2(.x = hazard_indicators_count_days,
+                        .y = input_dates$planting_date, 
+                        function(x,y){
+                          x %>% tidy_descriptive(., id_station, id_soil, id_cultivar, y, y)}) %>% 
+      compact %>% bind_rows()
 
-  hazard_indicators_water <- hazard_water_all(dir_run)
-  outputs_df6 <- map2(.x = hazard_indicators_water,
-                      .y = input_dates$planting_date, 
-                      function(x,y){
-                         x %>% tidy_descriptive(., id_station, id_soil, id_cultivar, y, y)}) %>% 
-    compact %>% bind_rows()
+    hazard_indicators_water <- hazard_water_all(dir_run)
+    outputs_df6 <- map2(.x = hazard_indicators_water,
+                        .y = input_dates$planting_date, 
+                        function(x,y){
+                          x %>% tidy_descriptive(., id_station, id_soil, id_cultivar, y, y)}) %>% 
+      compact %>% bind_rows()
 
 
-  #Fixing end date column. start + sim_freq
-  final_csv <- bind_rows(outputs_df1, outputs_df2, outputs_df3, outputs_df4, outputs_df5, outputs_df6)
-  final_csv$end <- as.Date(final_csv$end) + (sim_freq - 1)
-  final_csv <- na.omit(final_csv)
-  write_csv(final_csv, paste0(dir_outputs, id, ".csv"))
-  message(paste0("Successful Simulation \n Crop: ", 
-                 crop, " - Cultivar: ", cultivar[2], "\n Soil: ", soil, 
-                 "\n Irrigation: ", planting_details$IRR, "\n Fertilization: ", planting_details$FERT ))
+    #Fixing end date column. start + sim_freq
+    final_csv <- bind_rows(outputs_df1, outputs_df2, outputs_df3, outputs_df4, outputs_df5, outputs_df6)
+    final_csv$end <- as.Date(final_csv$end) + (sim_freq - 1)
+    final_csv <- na.omit(final_csv)
+    write_csv(final_csv, paste0(dir_outputs, id, ".csv"))
+    message(paste0("Successful Simulation \n Crop: ", 
+                  crop, " - Cultivar: ", cultivar[2], "\n Soil: ", soil, 
+                  "\n Irrigation: ", planting_details$IRR, "\n Fertilization: ", planting_details$FERT ))
+
   
   # This part extract phenological phase dates per each setup
   crop_conf = read_csv(paste0(dir_inputs_setup,"crop_conf.csv"))
-  for(i in 1:length(dir_run)){
-    data_files <- paste0(dir_run[i])
-    phenological_phase_dates = getPhenologicalPhaseDates(data_files,crop_conf,initial_date,id_station,id_cultivar,id_soil)
-    write_csv(phenological_phase_dates, paste0(dir_outputs, id, "_phenological-phases.csv"))
-  }
+  phenological_phase_dates = getPhenologicalPhaseDatesAll(dir_run,crop_conf,initial_date,id_station,id_cultivar,id_soil)
+  write_csv(phenological_phase_dates, paste0(dir_outputs, id, "_phenological-phases.csv"))
   
   setwd(wd_p)
 } else {
