@@ -37,7 +37,8 @@ hazards_water <- function(root, PlantGro_r , Weather_r, crop_conf_r,ET_r,ind ){
                              "SLAD",	"RDPD",	"PTFD",	"SWXD",	"WAVRD",	"WUPRD",	"WFTD",	"WFPD",	"WFGD",	"NFTD",	"NFPD",	"NFGD",
                              "NUPRD",	"TFPD",	"TFGD",	"VRNFD",	"DYLFD")
       
-      names(PlantGro)[1:49] = var_names_PlantGro
+      names(PlantGro) <- c("@YEAR", names(PlantGro[,-1]))
+      #names(PlantGro)[1:49] = var_names_PlantGro
       
       scenarios_plantgro[[i]] = PlantGro
       
@@ -54,7 +55,8 @@ hazards_water <- function(root, PlantGro_r , Weather_r, crop_conf_r,ET_r,ind ){
                              "SLAD",	"RDPD",	"PTFD",	"SWXD",	"WAVRD",	"WUPRD",	"WFTD",	"WFPD",	"WFGD",	"NFTD",	"NFPD",	"NFGD",
                              "NUPRD",	"TFPD",	"TFGD",	"VRNFD",	"DYLFD")
       
-      names(PlantGro)[1:49] = var_names_PlantGro
+      names(PlantGro) <- c("@YEAR", names(PlantGro[,-1]))
+      #names(PlantGro)[1:49] = var_names_PlantGro
       
       scenarios_plantgro[[i]] = PlantGro
       
@@ -84,7 +86,8 @@ hazards_water <- function(root, PlantGro_r , Weather_r, crop_conf_r,ET_r,ind ){
                             "TDYD", "TDWD", "TGAD", "TGRD", "WDSD", "CO2D",
                             "VPDF", "VPD", "OZON7", "WDATE")
       
-      names(Weather)[1:22] = var_names_weather
+      #names(Weather)[1:22] = var_names_weather
+      names(Weather) <- c("@YEAR", names(Weather[,-1]))
       
       scenarios_weather[[i]] = Weather
       
@@ -100,7 +103,8 @@ hazards_water <- function(root, PlantGro_r , Weather_r, crop_conf_r,ET_r,ind ){
                             "TDYD", "TDWD", "TGAD", "TGRD", "WDSD", "CO2D",
                             "VPDF", "VPD", "OZON7", "WDATE")
       
-      names(Weather)[1:22] = var_names_weather
+      #names(Weather)[1:22] = var_names_weather
+      names(Weather) <- c("@YEAR", names(Weather[,-1]))
       
       scenarios_weather[[i]] = Weather
       
@@ -131,8 +135,8 @@ hazards_water <- function(root, PlantGro_r , Weather_r, crop_conf_r,ET_r,ind ){
       
       
       
-      
-      names(ET)[1:33] = var_names_ET
+      names(ET) <- c("@YEAR", names(ET[,-1]))
+      #names(ET)[1:33] = var_names_ET
       
       scenarios_ET[[i]] = ET
       
@@ -148,7 +152,8 @@ hazards_water <- function(root, PlantGro_r , Weather_r, crop_conf_r,ET_r,ind ){
                        "EMAC","KCAA","KBSA","KEAA","ES1D","ES2D","ES3D","ES4D","ES5D","ES6D",
                        "ES7D","TRWUD","TWUPD")
       
-      names(ET)[1:22] = var_names_ET
+      names(ET) <- c("@YEAR", names(ET[,-1]))
+      #names(ET)[1:22] = var_names_ET
       
       scenarios_ET[[i]] = ET
       
@@ -159,8 +164,8 @@ hazards_water <- function(root, PlantGro_r , Weather_r, crop_conf_r,ET_r,ind ){
   
   # Calcular indicadores 
   crop_conf_inf <- read_csv(crop_conf_r)
-  colnames(crop_conf_inf) <- colnames(crop_conf_inf[,2:5]) 
-  crop_conf_inf <- crop_conf_inf[,1:4]
+  #colnames(crop_conf_inf) <- colnames(crop_conf_inf[,2:5]) 
+  #crop_conf_inf <- crop_conf_inf[,1:4]
   
   ###################   1
   if("hb_s_e" %in%  ind){
@@ -376,7 +381,7 @@ hazards_water <- function(root, PlantGro_r , Weather_r, crop_conf_r,ET_r,ind ){
   
 }
 
-hazards_water_safe <- purrr::possibly(hazards_water, NA)
+#hazards_water_safe <- purrr::possibly(hazards_water, NA)
 
 #Gets indicators for all planting dates
 hazard_water_all <- function(data_files_all){
@@ -397,8 +402,12 @@ hazard_water_all <- function(data_files_all){
                     ET_r=ET_r,
                     ind= ind)
 
-      df[df == "-Inf" | is.na(df)] <- NA
-      df[df == "Inf" | is.na(df)] <- NA
+      df <- lapply(1:length(ind), function(k){
+        tbl <- df[[k]]
+        tbl[tbl == "-Inf"] <- NA
+        tbl[tbl == "Inf"] <- NA
+        return(tbl)
+      })
       return(df) 
   }, mc.cores = no_cores, mc.preschedule = F)
 
@@ -417,12 +426,12 @@ hazard_water_all <- function(data_files_all){
       conf_lower <- function(var){
         
         t.test(var)$conf.int[1]
-      } 
-      CV <- function(var){
-        
-        (sd(var)/mean(var))*100
-        
       }
+      CV <- function(var){
+          
+          (sd(var)/mean(var))*100    
+      } 
+     
       if(!is.na(df)){
         result <- data.frame(measure = unique(paste0("hs_",df$Acronym)),
                         avg = mean(df$value, na.rm = T),
@@ -432,8 +441,8 @@ hazard_water_all <- function(data_files_all){
                         quar_1 = quantile(df$value, 0.25, na.rm = T),
                         quar_2 = quantile(df$value, 0.50, na.rm = T),
                         quar_3 = quantile(df$value, 0.75, na.rm = T),
-                        conf_lower <- tryCatch({conf_lower(df$value)}, error = function(e) {0}),
-                        conf_upper <- tryCatch({conf_upper(df$value)}, error = function(e) {0}),
+                        conf_lower <- tryCatch({conf_lower(df$value)}, error = function(e) {NA}),
+                        conf_upper <- tryCatch({conf_upper(df$value)}, error = function(e) {NA}),
                         sd = sd(df$value, na.rm = T), 
                         perc_5 = quantile(df$value, 0.05, na.rm = T),
                         perc_95 = quantile(df$value, 0.95, na.rm = T), 

@@ -74,8 +74,8 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
   #setwd(paste0(script_dir, "/"))
   
   # Folders
-#  dir_scripts <- "dssat_scripts/"
-  #dir_outputs <- "outputs/" ; dir.create(dir_outputs)
+  #Added vol2 for file system issues
+  dirOutputs = paste0("/forecast/workdir/vol2/", currentCountry, "/outputs/")
   dir_outputs <- paste0(dirOutputs, "cultivos/", if (currentCountry == "COLOMBIA" && crop == "maize") "maiz" else crop, "/", sep = "", collapse = NULL)
 
   # Set up run paths
@@ -219,7 +219,6 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
   #Deleting NA rows
   outputs_df4 <- na.omit(outputs_df4)
 
-  
 
 #If crop_conf exists run stress_risk
  if(file.exists(paste0(dir_inputs_setup, "crop_conf.csv"))){
@@ -239,7 +238,10 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
   drop_na(outputs_df3, coef_var)
   outputs_df3 <- outputs_df3 %>% filter(!grepl("Error", measure))
 
-  
+  #Check if hazards indicators exists
+  crop_conf = read_csv(paste0(dir_inputs_setup,"crop_conf.csv"))
+  if("hs," %in% crop_conf$tag){
+
     hazard_indicators_count_days <- hazard_count_days_all(dir_run)
     outputs_df5 <- map2(.x = hazard_indicators_count_days,
                         .y = input_dates$planting_date, 
@@ -260,15 +262,32 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
     final_csv$end <- as.Date(final_csv$end) + (sim_freq - 1)
     final_csv <- na.omit(final_csv)
     write_csv(final_csv, paste0(dir_outputs, id, ".csv"))
+  } else {
+
+    #Fixing end date column. start + sim_freq
+    final_csv <- bind_rows(outputs_df1, outputs_df2, outputs_df3, outputs_df4)
+    final_csv$end <- as.Date(final_csv$end) + (sim_freq - 1)
+    final_csv <- na.omit(final_csv)
+    write_csv(final_csv, paste0(dir_outputs, id, ".csv"))
+
+  } 
+
+    #New location
+    dirOutputsNew <- paste0(dirCurrent, "outputs/", sep = "", collapse = NULL)
+    dir_outputs_new <- paste0(dirOutputsNew, "cultivos/", if (currentCountry == "COLOMBIA" && crop == "maize") "maiz" else crop, "/", sep = "", collapse = NULL)
+    system(paste0("mv ", dir_outputs, id, ".csv ", dir_outputs_new))
+
     message(paste0("Successful Simulation \n Crop: ", 
                   crop, " - Cultivar: ", cultivar[2], "\n Soil: ", soil, 
                   "\n Irrigation: ", planting_details$IRR, "\n Fertilization: ", planting_details$FERT ))
 
   
   # This part extract phenological phase dates per each setup
-  crop_conf = read_csv(paste0(dir_inputs_setup,"crop_conf.csv"))
+  #crop_conf = read_csv(paste0(dir_inputs_setup,"crop_conf.csv"))
   phenological_phase_dates = getPhenologicalPhaseDatesAll(dir_run,crop_conf,initial_date,id_station,id_cultivar,id_soil)
   write_csv(phenological_phase_dates, paste0(dir_outputs, id, "_phenological-phases.csv"))
+
+  system(paste0("mv ", dir_outputs, id, "_phenological-phases.csv ", dir_outputs_new))
   
   setwd(wd_p)
 } else {
@@ -276,6 +295,11 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
   final_csv <- bind_rows(outputs_df1, outputs_df2, outputs_df4)
   final_csv$end <- as.Date(final_csv$end) + (sim_freq - 1)
   write_csv(final_csv, paste0(dir_outputs, id, ".csv"))
+
+  #New location
+  dirOutputsNew <- paste0(dirCurrent, "outputs/", sep = "", collapse = NULL)
+  dir_outputs_new <- paste0(dirOutputsNew, "cultivos/", if (currentCountry == "COLOMBIA" && crop == "maize") "maiz" else crop, "/", sep = "", collapse = NULL)
+  system(paste0("mv ", dir_outputs, id, ".csv ", dir_outputs_new))
 
   
   #tictoc::toc()

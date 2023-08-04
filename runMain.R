@@ -336,7 +336,7 @@ runDssatModule <- function(crop){
     
     
   
-  }, mc.cores = 5, mc.preschedule = F)
+  }, mc.cores = 8, mc.preschedule = F)
   tictoc::toc()
 
 }
