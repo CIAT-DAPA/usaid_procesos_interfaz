@@ -126,9 +126,9 @@ prepareRastersUpload <- function(ru_forecast_type) {
         
 
       }
-    }
+    
     #Subseasonal
-    else {
+    } else {
        # Writting deterministic raster files (to upload to geoserver)
       for (i in 1:length(nextGenFileName_det_sub)) {
         det <- raster(paste0(dir_outputs_nextgen_subseasonal, "/", nextGenFileName_det_sub[i]))
