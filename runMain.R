@@ -534,10 +534,10 @@ if(extract_input_data){
 }
 
 #Downloading observed data for prepare climate scenaries in crops setups
-# if (currentCountry == "COLOMBIA" || currentCountry == "ETHIOPIA") {
-#   source(paste0(dir_prepare_observed_data, "downloadObservedData.R"))
-#   downloadObservedData(dir_stations, format(strptime(as.character(Sys.Date()), "%Y-%m-%d"),"%d/%m/%Y" ), path_output_observed_data, currentCountry)
-# }
+if (currentCountry == "COLOMBIA" || currentCountry == "ETHIOPIA") {
+   source(paste0(dir_prepare_observed_data, "downloadObservedData.R"))
+   downloadObservedData(dir_stations, format(strptime(as.character(Sys.Date()), "%Y-%m-%d"),"%d/%m/%Y" ), path_output_observed_data, currentCountry)
+}
 # Prediction process
 if (currentCountry == "COLOMBIA" || currentCountry == "ANGOLA" || currentCountry == "MALAWI" || currentCountry == "ZAMBIA" || currentCountry == "TANZANIA") {
   Sys.setenv(CPT_BIN_DIR = "/forecast/models/CPT/15.5.10/bin/")
