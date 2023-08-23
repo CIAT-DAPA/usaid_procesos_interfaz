@@ -381,7 +381,6 @@ start.time <- Sys.time()
 dirCurrent <- "/forecast/usaid_procesos_interfaz/"
 dirWorkdir <- "/forecast/workdir/"
 #dirWorkdir <- "D:/forecast_process/workdir/"
-
 # forecastAppDll app - App de consola que se conecta a la base de datos
 forecastAppDll <- paste0("dotnet ", dirCurrent, "forecast_app/CIAT.DAPA.USAID.Forecast.ForecastApp.dll ", sep = "", collapse = NULL)
 
@@ -420,6 +419,8 @@ country_iso <- ifelse(currentCountry == "COLOMBIA", "co", ifelse(currentCountry 
 # Checks country for avoid conlicts
 maize_name_by_country <- if (currentCountry == "COLOMBIA") "maiz" else "maize"
 dirCurrent <- paste0(dirWorkdir, currentCountry, "/")
+#Forecast Log
+dirLogs <- paste0(dirCurrent,"logs/")
 # INPUTS variables
 dirInputs <- paste0(dirCurrent, "inputs/", sep = "", collapse = NULL)
 # Input variables Forecast module
@@ -471,6 +472,7 @@ dirResults <- paste0(dirCurrent, "results")
 ## ********************** Making inputs and outputs folders  **************************************
 # INPUTS
 pathConstruct(dirInputs) # ./inputs/
+pathConstruct(dirLogs) # ./logs/
 pathConstruct(dirPrediccionInputs) # ./inputs/prediccionClimatica/
 pathConstruct(dir_save) # ./inputs/prediccionClimatica/descarga
 pathConstruct(dir_runCPT) # ./inputs/prediccionClimatica/run_CPT
@@ -487,6 +489,7 @@ pathConstruct(dirPrediccionOutputs) # ./outputs/prediccionClimatica/
 pathConstruct(dir_rasters_categories_guate) # ./outputs/rasterCategpries/
 pathConstruct(dirNextGen) # ./outputs/NextGen/
 pathConstruct(path_save) # ./outputs/prediccionClimatica/probForecas
+pathConstruct(path_output_observed_data) # ./outputs/prediccionClimatica/observedData
 pathConstruct(path_rasters) # ./outputs/prediccionClimatica/raster
 pathConstruct(path_output) # ./outputs/prediccionClimatica/resampling
 pathConstruct(path_output_sum) # ./outputs/prediccionClimatica/resampling/summary
@@ -541,7 +544,8 @@ if (currentCountry == "COLOMBIA" || currentCountry == "ETHIOPIA") {
 # Prediction process
 if (currentCountry == "COLOMBIA" || currentCountry == "ANGOLA" || currentCountry == "MALAWI" || currentCountry == "ZAMBIA" || currentCountry == "TANZANIA") {
   Sys.setenv(CPT_BIN_DIR = "/forecast/models/CPT/15.5.10/bin/")
-  source(paste(dirForecast, "01_prediccion.R", sep = "", collapse = NULL))
+  #source(paste(dirForecast, "01_prediccion.R", sep = "", collapse = NULL))
+  source(paste(dirForecast, "01_aclimate_cpt.R", sep = "", collapse = NULL))
   } else if (currentCountry == "ETHIOPIA"){
   Sys.setenv(CPT_BIN_DIR = "/forecast/models/CPT/17.6.1/bin/")
   source(paste(dirForecast, "PyCPT_seasonal_outputs_process_R.r", sep = "", collapse = NULL))
