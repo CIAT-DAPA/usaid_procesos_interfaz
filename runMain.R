@@ -4,7 +4,7 @@ no_cores <- as.numeric(Sys.getenv("N_CORES"))
 #countries_list <- list("COLOMBIA", "ETHIOPIA", "ANGOLA")
 
 countries_ids <- list("COLOMBIA" = "61e59d829d5d2486e18d2ea8", "ETHIOPIA" = "61e59d829d5d2486e18d2ea9", "ANGOLA" = "62a739250dd05810f0e2938d", "GUATEMALA"="636c0813e57f2e6ac61394e6", 
-"MALAWI"="641c820e4fb2a6438cc670e7", "TANZANIA"="641c82214fb2a6438cc670eb", "ZAMBIA"="641c82304fb2a6438cc670ee")
+"MALAWI"="641c820e4fb2a6438cc670e7", "TANZANIA"="641c82214fb2a6438cc670eb", "ZAMBIA"="641c82304fb2a6438cc670ee", "PERU" = "6438525c843fb30d41311d25")
 
 #Taking arguments from cmd
 args <- commandArgs(trailingOnly = TRUE)
@@ -542,7 +542,7 @@ if (currentCountry == "COLOMBIA" || currentCountry == "ETHIOPIA") {
    downloadObservedData(dir_stations, format(strptime(as.character(Sys.Date()), "%Y-%m-%d"),"%d/%m/%Y" ), path_output_observed_data, currentCountry)
 }
 # Prediction process
-if (currentCountry == "COLOMBIA" || currentCountry == "ANGOLA" || currentCountry == "MALAWI" || currentCountry == "ZAMBIA" || currentCountry == "TANZANIA") {
+if (currentCountry == "COLOMBIA" || currentCountry == "PERU" || currentCountry == "ANGOLA" || currentCountry == "MALAWI" || currentCountry == "ZAMBIA" || currentCountry == "TANZANIA") {
   Sys.setenv(CPT_BIN_DIR = "/forecast/models/CPT/15.5.10/bin/")
   #source(paste(dirForecast, "01_prediccion.R", sep = "", collapse = NULL))
   source(paste(dirForecast, "01_aclimate_cpt.R", sep = "", collapse = NULL))
@@ -561,9 +561,12 @@ if (currentCountry == "GUATEMALA" || currentCountry == "ETHIOPIA") {
 }
 
 # Resampling process
-runRemuestreo <- source(paste(dirForecast, "02_remuestreo.R", sep = "", collapse = NULL))
+
+source(paste(dirForecast, "02_aclimate_resampling.R", sep = "", collapse = NULL))
+
+#runRemuestreo <- source(paste(dirForecast, "02_remuestreo.R", sep = "", collapse = NULL))
 # Dowloading and final joining data process
-runJoinFinalData <- source(paste(dirForecast, "03_join_wth_final.R", sep = "", collapse = NULL))
+#runJoinFinalData <- source(paste(dirForecast, "03_join_wth_final.R", sep = "", collapse = NULL))
 
 #new dssat module
 if (currentCountry == "ETHIOPIA") {
