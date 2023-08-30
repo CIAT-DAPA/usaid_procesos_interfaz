@@ -8,7 +8,7 @@ year = Sys.Date()
 year = as.numeric(format(year, "%Y"))
 
 command = paste(
-    "aclimate_resampling", "-C", currentCountry, "-p", dirWorkdir, "-c", no_cores, "-m", "1", "-y", year, 
+    "aclimate_resampling", "-C", currentCountry, "-p", dirWorkdir, "-c", no_cores, "-m", "1", "-y", year
 )
 
 aclimate_output <- system(command, intern = TRUE)
