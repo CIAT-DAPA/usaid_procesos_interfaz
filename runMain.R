@@ -398,6 +398,8 @@ dirModeloArroz <- paste0(dirCurrent, "modeloArroz/", sep = "", collapse = NULL)
 dir_dssat <- "C:/DSSAT46/" ## its necessary to have the parameters .CUL, .ECO, .SPE Updated for running (calibrated the crop (Frijol))
 dirModeloFrijol <- paste0(dirCurrent, "modeloFrijol/", sep = "", collapse = NULL)
 
+dirModeloFrutales <- paste0(dirCurrent, "modeloFrutales/", sep = "", collapse = NULL)
+
 # Script that upload files to the Geoserver file system
 dir_python_folder <- paste0(dirCurrent, "python/")
 dir_pycpt_scripts <- paste0(dir_python_folder, "PyCPT/")
@@ -589,6 +591,13 @@ if (currentCountry == "COLOMBIA") {
     # Making post request to oryza api
     run_oryza_by_setup()
   }
+}
+
+
+#new dssat module
+if (currentCountry == "PERU") {
+  crop <- "frutales"
+  source(paste(dirModeloFrutales, "01_aclimate_crop_risk.R", sep = "", collapse = NULL))
 }
 
 #Importation into db process
