@@ -466,6 +466,8 @@ dirModeloArrozOutputs <- paste0(dirOutputs, "cultivos/arroz/", sep = "", collaps
 dirModeloWheatOutputs <- paste0(dirOutputs, "cultivos/wheat/", sep = "", collapse = NULL)
 # Output variables frijol model module
 dirModeloFrijolOutputs <- paste0(dirOutputs, "cultivos/frijol/", sep = "", collapse = NULL)
+# Output variables frutales model module
+dirModeloFrutalesOutputs <- paste0(dirOutputs, "cultivos/frutales/", sep = "", collapse = NULL)
 # Output permanent folder
 dirResults <- paste0(dirCurrent, "results")
 # if (!file.exists(file.path(dirResults))){
@@ -505,6 +507,8 @@ pathConstruct(dirModeloArrozOutputs) # ./outputs/cultivos/arroz/
 pathConstruct(dirModeloWheatOutputs) # ./outputs/cultivos/wheat/
 # Frijol
 pathConstruct(dirModeloFrijolOutputs) # ./outputs/cultivos/frijol/
+# Frutales
+pathConstruct(dirModeloFrutalesOutputs) # ./outputs/cultivos/frutales/
 ## ************************************************************************************************
 ## Download initial parameters from interface database
 scriptsDir <- "/forecast/usaid_procesos_interfaz/"
@@ -539,7 +543,7 @@ if(extract_input_data){
 }
 
 #Downloading observed data for prepare climate scenaries in crops setups
-if (currentCountry == "COLOMBIA" || currentCountry == "ETHIOPIA") {
+if ( currentCountry == "ETHIOPIA") {
    source(paste0(dir_prepare_observed_data, "downloadObservedData.R"))
    downloadObservedData(dir_stations, format(strptime(as.character(Sys.Date()), "%Y-%m-%d"),"%d/%m/%Y" ), path_output_observed_data, currentCountry)
 }
