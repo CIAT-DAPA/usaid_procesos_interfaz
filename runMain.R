@@ -257,9 +257,8 @@ runDssatModule <- function(crop){
 
   dirCurrentCropInputs <- paste0(dirInputs, "cultivos/", if (currentCountry == "COLOMBIA" && crop == "maize") "maiz" else crop, "/", sep = "", collapse = NULL)
 
-  ## Wheat setups
+  ## Crop setups
   setups <- list.dirs(dirCurrentCropInputs, full.names = T)
-  #setups <- setups[1:4]
   setwd(dir_dssat_api)
   
   tryCatch(
@@ -324,6 +323,8 @@ runDssatModule <- function(crop){
         dir_outputs <- paste0(dirOutputs, "cultivos/", if (currentCountry == "COLOMBIA" && crop == "maize") "maiz" else crop, "/", sep = "", collapse = NULL)
         cat(conditionMessage(e))
         system(paste0("rm -R ",dir_outputs, id,"/*"))
+        dir_outputs_aux <- sub("/forecast/workdir/", "/forecast/workdir/vol2/", dir_outputs)
+        system(paste0("rm -R ",dir_outputs_aux, id,"/*"))
       })
       
       # tictoc::toc()
@@ -431,7 +432,7 @@ dir_save <- paste0(dirPrediccionInputs, "descarga", sep = "", collapse = NULL)
 dir_runCPT <- paste0(dirPrediccionInputs, "run_CPT", sep = "", collapse = NULL)
 dir_response <- paste0(dirPrediccionInputs, "estacionesMensuales", sep = "", collapse = NULL)
 dir_stations <- paste0(dirPrediccionInputs, "dailyData", sep = "", collapse = NULL)
-dir_inputs_nextgen <- paste0(dirInputs, "NextGen/", sep = "", collapse = NULL)
+dir_inputs_nextgen <- paste0(dirPrediccionInputs, "NextGen/", sep = "", collapse = NULL)
 dirCultivosInputs <- paste0(dirInputs, "cultivos/", sep = "", collapse = NULL)
 # Input variables Maize model module
 dirModeloMaizInputs <- paste0(dirInputs, "cultivos/", maize_name_by_country, "/", sep = "", collapse = NULL)
@@ -611,8 +612,8 @@ if(import_data_to_db){
   # Upload proccess results to interface database
   setwd(paste0(scriptsDir, "forecast_app"))
   CMDdirOutputs <- paste0(dirUnifiedOutputs, "outputs/") # paste0(gsub("/","\\\\",dirOutputs), "\\\"")
-  #try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\""), intern = TRUE, ignore.stderr = TRUE))
-  try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\"", " -frid \"", "648202f6a0488e3540a59e4e", "\""), intern = TRUE, ignore.stderr = TRUE))
+  try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\""), intern = TRUE, ignore.stderr = TRUE))
+  #try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\"", " -frid \"", "648202f6a0488e3540a59e4e", "\""), intern = TRUE, ignore.stderr = TRUE))
 
 }
 

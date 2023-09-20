@@ -100,7 +100,7 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
   #   cultivar <- c(location$var_cul, location$cul_name)
   # }
   
-  climate_scenaries <- load_all_climate(dir_inputs_climate)[-100]
+  climate_scenaries <- load_all_climate(dir_inputs_climate, dir_inputs_setup)[-100]
   planting_details_column_name <- if (currentCountry=="COLOMBIA") "value" else crop
   
   planting_details <- read_csv(paste0(dir_inputs_setup, "planting_details.csv"), show_col_types = F) %>%
@@ -242,23 +242,30 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
   crop_conf = read_csv(paste0(dir_inputs_setup,"crop_conf.csv"))
   if("hs," %in% crop_conf$tag){
 
-    hazard_indicators_count_days <- hazard_count_days_all(dir_run)
-    outputs_df5 <- map2(.x = hazard_indicators_count_days,
+    #hazard_indicators_count_days <- hazard_count_days_all(dir_run)
+    tryCatch({
+      hazard_indicators_count_days <- hazard_count_days_all(dir_run)
+      outputs_df5 <- map2(.x = hazard_indicators_count_days,
                         .y = input_dates$planting_date, 
                         function(x,y){
                           x %>% tidy_descriptive(., id_station, id_soil, id_cultivar, y, y)}) %>% 
-      compact %>% bind_rows()
+      compact %>% bind_rows()}, error = function(e) {NA})
+    
 
-    hazard_indicators_water <- hazard_water_all(dir_run)
-    outputs_df6 <- map2(.x = hazard_indicators_water,
+    #hazard_indicators_water <- hazard_water_all(dir_run)
+    tryCatch({
+      hazard_indicators_water <- hazard_water_all(dir_run)
+      outputs_df6 <- map2(.x = hazard_indicators_water,
                         .y = input_dates$planting_date, 
                         function(x,y){
                           x %>% tidy_descriptive(., id_station, id_soil, id_cultivar, y, y)}) %>% 
-      compact %>% bind_rows()
+      compact %>% bind_rows()}, error = function(e) {NA})
 
 
     #Fixing end date column. start + sim_freq
-    final_csv <- bind_rows(outputs_df1, outputs_df2, outputs_df3, outputs_df4, outputs_df5, outputs_df6)
+    lista_df <- list(outputs_df1, outputs_df2, outputs_df3, outputs_df4, outputs_df5, outputs_df6)
+    lista_df <- discard(lista_df, ~anyNA(.))
+    final_csv <- bind_rows(lista_df)
     final_csv$end <- as.Date(final_csv$end) + (sim_freq - 1)
     final_csv <- na.omit(final_csv)
     write_csv(final_csv, paste0(dir_outputs, id, ".csv"))
