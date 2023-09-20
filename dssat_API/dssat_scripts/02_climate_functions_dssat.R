@@ -19,7 +19,7 @@ climate_files <- list.files(dir_climate, full.names = T)
 #Checks if the current setup have plating_window.csv to insert the observed data into the climate scenaries
 dir_current_setup_planting_window <- paste0(dir_inputs_setup, "planting_window.csv")
 if(file.exists(dir_current_setup_planting_window)){
-  data_list <- addObsDataToPlanting(path_output_observed_data,id_station,data_list,dir_current_setup_planting_window)
+  data_list <- addObsDataToPlanting(path_output_observed_data,id_station,data_list,dir_current_setup_planting_window, dir_stations)
 }
 
  #Add filter to delete NANA row due to february climatology   

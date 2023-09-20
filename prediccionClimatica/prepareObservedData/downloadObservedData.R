@@ -26,33 +26,39 @@ moveFiles <- function(path,year){
   unlink(paste(path,year,sep=""),recursive=TRUE)
 }
 
-extract_data  <- function(variable, month, year, output_path) {
+extract_data  <- function(variable, month, year, output_path,force=FALSE) {
   path_to_export = paste(paste(output_path,replaceName(variable),sep=""),"/",sep="")
   dir.create(paste(output_path,replaceName(variable),sep=""), showWarnings = FALSE)
-  if(variable == "T.Max" || variable == "T.Min"){
-    statistic = "24_hour_minimum"
-    if(variable == "T.Max"){
-      statistic = "24_hour_maximum"
+  files <- length(list.files(path_to_export))
+  if(files < 27 || force){
+    if(variable == "T.Max" || variable == "T.Min"){
+      statistic = "24_hour_minimum"
+      if(variable == "T.Max"){
+        statistic = "24_hour_maximum"
+      }
+      cat("\n Start download Data")
+      test = ag5Tools::ag5_download(variable = replaceName(variable),
+                                    statistic = statistic,
+                                    day = "all",
+                                    month = month,
+                                    year = year,
+                                    path = path_to_export
+      )
+      
+    }else{
+      test = ag5Tools::ag5_download(variable = replaceName(variable),
+                                    day = "all",
+                                    month = month,
+                                    year = year,
+                                    path = path_to_export
+      )
+      
     }
-    test = ag5Tools::ag5_download(variable = replaceName(variable),
-                                  statistic = statistic,
-                                  day = "all",
-                                  month = month,
-                                  year = year,
-                                  path = path_to_export
-    )
-    
+    moveFiles(path_to_export,year)
   }else{
-    test = ag5Tools::ag5_download(variable = replaceName(variable),
-                                  day = "all",
-                                  month = month,
-                                  year = year,
-                                  path = path_to_export
-    )
-    
+    cat("\n Data has already been downloaded")
   }
-  moveFiles(path_to_export,year)
-  
+
 }
 
 
@@ -175,7 +181,7 @@ downloadObservedData <- function(daily_path, date_now, output_path, country_name
   # END Format date to get dateStart and dateEnd
   
   # START Extract data from nc files
-  
+  cat("\n Start - extracting data")
   for (variable in variables_to_extract) {
     database_path = paste0(output_path,replaceName(variable))
     tryCatch(
