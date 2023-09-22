@@ -103,6 +103,18 @@ system(paste(
     single_models, forecast_anomaly, forecast_spi, confidence_level
 ))
 
+#get years by season
+get_season_years <- function(month, year){
+  if(month==9 | month==10 | month==11) {
+    return(c(as.numeric(year), as.numeric(year)+1))
+  } else if (month==12) {
+    return(c(as.numeric(year)+1, as.numeric(year)+1))
+  } else {
+    return(c(as.numeric(year), as.numeric(year)))
+  }
+}
+
+
 # Where outputs files of Pycpt are
 dir_outputs_nextgen_seasonal <- dir_outputs_nextgen_seasonal
 setwd(dir_outputs_nextgen_seasonal)
@@ -160,6 +172,7 @@ for (i in 1:length(nextGenFileName_prob)) {
 stations_coords <- read.table(paste0(dir_inputs_nextgen, "stations_coords.csv"), head = TRUE, sep = ",")
 coords <- data.frame(stations_coords$lon, stations_coords$lat)
 names(coords)[1:2] <- c("lon", "lat")
+years <- get_season_years(month(Sys.Date()), fyr)
 
 list_Prob_Forec <- list()
 
@@ -167,8 +180,9 @@ for (i in 1:length(stacksBySeason)) {
     stacksBySeasonCurrent <- stack(stacksBySeason[[i]])
     P_forecast_1 <- raster::extract(stacksBySeasonCurrent, coords)
 
-    P_forecast_final <- data.frame(rep(fyr, nrow(coords)), rep(as.numeric(monthsNumber[tgts[i]]), nrow(coords)), stations_coords[, 1], P_forecast_1)
-    names(P_forecast_final)[1:6] <- c("year", "month", "id", "below", "normal", "above")
+    P_forecast_final <- data.frame(rep(years[i], nrow(coords)), rep(as.numeric(monthsNumber[tgts[i]]), nrow(coords)), 
+    stations_coords[, 1], P_forecast_1, rep(quarter_name(as.numeric(monthsNumber[tgts[i]])), nrow(coords)), rep("prec", nrow(coords)))
+    names(P_forecast_final)[1:8] <- c("year", "month", "id", "below", "normal", "above", "season", "predictand")
 
     list_Prob_Forec[[i]] <- P_forecast_final
 }

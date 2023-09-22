@@ -7,7 +7,7 @@
 
 
 # Lee archivos climaticos de la capeta de escenarios climaticos de remuestreo
-load_all_climate <- function(dir_climate){
+load_all_climate <- function(dir_climate, dir_inputs_setup){
   
 #  require(tidyverse)
 #  require(lubridate)

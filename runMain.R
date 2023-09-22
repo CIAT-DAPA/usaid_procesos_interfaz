@@ -612,8 +612,8 @@ if(import_data_to_db){
   # Upload proccess results to interface database
   setwd(paste0(scriptsDir, "forecast_app"))
   CMDdirOutputs <- paste0(dirUnifiedOutputs, "outputs/") # paste0(gsub("/","\\\\",dirOutputs), "\\\"")
-  try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\""), intern = TRUE, ignore.stderr = TRUE))
-  #try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\"", " -frid \"", "648202f6a0488e3540a59e4e", "\""), intern = TRUE, ignore.stderr = TRUE))
+  #try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\""), intern = TRUE, ignore.stderr = TRUE))
+  try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\"", " -frid \"", "6509bd622a55834e2c0d931c", "\""), intern = TRUE, ignore.stderr = TRUE))
 
 }
 

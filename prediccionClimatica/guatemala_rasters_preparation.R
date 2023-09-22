@@ -1,7 +1,7 @@
 
 ##Begin Functions
 #Get two trimesters (based on current date)
-get_seasons <- function(){
+get_seasons <- function(current_year, central_months){
 
   seasons <- c(paste0(month(month(Sys.Date()), label=TRUE), "-", month(month(Sys.Date() %m+% months(2)), label=TRUE)),
   paste0(month(month(Sys.Date() %m+% months(3)), label=TRUE), "-", month(month(Sys.Date() %m+% months(5)), label=TRUE))
@@ -23,7 +23,7 @@ get_season_years <- function(month, year){
 download_insivumeh_probabilities_scenaries <- function(month, scenarie, file_name){
 
   #http://dl.insivumeh.gob.gt/SOURCES/.NextGen/.CPT/.Estacional/.CHIRPS/.Guatemala/.REALTIME/.NextGen/.Forecast/Probabilities-Categories/C/(Bajo)/VALUE/S/757.0/VALUE/X/-119.95/-69.95/RANGEEDGES/Y/-4.95/39.95/RANGEEDGES/%5BX/Y/%5D/data.tiff?filename=dataBajo20230201T0000.tiff
-  urls <- paste0("http://dl.insivumeh.gob.gt/SOURCES/.NextGen/.CPT/.Estacional/.CHIRPS/.Guatemala/.REALTIME/.NextGen/.Forecast/.Probabilities-Categories/C/(",scenarie,")/VALUE/S/762.0/VALUE/X/-92.41666/-88.11666/RANGEEDGES/Y/13.57528/17.87528/RANGEEDGES/%5BX/Y/%5D/data.tiff?filename=", file_name, ".tiff")
+  urls <- paste0("http://dl.insivumeh.gob.gt/SOURCES/.NextGen/.CPT/.Estacional/.CHIRPS/.Guatemala/.REALTIME/.NextGen/.Forecast/.Probabilities-Categories/C/(",scenarie,")/VALUE/S/764.0/VALUE/X/-92.41666/-88.11666/RANGEEDGES/Y/13.57528/17.87528/RANGEEDGES/%5BX/Y/%5D/data.tiff?filename=", file_name, ".tiff")
   path_guatemala_rasters_files <- paste0(dir_rasters_categories_guate,file_name, ".tiff")
 
   headers = c(
@@ -34,6 +34,24 @@ download_insivumeh_probabilities_scenaries <- function(month, scenarie, file_nam
 
 
 }
+
+quarter_name <- function(central_month) {
+  months <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+  
+  if (central_month < 1 || central_month > 12) {
+    return("Invalid central month. It should be between 1 and 12.")
+  }
+  
+  # Calculate the indices of the months in the quarter
+  month1 <- ((central_month - 2) %% 12 + 12) %% 12 + 1
+  month2 <- central_month
+  month3 <- (central_month %% 12) + 1
+  
+  # Get the names of the months and format the quarter
+  quarter <- paste(months[month1], months[month2], months[month3], sep = "-")
+  return(quarter)
+}
+
 
 ##End functions
 
@@ -68,8 +86,9 @@ for (i in 1:length(stacksBySeason)) {
     stacksBySeasonCurrent <- stack(stacksBySeason[[i]])
     P_forecast_1 <- raster::extract(stacksBySeasonCurrent, coords)
 
-    P_forecast_final <- data.frame(rep(fyr, nrow(coords)), rep(as.numeric(monthsNumber[tgts[i]]), nrow(coords)), stations_coords[, 1], P_forecast_1)
-    names(P_forecast_final)[1:6] <- c("year", "month", "id", "below", "normal", "above")
+    P_forecast_final <- data.frame(rep(years[i], nrow(coords)), rep(as.numeric(monthsNumber[tgts[i]]), nrow(coords)), 
+    stations_coords[, 1], P_forecast_1, rep(quarter_name(as.numeric(monthsNumber[tgts[i]])), nrow(coords)), rep("prec", nrow(coords)))
+    names(P_forecast_final)[1:8] <- c("year", "month", "id", "below", "normal", "above", "season", "predictand")
 
     list_Prob_Forec[[i]] <- P_forecast_final
 }
