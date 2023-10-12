@@ -1,8 +1,43 @@
 getPhenologicalPhaseDates = function(folder,limits,initial_date,station,cultivar,soil){
   
   PlantGro_file <- paste0(folder,"PlantGro.OUT")
-  df_plantgro <- read_PlantGro(PlantGro_file)
-  df_plantgro$DATE <- initial_date + days(df_plantgro$DAP)
+  
+  scenarios_plantgro = list()
+  PlantGro_1 = read_lines(PlantGro_file)
+  pos_head <- grep("@YEAR", PlantGro_1)
+  for (i in 1:length(pos_head)){
+    
+    if(i < length(pos_head)){
+      
+      Ini = pos_head[i]      # The first row of the plant growth data
+      End = pos_head[i+1]-10 # The last row of the plant growth data
+      
+      PlantGro = fread(PlantGro_file, header=T,check.names = T, skip=(pos_head[i]-1),fill=TRUE,sep = " ",dec=".", nrows = End - Ini)
+      PlantGro = PlantGro[,c("X.YEAR","DOY","DAS","GSTD","DAP")]
+      
+      colnames(PlantGro) <- c("@YEAR","DOY","DAS","GSTD","DAP")
+      scenarios_plantgro[[i]] = PlantGro
+      
+    } else{ ## the case to read the weather for the last simulation, i.e. simulation number 99 ##
+      
+      Ini = pos_head[i]      # First row of the climate data
+      End = length(PlantGro_1) # Last row of the climate data
+      
+      PlantGro = fread (PlantGro_file, header=T,check.names = T, skip=(pos_head[i]-1),fill=TRUE,sep = " ",dec=".", nrows = End - Ini)
+      PlantGro = PlantGro[,c("X.YEAR","DOY","DAS","GSTD","DAP")]
+      colnames(PlantGro) <- c("@YEAR","DOY","DAS","GSTD","DAP")
+      scenarios_plantgro[[i]] = PlantGro
+    }
+    scenarios_plantgro[[i]]$DATE <- initial_date + days(scenarios_plantgro[[i]]$DAP)
+  }
+  
+  trat <- lapply(1: length(scenarios_plantgro),function(i){
+    df <- scenarios_plantgro[[i]]
+    df$TRT <- i
+    return(df)
+  })
+
+  df_plantgro <- do.call(rbind, trat)
 
   ciclo <- df_plantgro %>% nest(data  = -TRT) %>% pull(data) %>%
     map_dbl(nrow)
@@ -14,7 +49,7 @@ getPhenologicalPhaseDates = function(folder,limits,initial_date,station,cultivar
     phase_treatments = data.frame(matrix(ncol = length(columns_names), nrow = 99))
     colnames(phase_treatments) <- columns_names
     for(i in 1:99){
-      a<-subset(df_plantgro,df_plantgro$GSTD > as.numeric(limits[j,c("min")]) & df_plantgro$GSTD < as.numeric(limits[j,c("max")]))
+      a<-subset(df_plantgro,df_plantgro$GSTD >= as.numeric(limits[j,c("min")]) & df_plantgro$GSTD < as.numeric(limits[j,c("max")]))
       df_sub<- a[a$TRT==i,]
       
       min_date = format(strptime(as.character(min(df_sub$DATE)), "%Y-%m-%d"),"%Y-%m-%d" )
