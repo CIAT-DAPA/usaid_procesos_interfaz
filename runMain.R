@@ -274,7 +274,9 @@ runDssatModule <- function(crop){
       source("dssat_scripts/07_land_preparation.R")
       source("dssat_scripts/08_phenological_phases.R")
       source("dssat_scripts/09_hazard_indicators_count_days.R")
+      source("dssat_scripts/09_hazard_indicators_count_days2.R")
       source("dssat_scripts/10_hazards_indicators_water_balance.R")
+      source("dssat_scripts/10_hazards_indicators_water_balance2.R")
 
     },
     error = function(e) {
@@ -555,6 +557,7 @@ if (currentCountry == "COLOMBIA" || currentCountry == "PERU" || currentCountry =
   source(paste(dirForecast, "01_aclimate_cpt.R", sep = "", collapse = NULL))
   } else if (currentCountry == "ETHIOPIA"){
   Sys.setenv(CPT_BIN_DIR = "/forecast/models/CPT/17.6.1/bin/")
+  Sys.setenv(LD_LIBRARY_PATH = "/root/anaconda3/envs/envpycpt/lib:$LD_LIBRARY_PATH")
   source(paste(dirForecast, "PyCPT_seasonal_outputs_process_R.r", sep = "", collapse = NULL))
   source(paste(dirForecast, "PyCPT_subseasonal_outputs_process_R.r", sep = "", collapse = NULL))
 }

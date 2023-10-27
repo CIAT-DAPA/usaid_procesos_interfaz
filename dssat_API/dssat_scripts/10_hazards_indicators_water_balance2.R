@@ -12,9 +12,9 @@
 # hb_s_m
 # acronym <- "hb_t"
 
-hazards_water <- function(root, PlantGro_r , Weather_r, crop_conf_r,ET_r,ind ){
+hazards_water2 <- function(root, PlantGro_r , Weather_r, crop_conf_r,ET_r,ind ){
   
- #####################
+  #####################
   # Procesar PlantGro #
   #####################
   
@@ -118,8 +118,6 @@ hazards_water <- function(root, PlantGro_r , Weather_r, crop_conf_r,ET_r,ind ){
   ######################### 
   
   crop_conf_inf <- read_csv(crop_conf_r)
-  #colnames(crop_conf_inf) <- colnames(crop_conf_inf[,2:5]) 
-  #crop_conf_inf <- crop_conf_inf[,1:4]
   
   #### Nueva condicion 
   # Disponibilidad de datos 
@@ -146,15 +144,13 @@ hazards_water <- function(root, PlantGro_r , Weather_r, crop_conf_r,ET_r,ind ){
   }
   
   
-  ###################   1
-  if("hb_s_e" %in%  ind){
-    con <- dplyr::filter(crop_conf_inf, name =="hb_s_e")   
+  ###################   hb_0
+  if("hb_0" %in%  ind){
+    con <- dplyr::filter(crop_conf_inf, name =="hb_0")   
     start <- con$min
-    end   <- con$max
-    
     
     clima_con <- lapply(1:scenarios_n, function(i){
-      df_condition  = subset(scenarios_plantgro[[i]], GSTD >= start & GSTD <= end,)
+      df_condition  = subset(scenarios_plantgro[[i]], GSTD == start )
       DAS <- sort(df_condition$DAS,decreasing = F)
       First_DAS_condition = df_condition$DAS[1]
       Last_DAS_condition = df_condition$DAS[length(DAS)]
@@ -174,30 +170,28 @@ hazards_water <- function(root, PlantGro_r , Weather_r, crop_conf_r,ET_r,ind ){
       return(clima_new)
     })
     
-    hb_s_e  <- lapply(1: length(clima_new), function(i){
+    hb_0  <- lapply(1: length(clima_new), function(i){
       data <- clima_new[[i]]
       prec  <- data$PRED
       evap  <- data$ETAA
       inx  <- 1 - (sum(evap) / sum(prec) )
-      ind  <- data.frame(Acronym = "hb_s_e" , value = inx)
+      ind  <- data.frame(Acronym = "hb_0" , value = inx)
       return(ind)
     })
     
-    hb_s_e <- do.call(rbind,hb_s_e)
-    hb_s_e[is.na(hb_s_e)] <- 0
+    hb_0 <- do.call(rbind,hb_0)
+    hb_0[is.na(hb_0)] <- 0
     
-  }else{hb_s_e <- data.frame(Acronym= NA, value= NA)}
+  }else{hb_0 <- data.frame(Acronym= NA, value= NA)}
   
   
-  ###################   2
-  if("hb_t" %in%  ind){
-    con <- dplyr::filter(crop_conf_inf, name =="hb_t")   
+  ##################   hb_1
+  if("hb_1" %in%  ind){
+    con <- dplyr::filter(crop_conf_inf, name =="hb_1")   
     start <- con$min
-    end   <- con$max
-    # list_weather_condition = list()
     
     clima_con <- lapply(1:scenarios_n, function(i){
-      df_condition  = subset(scenarios_plantgro[[i]], GSTD >= start & GSTD <= end,)
+      df_condition  = subset(scenarios_plantgro[[i]], GSTD == start )
       DAS <- sort(df_condition$DAS,decreasing = F)
       First_DAS_condition = df_condition$DAS[1]
       Last_DAS_condition = df_condition$DAS[length(DAS)]
@@ -217,30 +211,28 @@ hazards_water <- function(root, PlantGro_r , Weather_r, crop_conf_r,ET_r,ind ){
       return(clima_new)
     })
     
-    hb_t  <- lapply(1: length(clima_new), function(i){
+    hb_1  <- lapply(1: length(clima_new), function(i){
       data <- clima_new[[i]]
       prec  <- data$PRED
       evap  <- data$ETAA
       inx  <- 1 - (sum(evap) / sum(prec) )
-      ind  <- data.frame(Acronym = "hb_t" , value = inx)
+      ind  <- data.frame(Acronym = "hb_1" , value = inx)
       return(ind)
     })
     
-    hb_t <- do.call(rbind,hb_t)
-    hb_t[is.na(hb_t)] <- 0
+    hb_1 <- do.call(rbind,hb_1)
+    hb_1[is.na(hb_1)] <- 0
     
-  }else{hb_t <- data.frame(Acronym= NA, value= NA)}
+  }else{hb_1 <- data.frame(Acronym= NA, value= NA)}
   
   
-  ###################   3
-  if("hb_ei_b" %in%  ind){
-    con <- dplyr::filter(crop_conf_inf, name =="hb_ei_b")   
+  ##################   hb_2
+  if("hb_2" %in%  ind){
+    con <- dplyr::filter(crop_conf_inf, name =="hb_2")   
     start <- con$min
-    end   <- con$max
-    # list_weather_condition = list()
     
     clima_con <- lapply(1:scenarios_n, function(i){
-      df_condition  = subset(scenarios_plantgro[[i]], GSTD >= start & GSTD <= end,)
+      df_condition  = subset(scenarios_plantgro[[i]], GSTD == start )
       DAS <- sort(df_condition$DAS,decreasing = F)
       First_DAS_condition = df_condition$DAS[1]
       Last_DAS_condition = df_condition$DAS[length(DAS)]
@@ -260,29 +252,29 @@ hazards_water <- function(root, PlantGro_r , Weather_r, crop_conf_r,ET_r,ind ){
       return(clima_new)
     })
     
-    hb_ei_b  <- lapply(1: length(clima_new), function(i){
+    hb_2  <- lapply(1: length(clima_new), function(i){
       data <- clima_new[[i]]
       prec  <- data$PRED
       evap  <- data$ETAA
       inx  <- 1 - (sum(evap) / sum(prec) )
-      ind  <- data.frame(Acronym = "hb_ei_b" , value = inx)
+      ind  <- data.frame(Acronym = "hb_2" , value = inx)
       return(ind)
     })
     
-    hb_ei_b <- do.call(rbind,hb_ei_b)
-    hb_ei_b[is.na(hb_ei_b)] <- 0
+    hb_2 <- do.call(rbind,hb_2)
+    hb_2[is.na(hb_2)] <- 0
     
-  }else{hb_ei_b <- data.frame(Acronym= NA, value= NA)}
+  }else{hb_2 <- data.frame(Acronym= NA, value= NA)}
   
-  ###################   4
-  if("hb_bh_m" %in%  ind){
-    con <- dplyr::filter(crop_conf_inf, name =="hb_bh_m")   
+  
+  
+  ##################   hb_3
+  if("hb_3" %in%  ind){
+    con <- dplyr::filter(crop_conf_inf, name =="hb_3")   
     start <- con$min
-    end   <- con$max
-    # list_weather_condition = list()
     
     clima_con <- lapply(1:scenarios_n, function(i){
-      df_condition  = subset(scenarios_plantgro[[i]], GSTD >= start & GSTD <= end,)
+      df_condition  = subset(scenarios_plantgro[[i]], GSTD == start )
       DAS <- sort(df_condition$DAS,decreasing = F)
       First_DAS_condition = df_condition$DAS[1]
       Last_DAS_condition = df_condition$DAS[length(DAS)]
@@ -302,28 +294,28 @@ hazards_water <- function(root, PlantGro_r , Weather_r, crop_conf_r,ET_r,ind ){
       return(clima_new)
     })
     
-    hb_bh_m  <- lapply(1: length(clima_new), function(i){
+    hb_3  <- lapply(1: length(clima_new), function(i){
       data <- clima_new[[i]]
       prec  <- data$PRED
       evap  <- data$ETAA
       inx  <- 1 - (sum(evap) / sum(prec) )
-      ind  <- data.frame(Acronym = "hb_bh_m" , value = inx)
+      ind  <- data.frame(Acronym = "hb_3" , value = inx)
       return(ind)
     })
     
-    hb_bh_m <- do.call(rbind,hb_bh_m)
-    hb_bh_m[is.na(hb_bh_m)] <- 0
-  }else{hb_bh_m <- data.frame(Acronym= NA, value= NA)}
+    hb_3 <- do.call(rbind,hb_3)
+    hb_3[is.na(hb_3)] <- 0
+    
+  }else{hb_3 <- data.frame(Acronym= NA, value= NA)}
   
-  ###################  5
-  if("hb_s_m" %in%  ind){
-    con <- dplyr::filter(crop_conf_inf, name =="hb_s_m")   
+  
+  ##################   hb_4
+  if("hb_4" %in%  ind){
+    con <- dplyr::filter(crop_conf_inf, name =="hb_4")   
     start <- con$min
-    end   <- con$max
-    # list_weather_condition = list()
     
     clima_con <- lapply(1:scenarios_n, function(i){
-      df_condition  = subset(scenarios_plantgro[[i]], GSTD >= start & GSTD <= end,)
+      df_condition  = subset(scenarios_plantgro[[i]], GSTD == start )
       DAS <- sort(df_condition$DAS,decreasing = F)
       First_DAS_condition = df_condition$DAS[1]
       Last_DAS_condition = df_condition$DAS[length(DAS)]
@@ -343,32 +335,73 @@ hazards_water <- function(root, PlantGro_r , Weather_r, crop_conf_r,ET_r,ind ){
       return(clima_new)
     })
     
-    hb_s_m  <- lapply(1: length(clima_new), function(i){
+    hb_4  <- lapply(1: length(clima_new), function(i){
       data <- clima_new[[i]]
       prec  <- data$PRED
       evap  <- data$ETAA
       inx  <- 1 - (sum(evap) / sum(prec) )
-      ind  <- data.frame(Acronym = "hb_s_m" , value = inx)
+      ind  <- data.frame(Acronym = "hb_4" , value = inx)
       return(ind)
     })
     
-    hb_s_m <- do.call(rbind,hb_s_m)
-    hb_s_m[is.na(hb_s_m)] <- 0
-  }else{hb_s_m <- data.frame(Acronym= NA, value= NA)}
+    hb_4 <- do.call(rbind,hb_4)
+    hb_4[is.na(hb_4)] <- 0
+    
+  }else{hb_4 <- data.frame(Acronym= NA, value= NA)}
   
   
-  resultado <- list(hb_s_e,hb_t,hb_ei_b,hb_bh_m,hb_s_m)
+  ##################   hb_5
+  if("hb_5" %in%  ind){
+    con <- dplyr::filter(crop_conf_inf, name =="hb_5")   
+    start <- con$min
+    
+    clima_con <- lapply(1:scenarios_n, function(i){
+      df_condition  = subset(scenarios_plantgro[[i]], GSTD == start )
+      DAS <- sort(df_condition$DAS,decreasing = F)
+      First_DAS_condition = df_condition$DAS[1]
+      Last_DAS_condition = df_condition$DAS[length(DAS)]
+      weather_data_condition= subset(scenarios_weather[[i]], DAS >= First_DAS_condition & DAS <= Last_DAS_condition,)
+      return(weather_data_condition)
+    })
+    
+    clima_new  <- lapply(1:length(clima_con) , function(i){
+      
+      df_clima <- clima_con[[i]]
+      df_et    <- scenarios_ET[[i]]
+      df_clima_start <- min(df_clima$DAS )
+      df_clima_end   <- max(df_clima$DAS )
+      df_et_con <-  subset(df_et, DAS >= df_clima_start & DAS <= df_clima_end,)
+      clima_new <- cbind(df_clima,df_et_con$ETAA )
+      colnames(clima_new) <- c(colnames(df_clima), "ETAA")
+      return(clima_new)
+    })
+    
+    hb_5  <- lapply(1: length(clima_new), function(i){
+      data <- clima_new[[i]]
+      prec  <- data$PRED
+      evap  <- data$ETAA
+      inx  <- 1 - (sum(evap) / sum(prec) )
+      ind  <- data.frame(Acronym = "hb_5" , value = inx)
+      return(ind)
+    })
+    
+    hb_5 <- do.call(rbind,hb_5)
+    hb_5[is.na(hb_5)] <- 0
+    
+  }else{hb_5 <- data.frame(Acronym= NA, value= NA)} 
+  
+  
+  resultado <- list(hb_0,hb_1,hb_2,hb_3,hb_4,hb_5)
   return(resultado)
-  
   
 }
 
 #hazards_water_safe <- purrr::possibly(hazards_water, NA)
 
 #Gets indicators for all planting dates
-hazard_water_all <- function(data_files_all){
+hazard_water_all2 <- function(data_files_all){
 
-  ind = c("hb_s_e","hb_t","hb_ei_b","hb_bh_m","hb_s_m")
+  ind = c("hb_0","hb_1","hb_2","hb_3","hb_4","hb_5")
 
   indicadores <- mclapply(1:length(data_files_all), function(i) {
     data_files <- paste0(data_files_all[i])
@@ -377,7 +410,7 @@ hazard_water_all <- function(data_files_all){
     ET_r         <-  paste0(data_files, "ET.OUT")
     crop_conf_r  <-  paste0(data_files, "crop_conf.csv")
     
-      df <-  hazards_water(root = data_files,
+      df <-  hazards_water2(root = data_files,
                     PlantGro= PlantGro_r ,
                     Weather= Weather_r,
                     crop_conf_r=crop_conf_r,

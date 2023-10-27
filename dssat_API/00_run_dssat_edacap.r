@@ -244,7 +244,8 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
 
     #hazard_indicators_count_days <- hazard_count_days_all(dir_run)
     tryCatch({
-      hazard_indicators_count_days <- hazard_count_days_all(dir_run)
+      hazard_indicators_count_days = if (crop == "wheat") hazard_count_days_all(dir_run) else hazard_count_days_all2(dir_run)
+      #hazard_indicators_count_days <- hazard_count_days_all(dir_run)
       outputs_df5 <- map2(.x = hazard_indicators_count_days,
                         .y = input_dates$planting_date, 
                         function(x,y){
@@ -254,7 +255,8 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
 
     #hazard_indicators_water <- hazard_water_all(dir_run)
     tryCatch({
-      hazard_indicators_water <- hazard_water_all(dir_run)
+      hazard_indicators_water = if (crop == "wheat") hazard_water_all(dir_run) else hazard_water_all2(dir_run)
+      #hazard_indicators_water <- hazard_water_all(dir_run)
       outputs_df6 <- map2(.x = hazard_indicators_water,
                         .y = input_dates$planting_date, 
                         function(x,y){
