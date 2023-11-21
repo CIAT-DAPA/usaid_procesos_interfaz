@@ -5,10 +5,11 @@ aclimate_resampling_log = paste0(dirLogs,"aclimate_resampling.log")
 aclimate_resampling_start <- Sys.time()
 
 year = Sys.Date()
+month = as.numeric(format(year, "%m"))
 year = as.numeric(format(year, "%Y"))
 
 command = paste(
-    "aclimate_resampling", "-C", currentCountry, "-p", dirWorkdir, "-c", no_cores, "-m", "1", "-y", year
+    "aclimate_resampling", "-C", currentCountry, "-p", dirWorkdir, "-c", no_cores, "-m", "1", "-y", year, "-a", month
 )
 
 aclimate_output <- system(command, intern = TRUE)
