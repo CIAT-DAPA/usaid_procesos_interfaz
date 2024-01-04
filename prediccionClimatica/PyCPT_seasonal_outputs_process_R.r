@@ -114,6 +114,24 @@ get_season_years <- function(month, year){
   }
 }
 
+quarter_name <- function(central_month) {
+  months <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+  
+  if (central_month < 1 || central_month > 12) {
+    return("Invalid central month. It should be between 1 and 12.")
+  }
+  
+  # Calculate the indices of the months in the quarter
+  month1 <- ((central_month - 2) %% 12 + 12) %% 12 + 1
+  month2 <- central_month
+  month3 <- (central_month %% 12) + 1
+  
+  # Get the names of the months and format the quarter
+  quarter <- paste(months[month1], months[month2], months[month3], sep = "-")
+  return(quarter)
+}
+
+
 
 # Where outputs files of Pycpt are
 dir_outputs_nextgen_seasonal <- dir_outputs_nextgen_seasonal
@@ -240,12 +258,15 @@ for (i in seq(from = 0, to = length(ncMetricsFiles), by = length(tgts))) {
 ## Extracting values of metrics by coords
 metricsCoords <- matrix(NA, ncol = 3 + length(raster_metrics), nrow = nrow(coords) * length(tgts))
 
-## Year
-metricsCoords[, 1] <- rep(fyr, nrow(coords) * length(tgts))
-## Month
+## Years and Months
 for (i in 1:length(tgts)) {
+    #Limits of each season
     ini <- (nrow(coords) * i) - (nrow(coords) - 1)
     end <- nrow(coords) * i
+
+    #Years
+    metricsCoords[ini:end, 1] <- rep(as.numeric(years[i]), nrow(coords))
+    #Months
     metricsCoords[ini:end, 2] <- rep(as.numeric(monthsNumber[tgts[i]]), nrow(coords))
 }
 

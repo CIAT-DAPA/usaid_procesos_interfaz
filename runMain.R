@@ -430,6 +430,7 @@ dirLogs <- paste0(dirCurrent,"logs/")
 dirInputs <- paste0(dirCurrent, "inputs/", sep = "", collapse = NULL)
 # Input variables Forecast module
 dirPrediccionInputs <- paste0(dirInputs, "prediccionClimatica/", sep = "", collapse = NULL)
+dirUrls <- paste0(dirInputs, "urls/", sep = "", collapse = NULL)
 dir_save <- paste0(dirPrediccionInputs, "descarga", sep = "", collapse = NULL)
 dir_runCPT <- paste0(dirPrediccionInputs, "run_CPT", sep = "", collapse = NULL)
 dir_response <- paste0(dirPrediccionInputs, "estacionesMensuales", sep = "", collapse = NULL)
@@ -560,6 +561,8 @@ if (currentCountry == "COLOMBIA" || currentCountry == "PERU" || currentCountry =
   Sys.setenv(LD_LIBRARY_PATH = "/root/anaconda3/envs/envpycpt/lib:$LD_LIBRARY_PATH")
   source(paste(dirForecast, "PyCPT_seasonal_outputs_process_R.r", sep = "", collapse = NULL))
   source(paste(dirForecast, "PyCPT_subseasonal_outputs_process_R.r", sep = "", collapse = NULL))
+}  else if (currentCountry == "GUATEMALA"){
+  source(paste0(dirForecast, "guatemala_rasters_preparation.R"))
 }
 
 #Rasters upload
@@ -616,7 +619,7 @@ if(import_data_to_db){
   setwd(paste0(scriptsDir, "forecast_app"))
   CMDdirOutputs <- paste0(dirUnifiedOutputs, "outputs/") # paste0(gsub("/","\\\\",dirOutputs), "\\\"")
   #try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\""), intern = TRUE, ignore.stderr = TRUE))
-  try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\"", " -frid \"", "6509bd622a55834e2c0d931c", "\""), intern = TRUE, ignore.stderr = TRUE))
+  try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\"", " -frid \"", "654e44c030de22672e85b866", "\""), intern = TRUE, ignore.stderr = TRUE))
 
 }
 

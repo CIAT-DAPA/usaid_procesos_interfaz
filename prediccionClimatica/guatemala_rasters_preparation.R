@@ -20,17 +20,24 @@ get_season_years <- function(month, year){
   }
 }
 
-download_insivumeh_probabilities_scenaries <- function(month, scenarie, file_name){
+download_insivumeh_probabilities_scenaries <- function(){
+  urls <- fromJSON(paste0(dirUrls, countries_ids[currentCountry],"_download_seasonal_prec.json"))
 
-  #http://dl.insivumeh.gob.gt/SOURCES/.NextGen/.CPT/.Estacional/.CHIRPS/.Guatemala/.REALTIME/.NextGen/.Forecast/Probabilities-Categories/C/(Bajo)/VALUE/S/757.0/VALUE/X/-119.95/-69.95/RANGEEDGES/Y/-4.95/39.95/RANGEEDGES/%5BX/Y/%5D/data.tiff?filename=dataBajo20230201T0000.tiff
-  urls <- paste0("http://dl.insivumeh.gob.gt/SOURCES/.NextGen/.CPT/.Estacional/.CHIRPS/.Guatemala/.REALTIME/.NextGen/.Forecast/.Probabilities-Categories/C/(",scenarie,")/VALUE/S/764.0/VALUE/X/-92.41666/-88.11666/RANGEEDGES/Y/13.57528/17.87528/RANGEEDGES/%5BX/Y/%5D/data.tiff?filename=", file_name, ".tiff")
-  path_guatemala_rasters_files <- paste0(dir_rasters_categories_guate,file_name, ".tiff")
+  for (i in seq(1:length(urls$urls$value))) {
+    # Imprimir la URL actual
+    print(urls$urls$value[i])
+    print(urls$urls$name[i])
+    #http://dl.insivumeh.gob.gt/SOURCES/.NextGen/.CPT/.Estacional/.CHIRPS/.Guatemala/.REALTIME/.NextGen/.Forecast/Probabilities-Categories/C/(Bajo)/VALUE/S/757.0/VALUE/X/-119.95/-69.95/RANGEEDGES/Y/-4.95/39.95/RANGEEDGES/%5BX/Y/%5D/data.tiff?filename=dataBajo20230201T0000.tiff
+    #urls <- paste0("http://dl.insivumeh.gob.gt/SOURCES/.NextGen/.CPT/.Estacional/.CHIRPS/.Guatemala/.REALTIME/.NextGen/.Forecast/.Probabilities-Categories/C/(",scenarie,")/VALUE/S/764.0/VALUE/X/-92.41666/-88.11666/RANGEEDGES/Y/13.57528/17.87528/RANGEEDGES/%5BX/Y/%5D/data.tiff?filename=", file_name, ".tiff")
+    path_guatemala_rasters_files <- paste0(dir_rasters_categories_guate,urls$urls$name[i], ".tiff")
 
-  headers = c(
-    `user-agent` = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.61 Safari/537.36'
-  )
+    headers = c(
+      `user-agent` = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.61 Safari/537.36'
+    )
 
-  res <- httr::GET(url = urls, write_disk(path_guatemala_rasters_files, overwrite=TRUE), httr::add_headers(.headers=headers))
+    res <- httr::GET(url = urls$urls$value[i], write_disk(path_guatemala_rasters_files, overwrite=TRUE), httr::add_headers(.headers=headers))
+  }
+
 
 
 }
@@ -59,6 +66,7 @@ quarter_name <- function(central_month) {
 
 
 ####Begin probabilities.csv process
+download_insivumeh_probabilities_scenaries()
 #Reading rasters downloaded
 stacksBySeason <- list()
 monthsNumber <- list("Jan-Mar" = 02, "Feb-Apr" = 03, "Mar-May" = 04, "Apr-Jun" = 05, "May-Jul" = 06, "Jun-Aug" = 07, "Jul-Sep" = 08, "Aug-Oct" = 09, "Sep-Nov" = 10, "Oct-Dec" = 11, "Nov-Jan" = 12, "Dec-Feb" = 01)
