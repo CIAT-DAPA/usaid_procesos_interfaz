@@ -29,7 +29,7 @@ moveFiles <- function(path,year){
 extract_data  <- function(variable, month, year, output_path,force=FALSE) {
   path_to_export = paste(paste(output_path,replaceName(variable),sep=""),"/",sep="")
   dir.create(paste(output_path,replaceName(variable),sep=""), showWarnings = FALSE)
-  files <- length(list.files(path_to_export))
+  files <- length(list.files(path_to_export, pattern=replaceRegex(variable)))
   if(files < 27 || force){
     if(variable == "T.Max" || variable == "T.Min"){
       statistic = "24_hour_minimum"
@@ -110,6 +110,8 @@ downloadObservedData <- function(daily_path, date_now, output_path, country_name
   # END get months to download data
   
   # START Download data
+
+  system('echo n | Rscript -e "ag5Tools::ag5_download(variable = \'solar_radiation_flux\', day = 1, month = 12, year = 2023, path = \'/forecast/workdir/\')"', intern = TRUE)
 
   count = 1
   for (year in year_to_download) {
