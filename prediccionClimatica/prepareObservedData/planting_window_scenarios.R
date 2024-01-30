@@ -29,8 +29,13 @@ addObsDataToPlanting <- function(path_resampling_observed,weather_station_id,cli
   start_year_planting_window = year(Sys.time())
   end_month_planting_window  = as.numeric(planting_window[3,2])
   end_year_planting_window = year(Sys.time())
-  if(end_month_planting_window < start_month_planting_window) {
-    end_year_planting_window = end_year_planting_window + 1
+
+  if(month(Sys.time()) < start_month_planting_window){
+    start_year_planting_window = start_year_planting_window - 1
+  }
+
+  if(start_month_planting_window > end_month_planting_window) {
+    end_year_planting_window = start_year_planting_window + 1
   }
   
   date_format_start_planting = paste0(start_month_planting_window,"/1/",start_year_planting_window)
@@ -131,7 +136,10 @@ verify_months <- function(dataframe, daily_data) {
     pos_12 <- which(months == 12)
     
     # Sumar 12 a los meses después de 12
-    months[(pos_12):length(months)] <- months[(pos_12):length(months)] + 12
+    if(length(months) != pos_12){
+      months[(pos_12+1):length(months)] <- months[(pos_12+1):length(months)] + 12
+    }
+    
   }
 
   for(month in months[1]:months[length(months)]){
