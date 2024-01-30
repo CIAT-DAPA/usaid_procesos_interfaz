@@ -1,5 +1,7 @@
 addObsDataToPlanting <- function(path_resampling_observed,weather_station_id,climate_scenaries,path_planting_window, daily_data_path){
   
+  climate_scenarios_obs = climate_scenaries
+
   path_resampling_observed = paste0(path_resampling_observed,"resampling_observed/")
   regex_scenario = paste(paste("^",weather_station_id,sep=""),"_escenario\\.csv$",sep="")
   
@@ -77,13 +79,13 @@ addObsDataToPlanting <- function(path_resampling_observed,weather_station_id,cli
   }
   
 
-  all_new_scenarios = vector(mode = "list", length = length(climate_scenaries))
+  all_new_scenarios = vector(mode = "list", length = length(climate_scenarios_obs))
   
-  for (line in 1:length(climate_scenaries)) {
+  for (line in 1:length(climate_scenarios_obs)) {
     
     paste_new_scenarios = data.frame()
     
-    new_data = climate_scenaries[line]
+    new_data = climate_scenarios_obs[line]
     
     new_data = new_data[[1]]
     paste_new_scenarios = rbind(new_scenario)
@@ -101,10 +103,13 @@ addObsDataToPlanting <- function(path_resampling_observed,weather_station_id,cli
       names = 1:nrow(paste_new_scenarios)
       row.names(paste_new_scenarios) = names
     }
+
     all_new_scenarios[[line]] = paste_new_scenarios
   }
   
   climate_scenaries = all_new_scenarios
+
+  return(climate_scenaries)
   
 }
 
@@ -114,7 +119,7 @@ verify_months <- function(dataframe, daily_data) {
 
   result = dataframe
   days_per_month <- c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
-  year_bi = dataframe[dataframe$month == 2,][1,]$year
+  year_bi = ifelse(!is.na(dataframe[dataframe$month == 2,][1,]$year) , dataframe[dataframe$month == 2,][1,]$year, as.numeric(format(Sys.Date(), "%Y"))) 
   if (!is.na(year_bi) && ((year_bi %% 4 == 0 && year_bi %% 100 != 0) || year_bi %% 400 == 0)) {
     # Si es bisiesto, febrero tiene 29 días
       days_per_month[2] <- 29
@@ -126,15 +131,18 @@ verify_months <- function(dataframe, daily_data) {
     pos_12 <- which(months == 12)
     
     # Sumar 12 a los meses después de 12
-    months[(pos_12 + 1):length(months)] <- months[(pos_12 + 1):length(months)] + 12
+    months[(pos_12):length(months)] <- months[(pos_12):length(months)] + 12
   }
 
   for(month in months[1]:months[length(months)]){
+    year = dataframe[1,]$year
     if(month > 12){
       month = month - 12
+      if(month != 12){
+        year = year + 1
+      }
     }
     data_frame_filtered = dataframe[dataframe$month == month,]
-    year = data_frame_filtered[1,]$year
     
 
     if(nrow(data_frame_filtered) != days_per_month[month] || any(is.na(data_frame_filtered))){
