@@ -92,8 +92,14 @@ system(paste(
     single_models, forecast_anomaly, forecast_spi, confidence_level
 ))
 
+monf <- paste0(month(month(Sys.Date()), label=TRUE))# Initialization month
+mon_fcst_ini <- paste0(monf,1)
+#mon_fcst_ini <- paste0(monf,3)
+weeks = c(1:4)
+
+fyr <- year(Sys.Date()) # Forecast year
 # Where outputs files of Pycpt are
-dir_outputs_nextgen_subseasonal
+dir_outputs_nextgen_subseasonal = paste0("/root/EDACaP_S2S/", fyr, "/", monf, "/31W-50E_to_-1S-18N/output")
 setwd(dir_outputs_nextgen_subseasonal)
 dir.create(file.path(dir_outputs_nextgen_subseasonal, "nc_files"))
 
@@ -103,35 +109,8 @@ models <- as.character(inputsPyCPT[[1]]$models)
 MOS <- 'CCA'
 PREDICTAND <- "PRCP"
 PREDICTOR <- "PRCP"
-monf <- paste0(month(month(Sys.Date()), label=TRUE))# Initialization month
-mon_fcst_ini <- paste0(monf,1)
-#mon_fcst_ini <- paste0(monf,3)
-weeks = paste0("wk",c(1:3,34))
-
-fyr <- year(Sys.Date()) # Forecast year
-
-for (wks in weeks)
-{
-    #### translate all  output data to netcdf
-    for (i in 1:length(models)) {
-        # probablistics forecast
-        ctl_input <- paste0(dir_outputs_nextgen_subseasonal, models[i], PREDICTAND,"_CCAFCST_P_",monf,"_",mon_fcst_ini,"_",wks,".ctl")
-        nc_output <- paste0(dir_outputs_nextgen_subseasonal, "nc_files/",  models[i], PREDICTAND,"_CCAFCST_P_",monf,"_",mon_fcst_ini,"_",wks,".nc")
-        system(paste0("cdo -f nc import_binary ", ctl_input, " ", nc_output))
-        # Deterministic forecast
-        ctl_input2 <- paste0(dir_outputs_nextgen_subseasonal, models[i], PREDICTAND,"_CCAFCST_mu_",monf,"_",mon_fcst_ini,"_",wks,".ctl")
-        nc_output2 <- paste0(dir_outputs_nextgen_subseasonal, "nc_files/", models[i], PREDICTAND,"_CCAFCST_mu_",monf,"_",mon_fcst_ini,"_",wks, ".nc")
-        system(paste0("cdo -f nc import_binary ", ctl_input2, " ", nc_output2))
-    }
-
-    system(paste0("cdo --no_history -ensmean  nc_files/*_CCAFCST_P_*",wks,".nc NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_P_", monf,"_",mon_fcst_ini,"_",wks,".nc"))
-    system(paste0("ncrename -v a,Below_Normal -v b,Normal -v c,Above_Normal  NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_P_", monf,"_",mon_fcst_ini,"_",wks,".nc"))
-    system(paste0("cdo --no_history -ensmean  nc_files/*_CCAFCST_mu_*",wks,".nc NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_mu_", monf,"_",mon_fcst_ini,"_",wks,".nc"))
-    system(paste0("rm -rf ", dir_outputs_nextgen_subseasonal, "nc_files/*.nc"))
-}
-
-nextGenFileName_prob_sub <- paste0("NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_P_", monf,"_",mon_fcst_ini,"_",weeks,".nc")
-nextGenFileName_det_sub <- paste0("NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_mu_", monf,"_",mon_fcst_ini,"_",weeks,".nc")
+nextGenFileName_prob_sub <- paste0("NextGEN_S2S_probablistic_", monf, fyr,"_Week",weeks,".nc")
+nextGenFileName_det_sub <- paste0("NextGEN_S2S_deterministic","_", monf,"_Week",weeks,".nc")
 
 stacksBySeason <- list()
 monthsNumber <- list("Jan-Mar" = 02, "Feb-Apr" = 03, "Mar-May" = 04, "Apr-Jun" = 05, "May-Jul" = 06, "Jun-Aug" = 07, "Jul-Sep" = 08, "Aug-Oct" = 09, "Sep-Nov" = 10, "Oct-Dec" = 11, "Nov-Jan" = 12, "Dec-Feb" = 01)
@@ -178,50 +157,26 @@ write.table(list_Prob_Forec_new, paste0(path_save, "/probabilities_subseasonal.c
 
 ################################ Working on metrics.csv ####################################
 
-################# .nc files metrics ##########################
-# station location
-# loc <- data.frame(
-#     lon = c(38.90, 36.5),
-#     lat = c(8.25, 7.764)
-# )
-
-##### NextGen skill matrix translator
-skilmetrics <- c("2AFC", "GROC", "Ignorance", "Pearson", "RPSS", "Spearman")
-metrics <- data.frame()
+nextGenFileName_skills_sub <- paste0("NextGEN_S2S_skillscore_", monf, fyr,"_Week",c(1:4),".nc")
 ncMetricsFiles <- list()
-for (skill in skilmetrics) {
-    for(m in models){
-        for (wks in weeks) {
-            #ctl_input <- paste0(datadir, models[i], PREDICTAND,"_CCAFCST_P_",monf,"_",mon_fcst_ini,"_",wks,".ctl")
-            #CFSv2_SubXPRCP_CCA_Spearman_Sep_wk3.ctl
-            ctlinput <- paste0(dir_outputs_nextgen_subseasonal, m, PREDICTAND, "_", MOS, "_", skill, "_", monf, "_", wks, ".ctl")
-            ncout <- paste0(dir_outputs_nextgen_subseasonal, "NextGen_", m, "_", MOS, "_", skill, "_", monf, "_", wks, ".nc")
 
-            #system(paste0("cdo -f nc import_binary ", ctl_input, " ", nc_output))
-            system(paste0("cdo -f nc import_binary ", ctlinput, " ", ncout))
-            ncMetricsFiles <- append(ncMetricsFiles, paste0(dir_outputs_nextgen_subseasonal, "NextGen_", m, "_",  MOS, "_", skill, "_", monf, "_", wks, ".nc"))
-        }
-    }
+for (i in 1:length(nextGenFileName_skills_sub)) {
+
+    metric2AFC <- raster(nextGenFileName_skills_sub, varname = "two_alternative_forced_choice")
+    metricGROC <- raster(nextGenFileName_skills_sub, varname = "generalized_roc")
+    metricIgnorance <- raster(nextGenFileName_skills_sub, varname = "ignorance")
+    metricPearson <-raster(nextGenFileName_skills_sub, varname = "pearson")
+    metricRPSS <- raster(nextGenFileName_skills_sub, varname = "rank_probability_skill_score")
+    metricSpearman <- raster(nextGenFileName_skills_sub, varname = "spearman")
+
+
+    # Stack structure in order to extract to create .csv files
+    ncMetricsFiles[[i]] <- stack(metric2AFC, metricGROC, metricIgnorance, metricPearson, metricRPSS, metricSpearman)
 }
-################# .nc files metrics ##########################
 
-################### working on writting metrics.csv ##########################
-raster_metrics <- list()
-
-## Organize raster stacks by metric
-weeksxmodels <- length(weeks) * length(models)
-for (i in seq(from = 0, to = length(ncMetricsFiles), by = weeksxmodels)) {
-    if (i != length(ncMetricsFiles)) {
-        temp_raster_list <- list()
-        for (j in 1:weeksxmodels) {
-            temp_raster_list[[j]] <- raster(ncMetricsFiles[[i + j]])
-        }
-        raster_metrics <- append(raster_metrics, stack(temp_raster_list))
-    }
-}
 
 ## Extracting values of metrics by coords
-metricsCoords <- matrix(NA, ncol = 4 + length(raster_metrics), nrow = nrow(coords) * length(weeks))
+metricsCoords <- matrix(NA, ncol = 4 + length(ncMetricsFiles[[1]][1]), nrow = nrow(coords) * length(weeks))
 
 ## Year
 metricsCoords[, 1] <- rep(fyr, nrow(coords) * length(weeks))
@@ -239,10 +194,16 @@ for (i in 1:length(weeks)) {
     end <- nrow(coords) * i
     metricsCoords[ini:end, 2] <- rep(i, nrow(coords))
 }
-## Metrics values
-for (i in 1:length(raster_metrics)) {
-    metricsCoords[, 4 + i] <- raster::extract(raster_metrics[[i]], coords)
-}
+##Get metrics values for each week
+metricsWeek1 = raster::extract(ncMetricsFiles[[1]], coords)
+metricsWeek2 = raster::extract(ncMetricsFiles[[2]], coords)
+metricsWeek3 = raster::extract(ncMetricsFiles[[3]], coords)
+metricsWeek4 = raster::extract(ncMetricsFiles[[4]], coords)
+
+totalMetrics = do.call(rbind, list(metricsWeek1, metricsWeek2, metricsWeek3, metricsWeek4))
+##Add metrics values of both season to final dataframe
+metricsCoords[, 5:10] = totalMetrics
+
 ## Naming columns
 metricsCoords <- as.data.frame(metricsCoords)
 names(metricsCoords)[1:ncol(metricsCoords)] <- c("year", "week", "month", "id", "afc2", "groc", "ignorance", "pearson", "rpss", "spearman")

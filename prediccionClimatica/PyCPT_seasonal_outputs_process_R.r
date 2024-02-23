@@ -132,9 +132,10 @@ quarter_name <- function(central_month) {
 }
 
 
-
 # Where outputs files of Pycpt are
-dir_outputs_nextgen_seasonal <- dir_outputs_nextgen_seasonal
+#dir_outputs_nextgen_seasonal <- dir_outputs_nextgen_seasonal
+fyr <- year(Sys.Date()) # Forecast year
+dir_outputs_nextgen_seasonal=paste0("/root/EDACaP_Seasonal_fcst/", fyr, "/", tgts, "/53W-30E_to_0S-20N/output")#/EDACaP_Seasonal_fcst/2024/Feb-Apr/53W-30E_to_0S-20N/output/
 setwd(dir_outputs_nextgen_seasonal)
 dir.create(file.path(dir_outputs_nextgen_seasonal, "nc_files"))
 
@@ -146,30 +147,9 @@ monf <- inputsPyCPT[[1]]$mons[[1]] # Initialization month
 #tgts <- as.character(inputsPyCPT[[1]]$tgts)
 mons <- as.character(inputsPyCPT[[1]]$mons)
 
-fyr <- year(Sys.Date()) # Forecast year
-
-for (j in 1:length(tgts))
-{
-    #### translate all  output data to netcdf
-    for (i in 1:length(models)) {
-        # probablistics forecast
-        ctl_input <- paste0(dir_outputs_nextgen_seasonal, models[i], "_", PREDICTAND, PREDICTOR, "_CCAFCST_P_", tgts[j], "_", monf, fyr, ".ctl")
-        nc_output <- paste0(dir_outputs_nextgen_seasonal, "nc_files/", models[i], "_", PREDICTAND, PREDICTOR, "_CCAFCST_P_", tgts[j], "_", monf, years[j], ".nc")
-        system(paste0("cdo -f nc import_binary ", ctl_input, " ", nc_output))
-        # Deterministic forecast
-        ctl_input2 <- paste0(dir_outputs_nextgen_seasonal, models[i], "_", PREDICTAND, PREDICTOR, "_CCAFCST_mu_", tgts[j], "_", monf, fyr, ".ctl")
-        nc_output2 <- paste0(dir_outputs_nextgen_seasonal, "nc_files/", models[i], "_", PREDICTAND, PREDICTOR, "_CCAFCST_mu_", tgts[j], "_", monf, years[j], ".nc")
-        system(paste0("cdo -f nc import_binary ", ctl_input2, " ", nc_output2))
-    }
-
-    system(paste0("cdo --no_history -ensmean  nc_files/*_CCAFCST_P_*.nc NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_P_", tgts[j], "_", monf, years[j], ".nc"))
-    system(paste0("ncrename -v a,Below_Normal -v b,Normal -v c,Above_Normal  NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_P_", tgts[j], "_", monf, years[j], ".nc"))
-    system(paste0("cdo --no_history -ensmean  nc_files/*_CCAFCST_mu_*.nc NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_mu_", tgts[j], "_", monf, years[j], ".nc"))
-    system(paste0("rm -rf ", dir_outputs_nextgen_seasonal, "nc_files/*.nc"))
-}
-
-nextGenFileName_prob <- paste0("NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_P_", tgts, "_", monf, years, ".nc")
-nextGenFileName_det <- paste0("NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_mu_", tgts, "_", monf, years, ".nc")
+#nextGenFileName_prob <- paste0("NextGEN_", PREDICTAND, PREDICTOR, "_", MOS, "FCST_P_", tgts, "_", monf, years, ".nc")
+nextGenFileName_prob <- paste0("NextGEN_", "probabilistic_", tgts, years, ".nc")
+nextGenFileName_det <- paste0("MME_deterministic_forecast_", fyr,".nc")
 
 stacksBySeason <- list()
 monthsNumber <- list("Jan-Mar" = 02, "Feb-Apr" = 03, "Mar-May" = 04, "Apr-Jun" = 05, "May-Jul" = 06, "Jun-Aug" = 07, "Jul-Sep" = 08, "Aug-Oct" = 09, "Sep-Nov" = 10, "Oct-Dec" = 11, "Nov-Jan" = 12, "Dec-Feb" = 01)
@@ -178,9 +158,9 @@ trimesters <- list("Jan-Mar" = "jfm", "Feb-Apr" = "fma", "Mar-May" = "mam", "Apr
 # Writting probabilistic raster files (to upload to geoserver) and stacking (to create .csv files)
 for (i in 1:length(nextGenFileName_prob)) {
     # It divides by 100 in orden to have a 0-1 data and not a 1-100
-    dataNextGenAbove <- raster(paste0(dir_outputs_nextgen_seasonal, "/", nextGenFileName_prob[i]), varname = "Above_Normal") / 100
-    dataNextGenBelow <- raster(paste0(dir_outputs_nextgen_seasonal, "/", nextGenFileName_prob[i]), varname = "Below_Normal") / 100
-    dataNextGenNormal <- raster(paste0(dir_outputs_nextgen_seasonal, "/", nextGenFileName_prob[i]), varname = "Normal") / 100
+    dataNextGenAbove <- raster(paste0(dir_outputs_nextgen_seasonal[i], "/", nextGenFileName_prob[i]), varname = "Above_Normal") / 100
+    dataNextGenBelow <- raster(paste0(dir_outputs_nextgen_seasonal[i], "/", nextGenFileName_prob[i]), varname = "Below_Normal") / 100
+    dataNextGenNormal <- raster(paste0(dir_outputs_nextgen_seasonal[i], "/", nextGenFileName_prob[i]), varname = "Normal") / 100
 
     # Stack structure in order to extract to create .csv files
     stacksBySeason[[i]] <- stack(dataNextGenBelow, dataNextGenNormal, dataNextGenAbove)
@@ -219,44 +199,24 @@ write.table(list_Prob_Forec_new, paste0(path_save, "/probabilities.csv"), row.na
 
 ################################ Working on metrics.csv ####################################
 
-################# .nc files metrics ##########################
-# station location
-# loc <- data.frame(
-#     lon = c(38.90, 36.5),
-#     lat = c(8.25, 7.764)
-# )
-
-##### NextGen skill matrix translator
-skilmetrics <- c("2AFC", "GROC", "Ignorance", "Pearson", "RPSS", "Spearman")
-metrics <- data.frame()
 ncMetricsFiles <- list()
-for (skill in skilmetrics) {
-    for (seas in tgts) {
-        ctlinput <- paste0("NextGen_", PREDICTAND, PREDICTOR, "_", MOS, "_", skill, "_", seas, "_", monf, ".ctl")
-        ncout <- paste0("NextGen_", PREDICTAND, PREDICTOR, "_", MOS, "_", skill, "_", seas, "_", monf, ".nc")
 
-        system(paste0("cdo -f nc -import_binary ", ctlinput, " ", ncout))
-        ncMetricsFiles <- append(ncMetricsFiles, paste0("NextGen_", PREDICTAND, PREDICTOR, "_", MOS, "_", skill, "_", seas, "_", monf, ".nc"))
-    }
-}
-################# .nc files metrics ##########################
+for (i in 1:length(dir_outputs_nextgen_seasonal)) {
 
-################### working on writting metrics.csv ##########################
-raster_metrics <- list()
+    metric2AFC <- raster(paste0(dir_outputs_nextgen_seasonal[i], "/", "MME_skill_scores.nc"), varname = "2afc")
+    metricGROC <- raster(paste0(dir_outputs_nextgen_seasonal[i], "/", "MME_skill_scores.nc"), varname = "generalized_roc")
+    metricIgnorance <- raster(paste0(dir_outputs_nextgen_seasonal[i], "/", "MME_skill_scores.nc"), varname = "ignorance")
+    metricPearson <- raster(paste0(dir_outputs_nextgen_seasonal[i], "/", "MME_skill_scores.nc"), varname = "pearson")
+    metricRPSS <- raster(paste0(dir_outputs_nextgen_seasonal[i], "/", "MME_skill_scores.nc"), varname = "rank_probability_skill_score")
+    metricSpearman <- raster(paste0(dir_outputs_nextgen_seasonal[i], "/", "MME_skill_scores.nc"), varname = "spearman")
 
-## Organize raster stacks by metric
-for (i in seq(from = 0, to = length(ncMetricsFiles), by = length(tgts))) {
-    if (i != length(ncMetricsFiles)) {
-        temp_raster_list <- list()
-        for (j in 1:length(tgts)) {
-            temp_raster_list[[j]] <- raster(ncMetricsFiles[[i + j]])
-        }
-        raster_metrics <- append(raster_metrics, stack(temp_raster_list))
-    }
+
+    # Stack structure in order to extract to create .csv files
+    ncMetricsFiles[[i]] <- stack(metric2AFC, metricGROC, metricIgnorance, metricPearson, metricRPSS, metricSpearman)
 }
 
 ## Extracting values of metrics by coords
-metricsCoords <- matrix(NA, ncol = 3 + length(raster_metrics), nrow = nrow(coords) * length(tgts))
+metricsCoords <- matrix(NA, ncol = 3 + length(ncMetricsFiles[[1]][1]), nrow = nrow(coords) * length(tgts))
 
 ## Years and Months
 for (i in 1:length(tgts)) {
@@ -270,9 +230,13 @@ for (i in 1:length(tgts)) {
     metricsCoords[ini:end, 2] <- rep(as.numeric(monthsNumber[tgts[i]]), nrow(coords))
 }
 
-for (i in 1:length(raster_metrics)) {
-    metricsCoords[, 3 + i] <- raster::extract(raster_metrics[[i]], coords)
-}
+##Get metrics values for first quarter
+metricsSeason1 = raster::extract(ncMetricsFiles[[1]], coords)
+##Get metrics values for second quarter
+metricsSeason2 = raster::extract(ncMetricsFiles[[2]], coords)
+totalMetrics = do.call(rbind, list(metricsSeason1, metricsSeason2))
+##Add metrics values of both season to final dataframe
+metricsCoords[, 4:9] = totalMetrics
 
 metricsCoords <- as.data.frame(metricsCoords)
 names(metricsCoords)[1:ncol(metricsCoords)] <- c("year", "month", "id", "afc2", "groc", "ignorance", "pearson", "rpss", "spearman")

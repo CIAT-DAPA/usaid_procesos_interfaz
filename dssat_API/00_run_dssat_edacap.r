@@ -108,9 +108,11 @@ run_crop_dssat <- function(id, crop, current_dir_inputs_climate, current_setup_d
   
   # Definir fecha inicial de simulacion/  
   #En este caso la define automaticamente de la fecha inicial de los escenarios climaticos
-  initial_date  <- climate_scenaries[[1]]$date[[1]] + days(30)
+  #initial_date  <- climate_scenaries[[1]]$date[[1]] + days(30) ## Convertir a DATE y sumar un month, no 30 dias ------------------
+  initial_date  <- climate_scenaries[[1]]$date[[1]]
   
-  input_dates <- make_sim_dates(initial_date, planting_before = 15, number_days = ndays, freq_sim = strtoi(strsplit(id, "_", fixed=T)[[1]][4]))
+  # planting_before - how many months
+  input_dates <- make_sim_dates(initial_date, planting_before = 1, number_days = ndays, freq_sim = strtoi(strsplit(id, "_", fixed=T)[[1]][4]))
   sim_number <- length(input_dates$start_date)  # It depends of planting window form forecast
   
   ## Parallel computing 

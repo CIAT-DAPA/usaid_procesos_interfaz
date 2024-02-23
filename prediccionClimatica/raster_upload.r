@@ -101,8 +101,8 @@ prepareRastersUpload <- function(ru_forecast_type) {
     #Seasonal
     if (ru_forecast_type == "seasonal"){
        # Writting deterministic raster files (to upload to geoserver)
-      for (i in 1:length(nextGenFileName_det)) {
-        det <- raster(paste0(dir_outputs_nextgen_seasonal, "/", nextGenFileName_det[i]))
+      for (i in 1:length(dir_outputs_nextgen_seasonal)) {
+        det <- raster(paste0(dir_outputs_nextgen_seasonal[i], "/", nextGenFileName_det))
         monthFormat <- if (monthsNumber[tgts[i]] < 10) paste0("0", monthsNumber[tgts[i]]) else monthsNumber[tgts[i]]
         # Writting raster files in .tif
         writeRaster(raster::mask(det,countrySHP), paste0(dir_upload_raster_layers, "/deterministic/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", monf, "_", trimesters[tgts[i]], "_deterministic_", years[i], monthFormat, ".tif"))), overwrite = TRUE)
@@ -110,9 +110,9 @@ prepareRastersUpload <- function(ru_forecast_type) {
 
       # Writting probabilistic and dominant raster files (to upload to geoserver)
       for (i in 1:length(nextGenFileName_prob)) {
-        dataNextGenAbove <- raster(paste0(dir_outputs_nextgen_seasonal, "/", nextGenFileName_prob[i]), varname = "Above_Normal")
-        dataNextGenNormal <- raster(paste0(dir_outputs_nextgen_seasonal, "/", nextGenFileName_prob[i]), varname = "Normal")
-        dataNextGenBelow <- raster(paste0(dir_outputs_nextgen_seasonal, "/", nextGenFileName_prob[i]), varname = "Below_Normal")
+        dataNextGenAbove <- raster(paste0(dir_outputs_nextgen_seasonal[i], "/", nextGenFileName_prob[i]), varname = "Above_Normal")
+        dataNextGenNormal <- raster(paste0(dir_outputs_nextgen_seasonal[i], "/", nextGenFileName_prob[i]), varname = "Normal")
+        dataNextGenBelow <- raster(paste0(dir_outputs_nextgen_seasonal[i], "/", nextGenFileName_prob[i]), varname = "Below_Normal")
         monthFormat <- if (monthsNumber[tgts[i]] < 10) paste0("0", monthsNumber[tgts[i]]) else monthsNumber[tgts[i]]
 
         # Writting probabilistic raster files in .tif
