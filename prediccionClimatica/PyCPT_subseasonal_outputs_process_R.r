@@ -1,96 +1,49 @@
 
 # Reading json config file
 setwd(dir_inputs_nextgen) # json files location
-inputsPyCPT <- read_json("subseasonal_pycpt.json")
-inputsPyCPT
-
-region <- paste0(currentCountry, "_subseasonal")
-spatial_predictors <- paste(inputsPyCPT[[1]]$spatial_predictors, collapse = " ")
-spatial_predictors <- gsub(" ", ",", spatial_predictors)
-typeof(spatial_predictors)
-spatial_predictors
-
-spatial_predictands <- paste(inputsPyCPT[[1]]$spatial_predictands, collapse = " ")
-spatial_predictands <- gsub(" ", ",", spatial_predictands)
-typeof(spatial_predictands)
-spatial_predictands
-
-models <- paste(inputsPyCPT[[1]]$models, collapse = " ")
-models <- gsub(" ", ",", models)
-#models <- gsub("_", "-", models)
-typeof(models)
-models
-
-obs <- inputsPyCPT[[1]]$obs
-typeof(obs)
-station <- inputsPyCPT[[1]]$station
-typeof(station)
-mos <- inputsPyCPT[[1]]$mos
-typeof(mos)
-predictand <- inputsPyCPT[[1]]$predictand
-typeof(predictand)
-predictor <- inputsPyCPT[[1]]$predictors
-typeof(predictor)
-
-mons <- paste(inputsPyCPT[[1]]$mons, collapse = " ")
-mons <- gsub(" ", ",", mons)
-typeof(mons)
-mons
-
-tgtii <- paste(inputsPyCPT[[1]]$tgtii, collapse = " ")
-tgtii <- gsub(" ", ",", tgtii)
-typeof(spatial_predictands)
-tgtii
-
-tgtff <- paste(inputsPyCPT[[1]]$tgtff, collapse = " ")
-tgtff <- gsub(" ", ",", tgtff)
-typeof(tgtff)
-tgtff
-
-tgts <- paste(inputsPyCPT[[1]]$tgts, collapse = " ")
-tgts <- gsub(" ", ",", tgts)
-typeof(tgts)
-tgts
-
-tini <- inputsPyCPT[[1]]$tini
-typeof(tini)
-tend <- inputsPyCPT[[1]]$tend
-typeof(tend)
-
-xmodes_min <- inputsPyCPT[[1]]$xmodes_min
-typeof(xmodes_min)
-xmodes_max <- inputsPyCPT[[1]]$xmodes_max
-typeof(xmodes_max)
-ymodes_min <- inputsPyCPT[[1]]$ymodes_min
-typeof(ymodes_min)
-ymodes_max <- inputsPyCPT[[1]]$ymodes_max
-typeof(ymodes_max)
-ccamodes_min <- inputsPyCPT[[1]]$ccamodes_min
-typeof(ccamodes_min)
-ccamodes_max <- inputsPyCPT[[1]]$ccamodes_max
-typeof(ccamodes_max)
-force_download <- inputsPyCPT[[1]]$force_download
-typeof(force_download)
-single_models <- inputsPyCPT[[1]]$single_models
-typeof(single_models)
-forecast_anomaly <- inputsPyCPT[[1]]$forecast_anomaly
-typeof(forecast_anomaly)
-forecast_spi <- inputsPyCPT[[1]]$forecast_spi
-typeof(forecast_spi)
-confidence_level <- inputsPyCPT[[1]]$confidence_level
-typeof(confidence_level)
+inputsPyCPT <- read_json("new_subseasonal_pycpt.json")
 
 
+region <- paste0(currentCountry, "_seasonal")
+
+predictor_extent <- gsub(" ", ",", paste(inputsPyCPT$predictor_extent, collapse = " "))
+#spatial_predictors <- gsub(" ", ",", spatial_predictors)
+typeof(predictor_extent)
+predictor_extent
+
+predictand_extent <- gsub(" ", ",", paste(inputsPyCPT$predictand_extent, collapse = " "))
+typeof(predictand_extent)
+predictand_extent
+
+predictor_names <- gsub(" ", ",", paste(inputsPyCPT$predictor_names, collapse = " "))
+typeof(predictor_names)
+predictor_names
+
+predictand_name <- inputsPyCPT$predictand_name
+typeof(predictand_name)
+predictand_name
+
+MOS <- inputsPyCPT$MOS
+
+ini_mon <- inputsPyCPT$ini_mon
+
+cca_modes <- gsub(" ", ",", paste(inputsPyCPT$cca_modes, collapse = " "))
+cca_modes
+tailoring <- inputsPyCPT$tailoring
+x_eof_modes <- gsub(" ", ",", paste(inputsPyCPT$x_eof_modes, collapse = " "))
+x_eof_modes
+y_eof_modes <- gsub(" ", ",", paste(inputsPyCPT$y_eof_modes, collapse = " "))
+y_eof_modes
+scree <- inputsPyCPT$scree
+
+#Calling seasonal script in python
 setwd(dir_pycpt_scripts)
-ru_forecast_type <- "subseasonal"
+ru_forecast_type <- "seasonal"
 # Running PyCPT
 system(paste(
-    "python run_main.py", ru_forecast_type, region, spatial_predictors, spatial_predictands,
-    models, obs, station, mos, predictand, predictor, mons, tgtii,
-    tgtff, tini, tend, xmodes_min, xmodes_max, ymodes_min,
-    ymodes_max, ccamodes_min, ccamodes_max, force_download,
-    single_models, forecast_anomaly, forecast_spi, confidence_level
-))
+    "ipython EDACaP_S2S.ipynb", ini_mon, MOS, predictor_names, predictand_name, predictor_extent, predictand_extent, tailoring,
+    cca_modes, x_eof_modes, y_eof_modes, scree
+    ))
 
 monf <- paste0(month(month(Sys.Date()), label=TRUE))# Initialization month
 mon_fcst_ini <- paste0(monf,1)

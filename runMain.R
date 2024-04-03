@@ -405,7 +405,7 @@ dirModeloFrutales <- paste0(dirCurrent, "modeloFrutales/", sep = "", collapse = 
 
 # Script that upload files to the Geoserver file system
 dir_python_folder <- paste0(dirCurrent, "python/")
-dir_pycpt_scripts <- paste0(dir_python_folder, "PyCPT/")
+dir_pycpt_scripts <- paste0(dir_python_folder, "seasonalv2/")
 dir_upload_raster_script <- paste0(dir_python_folder, "UploadMosaics/src")
 dir_upload_raster_layers <- paste0(dir_python_folder, "UploadMosaics/data/layers")
 
@@ -619,7 +619,7 @@ if(import_data_to_db){
   setwd(paste0(scriptsDir, "forecast_app"))
   CMDdirOutputs <- paste0(dirUnifiedOutputs, "outputs/") # paste0(gsub("/","\\\\",dirOutputs), "\\\"")
   #try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\""), intern = TRUE, ignore.stderr = TRUE))
-  try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\"", " -frid \"", "654e44c030de22672e85b866", "\""), intern = TRUE, ignore.stderr = TRUE))
+  try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\"", " -frid \"", "65e87c41789eed0222cf3f69", "\""), intern = TRUE, ignore.stderr = TRUE))
 
 }
 
