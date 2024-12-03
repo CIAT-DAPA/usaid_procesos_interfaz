@@ -5,7 +5,7 @@ library(ncdf4)
 library(lubridate)
 library("remotes")
 
-install_github("agrdatasci/ag5Tools", build_vignettes = TRUE, build = FALSE)
+#install_github("agrdatasci/ag5Tools", build_vignettes = TRUE, build = FALSE)
 library(ag5Tools)
 
 setwd(dir_prepare_observed_data)

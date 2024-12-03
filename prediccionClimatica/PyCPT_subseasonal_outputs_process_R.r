@@ -4,7 +4,7 @@ setwd(dir_inputs_nextgen) # json files location
 inputsPyCPT <- read_json("new_subseasonal_pycpt.json")
 
 
-region <- paste0(currentCountry, "_seasonal")
+region <- paste0(currentCountry, "_subseasonal")
 
 predictor_extent <- gsub(" ", ",", paste(inputsPyCPT$predictor_extent, collapse = " "))
 #spatial_predictors <- gsub(" ", ",", spatial_predictors)
@@ -38,7 +38,7 @@ scree <- inputsPyCPT$scree
 
 #Calling seasonal script in python
 setwd(dir_pycpt_scripts)
-ru_forecast_type <- "seasonal"
+ru_forecast_type <- "subseasonal"
 # Running PyCPT
 system(paste(
     "ipython EDACaP_S2S.ipynb", ini_mon, MOS, predictor_names, predictand_name, predictor_extent, predictand_extent, tailoring,

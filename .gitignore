@@ -12,3 +12,4 @@ configs/
 /tutorial-env/
 
 .RData
+/dssat_API/crop_setups

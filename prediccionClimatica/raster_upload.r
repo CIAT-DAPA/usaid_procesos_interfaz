@@ -93,7 +93,9 @@ prepareRastersUploadGuate <- function(ru_forecast_type, paths_prob) {
 # Some of the variables used in this function come from /prediccionClimatica/PyCPT_sub/seasonal_outputs_process_R.r
 prepareRastersUpload <- function(ru_forecast_type) {
   ##Donwloading ETH shape for clipping the rasters
-  countrySHP <- raster::getData('GADM', country='ETH', level=1) 
+  #countrySHP <- raster::getData('GADM', country='ETH', level=1) 
+  countrySHP <- rgdal::readOGR(paste0(dirETSHP, "gadm41_ETH_1.shp"))
+
   fyr <- year(Sys.Date())
   tgts <- get_seasons()
   years <- get_season_years(month(Sys.Date()), fyr)

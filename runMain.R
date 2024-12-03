@@ -339,7 +339,7 @@ runDssatModule <- function(crop){
     
     
   
-  }, mc.cores = 8, mc.preschedule = F)
+  }, mc.cores = 10, mc.preschedule = F)
   tictoc::toc()
 
 }
@@ -383,6 +383,7 @@ start.time <- Sys.time()
 # dirCurrent <- "/forecast/workdir/usaid_procesos_interfaz/"
 dirCurrent <- "/forecast/usaid_procesos_interfaz/"
 dirWorkdir <- "/forecast/workdir/"
+dirETSHP <- "/forecast/models/et_shapefile/"
 #dirWorkdir <- "D:/forecast_process/workdir/"
 # forecastAppDll app - App de consola que se conecta a la base de datos
 forecastAppDll <- paste0("dotnet ", dirCurrent, "forecast_app/CIAT.DAPA.USAID.Forecast.ForecastApp.dll ", sep = "", collapse = NULL)
@@ -560,6 +561,8 @@ if (currentCountry == "COLOMBIA" || currentCountry == "PERU" || currentCountry =
   Sys.setenv(CPT_BIN_DIR = "/forecast/models/CPT/17.6.1/bin/")
   Sys.setenv(LD_LIBRARY_PATH = "/root/anaconda3/envs/envpycpt/lib:$LD_LIBRARY_PATH")
   source(paste(dirForecast, "PyCPT_seasonal_outputs_process_R.r", sep = "", collapse = NULL))
+  Sys.setenv(CPT_BIN_DIR = "/root/anaconda3/envs/pycpt_env/opt/cpt/bin")
+  Sys.setenv(LD_LIBRARY_PATH = "/usr/lib/R/lib:/usr/lib/x86_64-linux-gnu:/usr/lib/jvm/default-java/lib/server")
   source(paste(dirForecast, "PyCPT_subseasonal_outputs_process_R.r", sep = "", collapse = NULL))
 }  else if (currentCountry == "GUATEMALA"){
   source(paste0(dirForecast, "guatemala_rasters_preparation.R"))
@@ -619,7 +622,7 @@ if(import_data_to_db){
   setwd(paste0(scriptsDir, "forecast_app"))
   CMDdirOutputs <- paste0(dirUnifiedOutputs, "outputs/") # paste0(gsub("/","\\\\",dirOutputs), "\\\"")
   #try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\""), intern = TRUE, ignore.stderr = TRUE))
-  try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\"", " -frid \"", "65e87c41789eed0222cf3f69", "\""), intern = TRUE, ignore.stderr = TRUE))
+  try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\"", " -frid \"", "6712d97c95f04a003bd9da69", "\""), intern = TRUE, ignore.stderr = TRUE))
 
 }
 
