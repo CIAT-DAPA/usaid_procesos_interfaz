@@ -8,8 +8,9 @@ year = Sys.Date()
 month = as.numeric(format(year, "%m"))
 year = as.numeric(format(year, "%Y"))
 
+# Ejecutar el comando aclimate_resampling en el entorno resam_env
 command = paste(
-    "aclimate_resampling", "-C", currentCountry, "-p", dirWorkdir, "-c", no_cores, "-m", "1", "-y", year, "-a", month
+    "conda run -n resam_env aclimate_resampling", "-C", currentCountry, "-p", dirWorkdir, "-c", no_cores, "-m", "1", "-y", year, "-a", month
 )
 
 aclimate_output <- system(command, intern = TRUE)

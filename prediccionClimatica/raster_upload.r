@@ -68,6 +68,18 @@ prepareRastersUploadGuate <- function(ru_forecast_type, paths_prob) {
         # crs(dataNextGenNormal) = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
 
         # Writting probabilistic raster files in .tif
+        if (!(file.exists(file.path(paste0(dir_upload_raster_layers, "/above/"))))) {
+          dir.create(file.path(paste0(dir_upload_raster_layers, "/above/")))
+        }
+        if (!(file.exists(file.path(paste0(dir_upload_raster_layers, "/normal/"))))) {
+          dir.create(file.path(paste0(dir_upload_raster_layers, "/normal/")))
+        }
+        if (!(file.exists(file.path(paste0(dir_upload_raster_layers, "/below/"))))) {
+          dir.create(file.path(paste0(dir_upload_raster_layers, "/below/")))
+        }
+        if (!(file.exists(file.path(paste0(dir_upload_raster_layers, "/seasonal_dominant/"))))) {
+          dir.create(file.path(paste0(dir_upload_raster_layers, "/seasonal_dominant/")))
+        }
         writeRaster(dataNextGenAbove, paste0(dir_upload_raster_layers, "/above/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", monf, "_", trimesters[tgts[i]], "_above_", years[i], monthFormat, ".tif"))), overwrite = TRUE)
         writeRaster(dataNextGenNormal, paste0(dir_upload_raster_layers, "/normal/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", monf, "_", trimesters[tgts[i]], "_normal_", years[i], monthFormat, ".tif"))), overwrite = TRUE)
         writeRaster(dataNextGenBelow, paste0(dir_upload_raster_layers, "/below/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", monf, "_", trimesters[tgts[i]], "_below_", years[i], monthFormat, ".tif"))), overwrite = TRUE)
@@ -107,6 +119,9 @@ prepareRastersUpload <- function(ru_forecast_type) {
         det <- raster(paste0(dir_outputs_nextgen_seasonal[i], "/", nextGenFileName_det))
         monthFormat <- if (monthsNumber[tgts[i]] < 10) paste0("0", monthsNumber[tgts[i]]) else monthsNumber[tgts[i]]
         # Writting raster files in .tif
+        if (!(file.exists(file.path(paste0(dir_upload_raster_layers, "/deterministic/"))))) {
+          dir.create(file.path(paste0(dir_upload_raster_layers, "/deterministic/")))
+        }
         writeRaster(raster::mask(det,countrySHP), paste0(dir_upload_raster_layers, "/deterministic/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", monf, "_", trimesters[tgts[i]], "_deterministic_", years[i], monthFormat, ".tif"))), overwrite = TRUE)
       }
 
@@ -118,6 +133,22 @@ prepareRastersUpload <- function(ru_forecast_type) {
         monthFormat <- if (monthsNumber[tgts[i]] < 10) paste0("0", monthsNumber[tgts[i]]) else monthsNumber[tgts[i]]
 
         # Writting probabilistic raster files in .tif
+         if (!(file.exists(file.path(paste0(dir_upload_raster_layers, "/above/"))))) {
+          dir.create(file.path(paste0(dir_upload_raster_layers, "/above/")))
+        }
+        if (!(file.exists(file.path(paste0(dir_upload_raster_layers, "/normal/"))))) {
+          dir.create(file.path(paste0(dir_upload_raster_layers, "/normal/")))
+        }
+        if (!(file.exists(file.path(paste0(dir_upload_raster_layers, "/below/"))))) {
+          dir.create(file.path(paste0(dir_upload_raster_layers, "/below/")))
+        }
+        if (!(file.exists(file.path(paste0(dir_upload_raster_layers, "/seasonal_dominant/"))))) {
+          dir.create(file.path(paste0(dir_upload_raster_layers, "/seasonal_dominant/")))
+        }
+        if (!(file.exists(file.path(paste0(dir_upload_raster_layers, "/subseasonal_dominant/"))))) {
+          dir.create(file.path(paste0(dir_upload_raster_layers, "/subseasonal_dominant/")))
+        }
+        
         writeRaster(raster::mask(dataNextGenAbove,countrySHP), paste0(dir_upload_raster_layers, "/above/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", monf, "_", trimesters[tgts[i]], "_above_", years[i], monthFormat, ".tif"))), overwrite = TRUE)
         writeRaster(raster::mask(dataNextGenNormal,countrySHP), paste0(dir_upload_raster_layers, "/normal/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", monf, "_", trimesters[tgts[i]], "_normal_", years[i], monthFormat, ".tif"))), overwrite = TRUE)
         writeRaster(raster::mask(dataNextGenBelow,countrySHP), paste0(dir_upload_raster_layers, "/below/", tolower(paste0(ru_forecast_type, "_", country_iso, "_", monf, "_", trimesters[tgts[i]], "_below_", years[i], monthFormat, ".tif"))), overwrite = TRUE)
@@ -156,13 +187,13 @@ prepareRastersUpload <- function(ru_forecast_type) {
       }
     }
 
-  # Copying raster in path_rasters (backup)
-  system(paste0("cp -R ", paste0(dir_upload_raster_layers, "/above/ "), paste0(path_rasters, "/")))
-  system(paste0("cp -R ", paste0(dir_upload_raster_layers, "/below/ "), paste0(path_rasters, "/")))
-  system(paste0("cp -R ", paste0(dir_upload_raster_layers, "/normal/ "), paste0(path_rasters, "/")))
-  system(paste0("cp -R ", paste0(dir_upload_raster_layers, "/deterministic/ "), paste0(path_rasters, "/")))
-  system(paste0("cp -R ", paste0(dir_upload_raster_layers, "/seasonal_dominant/ "), paste0(path_rasters, "/")))
-  system(paste0("cp -R ", paste0(dir_upload_raster_layers, "/subseasonal_dominant/ "), paste0(path_rasters, "/")))
+  # Copiar raster en path_rasters (backup)
+  file.copy(from = paste0(dir_upload_raster_layers, "/above/"), to = path_rasters, recursive = TRUE)
+  file.copy(from = paste0(dir_upload_raster_layers, "/below/"), to = path_rasters, recursive = TRUE)
+  file.copy(from = paste0(dir_upload_raster_layers, "/normal/"), to = path_rasters, recursive = TRUE)
+  file.copy(from = paste0(dir_upload_raster_layers, "/deterministic/"), to = path_rasters, recursive = TRUE)
+  file.copy(from = paste0(dir_upload_raster_layers, "/seasonal_dominant/"), to = path_rasters, recursive = TRUE)
+  file.copy(from = paste0(dir_upload_raster_layers, "/subseasonal_dominant/"), to = path_rasters, recursive = TRUE)
 }
 
 uploadRasterFiles <- function() {

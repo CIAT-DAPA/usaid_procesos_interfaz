@@ -462,6 +462,7 @@ path_rasters <- paste0(dirPrediccionOutputs, "raster", sep = "", collapse = NULL
 path_output <- paste0(dirPrediccionOutputs, "resampling", sep = "", collapse = NULL)
 path_output_observed_data <- paste0(dirPrediccionOutputs, "observedData/", sep = "", collapse = NULL)
 path_output_sum <- paste0(path_output, "/summary", sep = "", collapse = NULL)
+path_output_val <- paste0(path_output, "/validation", sep = "", collapse = NULL)
 dirCultivosOutputs <- paste0(dirOutputs, "cultivos/", sep = "", collapse = NULL)
 # Output variables maize model module
 dirModeloMaizOutputs <- paste0(dirOutputs, "cultivos/", maize_name_by_country, "/", sep = "", collapse = NULL)
@@ -502,6 +503,8 @@ pathConstruct(path_output_observed_data) # ./outputs/prediccionClimatica/observe
 pathConstruct(path_rasters) # ./outputs/prediccionClimatica/raster
 pathConstruct(path_output) # ./outputs/prediccionClimatica/resampling
 pathConstruct(path_output_sum) # ./outputs/prediccionClimatica/resampling/summary
+pathConstruct(path_output_val) # ./outputs/prediccionClimatica/resampling/validation
+
 # Outoputs crop model
 pathConstruct(dirCultivosOutputs) # ./outputs/cultivos/
 # Maize
@@ -577,7 +580,6 @@ if (currentCountry == "GUATEMALA" || currentCountry == "ETHIOPIA") {
 }
 
 # Resampling process
-
 source(paste(dirForecast, "02_aclimate_resampling.R", sep = "", collapse = NULL))
 
 #runRemuestreo <- source(paste(dirForecast, "02_remuestreo.R", sep = "", collapse = NULL))
@@ -621,8 +623,8 @@ if(import_data_to_db){
   # Upload proccess results to interface database
   setwd(paste0(scriptsDir, "forecast_app"))
   CMDdirOutputs <- paste0(dirUnifiedOutputs, "outputs/") # paste0(gsub("/","\\\\",dirOutputs), "\\\"")
-  #try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\""), intern = TRUE, ignore.stderr = TRUE))
-  try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\"", " -frid \"", "6712d97c95f04a003bd9da69", "\""), intern = TRUE, ignore.stderr = TRUE))
+  try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\""), intern = TRUE, ignore.stderr = TRUE))
+  #try(system(paste0(forecastAppDll, "-in -fs -cf 0.5 -p \"", CMDdirOutputs, "\"", " -frid \"", "6712d97c95f04a003bd9da69", "\""), intern = TRUE, ignore.stderr = TRUE))
 
 }
 
